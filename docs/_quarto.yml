@@ -1,0 +1,37 @@
+project:
+  type: website
+  output-dir: _site
+  preview:
+    port: 4600
+execute:
+  freeze: true
+website:
+  title: "InvenioRDM Starter"
+  bread-crumbs: false
+  navbar:
+    background: light
+    logo-alt: "InvenioRDM Starter"
+    right:
+      - icon: github
+        href: https://github.com/front-matter/invenio-rdm-starter
+  sidebar:
+    contents:
+      - index.qmd
+  page-footer:
+    left: "Copyright &copy;2023 Front Matter."
+    right:
+      - icon: envelope
+        href: mailto:info@front-matter.io
+      - icon: mastodon 
+        href: https://rogue-scholar.social/@admin
+format:
+  html:
+    theme:
+      light: [flatly, theme.scss]
+      dark: [darkly, theme.scss]
+    code-fold: false
+    code-block-bg: true
+    code-block-border-left: "#38a169"
+    highlight-style: github
+    toc: true
+    toc-location: right
