@@ -1,0 +1,4 @@
+- source: project
+  netlify:
+    - id: 1820630d-bc59-43bd-923b-41b6e81bf378
+      url: 'https://invenio-rdm-starter.netlify.app'
