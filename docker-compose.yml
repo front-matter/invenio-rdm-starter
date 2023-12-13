@@ -1,0 +1,90 @@
+# InvenioDRM Starter development environment
+#
+# Note, this file, and Docker Compose in general, is not suitable for a production deployment.
+#
+# Usage::
+#
+#   $ docker compose up -d
+#
+# THE following services are included:
+# - SSL termination: Traefik (exposed ports: 40, 443, and)
+# - Frontend: Nginx (exposed port: 8000)
+# - UI application: UWSGI (not exposed)
+# - API application: UWSGI (not exposed)
+# - Cache: Redis (exposed port: 6379)
+# - DB: (PostgresSQL/MySQL) (exposed port: 5432 or 3306)
+# - Message queue: RabbitMQ (exposed ports: 5672, 15672)
+# - Search platform: (OpenSearch/Elasticsearch) (exposed ports: 9200, 9300)
+
+version: '3.8'
+services:
+  traefik:
+    image: "traefik:v2.10"
+    container_name: "traefik"
+    command:
+      - --providers.docker=true
+      - --entrypoints.web.address=:80
+
+      # use default Traefic TLS certificate (browser may give warnings)
+      - --entrypoints.websecure.address=:443
+      - --api.insecure
+    labels:
+      # middleware redirect
+      - "traefik.http.middlewares.redirect-to-https.redirectscheme.scheme=https"
+      
+      # global redirect to https
+      - "traefik.http.routers.redirs.rule=hostregexp(`{host:.+}`)"
+      - "traefik.http.routers.redirs.entrypoints=web"
+      - "traefik.http.routers.redirs.middlewares=redirect-to-https"
+    ports:
+      - "80:80"
+      - "443:443"
+      - "8080:8080"
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+  cache:
+    image: redis:7
+    restart: "unless-stopped"
+    read_only: true
+    ports:
+      - "6379:6379"
+  db:
+    image: postgres:16.1
+    restart: "unless-stopped"
+    environment:
+      - "POSTGRES_USER=inveniordm"
+      - "POSTGRES_PASSWORD=inveniordm"
+      - "POSTGRES_DB=inveniordm"
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./docker/postgres/docker-entrypoint-initdb.d/inveniordm.sql:/docker-entrypoint-initdb.d/inveniordm.sql
+  mq:
+    image: rabbitmq:3-management
+    restart: "unless-stopped"
+    ports:
+      - "15672:15672"
+      - "5672:5672"
+  search:
+    image: opensearchproject/opensearch:2.3.0
+    restart: "unless-stopped"
+    environment:
+      # settings only for development. DO NOT use in production!
+      - bootstrap.memory_lock=true
+      - "OPENSEARCH_JAVA_OPTS=-Xms512m -Xmx512m"
+      - "DISABLE_INSTALL_DEMO_CONFIG=true"
+      - "DISABLE_SECURITY_PLUGIN=true"
+      - "discovery.type=single-node"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+      nofile:
+        soft: 65536
+        hard: 65536
+    mem_limit: 2g
+    volumes:
+      - ./docker/opensearch:/usr/share/opensearch/data
+    ports:
+      - "9200:9200"
+      - "9600:9600"
