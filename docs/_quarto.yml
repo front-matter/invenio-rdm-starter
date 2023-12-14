@@ -38,3 +38,5 @@ format:
     comments:
       giscus: 
         repo: front-matter/invenio-rdm-starter
+        category-id: DIC_kwDOK4yHis4CbvUZ
+        mapping: url
