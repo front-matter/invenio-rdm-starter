@@ -35,3 +35,6 @@ format:
     highlight-style: github
     toc: true
     toc-location: right
+    comments:
+      giscus: 
+        repo: front-matter/invenio-rdm-starter
