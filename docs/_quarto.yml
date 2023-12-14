@@ -2,7 +2,7 @@ project:
   type: website
   output-dir: _site
   preview:
-    port: 4600
+    port: 4700
 execute:
   freeze: true
 website:
