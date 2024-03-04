@@ -1,10 +1,12 @@
 # Dockerfile that builds the InvenioRDM Starter Docker image.
-ARG BUILDPLATFORM=linux/amd64
-FROM --platform=$BUILDPLATFORM registry.cern.ch/inveniosoftware/almalinux:1
+FROM registry.cern.ch/inveniosoftware/almalinux:1
 
+WORKDIR .
 COPY site ./site
 COPY Pipfile Pipfile.lock ./
 RUN pipenv install --deploy --system
+
+WORKDIR /opt/invenio
 
 COPY ./docker/uwsgi/ ${INVENIO_INSTANCE_PATH}
 COPY ./invenio.cfg ${INVENIO_INSTANCE_PATH}
