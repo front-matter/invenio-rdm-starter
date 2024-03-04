@@ -1,0 +1,18 @@
+- affiliations:
+  - name: University of Zurich
+  - name: Humboldt University of Berlin
+  - name: Kaiser Wilhelm Institute for Physics
+  family_name: Einstein
+  given_name: Albert
+  identifiers:
+  - identifier: gnd:118529579
+    scheme: gnd
+- affiliations:
+  - name: University of Cambridge
+  - name: California Institute of Technology
+  - name: University of Oxford
+  family_name: Hawking
+  given_name: Stephen
+  identifiers:
+  - identifier: https://orcid.org/0000-0002-9079-593X
+    scheme: orcid

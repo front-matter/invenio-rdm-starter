@@ -7,10 +7,16 @@ execute:
   freeze: true
 website:
   title: "InvenioRDM Starter"
+  site-url: https://invenio-rdm-starter.front-matter.io
+  repo-url: https://github.com/front-matter/invenio-rdm-starter
+  repo-subdir: docs
   bread-crumbs: false
   navbar:
     background: light
     logo-alt: "InvenioRDM Starter"
+    left: 
+      - index.qmd
+      - blog.qmd
     right:
       - icon: github
         href: https://github.com/front-matter/invenio-rdm-starter
@@ -23,7 +29,7 @@ website:
       - icon: envelope
         href: mailto:info@front-matter.io
       - icon: mastodon 
-        href: https://rogue-scholar.social/@admin
+        href: https://mozilla.social/@martin
 format:
   html:
     theme:
