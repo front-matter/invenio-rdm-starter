@@ -40,9 +40,10 @@ ENV VIRTUAL_ENV=/opt/invenio/.venv \
 
 COPY --from=builder ${VIRTUAL_ENV} ${VIRTUAL_ENV}
 
-COPY ./templates/ ${INVENIO_INSTANCE_PATH}/templates/
-COPY ./app_data/ ${INVENIO_INSTANCE_PATH}/app_data/
-COPY ./translations/ ${INVENIO_INSTANCE_PATH}/translations/
+COPY ./site ./site
+COPY ./templates ${INVENIO_INSTANCE_PATH}/templates
+COPY ./app_data ${INVENIO_INSTANCE_PATH}/app_data
+COPY ./translations ${INVENIO_INSTANCE_PATH}/translations
 COPY --from=builder ${INVENIO_INSTANCE_PATH}/static ${INVENIO_INSTANCE_PATH}/static
 COPY --from=builder ${INVENIO_INSTANCE_PATH}/assets ${INVENIO_INSTANCE_PATH}/assets
 

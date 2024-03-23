@@ -1,6 +1,4 @@
-# InvenioDRM Starter development environment
-#
-# Note, this file, and Docker Compose in general, is not suitable for a production deployment.
+# InvenioDRM Starter staging environment
 #
 # Usage::
 #
@@ -8,11 +6,10 @@
 #
 # The following services are included:
 # - Reverse Proxy with SSL termination: Traefik (exposed ports: 80, 443, 8080)
-# - UI application: UWSGI (not exposed)
-# - API application: UWSGI (not exposed)
+# - Web application: Nginx/Gunicorn (exposed port: not exposed)
 # - Cache: Redis (exposed port: 6379)
 # - DB: (PostgresSQL) (exposed port: 5432)
-# - Message queue: RabbitMQ (exposed ports: 5672, 15672)
+# - Message queue: Redis (exposed port: 6379)
 # - Search platform: (OpenSearch) (exposed ports: 9200, 9300)
 
 version: '3.8'
@@ -36,41 +33,16 @@ services:
       - "traefik.http.routers.redirs.entrypoints=web"
       - "traefik.http.routers.redirs.middlewares=redirect-to-https"
     depends_on:
-      - web-ui
-      - web-api
+      - web
     ports:
       - "80:80"
       - "443:443"
       - "8080:8080"
     volumes:
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
-  web-ui:
-    command: ["uwsgi /opt/invenio/var/instance/uwsgi_ui.ini"]
+  web:
     build:
       context: ./
-    image: invenio-rdm-starter:latest
-    ports:
-      - "5000"
-    volumes:
-      - static_data:/opt/invenio/var/instance/static
-      - uploaded_data:/opt/invenio/var/instance/data
-      - archived_data:/opt/invenio/var/instance/archive
-    environment:
-      - "INVENIO_ACCOUNTS_SESSION_REDIS_URL=redis://cache:6379/1"
-      - "INVENIO_BROKER_URL=amqp://guest:guest@mq:5672/"
-      - "INVENIO_CACHE_REDIS_URL=redis://cache:6379/0"
-      - "INVENIO_CACHE_TYPE=redis"
-      - "INVENIO_CELERY_BROKER_URL=amqp://guest:guest@mq:5672/"
-      - "INVENIO_CELERY_RESULT_BACKEND=redis://cache:6379/2"
-      - "INVENIO_SEARCH_HOSTS=['search:9200']"
-      - "INVENIO_SECRET_KEY=CHANGE_ME"
-      - "INVENIO_SQLALCHEMY_DATABASE_URI=postgresql+psycopg2://invenio-rdm-starter:invenio-rdm-starter@db/invenio-rdm-starter"
-      - "INVENIO_WSGI_PROXIES=2"
-      - "INVENIO_RATELIMIT_STORAGE_URL=redis://cache:6379/3"
-  web-api:
-    build:
-      context: ./
-    command: ["uwsgi /opt/invenio/var/instance/uwsgi_rest.ini"]
     image: invenio-rdm-starter:latest
     ports:
       - "5000"
@@ -79,15 +51,14 @@ services:
       - archived_data:/opt/invenio/var/instance/archive
     environment:
       - "INVENIO_ACCOUNTS_SESSION_REDIS_URL=redis://cache:6379/1"
-      - "INVENIO_BROKER_URL=amqp://guest:guest@mq:5672/"
+      - "INVENIO_BROKER_URL="
       - "INVENIO_CACHE_REDIS_URL=redis://cache:6379/0"
       - "INVENIO_CACHE_TYPE=redis"
-      - "INVENIO_CELERY_BROKER_URL=amqp://guest:guest@mq:5672/"
-      - "INVENIO_CELERY_RESULT_BACKEND=redis://cache:6379/2"
+      - "INVENIO_CELERY_BROKER_URL="
+      - "INVENIO_CELERY_RESULTpro_BACKEND=redis://cache:6379/2"
       - "INVENIO_SEARCH_HOSTS=['search:9200']"
       - "INVENIO_SECRET_KEY=CHANGE_ME"
       - "INVENIO_SQLALCHEMY_DATABASE_URI=postgresql+psycopg2://invenio-rdm-starter:invenio-rdm-starter@db/invenio-rdm-starter"
-      - "INVENIO_WSGI_PROXIES=2"
       - "INVENIO_RATELIMIT_STORAGE_URL=redis://cache:6379/3"
   worker:
     build:
@@ -103,14 +74,12 @@ services:
         condition: service_started
       db:
         condition: service_started
-      mq:
-        condition: service_started
     environment:
       - "INVENIO_ACCOUNTS_SESSION_REDIS_URL=redis://cache:6379/1"
-      - "INVENIO_BROKER_URL=amqp://guest:guest@mq:5672/"
+      - "INVENIO_BROKER_URL="
       - "INVENIO_CACHE_REDIS_URL=redis://cache:6379/0"
       - "INVENIO_CACHE_TYPE=redis"
-      - "INVENIO_CELERY_BROKER_URL=amqp://guest:guest@mq:5672/"
+      - "INVENIO_CELERY_BROKER_URL=redis://cache:6379/1"
       - "INVENIO_CELERY_RESULT_BACKEND=redis://cache:6379/2"
       - "INVENIO_SEARCH_HOSTS=['search:9200']"
       - "INVENIO_SECRET_KEY=CHANGE_ME"
@@ -134,12 +103,6 @@ services:
       - "5432:5432"
     volumes:
       - ./docker/postgres/docker-entrypoint-initdb.d/inveniordm.sql:/docker-entrypoint-initdb.d/inveniordm.sql
-  mq:
-    image: rabbitmq:3.13
-    restart: "unless-stopped"
-    ports:
-      - "15672:15672"
-      - "5672:5672"
   search:
     image: opensearchproject/opensearch:2.12.0
     restart: "unless-stopped"
