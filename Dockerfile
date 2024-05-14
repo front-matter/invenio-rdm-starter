@@ -21,14 +21,22 @@ ENV POETRY_NO_INTERACTION=1 \
 WORKDIR /opt/invenio
 COPY pyproject.toml poetry.lock ./
 RUN touch README.md
-RUN --mount=type=cache,target=$POETRY_CACHE_DIR poetry install --without dev --no-root
+RUN --mount=type=cache,target=$POETRY_CACHE_DIR poetry install --without dev --no-root --no-interaction --no-ansi
 
 ENV INVENIO_INSTANCE_PATH=/opt/invenio/var/instance
 
+COPY site ./site
 COPY static ${INVENIO_INSTANCE_PATH}/static
 COPY assets ${INVENIO_INSTANCE_PATH}/assets
+COPY templates ${INVENIO_INSTANCE_PATH}/templates
+COPY app_data ${INVENIO_INSTANCE_PATH}/app_data
+COPY translations ${INVENIO_INSTANCE_PATH}/translations
+
 RUN poetry run invenio collect --verbose && \
     poetry run invenio webpack buildall
+
+EXPOSE 5000
+ENTRYPOINT ["poetry", "run", "gunicorn", "invenio_app.wsgi:application", "--bind", "0.0.0.0:5000", "--workers", "4"]
 
 
 FROM python:3.12-slim-bookworm AS runtime
@@ -44,10 +52,7 @@ COPY --from=builder ${VIRTUAL_ENV} ${VIRTUAL_ENV}
 # RUN mkdir ${INVENIO_INSTANCE_PATH}/data && \
 #     mkdir ${INVENIO_INSTANCE_PATH}/archive
 
-COPY ./site ./site
-COPY ./templates ${INVENIO_INSTANCE_PATH}/templates
-COPY ./app_data ${INVENIO_INSTANCE_PATH}/app_data
-COPY ./translations ${INVENIO_INSTANCE_PATH}/translations
+
 COPY --from=builder ${INVENIO_INSTANCE_PATH}/static ${INVENIO_INSTANCE_PATH}/static
 COPY --from=builder ${INVENIO_INSTANCE_PATH}/assets ${INVENIO_INSTANCE_PATH}/assets
 
@@ -57,19 +62,6 @@ ENV INVENIO_USER_ID=1000
 #     chgrp -R +0 ${WORKDIR}
 #     # chmod -R g=u ${WORKDIR} && \
 #     # chown -R invenio:root ${WORKDIR}
-
-# For the full list of settings and their values, see
-# https://inveniordm.docs.cern.ch/reference/configuration/
-ENV INVENIO_ACCOUNTS_SESSION_REDIS_URL=redis://cache:6379/1 \
-    INVENIO_BROKER_URL= \
-    INVENIO_CACHE_REDIS_URL=redis://cache:6379/0 \
-    INVENIO_CACHE_TYPE=redis \
-    INVENIO_CELERY_BROKER_URL= \
-    INVENIO_CELERY_RESULT_BACKEND=redis://cache:6379/2 \
-    INVENIO_SEARCH_HOSTS=['search:9200'] \
-    INVENIO_SECRET_KEY=CHANGE_ME \
-    INVENIO_SQLALCHEMY_DATABASE_URI=postgresql+psycopg2://invenio-rdm-starter:invenio-rdm-starter@db/invenio-rdm-starter \
-    INVENIO_RATELIMIT_STORAGE_URL=redis://cache:6379/3
 
 # USER invenio
 EXPOSE 5000
