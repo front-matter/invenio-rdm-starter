@@ -11,7 +11,6 @@
 # - Message queue: Redis (exposed port: 6379)
 # - Search platform: (OpenSearch) (exposed ports: 9200, 9300)
 
-version: '3.8'
 services:
   nginx:
     image: nginx:1.25-bookworm
