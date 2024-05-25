@@ -1,5 +1,7 @@
 # Dockerfile that builds the InvenioRDM Starter Docker image.
 # Based on https://medium.com/@albertazzir/blazing-fast-python-docker-builds-with-poetry-a78a66f5aed0
+
+# syntax=docker/dockerfile:1.5
 ARG BUILDPLATFORM=linux/amd64
 FROM --platform=$BUILDPLATFORM python:3.12-bookworm AS builder
 
@@ -18,12 +20,17 @@ ENV POETRY_NO_INTERACTION=1 \
     POETRY_VIRTUALENVS_CREATE=1 \
     POETRY_CACHE_DIR=/tmp/poetry_cache
 
+ENV LANG en_US.UTF-8
+ENV LANGUAGE en_US:en
+ENV LC_ALL en_US.UTF-8
+
 WORKDIR /opt/invenio
+ENV WORKING_DIR=/opt/invenio
+ENV INVENIO_INSTANCE_PATH=${WORKING_DIR}/var/instance
+
 COPY pyproject.toml poetry.lock ./
 RUN touch README.md
 RUN --mount=type=cache,target=$POETRY_CACHE_DIR poetry install --without dev --no-root --no-interaction --no-ansi
-
-ENV INVENIO_INSTANCE_PATH=/opt/invenio/var/instance
 
 COPY site ./site
 COPY static ${INVENIO_INSTANCE_PATH}/static
@@ -35,11 +42,12 @@ COPY translations ${INVENIO_INSTANCE_PATH}/translations
 RUN poetry run invenio collect --verbose && \
     poetry run invenio webpack buildall
 
-EXPOSE 5000
-ENTRYPOINT ["poetry", "run", "gunicorn", "invenio_app.wsgi:application", "--bind", "0.0.0.0:5000", "--workers", "4"]
-
-
 FROM python:3.12-slim-bookworm AS runtime
+
+# Install OS package dependency
+RUN --mount=type=cache,target=/var/cache/apt apt-get update -y && \
+    apt-get install libcairo2 -y --no-install-recommends && \
+    apt-get clean && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /opt/invenio
 
@@ -48,6 +56,8 @@ ENV VIRTUAL_ENV=/opt/invenio/.venv \
     INVENIO_INSTANCE_PATH=/opt/invenio/var/instance
 
 COPY --from=builder ${VIRTUAL_ENV} ${VIRTUAL_ENV}
+
+WORKDIR ${WORKING_DIR}/src
 
 # RUN mkdir ${INVENIO_INSTANCE_PATH}/data && \
 #     mkdir ${INVENIO_INSTANCE_PATH}/archive
@@ -64,5 +74,5 @@ ENV INVENIO_USER_ID=1000
 #     # chown -R invenio:root ${WORKDIR}
 
 # USER invenio
-EXPOSE 5000
-CMD ["gunicorn", "invenio_app.wsgi:application", "--bind", "0.0.0.0:5000", "--workers", "4"]
+EXPOSE 9000
+CMD ["gunicorn", "invenio_app.wsgi:application", "--bind", "0.0.0.0:9000", "--workers", "4"]

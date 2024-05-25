@@ -5,30 +5,28 @@
 #   $ docker compose up -d
 #
 # The following services are included:
-# - Web application: Nginx/Gunicorn (exposed port: 8080)
+# - Web application: Caddy/Gunicorn (exposed port: 8080)
 # - DB: (PostgresSQL) (exposed port: 5432)
 # - Cache: Redis (exposed port: 6379)
 # - Message queue: Redis (exposed port: 6379)
 # - Search platform: (OpenSearch) (exposed ports: 9200, 9300)
 
 services:
-  nginx:
-    image: nginx:1.25-bookworm
-    restart: "unless-stopped"
-    ports:
-      - "9000:9000"
-    volumes:
-      - ./docker/nginx/conf.d:/etc/nginx/conf.d
-      - ./docker/nginx/certs/:/etc/ssl/certs/
-      - "./docker/nginx/templates:/etc/nginx/templates/"
-      - static_data:/opt/invenio/var/instance/static
-    env_file:
-      - .env.default
-      - .env
+  # proxy:
+  #   image: caddy:2.7.6
+  #   restart: "unless-stopped"
+  #   ports:
+  #     - "8080:8080"
+  #   volumes:
+  #     - static_data:/opt/invenio/var/instance/static
+  #     - ./Caddyfile:/etc/caddy/Caddyfile:ro
+  #   env_file:
+  #     - .env.default
+  #     - .env
   web:
     image: ghcr.io/front-matter/invenio-rdm-starter:latest
     ports:
-      - "5000"
+      - "9000:9000"
     volumes:
       - uploaded_data:/opt/invenio/var/instance/data
       - archived_data:/opt/invenio/var/instance/archive
