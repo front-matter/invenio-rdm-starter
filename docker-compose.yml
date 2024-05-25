@@ -1,91 +1,53 @@
-# InvenioDRM Starter staging environment
+# InvenioDRM Starter Docker Compose
 #
 # Usage::
 #
 #   $ docker compose up -d
 #
 # The following services are included:
-# - Reverse Proxy with SSL termination: Traefik (exposed ports: 80, 443, 8080)
-# - Web application: Nginx/Gunicorn (exposed port: not exposed)
-# - Cache: Redis (exposed port: 6379)
+# - Web application: Nginx/Gunicorn (exposed port: 8080)
 # - DB: (PostgresSQL) (exposed port: 5432)
+# - Cache: Redis (exposed port: 6379)
 # - Message queue: Redis (exposed port: 6379)
 # - Search platform: (OpenSearch) (exposed ports: 9200, 9300)
 
 version: '3.8'
 services:
-  traefik:
-    image: "traefik:v2.11"
-    container_name: "traefik"
-    command:
-      - --providers.docker=true
-      - --entrypoints.web.address=:80
-
-      # use default Traefic TLS certificate (browser may give warnings)
-      - --entrypoints.websecure.address=:443
-      - --api.insecure
-    labels:
-      # middleware redirect
-      - "traefik.http.middlewares.redirect-to-https.redirectscheme.scheme=https"
-      
-      # global redirect to https
-      - "traefik.http.routers.redirs.rule=hostregexp(`{host:.+}`)"
-      - "traefik.http.routers.redirs.entrypoints=web"
-      - "traefik.http.routers.redirs.middlewares=redirect-to-https"
-    depends_on:
-      - web
+  nginx:
+    image: nginx:1.25-bookworm
+    restart: "unless-stopped"
     ports:
-      - "80:80"
-      - "443:443"
-      - "8080:8080"
+      - "9000:9000"
     volumes:
-      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+      - ./docker/nginx/conf.d:/etc/nginx/conf.d
+      - ./docker/nginx/certs/:/etc/ssl/certs/
+      - "./docker/nginx/templates:/etc/nginx/templates/"
+      - static_data:/opt/invenio/var/instance/static
+    env_file:
+      - .env.default
+      - .env
   web:
-    build:
-      context: ./
-    image: invenio-rdm-starter:latest
+    image: ghcr.io/front-matter/invenio-rdm-starter:latest
     ports:
       - "5000"
     volumes:
       - uploaded_data:/opt/invenio/var/instance/data
       - archived_data:/opt/invenio/var/instance/archive
-    environment:
-      - "INVENIO_ACCOUNTS_SESSION_REDIS_URL=redis://cache:6379/1"
-      - "INVENIO_BROKER_URL="
-      - "INVENIO_CACHE_REDIS_URL=redis://cache:6379/0"
-      - "INVENIO_CACHE_TYPE=redis"
-      - "INVENIO_CELERY_BROKER_URL="
-      - "INVENIO_CELERY_RESULTpro_BACKEND=redis://cache:6379/2"
-      - "INVENIO_SEARCH_HOSTS=['search:9200']"
-      - "INVENIO_SECRET_KEY=CHANGE_ME"
-      - "INVENIO_SQLALCHEMY_DATABASE_URI=postgresql+psycopg2://invenio-rdm-starter:invenio-rdm-starter@db/invenio-rdm-starter"
-      - "INVENIO_RATELIMIT_STORAGE_URL=redis://cache:6379/3"
-  worker:
-    build:
-      context: ./
-    command: ["celery -A invenio_app.celery worker --beat --loglevel=INFO"]
-    image: invenio-rdm-starter:latest
-    volumes:
-      - uploaded_data:/opt/invenio/var/instance/data
-    depends_on:
-      search:
-        condition: service_started
-      cache:
-        condition: service_started
-      db:
-        condition: service_started
-    environment:
-      - "INVENIO_ACCOUNTS_SESSION_REDIS_URL=redis://cache:6379/1"
-      - "INVENIO_BROKER_URL="
-      - "INVENIO_CACHE_REDIS_URL=redis://cache:6379/0"
-      - "INVENIO_CACHE_TYPE=redis"
-      - "INVENIO_CELERY_BROKER_URL=redis://cache:6379/1"
-      - "INVENIO_CELERY_RESULT_BACKEND=redis://cache:6379/2"
-      - "INVENIO_SEARCH_HOSTS=['search:9200']"
-      - "INVENIO_SECRET_KEY=CHANGE_ME"
-      - "INVENIO_SQLALCHEMY_DATABASE_URI=postgresql+psycopg2://invenio-rdm-starter:invenio-rdm-starter@db/invenio-rdm-starter"
-      - "INVENIO_WSGI_PROXIES=2"
-      - "INVENIO_RATELIMIT_STORAGE_URL=redis://cache:6379/3"
+    env_file:
+      - .env.default
+      - .env
+  # worker:
+  #   command: ["celery -A invenio_app.celery worker --beat --loglevel=INFO"]
+  #   image: ghcr.io/front-matter/invenio-rdm-starter:latest
+  #   volumes:
+  #     - uploaded_data:/opt/invenio/var/instance/data
+  #   depends_on:
+  #     search:
+  #       condition: service_started
+  #     cache:
+  #       condition: service_started
+  #     db:
+  #       condition: service_started
   cache:
     image: redis:7.2
     restart: "unless-stopped"
@@ -95,10 +57,9 @@ services:
   db:
     image: postgres:16.2
     restart: "unless-stopped"
-    environment:
-      - "POSTGRES_USER=inveniordm"
-      - "POSTGRES_PASSWORD=inveniordm"
-      - "POSTGRES_DB=inveniordm"
+    env_file:
+      - .env.default
+      - .env
     ports:
       - "5432:5432"
     volumes:
