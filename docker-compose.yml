@@ -12,39 +12,51 @@
 # - Search platform: (OpenSearch) (exposed ports: 9200, 9300)
 
 services:
-  # proxy:
-  #   image: caddy:2.7.6
-  #   restart: "unless-stopped"
-  #   ports:
-  #     - "8080:8080"
-  #   volumes:
-  #     - static_data:/opt/invenio/var/instance/static
-  #     - ./Caddyfile:/etc/caddy/Caddyfile:ro
-  #   env_file:
-  #     - .env.default
-  #     - .env
-  web:
-    image: ghcr.io/front-matter/invenio-rdm-starter:latest
+  proxy:
+    image: caddy:2.7.6
+    restart: "unless-stopped"
     ports:
-      - "9000:9000"
+      - "80:80"
+      - "443:443"
+      - "443:443/udp"
     volumes:
-      - uploaded_data:/opt/invenio/var/instance/data
-      - archived_data:/opt/invenio/var/instance/archive
+      - static_data:/opt/invenio/var/instance/static
+      - ./Caddyfile:/etc/caddy/Caddyfile
+      - caddy_data:/data
+      - caddy_config:/config
     env_file:
       - .env.default
       - .env
-  # worker:
-  #   command: ["celery -A invenio_app.celery worker --beat --loglevel=INFO"]
-  #   image: ghcr.io/front-matter/invenio-rdm-starter:latest
-  #   volumes:
-  #     - uploaded_data:/opt/invenio/var/instance/data
-  #   depends_on:
-  #     search:
-  #       condition: service_started
-  #     cache:
-  #       condition: service_started
-  #     db:
-  #       condition: service_started
+  web:
+    image: ghcr.io/front-matter/invenio-rdm-starter:latest
+    volumes:
+      - uploaded_data:/opt/invenio/var/instance/data
+      - archived_data:/opt/invenio/var/instance/archive
+    environment:
+      - INVENIO_ACCOUNTS_SESSION_REDIS_URL=redis://cache:6379/1
+      - INVENIO_BROKER_URL=amqp://guest:guest@mq:5672/
+      - INVENIO_CACHE_REDIS_URL=redis://cache:6379/0
+      - INVENIO_CACHE_TYPE=redis
+      - INVENIO_CELERY_BROKER_URL=amqp://guest:guest@mq:5672/
+      - INVENIO_CELERY_RESULT_BACKEND=redis://cache:6379/2
+      - INVENIO_SEARCH_HOSTS=['search:9200']
+      - INVENIO_SECRET_KEY=CHANGE_ME
+      - INVENIO_SQLALCHEMY_DATABASE_URI=postgresql+psycopg2://inveniordm:inveniordm@db/inveniordm
+      - INVENIO_WSGI_PROXIES=2
+      - INVENIO_RATELIMIT_STORAGE_URL=redis://cache:6379/3
+      - INVENIO_THEME_SHOW_FRONTPAGE_INTRO_SECTION=False
+  worker:
+    command: ["celery -A invenio_app.celery worker --beat --loglevel=INFO"]
+    image: ghcr.io/front-matter/invenio-rdm-starter:latest
+    volumes:
+      - uploaded_data:/opt/invenio/var/instance/data
+    depends_on:
+      search:
+        condition: service_started
+      cache:
+        condition: service_started
+      db:
+        condition: service_started
   cache:
     image: redis:7.2
     restart: "unless-stopped"
@@ -54,9 +66,10 @@ services:
   db:
     image: postgres:16.2
     restart: "unless-stopped"
-    env_file:
-      - .env.default
-      - .env
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DB}
     ports:
       - "5432:5432"
     volumes:
@@ -87,3 +100,5 @@ volumes:
   static_data:
   uploaded_data:
   archived_data:
+  caddy_data:
+  caddy_config:

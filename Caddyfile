@@ -1,5 +1,5 @@
-localhost :8080 {
+localhost :443 {
 	root /static/* /opt/invenio/var/instance/static
-	reverse_proxy /api/* localhost:5000
+	reverse_proxy web:5000
 	file_server
 }
