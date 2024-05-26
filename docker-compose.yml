@@ -32,35 +32,40 @@ services:
     volumes:
       - uploaded_data:/opt/invenio/var/instance/data
       - archived_data:/opt/invenio/var/instance/archive
+    env_file:
+      - .env.default
+      - .env
     environment:
-      - INVENIO_ACCOUNTS_SESSION_REDIS_URL=redis://cache:6379/1
       - INVENIO_BROKER_URL=amqp://guest:guest@mq:5672/
+      - INVENIO_CELERY_BROKER_URL=amqp://guest:guest@mq:5672/
       - INVENIO_CACHE_REDIS_URL=redis://cache:6379/0
       - INVENIO_CACHE_TYPE=redis
-      - INVENIO_CELERY_BROKER_URL=amqp://guest:guest@mq:5672/
+      - INVENIO_ACCOUNTS_SESSION_REDIS_URL=redis://cache:6379/1
       - INVENIO_CELERY_RESULT_BACKEND=redis://cache:6379/2
+      - INVENIO_RATELIMIT_STORAGE_URL=redis://cache:6379/3
       - INVENIO_SEARCH_HOSTS=['search:9200']
-      - INVENIO_SECRET_KEY=CHANGE_ME
+      - INVENIO_SECRET_KEY=${INVENIO_SECRET_KEY}
       - INVENIO_SQLALCHEMY_DATABASE_URI=postgresql+psycopg2://inveniordm:inveniordm@db/inveniordm
       - INVENIO_WSGI_PROXIES=2
-      - INVENIO_RATELIMIT_STORAGE_URL=redis://cache:6379/3
       - INVENIO_THEME_SHOW_FRONTPAGE_INTRO_SECTION=False
+      - INVENIO_MAIL_SUPPRESS_SEND=True
   worker:
-    command: ["celery -A invenio_app.celery worker --beat --loglevel=INFO"]
+    command: "celery -A invenio_app.celery worker --beat --loglevel=INFO"
     image: ghcr.io/front-matter/invenio-rdm-starter:latest
     volumes:
       - uploaded_data:/opt/invenio/var/instance/data
-    depends_on:
-      search:
-        condition: service_started
-      cache:
-        condition: service_started
-      db:
-        condition: service_started
-  cache:
-    image: redis:7.2
+    environment:
+      - INVENIO_CELERY_BROKER_URL=amqp://guest:guest@mq:5672/
+      - INVENIO_CELERY_RESULT_BACKEND=redis://cache:6379/2
+  mq:
+    image: rabbitmq:3.13-management
     restart: "unless-stopped"
-    read_only: true
+    ports:
+      - "15672:15672"
+      - "5672:5672"
+  cache:
+    image: redis:7.2.5-bookworm
+    restart: "unless-stopped"
     ports:
       - "6379:6379"
   db:
@@ -71,7 +76,7 @@ services:
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
       - POSTGRES_DB=${POSTGRES_DB}
     ports:
-      - "5432:5432"
+      - 5432:5432
     volumes:
       - ./docker/postgres/docker-entrypoint-initdb.d/inveniordm.sql:/docker-entrypoint-initdb.d/inveniordm.sql
   search:
@@ -79,10 +84,10 @@ services:
     restart: "unless-stopped"
     environment:
       - bootstrap.memory_lock=true
-      - "OPENSEARCH_JAVA_OPTS=-Xms512m -Xmx512m"
-      - "DISABLE_INSTALL_DEMO_CONFIG=true"
-      - "DISABLE_SECURITY_PLUGIN=true"
-      - "discovery.type=single-node"
+      - OPENSEARCH_JAVA_OPTS=-Xms512m -Xmx512m
+      - DISABLE_INSTALL_DEMO_CONFIG=true
+      - DISABLE_SECURITY_PLUGIN=true
+      - discovery.type=single-node
     ulimits:
       memlock:
         soft: -1
