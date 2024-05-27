@@ -46,7 +46,7 @@ FROM python:3.12-slim-bookworm AS runtime
 
 # Install OS package dependency
 RUN --mount=type=cache,target=/var/cache/apt apt-get update -y && \
-    apt-get install libcairo2 libxmlsec1 -y --no-install-recommends && \
+    apt-get install libcairo2 -y --no-install-recommends && \
     apt-get clean && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /opt/invenio
@@ -66,6 +66,8 @@ WORKDIR ${WORKING_DIR}/src
 COPY --from=builder ${INVENIO_INSTANCE_PATH}/static ${INVENIO_INSTANCE_PATH}/static
 COPY --from=builder ${INVENIO_INSTANCE_PATH}/assets ${INVENIO_INSTANCE_PATH}/assets
 
+COPY ./invenio.cfg ${INVENIO_INSTANCE_PATH}
+
 # Create user and set permissions
 ENV INVENIO_USER_ID=1000
 # RUN adduser invenio --uid ${INVENIO_USER_ID} --gid 0 --no-create-home && \
@@ -75,4 +77,4 @@ ENV INVENIO_USER_ID=1000
 
 # USER invenio
 EXPOSE 5000
-CMD ["gunicorn", "invenio_app.wsgi", "--bind", "0.0.0.0:5000", "--workers", "4"]
+CMD ["gunicorn", "invenio_app.wsgi:application", "--bind", "0.0.0.0:5000", "--workers", "4"]
