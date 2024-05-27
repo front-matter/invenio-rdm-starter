@@ -1,5 +1,16 @@
 localhost :443 {
 	root /static/* /opt/invenio/var/instance/static
 	reverse_proxy web:5000
-	file_server
+  file_server
+  encode gzip
+  log
+
+  @css path *.css
+      header @css Content-Type text/css
+  @js path *.js
+      header @js Content-Type application/javascript
+  @svg path *.svg
+      header @svg Content-Type image/svg+xml
+  @ico path *.ico
+      header @ico Content-Type image/x-icon
 }

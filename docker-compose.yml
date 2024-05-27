@@ -5,10 +5,11 @@
 #   $ docker compose up -d
 #
 # The following services are included:
-# - Web application: Caddy/Gunicorn (exposed port: 8080)
+# - Reverse proxy: Caddy (exposed ports: 80, 443)
+# - Web application: Gunicorn (exposed port: none)
 # - DB: (PostgresSQL) (exposed port: 5432)
 # - Cache: Redis (exposed port: 6379)
-# - Message queue: Redis (exposed port: 6379)
+# - Message queue: RabbbitMQ (exposed port: 5672)
 # - Search platform: (OpenSearch) (exposed ports: 9200, 9300)
 
 services:
@@ -19,8 +20,8 @@ services:
       - "80:80"
       - "443:443"
       - "443:443/udp"
+      - "2019:2019"
     volumes:
-      - static_data:/opt/invenio/var/instance/static
       - ./Caddyfile:/etc/caddy/Caddyfile
       - caddy_data:/data
       - caddy_config:/config
@@ -36,17 +37,17 @@ services:
       - .env.default
       - .env
     environment:
-      - INVENIO_BROKER_URL=amqp://guest:guest@mq:5672/
-      - INVENIO_CELERY_BROKER_URL=amqp://guest:guest@mq:5672/
-      - INVENIO_CACHE_REDIS_URL=redis://cache:6379/0
-      - INVENIO_CACHE_TYPE=redis
-      - INVENIO_ACCOUNTS_SESSION_REDIS_URL=redis://cache:6379/1
-      - INVENIO_CELERY_RESULT_BACKEND=redis://cache:6379/2
-      - INVENIO_RATELIMIT_STORAGE_URL=redis://cache:6379/3
+      - INVENIO_BROKER_URL=${INVENIO_BROKER_URL}
+      - INVENIO_CELERY_BROKER_URL=${INVENIO_BROKER_URL}
+      - INVENIO_CACHE_TYPE=${INVENIO_CACHE_TYPE}
+      - INVENIO_CACHE_REDIS_URL=${INVENIO_CACHE_REDIS_URL}
+      - INVENIO_ACCOUNTS_SESSION_REDIS_URL=${INVENIO_ACCOUNTS_SESSION_REDIS_URL}
+      - INVENIO_CELERY_RESULT_BACKEND=${INVENIO_CELERY_RESULT_BACKEND}
+      - INVENIO_RATELIMIT_STORAGE_URL=${INVENIO_RATELIMIT_STORAGE_URL}
       - INVENIO_SEARCH_HOSTS=['search:9200']
       - INVENIO_SECRET_KEY=${INVENIO_SECRET_KEY}
       - INVENIO_SQLALCHEMY_DATABASE_URI=postgresql+psycopg2://inveniordm:inveniordm@db/inveniordm
-      - INVENIO_WSGI_PROXIES=2
+      - INVENIO_WSGI_PROXIES=4
       - INVENIO_THEME_SHOW_FRONTPAGE_INTRO_SECTION=False
       - INVENIO_MAIL_SUPPRESS_SEND=True
   worker:
