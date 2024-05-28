@@ -1946,13 +1946,13 @@ tests = ["mock (>=4.0.0)", "pytest-black (>=0.3.0)", "pytest-invenio (>=1.4.7)",
 
 [[package]]
 name = "invenio-app-rdm"
-version = "12.0.0b3.dev17"
+version = "12.0.0b3.dev18"
 description = "Invenio Research Data Management."
 optional = false
 python-versions = ">=3.7"
 files = [
-    {file = "invenio-app-rdm-12.0.0b3.dev17.tar.gz", hash = "sha256:f46ed57fb88cde09b3fb0b8e4347f34d160254d3306cd4ea04d310eb3ea4bc41"},
-    {file = "invenio_app_rdm-12.0.0b3.dev17-py2.py3-none-any.whl", hash = "sha256:4520e6ae1bd2244cc4e4033bca5c8bd91eee2b6e52ab317300508a2582334d77"},
+    {file = "invenio-app-rdm-12.0.0b3.dev18.tar.gz", hash = "sha256:997f990aa99b3e94e219729be17a8ffe0f49ef19cc017962a2ce1a70314a261b"},
+    {file = "invenio_app_rdm-12.0.0b3.dev18-py2.py3-none-any.whl", hash = "sha256:c2bca2295da418f87324341b19c5fcfca558d64c360171d7ce7e9ae5a7c1c5d5"},
 ]
 
 [package.dependencies]
@@ -4335,13 +4335,13 @@ files = [
 
 [[package]]
 name = "prompt-toolkit"
-version = "3.0.43"
+version = "3.0.44"
 description = "Library for building powerful interactive command lines in Python"
 optional = false
 python-versions = ">=3.7.0"
 files = [
-    {file = "prompt_toolkit-3.0.43-py3-none-any.whl", hash = "sha256:a11a29cb3bf0a28a387fe5122cdb649816a957cd9261dcedf8c9f1fef33eacf6"},
-    {file = "prompt_toolkit-3.0.43.tar.gz", hash = "sha256:3527b7af26106cbc65a040bcc84839a3566ec1b051bb0bfe953631e704b0ff7d"},
+    {file = "prompt_toolkit-3.0.44-py3-none-any.whl", hash = "sha256:205a20669633d042d3722a528b8e7cd3f4dbd9e1450935f596c2cc61166762dd"},
+    {file = "prompt_toolkit-3.0.44.tar.gz", hash = "sha256:c1dfd082c4259964bc8bcce1f8460d9dbeb5d4a37bfc25b8082bc02cd41c8af6"},
 ]
 
 [package.dependencies]
@@ -6303,13 +6303,13 @@ files = [
 
 [[package]]
 name = "zipp"
-version = "3.18.2"
+version = "3.19.0"
 description = "Backport of pathlib-compatible object wrapper for zip files"
 optional = false
 python-versions = ">=3.8"
 files = [
-    {file = "zipp-3.18.2-py3-none-any.whl", hash = "sha256:dce197b859eb796242b0622af1b8beb0a722d52aa2f57133ead08edd5bf5374e"},
-    {file = "zipp-3.18.2.tar.gz", hash = "sha256:6278d9ddbcfb1f1089a88fde84481528b07b0e10474e09dcfe53dad4069fa059"},
+    {file = "zipp-3.19.0-py3-none-any.whl", hash = "sha256:96dc6ad62f1441bcaccef23b274ec471518daf4fbbc580341204936a5a3dddec"},
+    {file = "zipp-3.19.0.tar.gz", hash = "sha256:952df858fb3164426c976d9338d3961e8e8b3758e2e059e0f754b8c4262625ee"},
 ]
 
 [package.extras]
@@ -6333,4 +6333,4 @@ tests = ["pytest", "pytest-cov"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.12"
-content-hash = "45995ac0613a0e5df4866384f48c70b61e9f249a651c25565bb58369401556c7"
+content-hash = "d0f5f395f17d6b2a13d679d18baaeb03444e786ef3c43d6f9526a35a870f840e"
