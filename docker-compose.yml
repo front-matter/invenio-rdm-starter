@@ -47,6 +47,7 @@ services:
       - INVENIO_THEME_SHOW_FRONTPAGE_INTRO_SECTION=False
       - INVENIO_MAIL_SUPPRESS_SEND=True
       - INVENIO_LOGGING_CONSOLE_LEVEL=${INVENIO_LOGGING_CONSOLE_LEVEL:-INFO}
+      - INVENIO_BABEL_DEFAULT_LOCALE=${INVENIO_BABEL_DEFAULT_LOCALE:-en}
   worker:
     command: "celery -A invenio_app.celery worker --beat --loglevel=INFO"
     image: ghcr.io/front-matter/invenio-rdm-starter:latest
