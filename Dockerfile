@@ -68,6 +68,8 @@ ENV VIRTUAL_ENV=/opt/invenio/.venv \
 
 COPY --from=builder ${WORKING_DIR} ${WORKING_DIR}
 
+RUN pip install --upgrade --force-reinstall invenio-app-rdm==12.0.0rc2
+
 WORKDIR ${WORKING_DIR}/src
 
 # RUN mkdir ${INVENIO_INSTANCE_PATH}/data && \

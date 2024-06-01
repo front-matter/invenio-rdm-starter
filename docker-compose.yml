@@ -14,7 +14,7 @@
 
 services:
   proxy:
-    image: caddy:2.7.6
+    image: caddy:2.8.1
     restart: "unless-stopped"
     ports:
       - "80:80"
@@ -23,29 +23,24 @@ services:
       - "2019:2019"
     volumes:
       - ./Caddyfile:/etc/caddy/Caddyfile
+      - ./site:/srv
       - caddy_data:/data
       - caddy_config:/config
-    env_file:
-      - .env.default
-      - .env
   web:
     image: ghcr.io/front-matter/invenio-rdm-starter:latest
     volumes:
       - uploaded_data:/opt/invenio/var/instance/data
       - archived_data:/opt/invenio/var/instance/archive
-    env_file:
-      - .env.default
-      - .env
     environment:
-      - INVENIO_BROKER_URL=${INVENIO_BROKER_URL}
-      - INVENIO_CELERY_BROKER_URL=${INVENIO_BROKER_URL}
-      - INVENIO_CACHE_TYPE=${INVENIO_CACHE_TYPE}
-      - INVENIO_CACHE_REDIS_URL=${INVENIO_CACHE_REDIS_URL}
-      - INVENIO_ACCOUNTS_SESSION_REDIS_URL=${INVENIO_ACCOUNTS_SESSION_REDIS_URL}
-      - INVENIO_CELERY_RESULT_BACKEND=${INVENIO_CELERY_RESULT_BACKEND}
-      - INVENIO_RATELIMIT_STORAGE_URL=${INVENIO_RATELIMIT_STORAGE_URL}
+      - INVENIO_BROKER_URL=${INVENIO_BROKER_URL:-amqp://guest:guest@mq:5672/}
+      - INVENIO_CACHE_TYPE=${INVENIO_CACHE_TYPE:-redis}
+      - INVENIO_CACHE_REDIS_URL=${INVENIO_CACHE_REDIS_URL:-redis://cache:6379/0}
+      - INVENIO_ACCOUNTS_SESSION_REDIS_URL=${INVENIO_ACCOUNTS_SESSION_REDIS_URL:-redis://cache:6379/1}
+      - INVENIO_CELERY_RESULT_BACKEND=${INVENIO_CELERY_RESULT_BACKEND:-redis://cache:6379/2}
+      - INVENIO_RATELIMIT_STORAGE_URL=${INVENIO_RATELIMIT_STORAGE_URL:-redis://cache:6379/3}
+      - INVENIO_COMMUNITIES_IDENTITIES_CACHE_REDIS_URL=${INVENIO_COMMUNITIES_IDENTITIES_CACHE_REDIS_URL:-redis://cache:6379/4}
       - INVENIO_SEARCH_HOSTS=['search:9200']
-      - INVENIO_SECRET_KEY=${INVENIO_SECRET_KEY}
+      - INVENIO_SECRET_KEY=${INVENIO_SECRET_KEY:-changeme}
       - INVENIO_SQLALCHEMY_DATABASE_URI=postgresql+psycopg2://inveniordm:inveniordm@db/inveniordm
       - INVENIO_WSGI_PROXIES=4
       - INVENIO_THEME_SHOW_FRONTPAGE_INTRO_SECTION=False
@@ -73,9 +68,9 @@ services:
     image: postgres:16.2
     restart: "unless-stopped"
     environment:
-      - POSTGRES_USER=${POSTGRES_USER}
-      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
-      - POSTGRES_DB=${POSTGRES_DB}
+      - POSTGRES_USER=${POSTGRES_USER:-inveniordm}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-inveniordm}
+      - POSTGRES_DB=${POSTGRES_DB:-inveniordm}
     ports:
       - 5432:5432
     volumes:
