@@ -41,7 +41,7 @@ services:
       - INVENIO_COMMUNITIES_IDENTITIES_CACHE_REDIS_URL=${INVENIO_COMMUNITIES_IDENTITIES_CACHE_REDIS_URL:-redis://cache:6379/4}
       - INVENIO_SEARCH_HOSTS=['search:9200']
       - INVENIO_SECRET_KEY=${INVENIO_SECRET_KEY:-changeme}
-      - INVENIO_SQLALCHEMY_DATABASE_URI=postgresql+psycopg2://inveniordm:inveniordm@db/inveniordm
+      - INVENIO_SQLALCHEMY_DATABASE_URI=${INVENIO_SQLALCHEMY_DATABASE_URI:-postgresql+psycopg2://inveniordm:inveniordm@db/inveniordm}
       - INVENIO_WSGI_PROXIES=4
       - INVENIO_THEME_SHOW_FRONTPAGE_INTRO_SECTION=False
       - INVENIO_MAIL_SUPPRESS_SEND=True
@@ -51,8 +51,8 @@ services:
     volumes:
       - uploaded_data:/opt/invenio/var/instance/data
     environment:
-      - INVENIO_CELERY_BROKER_URL=amqp://guest:guest@mq:5672/
-      - INVENIO_CELERY_RESULT_BACKEND=redis://cache:6379/2
+      - INVENIO_BROKER_URL=${INVENIO_BROKER_URL:-amqp://guest:guest@mq:5672/}
+      - INVENIO_CELERY_RESULT_BACKEND=${INVENIO_CELERY_RESULT_BACKEND:-redis://cache:6379/2}
   mq:
     image: rabbitmq:3.13-management
     restart: "unless-stopped"
