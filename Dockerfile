@@ -42,7 +42,7 @@ WORKDIR ${WORKING_DIR}
 
 COPY pyproject.toml poetry.lock ./
 RUN touch README.md
-RUN --mount=type=cache,target=$POETRY_CACHE_DIR poetry install --no-root --no-dev --no-interaction --no-ansi
+RUN --mount=type=cache,target=$POETRY_CACHE_DIR poetry install --no-root --only main --no-interaction --no-ansi
 
 COPY site ./site
 COPY static ${INVENIO_INSTANCE_PATH}/static
