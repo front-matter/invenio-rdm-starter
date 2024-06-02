@@ -58,7 +58,7 @@ FROM python:3.12-slim-bookworm AS runtime
 
 # Install OS package dependency
 RUN --mount=type=cache,target=/var/cache/apt apt-get update -y --fix-missing && \
-    apt-get install libcairo2 -y --no-install-recommends && \
+    apt-get install -y --no-install-recommends && \
     apt-get clean
 
 ENV VIRTUAL_ENV=/opt/invenio/.venv \
