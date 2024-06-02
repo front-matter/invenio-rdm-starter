@@ -1,80 +1,91 @@
-# InvenioDRM Starter development environment
-#
-# Note, this file, and Docker Compose in general, is not suitable for a production deployment.
+# InvenioDRM Starter Docker Compose
 #
 # Usage::
 #
 #   $ docker compose up -d
 #
-# THE following services are included:
-# - SSL termination: Traefik (exposed ports: 40, 443, and)
-# - Frontend: Nginx (exposed port: 8000)
-# - UI application: UWSGI (not exposed)
-# - API application: UWSGI (not exposed)
+# The following services are included:
+# - Reverse proxy: Caddy (exposed ports: 80, 443)
+# - Web application: Gunicorn (exposed port: none)
+# - DB: (PostgresSQL) (exposed port: 5432)
 # - Cache: Redis (exposed port: 6379)
-# - DB: (PostgresSQL/MySQL) (exposed port: 5432 or 3306)
-# - Message queue: RabbitMQ (exposed ports: 5672, 15672)
-# - Search platform: (OpenSearch/Elasticsearch) (exposed ports: 9200, 9300)
+# - Message queue: RabbbitMQ (exposed port: 5672)
+# - Search platform: (OpenSearch) (exposed ports: 9200, 9300)
 
-version: '3.8'
 services:
-  traefik:
-    image: "traefik:v2.10"
-    container_name: "traefik"
-    command:
-      - --providers.docker=true
-      - --entrypoints.web.address=:80
-
-      # use default Traefic TLS certificate (browser may give warnings)
-      - --entrypoints.websecure.address=:443
-      - --api.insecure
-    labels:
-      # middleware redirect
-      - "traefik.http.middlewares.redirect-to-https.redirectscheme.scheme=https"
-      
-      # global redirect to https
-      - "traefik.http.routers.redirs.rule=hostregexp(`{host:.+}`)"
-      - "traefik.http.routers.redirs.entrypoints=web"
-      - "traefik.http.routers.redirs.middlewares=redirect-to-https"
+  proxy:
+    image: caddy:2.8.1
+    restart: "unless-stopped"
     ports:
       - "80:80"
       - "443:443"
-      - "8080:8080"
+      - "443:443/udp"
+      - "2019:2019"
     volumes:
-      - "/var/run/docker.sock:/var/run/docker.sock:ro"
-  cache:
-    image: redis:7
-    restart: "unless-stopped"
-    read_only: true
-    ports:
-      - "6379:6379"
-  db:
-    image: postgres:16.1
-    restart: "unless-stopped"
+      - ./Caddyfile:/etc/caddy/Caddyfile
+      - ./site:/srv
+      - caddy_data:/data
+      - caddy_config:/config
+  web:
+    image: ghcr.io/front-matter/invenio-rdm-starter:latest
+    volumes:
+      - uploaded_data:/opt/invenio/var/instance/data
+      - archived_data:/opt/invenio/var/instance/archive
     environment:
-      - "POSTGRES_USER=inveniordm"
-      - "POSTGRES_PASSWORD=inveniordm"
-      - "POSTGRES_DB=inveniordm"
-    ports:
-      - "5432:5432"
+      - INVENIO_BROKER_URL=${INVENIO_BROKER_URL:-amqp://guest:guest@mq:5672/}
+      - INVENIO_CACHE_TYPE=${INVENIO_CACHE_TYPE:-redis}
+      - INVENIO_CACHE_REDIS_URL=${INVENIO_CACHE_REDIS_URL:-redis://cache:6379/0}
+      - INVENIO_ACCOUNTS_SESSION_REDIS_URL=${INVENIO_ACCOUNTS_SESSION_REDIS_URL:-redis://cache:6379/1}
+      - INVENIO_CELERY_RESULT_BACKEND=${INVENIO_CELERY_RESULT_BACKEND:-redis://cache:6379/2}
+      - INVENIO_RATELIMIT_STORAGE_URL=${INVENIO_RATELIMIT_STORAGE_URL:-redis://cache:6379/3}
+      - INVENIO_COMMUNITIES_IDENTITIES_CACHE_REDIS_URL=${INVENIO_COMMUNITIES_IDENTITIES_CACHE_REDIS_URL:-redis://cache:6379/4}
+      - INVENIO_SEARCH_HOSTS=['search:9200']
+      - INVENIO_SECRET_KEY=${INVENIO_SECRET_KEY:-changeme}
+      - INVENIO_SQLALCHEMY_DATABASE_URI=${INVENIO_SQLALCHEMY_DATABASE_URI:-postgresql+psycopg2://inveniordm:inveniordm@db/inveniordm}
+      - INVENIO_WSGI_PROXIES=4
+      - INVENIO_THEME_FRONTPAGE_TITLE=${INVENIO_THEME_FRONTPAGE_TITLE:-InvenioRDM Starter}
+      - INVENIO_THEME_SHOW_FRONTPAGE_INTRO_SECTION=False
+      - INVENIO_MAIL_SUPPRESS_SEND=True
+      - INVENIO_LOGGING_CONSOLE_LEVEL=${INVENIO_LOGGING_CONSOLE_LEVEL:-INFO}
+      - INVENIO_BABEL_DEFAULT_LOCALE=${INVENIO_BABEL_DEFAULT_LOCALE:-en}
+  worker:
+    command: "celery -A invenio_app.celery worker --beat --loglevel=INFO"
+    image: ghcr.io/front-matter/invenio-rdm-starter:latest
     volumes:
-      - ./docker/postgres/docker-entrypoint-initdb.d/inveniordm.sql:/docker-entrypoint-initdb.d/inveniordm.sql
+      - uploaded_data:/opt/invenio/var/instance/data
+    environment:
+      - INVENIO_BROKER_URL=${INVENIO_BROKER_URL:-amqp://guest:guest@mq:5672/}
+      - INVENIO_CELERY_BROKER_URL=${INVENIO_CELERY_BROKER_URL:-amqp://guest:guest@mq:5672/}
+      - INVENIO_CELERY_RESULT_BACKEND=${INVENIO_CELERY_RESULT_BACKEND:-redis://cache:6379/2}
   mq:
-    image: rabbitmq:3-management
+    image: rabbitmq:3.13-management
     restart: "unless-stopped"
     ports:
       - "15672:15672"
       - "5672:5672"
-  search:
-    image: opensearchproject/opensearch:2.3.0
+  cache:
+    image: redis:7.2.5-bookworm
+    restart: "unless-stopped"
+    ports:
+      - "6379:6379"
+  db:
+    image: postgres:16.2
     restart: "unless-stopped"
     environment:
-      # settings only for development. DO NOT use in production!
+      - POSTGRES_USER=${POSTGRES_USER:-inveniordm}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-inveniordm}
+      - POSTGRES_DB=${POSTGRES_DB:-inveniordm}
+    ports:
+      - 5432:5432
+  search:
+    image: opensearchproject/opensearch:2.12.0
+    restart: "unless-stopped"
+    environment:
       - bootstrap.memory_lock=true
-      - "OPENSEARCH_JAVA_OPTS=-Xms512m -Xmx512m"
-      - "DISABLE_INSTALL_DEMO_CONFIG=true"
-      - "DISABLE_SECURITY_PLUGIN=true"
-      - "discovery.type=single-node"
+      - OPENSEARCH_JAVA_OPTS=-Xms512m -Xmx512m
+      - DISABLE_INSTALL_DEMO_CONFIG=true
+      - DISABLE_SECURITY_PLUGIN=true
+      - discovery.type=single-node
     ulimits:
       memlock:
         soft: -1
@@ -83,8 +94,12 @@ services:
         soft: 65536
         hard: 65536
     mem_limit: 2g
-    volumes:
-      - ./docker/opensearch:/usr/share/opensearch/data
     ports:
       - "9200:9200"
       - "9600:9600"
+volumes:
+  static_data:
+  uploaded_data:
+  archived_data:
+  caddy_data:
+  caddy_config:
