@@ -1,0 +1,96 @@
+- id: ara
+  props:
+    alpha_2: ar
+  tags:
+  - macrolanguage
+  - living
+  title:
+    en: Arabic
+- id: cym
+  props:
+    alpha_2: cy
+  tags:
+  - individual
+  - living
+  title:
+    en: Welsh
+- id: deu
+  props:
+    alpha_2: de
+  tags:
+  - individual
+  - living
+  title:
+    en: German 
+- id: eng
+  props:
+    alpha_2: en
+  tags:
+  - individual
+  - living
+  title:
+    en: English
+- id: fra
+  props:
+    alpha_2: fr
+  tags:
+  - individual
+  - living
+  title:
+    en: French
+- id: ita
+  props:
+    alpha_2: it
+  tags:
+  - individual
+  - living
+  title:
+    en: Italian
+- id: nor
+  props:
+    alpha_2: 'no'
+  tags:
+  - macrolanguage
+  - living
+  title:
+    en: Norwegian
+- id: roh
+  props:
+    alpha_2: rm
+  tags:
+  - individual
+  - living
+  title:
+    en: Romansh
+- id: spa
+  props:
+    alpha_2: es
+  tags:
+  - individual
+  - living
+  title:
+    en: Spanish
+- id: tur
+  props:
+    alpha_2: tr
+  tags:
+  - individual
+  - living
+  title:
+    en: Turkish
+- id: aag
+  props:
+    alpha_2: ''
+  tags:
+  - individual
+  - living
+  title:
+    en: Ambrak
+- id: aah
+  props:
+    alpha_2: ''
+  tags:
+  - individual
+  - living
+  title:
+    en: Abu' Arapesh

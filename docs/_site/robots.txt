@@ -1,0 +1,1 @@
+Sitemap: https://invenio-rdm-starter.front-matter.io/sitemap.xml
