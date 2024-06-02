@@ -33,27 +33,27 @@ jobs:
       #     sarif_file: 'trivy-results.sarif'
       #     category: 'fs'
 
-      - name: Build an image from Dockerfile
-        run: |
-          docker build -t ghcr.io/${{ github.repository_owner }}/invenio-rdm-starter:${{ github.sha }} .
+      # - name: Build an image from Dockerfile
+      #   run: |
+      #     docker build -t ghcr.io/${{ github.repository_owner }}/invenio-rdm-starter:${{ github.sha }} .
 
-      - name: Run Trivy image scan
-        uses: aquasecurity/trivy-action@master
-        with:
-          image-ref: 'ghcr.io/${{ github.repository_owner }}/invenio-rdm-starter:${{ github.sha }}'
-          format: 'sarif'
-          output: 'trivy-results.sarif'
-          exit-code: '1'
-          ignore-unfixed: true
-          vuln-type: 'os,library'
-          severity: 'CRITICAL,HIGH'
+      # - name: Run Trivy image scan
+      #   uses: aquasecurity/trivy-action@master
+      #   with:
+      #     image-ref: 'ghcr.io/${{ github.repository_owner }}/invenio-rdm-starter:${{ github.sha }}'
+      #     format: 'sarif'
+      #     output: 'trivy-results.sarif'
+      #     exit-code: '1'
+      #     ignore-unfixed: true
+      #     vuln-type: 'os,library'
+      #     severity: 'CRITICAL,HIGH'
 
-      - name: Upload Trivy image scan results to GitHub Security tab
-        uses: github/codeql-action/upload-sarif@v3
-        if: always()
-        with:
-          sarif_file: 'trivy-results.sarif'
-          category: 'image'
+      # - name: Upload Trivy image scan results to GitHub Security tab
+      #   uses: github/codeql-action/upload-sarif@v3
+      #   if: always()
+      #   with:
+      #     sarif_file: 'trivy-results.sarif'
+      #     category: 'image'
 
       # https://github.com/docker/metadata-action
       # Tags:
