@@ -1,19 +1,21 @@
 [tool.poetry]
 name = "invenio-rdm-starter"
-version = "0.1.0"
-description = "Starter for the Tturn-key research data management repository"
+version = "0.3.0"
+description = "Starter for the turn-key research data management repository"
 authors = ["Martin Fenner <martin@front-matter.io>"]
 license = "MIT"
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = "^3.9.8"
-invenio-app-rdm = "^11.0.5"
+python = "^3.12"
+invenio-app-rdm = "12.0.0rc2"
+importlib-metadata = "^7.1.0"
+invenio-search = { version = "^2.3.1", extras = ["opensearch2"] }
+gunicorn = "^22.0"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^7.4.3"
-ruff = "^0.1.7"
-black = "^23.12.0"
+ruff = "^0.4.5"
 
 [build-system]
 requires = ["poetry-core"]
