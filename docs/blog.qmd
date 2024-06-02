@@ -1,0 +1,12 @@
+---
+title: Blog
+listing:
+  contents: posts
+  sort: "date desc"
+  page-size: 10
+  type: default
+  feed:
+    items: 50
+    type: "full"
+    language: en
+---
