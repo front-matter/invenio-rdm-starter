@@ -77,8 +77,6 @@ services:
       - POSTGRES_DB=${POSTGRES_DB:-inveniordm}
     ports:
       - 5432:5432
-    volumes:
-      - ./docker/postgres/docker-entrypoint-initdb.d/inveniordm.sql:/docker-entrypoint-initdb.d/inveniordm.sql
   search:
     image: opensearchproject/opensearch:2.12.0
     restart: "unless-stopped"
@@ -96,8 +94,6 @@ services:
         soft: 65536
         hard: 65536
     mem_limit: 2g
-    volumes:
-      - ./docker/opensearch:/usr/share/opensearch/data
     ports:
       - "9200:9200"
       - "9600:9600"

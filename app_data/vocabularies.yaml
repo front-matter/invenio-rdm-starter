@@ -10,12 +10,12 @@ subjects:
 #names:
 #  pid-type: names
 #  data-file: vocabularies/names.yaml
-#licenses:
-#  pid-type: lic
-#  data-file: vocabularies/cc_licences.csv
-#languages:
-#  pid-type: lng
-#  data-file: vocabularies/languages.yaml
+licenses:
+ pid-type: lic
+ data-file: vocabularies/cc_licences.csv
+languages:
+ pid-type: lng
+ data-file: vocabularies/languages.yaml
 # TODO: Uncoment this if you want to have all affiliations with ROR identifiers.
 # affiliations:
 #   pid-type: aff

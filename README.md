@@ -11,10 +11,13 @@ docker exec -it invenio-rdm-starter-web-1  bash
 # create the database and run migrations
 invenio db create
 invenio alembic upgrade
+invenio index init
+
+# load vocabularies
+invenio rdm-records fixtures
 
 # (optional) load demo data
 invenio rdm-records demo
-invenio rdm-records fixtures
 
 # create a user using (your) email address, you will be prompted for a password
 invenio users create info@example.org  --active --confirm
