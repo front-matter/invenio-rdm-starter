@@ -44,7 +44,7 @@ COPY pyproject.toml poetry.lock ./
 RUN touch README.md
 RUN --mount=type=cache,target=$POETRY_CACHE_DIR poetry install --no-root --only main --no-interaction --no-ansi
 
-COPY site ./site
+# COPY site ./site
 COPY static ${INVENIO_INSTANCE_PATH}/static
 COPY assets ${INVENIO_INSTANCE_PATH}/assets
 COPY templates ${INVENIO_INSTANCE_PATH}/templates
