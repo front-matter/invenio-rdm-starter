@@ -68,7 +68,8 @@ ENV VIRTUAL_ENV=/opt/invenio/.venv \
 
 COPY --from=builder ${WORKING_DIR} ${WORKING_DIR}
 
-RUN pip install --upgrade --force-reinstall invenio-app-rdm==12.0.0rc2
+RUN pip install --upgrade --force-reinstall --no-cache-dir cryptography==42.0.7 gunicorn==22.0.0 celery==5.3.6 \
+    rpds-py==0.18.1 lxml==5.2.2 pillow==10.3.0 regex==2024.5.15 psycopg2-binary==2.9.9
 
 WORKDIR ${WORKING_DIR}/src
 
