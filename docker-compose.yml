@@ -32,7 +32,8 @@ services:
       - uploaded_data:/opt/invenio/var/instance/data
       - archived_data:/opt/invenio/var/instance/archive
     environment:
-      - INVENIO_BROKER_URL=${INVENIO_BROKER_URL:-amqp://guest:guest@mq:5672/}
+      - INVENIO_BROKER_URL=${INVENIO_BROKER_URL:-amqp://guest:guest@mq:5672//}
+      - INVENIO_CELERY_BROKER_URL=${INVENIO_CELERY_BROKER_URL:-amqp://guest:guest@mq:5672//}
       - INVENIO_CACHE_TYPE=${INVENIO_CACHE_TYPE:-redis}
       - INVENIO_CACHE_REDIS_URL=${INVENIO_CACHE_REDIS_URL:-redis://cache:6379/0}
       - INVENIO_ACCOUNTS_SESSION_REDIS_URL=${INVENIO_ACCOUNTS_SESSION_REDIS_URL:-redis://cache:6379/1}
@@ -56,9 +57,20 @@ services:
     volumes:
       - uploaded_data:/opt/invenio/var/instance/data
     environment:
-      - INVENIO_BROKER_URL=${INVENIO_BROKER_URL:-amqp://guest:guest@mq:5672/}
-      - INVENIO_CELERY_BROKER_URL=${INVENIO_CELERY_BROKER_URL:-amqp://guest:guest@mq:5672/}
+      - INVENIO_BROKER_URL=${INVENIO_BROKER_URL:-amqp://guest:guest@mq:5672//}
+      - INVENIO_CELERY_BROKER_URL=${INVENIO_CELERY_BROKER_URL:-amqp://guest:guest@mq:5672//}
+      - INVENIO_CACHE_TYPE=${INVENIO_CACHE_TYPE:-redis}
+      - INVENIO_CACHE_REDIS_URL=${INVENIO_CACHE_REDIS_URL:-redis://cache:6379/0}
+      - INVENIO_ACCOUNTS_SESSION_REDIS_URL=${INVENIO_ACCOUNTS_SESSION_REDIS_URL:-redis://cache:6379/1}
       - INVENIO_CELERY_RESULT_BACKEND=${INVENIO_CELERY_RESULT_BACKEND:-redis://cache:6379/2}
+      - INVENIO_RATELIMIT_STORAGE_URL=${INVENIO_RATELIMIT_STORAGE_URL:-redis://cache:6379/3}
+      - INVENIO_COMMUNITIES_IDENTITIES_CACHE_REDIS_URL=${INVENIO_COMMUNITIES_IDENTITIES_CACHE_REDIS_URL:-redis://cache:6379/4}
+      - INVENIO_SEARCH_HOSTS=['search:9200']
+      - INVENIO_SECRET_KEY=${INVENIO_SECRET_KEY:-changeme}
+      - INVENIO_SQLALCHEMY_DATABASE_URI=${INVENIO_SQLALCHEMY_DATABASE_URI:-postgresql+psycopg2://inveniordm:inveniordm@db/inveniordm}
+      - INVENIO_WSGI_PROXIES=4
+      - INVENIO_SITE_UI_URL=${INVENIO_SITE_UI_URL:-https://localhost}
+      - INVENIO_SITE_API_URL=${INVENIO_SITE_UI_API_URL:-https://localhost/api}
   mq:
     image: rabbitmq:3.13-management
     restart: "unless-stopped"
