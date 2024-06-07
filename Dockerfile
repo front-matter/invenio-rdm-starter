@@ -11,7 +11,8 @@ FROM --platform=$BUILDPLATFORM python:3.12-bookworm AS builder
 ENV LANG=en_US.UTF-8 \
     LANGUAGE=en_US:en \
     LC_ALL=en_US.UTF-8 \
-    POETRY_VERSION=1.8.3
+    POETRY_VERSION=1.8.3 \
+    NODENV_VERSION=20.14.0
 
 # Install OS package dependencies
 RUN --mount=type=cache,target=/var/cache/apt \
@@ -56,10 +57,14 @@ RUN poetry run invenio collect --verbose && poetry run invenio webpack buildall
 
 FROM --platform=$BUILDPLATFORM python:3.12-slim-bookworm AS runtime
 
-# Install OS package dependency
+# Install OS package dependencies
 RUN --mount=type=cache,target=/var/cache/apt apt-get update -y --fix-missing && \
-    apt-get install apt-utils libcairo2 curl -y --no-install-recommends && \
-    apt-get clean
+    apt-get install apt-utils libcairo2 curl -y --no-install-recommends
+
+# Install Node.js v20
+RUN curl -fsSL https://deb.nodesource.com/setup_20.x -o nodesource_setup.sh && \
+    bash nodesource_setup.sh && \
+    apt-get install -y nodejs --no-install-recommends && apt-get clean
 
 ENV VIRTUAL_ENV=/opt/invenio/.venv \
     PATH="/opt/invenio/.venv/bin:$PATH" \
@@ -67,15 +72,6 @@ ENV VIRTUAL_ENV=/opt/invenio/.venv \
     INVENIO_INSTANCE_PATH=/opt/invenio/var/instance
 
 COPY --from=builder ${WORKING_DIR} ${WORKING_DIR}
-
-# reinstall Python packages with binary dependencies
-# RUN pip install --upgrade --force-reinstall --no-cache-dir cryptography==42.0.7 gunicorn==22.0.0 celery==5.3.6 \
-#     rpds-py==0.18.1 lxml==5.2.2 pillow==10.3.0 regex==2024.5.15 psycopg2-binary==2.9.9
-
-# Install Node.js v20
-# RUN curl -fsSL https://deb.nodesource.com/setup_20.x -o nodesource_setup.sh && \
-#     bash nodesource_setup.sh && \
-#     apt-get install -y nodejs
 
 WORKDIR ${WORKING_DIR}/src
 
