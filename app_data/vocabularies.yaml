@@ -16,6 +16,12 @@ licenses:
 languages:
   pid-type: lng
   data-file: vocabularies/languages.yaml
+relationtypes:
+  pid-type: rlt
+  data-file: vocabularies/relation_types.yaml
+resourcetypes:
+  pid-type: rsrct
+  data-file: vocabularies/resource_types.yaml
 # TODO: Uncoment this if you want to have all affiliations with ROR identifiers.
 # affiliations:
 #   pid-type: aff
