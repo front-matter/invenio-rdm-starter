@@ -27,6 +27,7 @@ invenio rdm-records demo
 invenio users create info@example.org  --active --confirm
 
 # add the user to the admin role
+invenio roles create admin
 invenio roles add info@example.org admin
 invenio access allow superuser-access role admin
 ```
@@ -44,7 +45,7 @@ docker exec -it invenio-rdm-starter-web-1  bash
 invenio db drop --yes-i-know
 
 # remove the opensearch indexes
-invenio index destroy
+invenio index destroy --force --yes-i-know
 
 # remove the files location
 invenio files location delete default-location
