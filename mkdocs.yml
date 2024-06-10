@@ -11,7 +11,9 @@ theme:
     primary: teal
 extra:
   social:
-    - icon: fontawesome/brands/github 
-      link: https://github.com/front-matter/invenio-rdm-starter
+    - icon: fontawesome/solid/paper-plane
+      link: mailto:info@front-matter.io
     - icon: fontawesome/brands/mastodon 
       link: https://mozilla.org/@martin
+    - icon: fontawesome/brands/github 
+      link: https://github.com/front-matter/invenio-rdm-starter
