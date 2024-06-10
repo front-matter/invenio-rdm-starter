@@ -1,17 +1,6 @@
-# Welcome to MkDocs
+# Welcome to InvenioRDM Starter
 
-For full documentation visit [mkdocs.org](https://www.mkdocs.org).
+## Installation for Development and Testing
 
-## Commands
-
-* `mkdocs new [dir-name]` - Create a new project.
-* `mkdocs serve` - Start the live-reloading docs server.
-* `mkdocs build` - Build the documentation site.
-* `mkdocs -h` - Print help message and exit.
-
-## Project layout
-
-    mkdocs.yml    # The configuration file.
-    docs/
-        index.md  # The documentation homepage.
-        ...       # Other markdown pages, images and other files.
+To install InvenioRDM on your local machine for Testing, use the Docker Compose
+configuration provided by InvenioRDM Starter.

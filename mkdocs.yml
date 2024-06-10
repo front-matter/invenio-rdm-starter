@@ -1,13 +1,16 @@
 site_name: InvenioRDM Starter
+site_dir: _site
 site_url: https://starter.front-matter.io
 repo_url: https://github.com/front-matter/invenio-rdm-starter
+repo_name: front-matter/invenio-rdm-starter
+copyright: Copyright &copy; 2024 Front Matter
 theme:
   name: material
+  palette:
+    primary: teal
 extra:
-  alternate:
-    - name: English
-      link: /en/ 
-      lang: en
-    - name: Deutsch
-      link: /de/
-      lang: de
+  social:
+    - icon: fontawesome/brands/github 
+      link: https://github.com/front-matter/invenio-rdm-starter
+    - icon: fontawesome/brands/mastodon 
+      link: https://mozilla.org/@martin
