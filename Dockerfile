@@ -1,41 +1,43 @@
 # syntax=docker/dockerfile:1.5
-ARG BUILDPLATFORM=linux/amd64,linux/arm64
-FROM python:3.12-bookworm AS builder
+FROM python:3.12 AS builder
 
 # Dockerfile that builds the InvenioRDM Starter Docker image. Based on the following:
 # - https://medium.com/@albertazzir/blazing-fast-python-docker-builds-with-poetry-a78a66f5aed0
 # - https://pythonspeed.com/articles/smaller-python-docker-images/
 # - https://pythonspeed.com/articles/multi-stage-docker-python/
-# - https://stackoverflow.com/questions/53835198/integrating-python-poetry-with-docker
 
 ENV LANG=en_US.UTF-8 \
     LANGUAGE=en_US:en \
-    LC_ALL=en_US.UTF-8 \
     RYE_VERSION=0.34.0 \
-    NODENV_VERSION=20.14.0
+    RYE_TOOLCHAIN=cpython@3.12 \
+    UV_VERSION=0.2.9 \
+    NODENV_VERSION=20.14.0 \
+    VIRTUAL_ENV=/opt/invenio/.venv
 
 # Install OS package dependencies
 RUN --mount=type=cache,sharing=locked,target=/var/cache/apt \
     apt-get update --fix-missing && apt-get install -y build-essential libssl-dev libffi-dev \
     python3-dev cargo pkg-config curl --no-install-recommends
 
-# Explicitly set the virtual environment used by Poetry
-ENV WORKING_DIR=/opt/invenio
-ENV VIRTUAL_ENV=/opt/invenio/.venv
-RUN python3 -m venv "$VIRTUAL_ENV"
-ENV PATH="/opt/invenio/.venv/bin:$PATH"
+# Install Node.js
+RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - && \
+    apt-get install -y nodejs && apt-get clean
 
-# Install Rye
-RUN curl -sSf https://rye.astral.sh/get | bash
+RUN python3 -m venv ${VIRTUAL_ENV}
+# Make sure we use the virtualenv:
+ENV PATH="${VIRTUAL_ENV}/bin:$PATH"
 
-ENV INVENIO_INSTANCE_PATH=${WORKING_DIR}/var/instance
+ENV WORKING_DIR=/opt/invenio \
+    PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1 \
+    INVENIO_INSTANCE_PATH=/opt/invenio/var/instance
 
-WORKDIR ${WORKING_DIR}
+WORKDIR ${INVENIO_INSTANCE_PATH}
 
-COPY pyproject.toml ./
-RUN --mount=type=cache,target=$POETRY_CACHE_DIR poetry install --no-root --only main --no-interaction --no-ansi
+COPY pyproject.toml requirements.lock ./
+RUN --mount=type=cache,target=/var/cache/pip pip install --no-cache-dir -r requirements.lock
 
-# COPY site ./site
+COPY site ./site
 COPY static ${INVENIO_INSTANCE_PATH}/static
 COPY assets ${INVENIO_INSTANCE_PATH}/assets
 COPY templates ${INVENIO_INSTANCE_PATH}/templates
@@ -43,9 +45,8 @@ COPY app_data ${INVENIO_INSTANCE_PATH}/app_data
 COPY translations ${INVENIO_INSTANCE_PATH}/translations
 COPY ./invenio.cfg ${INVENIO_INSTANCE_PATH}
 
-# Install Node.js into the virtual environment and build assets
-RUN poetry run nodeenv -p --node=${NODENV_VERSION} --prebuilt && \
-    invenio collect --verbose && poetry run invenio webpack buildall
+# Build Javascript assets
+RUN invenio collect --verbose && invenio webpack buildall
 
 FROM python:3.12-slim-bookworm AS runtime
 
@@ -59,9 +60,6 @@ ENV VIRTUAL_ENV=/opt/invenio/.venv \
     INVENIO_INSTANCE_PATH=/opt/invenio/var/instance
 
 COPY --from=builder ${VIRTUAL_ENV} ${VIRTUAL_ENV}
-# COPY --from=builder ${VIRTUAL_ENV}/lib ${VIRTUAL_ENV}/lib
-# COPY --from=builder ${VIRTUAL_ENV}/bin ${VIRTUAL_ENV}/bin
-# COPY --from=builder ${VIRTUAL_ENV}/include ${VIRTUAL_ENV}/include
 COPY --from=builder ${INVENIO_INSTANCE_PATH}/app_data ${INVENIO_INSTANCE_PATH}/app_data
 COPY --from=builder ${INVENIO_INSTANCE_PATH}/static ${INVENIO_INSTANCE_PATH}/static
 COPY --from=builder ${INVENIO_INSTANCE_PATH}/translations ${INVENIO_INSTANCE_PATH}/translations
@@ -79,6 +77,6 @@ RUN adduser invenio --uid ${INVENIO_USER_ID} --gid 0 --no-create-home
 #     # chmod -R g=u ${WORKDIR} && \
 #     # chown -R invenio:root ${WORKDIR}
 
-# USER invenio
+USER invenio
 EXPOSE 5000
 CMD ["gunicorn", "invenio_app.wsgi:application", "--bind", "0.0.0.0:5000", "--workers", "4"]
