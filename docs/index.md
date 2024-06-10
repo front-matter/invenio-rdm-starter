@@ -26,8 +26,8 @@ the `invenio-cli` command-line tool in the following ways:
 
 * `invenio-cli` is not used.
 * The `invenio-app-rdm` Docker prebuilt image provided by InvenioRDM Starter is used instead of building the image locally.
-* `Python:3.12` based on Debian Bookworm is used as the Docker base image, instead of `Almalinux`.
+* [Debian Bookworm](https://www.debian.org/releases/bookworm/) is used as the Docker base image, instead of `Almalinux`.
 * The Docker image uses `Python 3.12` and `Node 20`.
 * The Docker image uses `gunicorn` as the WSGI server instead of `uwsgi`.
-* Docker Compose uses `Caddy` as the reverse proxy server instead of `Nginx`. InvenioRDM Starter run at `https://localhost`, and uses a self-signed certificate issued by `Caddy`.
+* Docker Compose uses `Caddy` as the reverse proxy server instead of `Nginx`. InvenioRDM Starter will run locally at `https://localhost`, and uses a self-signed certificate issued by `Caddy`.
 * Docker Compose uses `Redis` as the message broker instead of `RabbitMQ`
