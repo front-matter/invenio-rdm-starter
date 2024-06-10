@@ -623,6 +623,7 @@ marshmallow-oneofschema==3.1.1
     # via marshmallow-utils
 marshmallow-utils==0.9.0
     # via invenio-records-resources
+material-plausible-plugin==0.2.0
 matplotlib-inline==0.1.7
     # via ipython
 maxminddb==2.6.1
@@ -639,6 +640,7 @@ mistune==3.0.2
     # via nbconvert
 mkdocs==1.6.0
     # via commonmeta-py
+    # via material-plausible-plugin
     # via mkdocs-jupyter
     # via mkdocs-material
 mkdocs-get-deps==0.2.0
@@ -647,6 +649,7 @@ mkdocs-jupyter==0.12.0
     # via commonmeta-py
 mkdocs-material==8.5.11
     # via commonmeta-py
+    # via material-plausible-plugin
 mkdocs-material-extensions==1.3.1
     # via commonmeta-py
     # via mkdocs-material
@@ -667,7 +670,6 @@ nbformat==5.10.4
     # via nbstripout
 nbstripout==0.6.2
     # via commonmeta-py
-nodeenv==1.9.1
 oauthlib==2.1.0
     # via flask-oauthlib
     # via invenio-oauthclient

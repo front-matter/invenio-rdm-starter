@@ -77,6 +77,6 @@ RUN adduser invenio --uid ${INVENIO_USER_ID} --gid 0 --no-create-home
 #     # chmod -R g=u ${WORKDIR} && \
 #     # chown -R invenio:root ${WORKDIR}
 
-USER invenio
+# USER invenio
 EXPOSE 5000
 CMD ["gunicorn", "invenio_app.wsgi:application", "--bind", "0.0.0.0:5000", "--workers", "4"]

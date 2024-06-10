@@ -5,6 +5,8 @@ repo_url: https://github.com/front-matter/invenio-rdm-starter
 edit_uri: edit/main/docs/
 repo_name: front-matter/invenio-rdm-starter
 copyright: Copyright &copy; 2024 Front Matter
+plugins:
+  - material-plausible
 theme:
   name: material
   logo: assets/logo.png
@@ -18,5 +20,8 @@ extra:
       link: https://mozilla.org/@martin
     - icon: fontawesome/brands/github 
       link: https://github.com/front-matter/invenio-rdm-starter
+  analytics:
+    provider: plausible
+    domain: starter.front-matter.io
 extra_css:
   - stylesheets/extra.css
