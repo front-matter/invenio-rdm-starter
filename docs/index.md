@@ -1,5 +1,7 @@
 # Welcome to InvenioRDM Starter
 
+![Screenshot](assets/screenshot.png)
+
 ## Introduction
 
 InvenioRDM Starter is an implementation of the InvenioRDM Turn-key research data management repository focusing on easy deployment and configuration. This is achieved by providing
