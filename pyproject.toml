@@ -9,7 +9,7 @@ dependencies = [
     "invenio-app-rdm>=12.0.0rc2,<12.1.dev0",
     "invenio-search[opensearch2]~=2.3.1",
     "invenio-cache~=1.3.0",
-    "importlib-metadata~=7.1.0",
+    "importlib-metadata~=6.11.0",
     "gunicorn~=22.0.0",
     "nodeenv~=1.9.1",
 ]

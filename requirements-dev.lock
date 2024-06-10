@@ -278,7 +278,7 @@ idutils==1.2.1
     # via marshmallow-utils
 imagesize==1.4.1
     # via sphinx
-importlib-metadata==7.1.0
+importlib-metadata==6.11.0
     # via invenio-base
     # via invenio-jsonschemas
     # via invenio-oauth2server
