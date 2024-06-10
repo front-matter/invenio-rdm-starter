@@ -9,7 +9,7 @@ hide:
 
 ## Introduction
 
-InvenioRDM is the turn-key research data management platform. Detailed documentation is available [here](https://inveniordm.docs.cern.ch). InvenioRDM Starter allows easy deployment and configuration of InvenioRDM, which allows enables running InvenioRDM on your local computer in 15 min. This is achieved by providing
+InvenioRDM is the turn-key research data management platform. Detailed documentation is available [here](https://inveniordm.docs.cern.ch). InvenioRDM Starter allows easy deployment and configuration of InvenioRDM, which enables running InvenioRDM on your local computer within 15 min. This is achieved by providing
 
 * a prebuilt Invenio-App-RDM Docker image.
 * a Docker Compose configuration file with sensible defaults.
