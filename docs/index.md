@@ -9,6 +9,8 @@ InvenioRDM Starter is an implementation of the InvenioRDM Turn-key research data
 * a prebuilt Invenio-App-RDM Docker image.
 * a Docker Compose configuration file with sensible defaults.
 
+InvenioRDM Starter is coordinated by the InvenioRDM partner Front Matter.
+
 ## Requirements
 
 * Docker Desktop ([Windows](https://docs.docker.com/desktop/install/windows-install/), [macOS](https://docs.docker.com/desktop/install/mac-install/), [Linux](https://docs.docker.com/desktop/install/linux-install/)) or Docker Engine ([Linux](https://docs.docker.com/engine/install/))
