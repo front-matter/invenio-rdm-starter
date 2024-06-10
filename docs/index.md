@@ -3,6 +3,8 @@ hide:
   - navigation
 ---
 
+# InvenioRDM Starter
+
 ![Screenshot](assets/screenshot.png)
 
 ## Introduction
