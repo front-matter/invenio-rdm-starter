@@ -2,17 +2,16 @@
 
 ## Introduction
 
-InvenioRDM Starter is an implementation of the InvenioRDM repository management
-platform focused on easy deployment and configuration. This is achieved by providing
+InvenioRDM Starter is an implementation of the InvenioRDM Turn-key research data management repository focusing on easy deployment and configuration. This is achieved by providing
 
 * a prebuilt Invenio-App-RDM Docker image.
 * a Docker Compose configuration file with sensible defaults.
 
 ## Requirements
 
-* Docker Desktop (Windows, macOS) or Docker Engine (Linux)
+* Docker Desktop ([Windows](https://docs.docker.com/desktop/install/windows-install/), [macOS](https://docs.docker.com/desktop/install/mac-install/), [Linux](https://docs.docker.com/desktop/install/linux-install/)) or Docker Engine ([Linux](https://docs.docker.com/engine/install/))
 
-A local installation of Python or Invenio-CLI is not required.
+A local installation of Python or Invenio-CLI is not required. A git client is recommended but not required.
 
 ## Quickstart
 
@@ -30,5 +29,5 @@ the `invenio-cli` command-line tool in the following ways:
 * `Python:3.12` based on Debian Bookworm is used as the Docker base image, instead of `Almalinux`.
 * The Docker image uses `Python 3.12` and `Node 20`.
 * The Docker image uses `gunicorn` as the WSGI server instead of `uwsgi`.
-* Docker Compose uses `Caddy` as the reverse proxy server instead of `Nginx`.
+* Docker Compose uses `Caddy` as the reverse proxy server instead of `Nginx`. InvenioRDM Starter run at `https://localhost`, and uses a self-signed certificate issued by `Caddy`.
 * Docker Compose uses `Redis` as the message broker instead of `RabbitMQ`

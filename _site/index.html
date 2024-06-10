@@ -356,17 +356,16 @@
 
 <h1 id="welcome-to-inveniordm-starter">Welcome to InvenioRDM Starter</h1>
 <h2 id="introduction">Introduction</h2>
-<p>InvenioRDM Starter is an implementation of the InvenioRDM repository management
-platform focused on easy deployment and configuration. This is achieved by providing</p>
+<p>InvenioRDM Starter is an implementation of the InvenioRDM Turn-key research data management repository focusing on easy deployment and configuration. This is achieved by providing</p>
 <ul>
 <li>a prebuilt Invenio-App-RDM Docker image.</li>
 <li>a Docker Compose configuration file with sensible defaults.</li>
 </ul>
 <h2 id="requirements">Requirements</h2>
 <ul>
-<li>Docker Desktop (Windows, macOS) or Docker Engine (Linux)</li>
+<li>Docker Desktop (<a href="https://docs.docker.com/desktop/install/windows-install/">Windows</a>, <a href="https://docs.docker.com/desktop/install/mac-install/">macOS</a>, <a href="https://docs.docker.com/desktop/install/linux-install/">Linux</a>) or Docker Engine (<a href="https://docs.docker.com/engine/install/">Linux</a>)</li>
 </ul>
-<p>A local installation of Python or Invenio-CLI is not required.</p>
+<p>A local installation of Python or Invenio-CLI is not required. A git client is recommended but not required.</p>
 <h2 id="quickstart">Quickstart</h2>
 <ul>
 <li>Download the <code>docker-compose.yml</code> file from the <a href="https://github.com/front-matter/invenio-rdm-starter">InvenioRDM Starter git repository</a>. Alternatively, clone the repository.</li>
@@ -382,7 +381,7 @@ the <code>invenio-cli</code> command-line tool in the following ways:</p>
 <li><code>Python:3.12</code> based on Debian Bookworm is used as the Docker base image, instead of <code>Almalinux</code>.</li>
 <li>The Docker image uses <code>Python 3.12</code> and <code>Node 20</code>.</li>
 <li>The Docker image uses <code>gunicorn</code> as the WSGI server instead of <code>uwsgi</code>.</li>
-<li>Docker Compose uses <code>Caddy</code> as the reverse proxy server instead of <code>Nginx</code>.</li>
+<li>Docker Compose uses <code>Caddy</code> as the reverse proxy server instead of <code>Nginx</code>. InvenioRDM Starter run at <code>https://localhost</code>, and uses a self-signed certificate issued by <code>Caddy</code>.</li>
 <li>Docker Compose uses <code>Redis</code> as the message broker instead of <code>RabbitMQ</code></li>
 </ul>
 
