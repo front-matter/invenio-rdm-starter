@@ -8,11 +8,21 @@ copyright: Copyright &copy; 2024 Front Matter
 plugins:
   - search
   - material-plausible
+markdown_extensions:
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.superfences
 theme:
   name: material
   logo: assets/logo.png
   palette:
     primary: custom
+  features:
+    - content.code.copy
 extra:
   social:
     - icon: fontawesome/solid/paper-plane

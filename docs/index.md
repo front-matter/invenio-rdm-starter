@@ -9,7 +9,7 @@ hide:
 
 ## Introduction
 
-InvenioRDM Starter is an implementation of the InvenioRDM Turn-key research data management repository focusing on easy deployment and configuration. This is achieved by providing
+InvenioRDM is the turn-key research data management platform. Detailed documentation is available [here](https://inveniordm.docs.cern.ch/reference/focusing). InvenioRDM Starter allows easy deployment and configuration of InvenioRDM. This is achieved by providing
 
 * a prebuilt Invenio-App-RDM Docker image.
 * a Docker Compose configuration file with sensible defaults.
@@ -24,9 +24,23 @@ A local installation of Python or Invenio-CLI is not required. A git client is r
 
 ## Quickstart
 
-* Download the `docker-compose.yml` file from the [InvenioRDM Starter git repository](https://github.com/front-matter/invenio-rdm-starter). Alternatively, clone the repository.
-* Run `docker-compose up` in the same directory as the `docker-compose.yml` file.
-* Open a web browser and navigate to `https://localhost`.
+Download the `docker-compose.yml` file from the [InvenioRDM Starter git repository](https://github.com/front-matter/invenio-rdm-starter). Alternatively, clone the repository with git.
+
+```bash
+git clone https://github.com/front-matter/invenio-rdm-starter.git
+```
+
+```bash
+cd invenio-rdm-starter
+```
+
+Run `docker-compose up` in the same directory as the `docker-compose.yml` file.
+
+```bash
+docker compose up
+```
+
+Open a web browser and navigate to [https://localhost](https://localhost).
 
 ## Technology Choices
 
