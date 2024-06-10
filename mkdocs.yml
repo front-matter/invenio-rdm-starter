@@ -6,6 +6,7 @@ edit_uri: edit/main/docs/
 repo_name: front-matter/invenio-rdm-starter
 copyright: Copyright &copy; 2024 Front Matter
 plugins:
+  - search
   - material-plausible
 theme:
   name: material
