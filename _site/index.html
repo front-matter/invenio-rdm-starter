@@ -354,6 +354,57 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="Configuration">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#web-and-worker" class="md-nav__link">
+    <span class="md-ellipsis">
+      Web and Worker
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cache" class="md-nav__link">
+    <span class="md-ellipsis">
+      Cache
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#database" class="md-nav__link">
+    <span class="md-ellipsis">
+      Database
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#search" class="md-nav__link">
+    <span class="md-ellipsis">
+      Search
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#mail" class="md-nav__link">
+    <span class="md-ellipsis">
+      Mail
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
@@ -435,6 +486,57 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="Configuration">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#web-and-worker" class="md-nav__link">
+    <span class="md-ellipsis">
+      Web and Worker
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cache" class="md-nav__link">
+    <span class="md-ellipsis">
+      Cache
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#database" class="md-nav__link">
+    <span class="md-ellipsis">
+      Database
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#search" class="md-nav__link">
+    <span class="md-ellipsis">
+      Search
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#mail" class="md-nav__link">
+    <span class="md-ellipsis">
+      Mail
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
@@ -489,17 +591,9 @@
 </span></code></pre></div>
 <p>Open a web browser and navigate to <a href="https://localhost">https://localhost</a>.</p>
 <h2 id="configuration">Configuration</h2>
-<p>The <code>docker-compose.yml</code> file can be modified to suit your needs. The following environment variables can be set via an <code>.env</code> file in the same folder:</p>
+<p>The <code>docker-compose.yml</code> configuration can be modified to suit your needs. The following environment variables can be set via an <code>.env</code> file in the same folder:</p>
+<h3 id="web-and-worker">Web and Worker</h3>
 <ul>
-<li><code>INVENIO_BROKER_URL</code> - The broker URL used by InvenioRDM.</li>
-<li><code>INVENIO_CELERY_BROKER_URL</code> - The Celery broker URL used by InvenioRDM.</li>
-<li><code>INVENIO_CACHE_TYPE</code> - The cache type used by InvenioRDM.</li>
-<li><code>INVENIO_CACHE_REDIS_URL</code> - The cache Redis URL used by InvenioRDM.</li>
-<li><code>INVENIO_ACCOUNTS_SESSION_REDIS_URL</code> - The accounts session Redis URL used by InvenioRDM.</li>
-<li><code>INVENIO_CELERY_RESULT_BACKEND</code> - The Celery result backend used by InvenioRDM.</li>
-<li><code>INVENIO_RATELIMIT_STORAGE_URL</code> - The ratelimit storage URL used by InvenioRDM.</li>
-<li><code>INVENIO_COMMUNITIES_IDENTITIES_CACHE_REDIS_URL</code> - The communities identities cache Redis URL used by InvenioRDM.</li>
-<li><code>INVENIO_SEARCH_HOSTS</code> - The search hosts used by InvenioRDM.</li>
 <li><code>INVENIO_SITE_UI_URL</code> - The site UI URL used by InvenioRDM.</li>
 <li><code>INVENIO_SITE_API_URL</code> - The site API URL used by InvenioRDM.</li>
 <li><code>INVENIO_THEME_FRONTPAGE_TITLE</code> - The frontpage title used by InvenioRDM.</li>
@@ -510,8 +604,29 @@
 <li><code>INVENIO_SITE_UI_URL</code> - The site UI URL used by InvenioRDM.</li>
 <li><code>INVENIO_SITE_API_URL</code> - The site API URL used by InvenioRDM.</li>
 <li><code>INVENIO_SECRET_KEY</code> - The secret key used by InvenioRDM.</li>
-<li><code>INVENIO_SQLALCHEMY_DATABASE_URI</code> - The database URI used by InvenioRDM.</li>
 <li><code>INVENIO_BASE_URL</code> - The base URL used by InvenioRDM.</li>
+</ul>
+<h3 id="cache">Cache</h3>
+<ul>
+<li><code>INVENIO_CACHE_TYPE</code> - The cache type used by InvenioRDM.</li>
+<li><code>INVENIO_CACHE_REDIS_URL</code> - The cache Redis URL used by InvenioRDM.</li>
+<li><code>INVENIO_ACCOUNTS_SESSION_REDIS_URL</code> - The accounts session Redis URL used by InvenioRDM.</li>
+<li><code>INVENIO_CELERY_RESULT_BACKEND</code> - The Celery result backend used by InvenioRDM.</li>
+<li><code>INVENIO_RATELIMIT_STORAGE_URL</code> - The ratelimit storage URL used by InvenioRDM.</li>
+<li><code>INVENIO_COMMUNITIES_IDENTITIES_CACHE_REDIS_URL</code> - The communities identities cache Redis URL used by InvenioRDM.</li>
+<li><code>INVENIO_BROKER_URL</code> - The broker URL used by InvenioRDM.</li>
+<li><code>INVENIO_CELERY_BROKER_URL</code> - The Celery broker URL used by InvenioRDM.</li>
+</ul>
+<h3 id="database">Database</h3>
+<ul>
+<li><code>INVENIO_SQLALCHEMY_DATABASE_URI</code> - The database URI used by InvenioRDM.</li>
+</ul>
+<h3 id="search">Search</h3>
+<ul>
+<li><code>INVENIO_SEARCH_HOSTS</code> - The search host and port.</li>
+</ul>
+<h3 id="mail">Mail</h3>
+<ul>
 <li><code>INVENIO_MAIL_SUPPRESS_SEND</code> - Set to <code>true</code> to suppress sending emails.</li>
 </ul>
 <h2 id="technology-choices">Technology Choices</h2>

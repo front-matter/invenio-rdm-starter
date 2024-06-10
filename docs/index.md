@@ -44,17 +44,10 @@ Open a web browser and navigate to [https://localhost](https://localhost).
 
 ## Configuration
 
-The `docker-compose.yml` file can be modified to suit your needs. The following environment variables can be set via an `.env` file in the same folder:
+The `docker-compose.yml` configuration can be modified to suit your needs. The following environment variables can be set via an `.env` file in the same folder:
 
-* `INVENIO_BROKER_URL` - The broker URL used by InvenioRDM.
-* `INVENIO_CELERY_BROKER_URL` - The Celery broker URL used by InvenioRDM.
-* `INVENIO_CACHE_TYPE` - The cache type used by InvenioRDM.
-* `INVENIO_CACHE_REDIS_URL` - The cache Redis URL used by InvenioRDM.
-* `INVENIO_ACCOUNTS_SESSION_REDIS_URL` - The accounts session Redis URL used by InvenioRDM.
-* `INVENIO_CELERY_RESULT_BACKEND` - The Celery result backend used by InvenioRDM.
-* `INVENIO_RATELIMIT_STORAGE_URL` - The ratelimit storage URL used by InvenioRDM.
-* `INVENIO_COMMUNITIES_IDENTITIES_CACHE_REDIS_URL` - The communities identities cache Redis URL used by InvenioRDM.
-* `INVENIO_SEARCH_HOSTS` - The search hosts used by InvenioRDM.
+### Web and Worker
+
 * `INVENIO_SITE_UI_URL` - The site UI URL used by InvenioRDM.
 * `INVENIO_SITE_API_URL` - The site API URL used by InvenioRDM.
 * `INVENIO_THEME_FRONTPAGE_TITLE` - The frontpage title used by InvenioRDM.
@@ -65,8 +58,29 @@ The `docker-compose.yml` file can be modified to suit your needs. The following 
 * `INVENIO_SITE_UI_URL` - The site UI URL used by InvenioRDM.
 * `INVENIO_SITE_API_URL` - The site API URL used by InvenioRDM.
 * `INVENIO_SECRET_KEY` - The secret key used by InvenioRDM.
-* `INVENIO_SQLALCHEMY_DATABASE_URI` - The database URI used by InvenioRDM.
 * `INVENIO_BASE_URL` - The base URL used by InvenioRDM.
+
+### Cache
+
+* `INVENIO_CACHE_TYPE` - The cache type used by InvenioRDM.
+* `INVENIO_CACHE_REDIS_URL` - The cache Redis URL used by InvenioRDM.
+* `INVENIO_ACCOUNTS_SESSION_REDIS_URL` - The accounts session Redis URL used by InvenioRDM.
+* `INVENIO_CELERY_RESULT_BACKEND` - The Celery result backend used by InvenioRDM.
+* `INVENIO_RATELIMIT_STORAGE_URL` - The ratelimit storage URL used by InvenioRDM.
+* `INVENIO_COMMUNITIES_IDENTITIES_CACHE_REDIS_URL` - The communities identities cache Redis URL used by InvenioRDM.
+* `INVENIO_BROKER_URL` - The broker URL used by InvenioRDM.
+* `INVENIO_CELERY_BROKER_URL` - The Celery broker URL used by InvenioRDM.
+
+### Database
+
+* `INVENIO_SQLALCHEMY_DATABASE_URI` - The database URI used by InvenioRDM.
+
+### Search
+
+* `INVENIO_SEARCH_HOSTS` - The search host and port.
+
+### Mail
+
 * `INVENIO_MAIL_SUPPRESS_SEND` - Set to `true` to suppress sending emails.
 
 ## Technology Choices
