@@ -1,3 +1,8 @@
+---
+hide:
+  - navigation
+---
+
 # Welcome to InvenioRDM Starter
 
 ![Screenshot](assets/screenshot.png)
