@@ -67,16 +67,12 @@ COPY --from=builder ${INVENIO_INSTANCE_PATH}/templates ${INVENIO_INSTANCE_PATH}/
 
 WORKDIR ${WORKING_DIR}/src
 
-# RUN mkdir ${INVENIO_INSTANCE_PATH}/data && \
-#     mkdir ${INVENIO_INSTANCE_PATH}/archive
-
-# Create user and set permissions
+# Create invenio user and set appropriate permissions
 ENV INVENIO_USER_ID=1000
-RUN adduser invenio --uid ${INVENIO_USER_ID} --gid 0 --no-create-home
-#     chgrp -R +0 ${WORKDIR}
-#     # chmod -R g=u ${WORKDIR} && \
-#     # chown -R invenio:root ${WORKDIR}
-
+RUN adduser invenio --uid ${INVENIO_USER_ID} --gid 0 --no-create-home --disabled-password && \
+    chown -R invenio:root /opt/invenio/src && \
+    chown -R invenio:root /opt/invenio/var
 # USER invenio
+
 EXPOSE 5000
 CMD ["gunicorn", "invenio_app.wsgi:application", "--bind", "0.0.0.0:5000", "--workers", "4"]

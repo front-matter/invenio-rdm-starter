@@ -73,11 +73,14 @@ The `docker-compose.yml` configuration can be modified to suit your needs. The f
 
 ### Database
 
-* `INVENIO_SQLALCHEMY_DATABASE_URI` - The database URI used by InvenioRDM.
+* `POSTGRES_USER` - The Postgres user used by InvenioRDM, defaults to `inveniordm`.
+* `POSTGRES_PASSWORD` - The Postgres password used by InvenioRDM, defaults to `inveniordm`.
+* `POSTGRES_DB` - The Postgres database used by InvenioRDM, defaults to `inveniordm`.
+* `INVENIO_SQLALCHEMY_DATABASE_URI` - The database URI used by InvenioRDM, defaults to `postgresql+psycopg2://inveniordm:inveniordm@db:5432/inveniordm`.
 
 ### Search
 
-* `INVENIO_SEARCH_HOSTS` - The search host and port.
+* `INVENIO_SEARCH_HOSTS` - The search host and port, defaults to `['search:9200']`.
 
 ### Mail
 
