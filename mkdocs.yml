@@ -20,18 +20,15 @@ theme:
   name: material
   logo: assets/logo.png
   palette:    
-    # Palette toggle for light mode
     - media: "(prefers-color-scheme: light)"
       scheme: starter-light
       toggle:
-        icon: material/brightness-7
+        icon: material/lightbulb
         name: Switch to dark mode
-
-    # Palette toggle for dark mode
     - media: "(prefers-color-scheme: dark)"
       scheme: slate
       toggle:
-        icon: material/brightness-4
+        icon: material/lightbulb-outline
         name: Switch to light mode
   features:
     - content.code.copy
