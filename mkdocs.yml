@@ -38,7 +38,7 @@ extra:
       link: mailto:<info@front-matter.io>
     - icon: fontawesome/brands/mastodon 
       link: https://mozilla.org/@martin
-    - icon: fontawesome/brands/github 
+    - icon: fontawesome/brands/github
       link: https://github.com/front-matter/invenio-rdm-starter
   analytics:
     provider: plausible
