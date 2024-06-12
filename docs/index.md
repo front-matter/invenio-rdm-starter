@@ -1,6 +1,7 @@
 ---
 hide:
   - navigation
+comments: true
 ---
 
 # InvenioRDM Starter
