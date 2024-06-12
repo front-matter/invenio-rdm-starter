@@ -1,8 +1,14 @@
 ![GitHub](https://img.shields.io/github/license/front-matter/invenio-rdm-starter?logo=MIT)
 
+---
+hide:
+  - navigation
+comments: true
+---
+
 # InvenioRDM Starter
 
-![Screenshot](assets/screenshot.png)
+![Screenshot](screenshot.png)
 
 ## Introduction
 
@@ -41,47 +47,78 @@ Open a web browser and navigate to [https://localhost](https://localhost).
 
 ## Configuration
 
-The `docker-compose.yml` configuration can be modified to suit your needs. The following environment variables can be set via an `.env` file in the same folder:
+The `docker-compose.yml` configuration can be modified to suit your needs using environment variables in an `.env` file in the same folder:
 
-### Web and Worker
+### Flask
 
-* `INVENIO_SITE_UI_URL` - The site UI URL used by InvenioRDM.
-* `INVENIO_SITE_API_URL` - The site API URL used by InvenioRDM.
-* `INVENIO_THEME_FRONTPAGE_TITLE` - The frontpage title used by InvenioRDM.
-* `INVENIO_THEME_SHOW_FRONTPAGE_INTRO_SECTION` - Set to `true` to show the frontpage intro section.
-* `INVENIO_LOGGING_CONSOLE_LEVEL` - The logging console level used by InvenioRDM.
-* `INVENIO_BABEL_DEFAULT_LOCALE` - The default locale used by InvenioRDM.
-* `INVENIO_WSGI_PROXIES` - The number of proxies used by InvenioRDM.
-* `INVENIO_SITE_UI_URL` - The site UI URL used by InvenioRDM.
-* `INVENIO_SITE_API_URL` - The site API URL used by InvenioRDM.
-* `INVENIO_SECRET_KEY` - The secret key used by InvenioRDM.
-* `INVENIO_BASE_URL` - The base URL used by InvenioRDM.
+* `INVENIO_APP_ALLOWED_HOSTS` - The allowed hosts for InvenioRDM, defaults to `['0.0.0.0', 'localhost', '127.0.0.1']`. Set to specific IP addresses or hostnames in publicly accessible deployments.
 
-### Cache
+### Flask-SQLAlchemy
 
-* `INVENIO_CACHE_TYPE` - The cache type used by InvenioRDM.
-* `INVENIO_CACHE_REDIS_URL` - The cache Redis URL used by InvenioRDM.
-* `INVENIO_ACCOUNTS_SESSION_REDIS_URL` - The accounts session Redis URL used by InvenioRDM.
-* `INVENIO_CELERY_RESULT_BACKEND` - The Celery result backend used by InvenioRDM.
-* `INVENIO_RATELIMIT_STORAGE_URL` - The ratelimit storage URL used by InvenioRDM.
-* `INVENIO_COMMUNITIES_IDENTITIES_CACHE_REDIS_URL` - The communities identities cache Redis URL used by InvenioRDM.
-* `INVENIO_BROKER_URL` - The broker URL used by InvenioRDM.
-* `INVENIO_CELERY_BROKER_URL` - The Celery broker URL used by InvenioRDM.
+* `INVENIO_SQLALCHEMY_DATABASE_URI` - The database URI used by InvenioRDM, defaults to `INVENIO_SQLALCHEMY_DATABASE_URI=postgresql+psycopg2://${POSTGRES_USER:-inveniordm}:${POSTGRES_PASSWORD:-inveniordm}@db/${POSTGRES_DB:-inveniordm}`, using the Postgres service provided by Docker Compose, and its `POSTGRES_USER`, `POSTGRES_PASSWORD`, and `POSTGRES_DB` environment variables (see below).
+    
+### Flask-Babel
 
-### Database
+* `INVENIO_BABEL_DEFAULT_LOCALE` - The default locale used by InvenioRDM, defaults to `en`.
+* `INVENIO_BABEL_DEFAULT_TIMEZONE` - The default timezone used by InvenioRDM, defaults to `UTC`. 
 
-* `POSTGRES_USER` - The Postgres user used by InvenioRDM, defaults to `inveniordm`.
-* `POSTGRES_PASSWORD` - The Postgres password used by InvenioRDM, defaults to `inveniordm`.
-* `POSTGRES_DB` - The Postgres database used by InvenioRDM, defaults to `inveniordm`.
-* `INVENIO_SQLALCHEMY_DATABASE_URI` - The database URI used by InvenioRDM, defaults to `postgresql+psycopg2://inveniordm:inveniordm@db:5432/inveniordm`.
+### Invenio-App
 
-### Search
+* `INVENIO_CACHE_TYPE` - The cache type used by InvenioRDM, defaults to `redis`.
+* `INVENIO_CACHE_REDIS_URL` - The Redis cache used by InvenioRDM, defaults to `redis://cache:6379/0`.
+* `INVENIO_ACCOUNTS_SESSION_REDIS_URL` - The accounts session Redis cache used by InvenioRDM, defaults to `redis://cache:6379/1`.
+* `INVENIO_CELERY_RESULT_BACKEND` - The Celery result backend used by InvenioRDM, defaults to `redis://cache:6379/2`.
+* `INVENIO_RATELIMIT_STORAGE_URL` - The ratelimit Redis cache used by InvenioRDM, defaults to `redis://cache:6379/3`.
+* `INVENIO_COMMUNITIES_IDENTITIES_CACHE_REDIS_URL` - The communities Redis cache used by InvenioRDM, defaults to `redis://cache:6379/4`.
+* `INVENIO_CELERY_BROKER_URL` - The Celery Redis broker used by InvenioRDM, defaults to `redis://cache:6379/5`.
 
-* `INVENIO_SEARCH_HOSTS` - The search host and port, defaults to `['search:9200']`.
+* `INVENIO_WSGI_PROXIES` - The number of proxies used by InvenioRDM, defaults to `4`.
+* `INVENIO_SECRET_KEY` - The secret key used by InvenioRDM, defaults to `changeme`.
 
-### Mail
+### Invenio-Theme
 
-* `INVENIO_MAIL_SUPPRESS_SEND` - Set to `true` to suppress sending emails.
+* `INVENIO_THEME_HEADER_LOGO` - The header logo used by InvenioRDM, defaults to `/static/images/logo.png`.
+* `INVENIO_THEME_FRONTPAGE_TITLE` - The frontpage title used by InvenioRDM, defaults to `InvenioRDM Starter`.
+* `INVENIO_THEME_SHOW_FRONTPAGE_INTRO_SECTION` - Set to `True` to show the frontpage intro section, defaults to `False`.
+
+### Invenio-Records-Resources
+
+* `INVENIO_SITE_UI_URL` - The site UI URL used by InvenioRDM, defaults to `https://localhost`.
+* `INVENIO_SITE_API_URL` - The site API URL used by InvenioRDM, defaults to `https://localhost/api`.
+
+### Invenio-RDM-Records
+
+* `INVENIO_DATACITE_ENABLED` - Set to `True` to enable DataCite, defaults to `False`.
+* `INVENIO_DATACITE_USERNAME` - The DataCite username used by InvenioRDM.
+* `INVENIO_DATACITE_PASSWORD` - The DataCite password used by InvenioRDM.
+* `INVENIO_DATACITE_PREFIX` - The DataCite DOI prefix used by InvenioRDM.
+* `INVENIO_DATACITE_TEST_MODE` - Set to `True` to enable DataCite test mode, defaults to `True`.
+* `INVENIO_DATACITE_DATACENTER_SYMBOL` - The DataCite datacenter symbol (e.g. `CERN:ZENODO`) used by InvenioRDM.
+
+* `INVENIO_RDM_ALLOW_METADATA_ONLY_RECORDS` - Set to `True` to allow metadata-only records, defaults to `True`.
+* `INVENIO_RDM_ALLOW_RESTRICTED_RECORDS` - Set to `True` to allow restricted records, defaults to `True`.
+* `INVENIO_RDM_CITATION_STYLES_DEFAULT` - The default citation style used by InvenioRDM, defaults to `apa`.
+
+### Invenio-Accounts
+
+* `INVENIO_ACCOUNTS_LOCAL_LOGIN_ENABLED` - Set to `True` to enable local login, defaults to `True`.
+
+### OAI-PMH
+
+* `INVENIO_OAISERVER_ID_PREFIX` - The OAI-PMH ID prefix used by InvenioRDM, defaults to `invenio-rdm`.
+
+### Invenio-Search
+
+* `INVENIO_SEARCH_HOSTS` - The search host and port (as used in this Docker Compose), defaults to `['search:9200']`.
+* `INVENIO_SEARCH_INDEX_PREFIX` - The search index prefix used by InvenioRDM, defaults to `invenio-rdm-`.
+
+### Logging
+
+* `INVENIO_LOGGING_CONSOLE_LEVEL` - The logging console level used by InvenioRDM, defaults to `WARNING`.
+
+### Invenio-Mail
+
+* `INVENIO_MAIL_SUPPRESS_SEND` - Set to `True` to suppress sending emails, defaults to `True`. Useful for development and testing.
 
 ## Architecture
 

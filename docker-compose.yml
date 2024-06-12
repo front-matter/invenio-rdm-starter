@@ -29,45 +29,87 @@ services:
       - uploaded_data:/opt/invenio/var/instance/data
       - archived_data:/opt/invenio/var/instance/archive
     environment:
-      - INVENIO_BROKER_URL=${INVENIO_BROKER_URL:-redis://cache:6379/5}
-      - INVENIO_CELERY_BROKER_URL=${INVENIO_CELERY_BROKER_URL:-redis://cache:6379/5}
+      # Flask
+      - INVENIO_APP_ALLOWED_HOSTS=${INVENIO_APP_ALLOWED_HOSTS:-['0.0.0.0', 'localhost', '127.0.0.1']}
+
+      # Flask-SQLAlchemy
+      - INVENIO_SQLALCHEMY_DATABASE_URI=postgresql+psycopg2://${POSTGRES_USER:-inveniordm}:${POSTGRES_PASSWORD:-inveniordm}@db/${POSTGRES_DB:-inveniordm}
+    
+      # Flask-Babel
+      - INVENIO_BABEL_DEFAULT_LOCALE=${INVENIO_BABEL_DEFAULT_LOCALE:-en}
+      - INVENIO_BABEL_DEFAULT_TIMEZONE=${INVENIO_BABEL_DEFAULT_TIMEZONE:-UTC}
+
+      # Invenio-App
       - INVENIO_CACHE_TYPE=${INVENIO_CACHE_TYPE:-redis}
       - INVENIO_CACHE_REDIS_URL=${INVENIO_CACHE_REDIS_URL:-redis://cache:6379/0}
       - INVENIO_ACCOUNTS_SESSION_REDIS_URL=${INVENIO_ACCOUNTS_SESSION_REDIS_URL:-redis://cache:6379/1}
       - INVENIO_CELERY_RESULT_BACKEND=${INVENIO_CELERY_RESULT_BACKEND:-redis://cache:6379/2}
       - INVENIO_RATELIMIT_STORAGE_URL=${INVENIO_RATELIMIT_STORAGE_URL:-redis://cache:6379/3}
       - INVENIO_COMMUNITIES_IDENTITIES_CACHE_REDIS_URL=${INVENIO_COMMUNITIES_IDENTITIES_CACHE_REDIS_URL:-redis://cache:6379/4}
-      - INVENIO_SEARCH_HOSTS=['search:9200']
-      - INVENIO_SECRET_KEY=${INVENIO_SECRET_KEY:-changeme}
-      - INVENIO_SQLALCHEMY_DATABASE_URI=${INVENIO_SQLALCHEMY_DATABASE_URI:-postgresql+psycopg2://inveniordm:inveniordm@db/inveniordm}
+      - INVENIO_CELERY_BROKER_URL=${INVENIO_CELERY_BROKER_URL:-redis://cache:6379/5}
+      
       - INVENIO_WSGI_PROXIES=4
-      - INVENIO_SITE_UI_URL=${INVENIO_SITE_UI_URL:-https://localhost}
-      - INVENIO_SITE_API_URL=${INVENIO_SITE_UI_API_URL:-https://localhost/api}
+      - INVENIO_SECRET_KEY=${INVENIO_SECRET_KEY:-changeme}
+      
+      # Invenio-I18N
+      # TODO: fix tuple parsing
+      # - INVENIO_I18N_LANGUAGES=${INVENIO_I18N_LANGUAGES:-'[("de", _("German"))]'}
+
+      # Invenio-Theme
+      - INVENIO_THEME_HEADER_LOGO=${INVENIO_THEME_HEADER_LOGO:-/static/images/logo.png}
       - INVENIO_THEME_FRONTPAGE_TITLE=${INVENIO_THEME_FRONTPAGE_TITLE:-InvenioRDM Starter}
       - INVENIO_THEME_SHOW_FRONTPAGE_INTRO_SECTION=False
-      - INVENIO_MAIL_SUPPRESS_SEND=True
+
+      # Invenio-Records-Resources
+      - INVENIO_SITE_UI_URL=${INVENIO_SITE_UI_URL:-https://localhost}
+      - INVENIO_SITE_API_URL=${INVENIO_SITE_UI_API_URL:-https://localhost/api}
+
+      # Invenio-RDM-Records
+      - INVENIO_DATACITE_ENABLED=${INVENIO_DATACITE_ENABLED:-False}
+      - INVENIO_DATACITE_USERNAME=${INVENIO_DATACITE_USERNAME:-}
+      - INVENIO_DATACITE_PASSWORD=${INVENIO_DATACITE_PASSWORD:-}
+      - INVENIO_DATACITE_PREFIX=${INVENIO_DATACITE_PREFIX:-}
+      - INVENIO_DATACITE_TEST_MODE=${INVENIO_DATACITE_TEST_MODE:-True}
+      - INVENIO_DATACITE_DATACENTER_SYMBOL=${INVENIO_DATACITE_DATACENTER_SYMBOL:-}
+
+      - INVENIO_RDM_ALLOW_METADATA_ONLY_RECORDS=${INVENIO_RDM_ALLOW_METADATA_ONLY_RECORDS:-True}
+      - INVENIO_RDM_ALLOW_RESTRICTED_RECORDS=${INVENIO_RDM_ALLOW_RESTRICTED_RECORDS:-True}
+
+      - INVENIO_RDM_CITATION_STYLES_DEFAULT=${INVENIO_RDM_CITATION_STYLES_DEFAULT:-apa}
+      - INVENIO_RDM_CITATION_STYLES=${INVENIO_RDM_CITATION_STYLES:-"[('apa', 'APA'), ('chicago-note-bibliography', 'Chicago'), ('harvard-cite-them-right', 'Harvard')]"}
+
+      # Invenio-Accounts
+      - INVENIO_ACCOUNTS_LOCAL_LOGIN_ENABLED=${INVENIO_ACCOUNTS_LOCAL_LOGIN_ENABLED:-True}
+
+      # OAI-PMH
+      - INVENIO_OAISERVER_ID_PREFIX=${OAISERVER_ID_PREFIX:-invenio-rdm}
+
+      # Invenio-Search
+      - INVENIO_SEARCH_HOSTS=['search:9200']
+      - INVENIO_SEARCH_INDEX_PREFIX=${INVENIO_SEARCH_INDEX_PREFIX:-invenio-rdm-}
+
+      # Logging
       - INVENIO_LOGGING_CONSOLE_LEVEL=${INVENIO_LOGGING_CONSOLE_LEVEL:-WARNING}
-      - INVENIO_BABEL_DEFAULT_LOCALE=${INVENIO_BABEL_DEFAULT_LOCALE:-en}
+      
+      # Invenio-Mail
+      - INVENIO_MAIL_SUPPRESS_SEND=${INVENIO_MAIL_SUPPRESS_SEND:-True}
   worker:
     command: "celery -A invenio_app.celery worker --beat --loglevel=WARNING"
     image: ghcr.io/front-matter/invenio-rdm-starter:latest
     volumes:
       - uploaded_data:/opt/invenio/var/instance/data
     environment:
-      - INVENIO_BROKER_URL=${INVENIO_BROKER_URL:-redis://cache:6379/5}
-      - INVENIO_CELERY_BROKER_URL=${INVENIO_CELERY_BROKER_URL:-redis://cache:6379/5}
+      - INVENIO_SQLALCHEMY_DATABASE_URI=postgresql+psycopg2://${POSTGRES_USER:-inveniordm}:${POSTGRES_PASSWORD:-inveniordm}@db/${POSTGRES_DB:-inveniordm}
+      - INVENIO_SEARCH_HOSTS=['search:9200']
+      - INVENIO_SEARCH_INDEX_PREFIX=${INVENIO_SEARCH_INDEX_PREFIX:-invenio-rdm-}
+
       - INVENIO_CACHE_TYPE=${INVENIO_CACHE_TYPE:-redis}
       - INVENIO_CACHE_REDIS_URL=${INVENIO_CACHE_REDIS_URL:-redis://cache:6379/0}
       - INVENIO_ACCOUNTS_SESSION_REDIS_URL=${INVENIO_ACCOUNTS_SESSION_REDIS_URL:-redis://cache:6379/1}
       - INVENIO_CELERY_RESULT_BACKEND=${INVENIO_CELERY_RESULT_BACKEND:-redis://cache:6379/2}
       - INVENIO_RATELIMIT_STORAGE_URL=${INVENIO_RATELIMIT_STORAGE_URL:-redis://cache:6379/3}
       - INVENIO_COMMUNITIES_IDENTITIES_CACHE_REDIS_URL=${INVENIO_COMMUNITIES_IDENTITIES_CACHE_REDIS_URL:-redis://cache:6379/4}
-      - INVENIO_SEARCH_HOSTS=['search:9200']
-      - INVENIO_SECRET_KEY=${INVENIO_SECRET_KEY:-changeme}
-      - INVENIO_SQLALCHEMY_DATABASE_URI=${INVENIO_SQLALCHEMY_DATABASE_URI:-postgresql+psycopg2://inveniordm:inveniordm@db/inveniordm}
-      - INVENIO_WSGI_PROXIES=4
-      - INVENIO_SITE_UI_URL=${INVENIO_SITE_UI_URL:-https://localhost}
-      - INVENIO_SITE_API_URL=${INVENIO_SITE_UI_API_URL:-https://localhost/api}
+      - INVENIO_CELERY_BROKER_URL=${INVENIO_CELERY_BROKER_URL:-redis://cache:6379/5}
   cache:
     image: redis:7.2.5-bookworm
     restart: "unless-stopped"
