@@ -1,4 +1,3 @@
-# syntax=docker/dockerfile:1.5
 FROM python:3.12 AS builder
 
 # Dockerfile that builds the InvenioRDM Starter Docker image. Based on the following:
@@ -64,6 +63,7 @@ COPY --from=builder ${INVENIO_INSTANCE_PATH}/app_data ${INVENIO_INSTANCE_PATH}/a
 COPY --from=builder ${INVENIO_INSTANCE_PATH}/static ${INVENIO_INSTANCE_PATH}/static
 COPY --from=builder ${INVENIO_INSTANCE_PATH}/translations ${INVENIO_INSTANCE_PATH}/translations
 COPY --from=builder ${INVENIO_INSTANCE_PATH}/templates ${INVENIO_INSTANCE_PATH}/templates
+COPY ./init.sh /opt/invenio/.venv/bin/init.sh
 
 WORKDIR ${WORKING_DIR}/src
 

@@ -24,6 +24,7 @@ services:
       - caddy_data:/data
       - caddy_config:/config
   web:
+    command: "init.sh"
     image: ghcr.io/front-matter/invenio-rdm-starter:latest
     volumes:
       - uploaded_data:/opt/invenio/var/instance/data
@@ -47,6 +48,7 @@ services:
       - INVENIO_RATELIMIT_STORAGE_URL=${INVENIO_RATELIMIT_STORAGE_URL:-redis://cache:6379/3}
       - INVENIO_COMMUNITIES_IDENTITIES_CACHE_REDIS_URL=${INVENIO_COMMUNITIES_IDENTITIES_CACHE_REDIS_URL:-redis://cache:6379/4}
       - INVENIO_BROKER_URL=${INVENIO_BROKER_URL:-redis://cache:6379/5}
+      - INVENIO_CELERY_BROKER_URL=${INVENIO_BROKER_URL:-redis://cache:6379/5}
       
       - INVENIO_WSGI_PROXIES=4
       - INVENIO_SECRET_KEY=${INVENIO_SECRET_KEY:-changeme}
@@ -75,9 +77,10 @@ services:
       - INVENIO_RDM_ALLOW_METADATA_ONLY_RECORDS=${INVENIO_RDM_ALLOW_METADATA_ONLY_RECORDS:-True}
       - INVENIO_RDM_ALLOW_RESTRICTED_RECORDS=${INVENIO_RDM_ALLOW_RESTRICTED_RECORDS:-True}
 
-      - INVENIO_RDM_CITATION_STYLES_DEFAULT=${INVENIO_RDM_CITATION_STYLES_DEFAULT:-apa}
-      - INVENIO_RDM_CITATION_STYLES=${INVENIO_RDM_CITATION_STYLES:-"[('apa', 'APA'), ('chicago-note-bibliography', 'Chicago'), ('harvard-cite-them-right', 'Harvard')]"}
-
+      - INVENIO_RDM_CITATION_STYLES_DEFAULT=${INVENIO_RDM_CITATION_STYLES_DEFAULT:-harvard-cite-them-right}
+      # TODO: fix tuple parsing
+      # - INVENIO_RDM_CITATION_STYLES=${INVENIO_RDM_CITATION_STYLES:-"[('apa', 'APA'), ('chicago-note-bibliography', 'Chicago'), ('harvard-cite-them-right', 'Harvard')]"}
+      
       # Invenio-Accounts
       - INVENIO_ACCOUNTS_LOCAL_LOGIN_ENABLED=${INVENIO_ACCOUNTS_LOCAL_LOGIN_ENABLED:-True}
 
@@ -93,6 +96,13 @@ services:
       
       # Invenio-Mail
       - INVENIO_MAIL_SUPPRESS_SEND=${INVENIO_MAIL_SUPPRESS_SEND:-True}
+    depends_on:
+      search:
+        condition: service_started
+      cache:
+        condition: service_started
+      db:
+        condition: service_started
   worker:
     command: "celery -A invenio_app.celery worker --beat --loglevel=WARNING"
     image: ghcr.io/front-matter/invenio-rdm-starter:latest
@@ -110,6 +120,14 @@ services:
       - INVENIO_RATELIMIT_STORAGE_URL=${INVENIO_RATELIMIT_STORAGE_URL:-redis://cache:6379/3}
       - INVENIO_COMMUNITIES_IDENTITIES_CACHE_REDIS_URL=${INVENIO_COMMUNITIES_IDENTITIES_CACHE_REDIS_URL:-redis://cache:6379/4}
       - INVENIO_BROKER_URL=${INVENIO_BROKER_URL:-redis://cache:6379/5}
+      - INVENIO_CELERY_BROKER_URL=${INVENIO_BROKER_URL:-redis://cache:6379/5}
+    depends_on:
+      search:
+        condition: service_started
+      cache:
+        condition: service_started
+      db:
+        condition: service_started
   cache:
     image: redis:7.2.5-bookworm
     restart: "unless-stopped"
