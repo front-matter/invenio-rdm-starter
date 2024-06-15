@@ -134,13 +134,12 @@ services:
     ports:
       - "6379:6379"
   db:
-    image: paradedb/paradedb:16-v0.7.5
+    image: postgres:16.2
     restart: "unless-stopped"
     environment:
-      - POSTGRESQL_USERNAME=${POSTGRESQL_USERNAME:-inveniordm}
-      - POSTGRESQL_PASSWORD=${POSTGRESQL_PASSWORD:-inveniordm}
-      - POSTGRESQL_DATABASE=${POSTGRESQL_DATABASE:-inveniordm}
-      - POSTGRESQL_POSTGRES_PASSWORD=${POSTGRESQL_POSTGRES_PASSWORD:-inveniordm}
+      - POSTGRES_USER=${POSTGRES_USER:-inveniordm}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-inveniordm}
+      - POSTGRES_DB=${POSTGRES_DB:-inveniordm}
     ports:
       - 5432:5432
   search:

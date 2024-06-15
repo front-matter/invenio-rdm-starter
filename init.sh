@@ -4,8 +4,7 @@ CONTAINER_ALREADY_STARTED="CONTAINER_ALREADY_STARTED"
 if [ ! -e $CONTAINER_ALREADY_STARTED ]; then
     echo "-- First container startup --"
     
-    # drop and re-create the database and run migrations
-    invenio db drop --yes-i-know
+    # create the database and run migrations
     invenio db create
     invenio alembic upgrade
 
