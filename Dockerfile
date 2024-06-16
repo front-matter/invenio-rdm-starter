@@ -36,7 +36,7 @@ WORKDIR ${INVENIO_INSTANCE_PATH}
 COPY pyproject.toml requirements.lock ./
 RUN --mount=type=cache,target=/var/cache/pip pip install --no-cache-dir -r requirements.lock
 
-COPY site ./site
+COPY site ${INVENIO_INSTANCE_PATH}/site
 COPY static ${INVENIO_INSTANCE_PATH}/static
 COPY assets ${INVENIO_INSTANCE_PATH}/assets
 COPY templates ${INVENIO_INSTANCE_PATH}/templates
@@ -45,7 +45,7 @@ COPY translations ${INVENIO_INSTANCE_PATH}/translations
 COPY ./invenio.cfg ${INVENIO_INSTANCE_PATH}
 
 # Build Javascript assets
-RUN invenio collect --verbose && invenio webpack buildall
+RUN --mount=type=cache,target=/var/cache/assets invenio collect --verbose && invenio webpack buildall
 
 FROM python:3.12-slim-bookworm AS runtime
 
@@ -59,11 +59,14 @@ ENV VIRTUAL_ENV=/opt/invenio/.venv \
     INVENIO_INSTANCE_PATH=/opt/invenio/var/instance
 
 COPY --from=builder ${VIRTUAL_ENV} ${VIRTUAL_ENV}
-COPY --from=builder ${INVENIO_INSTANCE_PATH}/app_data ${INVENIO_INSTANCE_PATH}/app_data
+COPY --from=builder ${INVENIO_INSTANCE_PATH}/site ${INVENIO_INSTANCE_PATH}/site
 COPY --from=builder ${INVENIO_INSTANCE_PATH}/static ${INVENIO_INSTANCE_PATH}/static
-COPY --from=builder ${INVENIO_INSTANCE_PATH}/translations ${INVENIO_INSTANCE_PATH}/translations
+COPY --from=builder ${INVENIO_INSTANCE_PATH}/assets ${INVENIO_INSTANCE_PATH}/assets
 COPY --from=builder ${INVENIO_INSTANCE_PATH}/templates ${INVENIO_INSTANCE_PATH}/templates
-COPY ./init.sh /opt/invenio/.venv/bin/init.sh
+COPY --from=builder ${INVENIO_INSTANCE_PATH}/app_data ${INVENIO_INSTANCE_PATH}/app_data
+COPY --from=builder ${INVENIO_INSTANCE_PATH}/translations ${INVENIO_INSTANCE_PATH}/translations
+COPY ./invenio.cfg ${INVENIO_INSTANCE_PATH}
+COPY ./setup.sh /opt/invenio/.venv/bin/setup.sh
 
 WORKDIR ${WORKING_DIR}/src
 

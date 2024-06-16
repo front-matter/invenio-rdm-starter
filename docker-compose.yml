@@ -24,7 +24,7 @@ services:
       - caddy_data:/data
       - caddy_config:/config
   web:
-    command: "init.sh"
+    command: "setup.sh"
     image: ghcr.io/front-matter/invenio-rdm-starter:latest
     volumes:
       - uploaded_data:/opt/invenio/var/instance/data
@@ -58,7 +58,7 @@ services:
       # - INVENIO_I18N_LANGUAGES=${INVENIO_I18N_LANGUAGES:-'[("de", _("German"))]'}
 
       # Invenio-Theme
-      - INVENIO_THEME_HEADER_LOGO=${INVENIO_THEME_HEADER_LOGO:-/static/images/logo.png}
+      - INVENIO_THEME_LOGO=${INVENIO_THEME_LOGO:-images/starter-white.svg}
       - INVENIO_THEME_FRONTPAGE_TITLE=${INVENIO_THEME_FRONTPAGE_TITLE:-InvenioRDM Starter}
       - INVENIO_THEME_SHOW_FRONTPAGE_INTRO_SECTION=False
 
@@ -163,7 +163,7 @@ services:
       - "9200:9200"
       - "9600:9600"
 volumes:
-  static_data:
+  app_data:
   uploaded_data:
   archived_data:
   caddy_data:

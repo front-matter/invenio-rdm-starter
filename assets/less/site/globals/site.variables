@@ -1,0 +1,143 @@
+/***********************************************
+    Invenio App RDM Site Variables
+***********************************************/
+
+/*-------------------
+    Brand Colors
+--------------------*/
+
+@primaryColor: #0377cd;
+@secondaryColor: #fb8273;
+@featuredListBackgroundColor: #4899DB;
+@primaryDarkenColor: #0267b2;
+
+// backwards compatibility
+@brandColor: @primaryColor;
+@brand-primary:@primaryColor;
+
+
+/*-------------------
+      Site Colors
+--------------------*/
+
+@darkGray: #333;
+@green: #048622;
+@signupColor: @green;
+
+@accessRightOpen: @green;
+@accessRightRestricted: @red;
+@accessRightEmbargoed: @yellow;
+@accessRightMetadataOnly: @teal;
+
+@restricted-components-background-color: #feeaea;
+@restricted-components-border-color: #e0b4b4;
+@embargoed-components-background-color: #fbf8ee;
+@embargoed-components-border-color: #c9ba9b;
+
+@footerLightColor: #0377cd;
+@footerDarkColor: #0047a8;
+@subFooterColor: @footerDarkColor;
+@footerTextLightColor: #ffffff;
+@footerTextDarkColor: #ffffff;
+
+@errorTextColor: #9f3a38;
+@focusedFormBorderColor: #2185d0;
+@focusedFormMutedBorderColor: #2185d0;
+
+@highlightHeaderColor: #ededed;
+@highlightBackgroundColor: @highlightHeaderColor;
+@highlightBackgroundColorHover:  darken(saturate(@highlightHeaderColor, 20), 15, relative);
+@highlightLandingPageBackgroundColor: rgba(173, 206, 224, 0.52);
+@selectedColor: #ededed;
+
+
+@navbarBackgroundImage: linear-gradient(
+  12deg,
+  rgba(3, 119, 205, 1),
+  rgba(3, 119, 205, 1) 15%,
+  rgba(251, 130, 115, 0.69)
+);
+@navbarBackgroundColor: rgba(3, 119, 205, 1);
+@versionActiveColor: #d9edf7;
+
+@mutedAccordionHeaderColor: #f5f5f5;
+@defaultBrandColor: #434C5E;
+
+
+/*-------------------
+      Links
+--------------------*/
+
+@linkColor: #005b9e;
+@linkUnderline: none;
+@linkHoverColor: darken(saturate(@linkColor, 20), 15, relative);
+@linkHoverUnderline: underline;
+
+
+/*-------------------
+    Breakpoints
+--------------------*/
+@mobileBreakpoint            : 320px;
+@tabletBreakpoint            : 768px;
+@computerBreakpoint          : 1300px;
+@largeMonitorBreakpoint      : 1680px;
+@widescreenMonitorBreakpoint : 1920px;
+
+/*-------------------
+      Fonts
+--------------------*/
+
+
+@fontSizeBase: 14px;
+@font-size-small: 12px;
+@font-size-tiny: 10px;
+@font-size-massive: 36px;
+@fontName: 'Helvetica';
+
+
+/*-------------------
+     Em Sizes
+--------------------*/
+
+@75px : unit( (75 / @emSize), rem);
+@relative75px : unit( (75 / @emSize), em);
+
+
+/*-------------------
+  negative spacing
+--------------------*/
+@coverPageDefaultMargin: 0;
+
+
+/* borders */
+
+@dashedBorder: 2px dashed @borderColor;
+@defaultBorder: 1px solid @solidBorderColor;
+
+/*------------------
+  checkboxes
+------------------*/
+
+@checkboxSize: @relative17px;
+
+/*------------------
+  tables
+------------------*/
+
+@cellVerticalPadding: @relativeMini;
+@cellHorizontalPadding: @relativeMini;
+
+
+/*------------------
+  Images
+------------------*/
+
+@userDashboardAvatarSize: 40px;
+@communityItemLogoWidth: 115px;
+
+
+/*------------------
+  Separators
+------------------*/
+@listSeparator: ";";
+@listCommaSeparator: ",";
