@@ -27,7 +27,7 @@ if [ ! -e $SETUP_COMPLETED ]; then
     invenio communities custom-fields init
 
     # Creating rdm fixtures...
-    invenio rdm fixtures
+    invenio rdm-records fixtures
 
     # Creating demo records...
     invenio rdm-records demo

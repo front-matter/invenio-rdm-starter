@@ -1,3 +1,5 @@
 /***********************************************
-         Invenio RDM Starter Overrides
+         Invenio RDM Starter Container Overrides
 ***********************************************/
+
+@highlightHeaderColor: @lightGray;

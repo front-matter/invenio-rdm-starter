@@ -65,7 +65,7 @@ COPY --from=builder ${INVENIO_INSTANCE_PATH}/assets ${INVENIO_INSTANCE_PATH}/ass
 COPY --from=builder ${INVENIO_INSTANCE_PATH}/templates ${INVENIO_INSTANCE_PATH}/templates
 COPY --from=builder ${INVENIO_INSTANCE_PATH}/app_data ${INVENIO_INSTANCE_PATH}/app_data
 COPY --from=builder ${INVENIO_INSTANCE_PATH}/translations ${INVENIO_INSTANCE_PATH}/translations
-COPY ./invenio.cfg ${INVENIO_INSTANCE_PATH}
+
 COPY ./setup.sh /opt/invenio/.venv/bin/setup.sh
 
 WORKDIR ${WORKING_DIR}/src

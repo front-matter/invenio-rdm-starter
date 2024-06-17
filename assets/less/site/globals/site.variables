@@ -1,28 +1,37 @@
 /***********************************************
-    Invenio App RDM Site Variables
+    Invenio RDM Starter Site Variables
 ***********************************************/
 
 /*-------------------
     Brand Colors
 --------------------*/
 
-@primaryColor: #0377cd;
-@secondaryColor: #fb8273;
-@featuredListBackgroundColor: #4899DB;
-@primaryDarkenColor: #0267b2;
+@white: #ffffff;
+@red: #dc2626;
+@orange: #dc2626;
+@green: #059669;
+@teal: #0d9488;
+@blue: #0284c7;
+@yellow: #eab308;
+@gray: #94A3B8;
+@lightBlue: #bae6fd;
+@lightGray: #e2e8f0;
+@darkGray: #64748b;
+@darkRed: #7f1d1d;
+@darkBlue: #075985;
+@darkGreen: #065f46;
 
-// backwards compatibility
-@brandColor: @primaryColor;
-@brand-primary:@primaryColor;
-
+@primaryColor: @blue;
+@secondaryColor: @red;
+@primaryDarkenColor: @darkBlue;
 
 /*-------------------
       Site Colors
 --------------------*/
 
-@darkGray: #333;
-@green: #048622;
 @signupColor: @green;
+@primaryLabelColor: @darkBlue;
+@positiveColor: @green;
 
 @accessRightOpen: @green;
 @accessRightRestricted: @red;
@@ -34,15 +43,15 @@
 @embargoed-components-background-color: #fbf8ee;
 @embargoed-components-border-color: #c9ba9b;
 
-@footerLightColor: #0377cd;
-@footerDarkColor: #0047a8;
-@subFooterColor: @footerDarkColor;
-@footerTextLightColor: #ffffff;
-@footerTextDarkColor: #ffffff;
+@footerLightColor: @gray;
+@footerDarkColor: @darkGray;
+@subFooterColor: @darkGray;
+@footerTextLightColor: @white;
+@footerTextDarkColor: @white;
 
-@errorTextColor: #9f3a38;
-@focusedFormBorderColor: #2185d0;
-@focusedFormMutedBorderColor: #2185d0;
+@errorTextColor: @darkRed;
+@focusedFormBorderColor: @darkRed;
+@focusedFormMutedBorderColor: @darkRed;
 
 @highlightHeaderColor: #ededed;
 @highlightBackgroundColor: @highlightHeaderColor;
@@ -51,14 +60,9 @@
 @selectedColor: #ededed;
 
 
-@navbarBackgroundImage: linear-gradient(
-  12deg,
-  rgba(3, 119, 205, 1),
-  rgba(3, 119, 205, 1) 15%,
-  rgba(251, 130, 115, 0.69)
-);
-@navbarBackgroundColor: rgba(3, 119, 205, 1);
-@versionActiveColor: #d9edf7;
+@navbarBackgroundImage: e("");
+@navbarBackgroundColor: @gray;
+@versionActiveColor: @lightGray;
 
 @mutedAccordionHeaderColor: #f5f5f5;
 @defaultBrandColor: #434C5E;
@@ -68,76 +72,11 @@
       Links
 --------------------*/
 
-@linkColor: #005b9e;
-@linkUnderline: none;
+@linkColor: @red;
 @linkHoverColor: darken(saturate(@linkColor, 20), 15, relative);
-@linkHoverUnderline: underline;
-
-
-/*-------------------
-    Breakpoints
---------------------*/
-@mobileBreakpoint            : 320px;
-@tabletBreakpoint            : 768px;
-@computerBreakpoint          : 1300px;
-@largeMonitorBreakpoint      : 1680px;
-@widescreenMonitorBreakpoint : 1920px;
 
 /*-------------------
       Fonts
 --------------------*/
 
-
-@fontSizeBase: 14px;
-@font-size-small: 12px;
-@font-size-tiny: 10px;
-@font-size-massive: 36px;
-@fontName: 'Helvetica';
-
-
-/*-------------------
-     Em Sizes
---------------------*/
-
-@75px : unit( (75 / @emSize), rem);
-@relative75px : unit( (75 / @emSize), em);
-
-
-/*-------------------
-  negative spacing
---------------------*/
-@coverPageDefaultMargin: 0;
-
-
-/* borders */
-
-@dashedBorder: 2px dashed @borderColor;
-@defaultBorder: 1px solid @solidBorderColor;
-
-/*------------------
-  checkboxes
-------------------*/
-
-@checkboxSize: @relative17px;
-
-/*------------------
-  tables
-------------------*/
-
-@cellVerticalPadding: @relativeMini;
-@cellHorizontalPadding: @relativeMini;
-
-
-/*------------------
-  Images
-------------------*/
-
-@userDashboardAvatarSize: 40px;
-@communityItemLogoWidth: 115px;
-
-
-/*------------------
-  Separators
-------------------*/
-@listSeparator: ";";
-@listCommaSeparator: ",";
+@fontName: 'Lato';
