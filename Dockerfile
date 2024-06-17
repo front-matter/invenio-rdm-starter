@@ -7,10 +7,6 @@ FROM python:3.12 AS builder
 
 ENV LANG=en_US.UTF-8 \
     LANGUAGE=en_US:en \
-    RYE_VERSION=0.34.0 \
-    RYE_TOOLCHAIN=cpython@3.12 \
-    UV_VERSION=0.2.9 \
-    NODENV_VERSION=20.14.0 \
     VIRTUAL_ENV=/opt/invenio/.venv
 
 # Install OS package dependencies
@@ -51,7 +47,7 @@ FROM python:3.12-slim-bookworm AS runtime
 
 # Install OS package dependencies
 RUN --mount=type=cache,sharing=locked,target=/var/cache/apt apt-get update -y --fix-missing && \
-    apt-get install apt-utils libcairo2 curl -y --no-install-recommends && apt-get clean
+    apt-get install apt-utils libcairo2 -y --no-install-recommends && apt-get clean
 
 ENV VIRTUAL_ENV=/opt/invenio/.venv \
     PATH="/opt/invenio/.venv/bin:$PATH" \

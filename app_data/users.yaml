@@ -1,0 +1,8 @@
+- email: admin@inveniosoftware.org
+  active: True
+  password: changeme
+  username: admin
+  roles:
+    - admin
+  allow:
+    - superuser-access

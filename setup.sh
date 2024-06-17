@@ -3,7 +3,7 @@
 SETUP_COMPLETED="SETUP_COMPLETED"
 if [ ! -e $SETUP_COMPLETED ]; then
     echo "-- Setup InvenioRDM --"
-    
+
     # Creating database...
     invenio db init create
 
@@ -26,7 +26,7 @@ if [ ! -e $SETUP_COMPLETED ]; then
     # Creating custom fields for communities...
     invenio communities custom-fields init
 
-    # Creating rdm fixtures...
+    # Creating rdm fixtures if...
     invenio rdm-records fixtures
 
     # Creating demo records...
@@ -40,4 +40,6 @@ if [ ! -e $SETUP_COMPLETED ]; then
 else
     echo "-- No setup needed --"
 fi
+
+# Start application server
 gunicorn invenio_app.wsgi:application --bind 0.0.0.0:5000 --workers=4
