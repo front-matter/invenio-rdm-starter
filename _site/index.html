@@ -544,20 +544,14 @@
   
 </li>
         
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
+          <li class="md-nav__item">
   <a href="#isnt-inveniordm-depending-on-python-39" class="md-nav__link">
     <span class="md-ellipsis">
       Isn't InvenioRDM depending on Python 3.9?
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Isn't InvenioRDM depending on Python 3.9?">
-      <ul class="md-nav__list">
+</li>
         
           <li class="md-nav__item">
   <a href="#dont-i-need-rabbitmq-for-the-inveniordm-message-broker" class="md-nav__link">
@@ -823,20 +817,14 @@
   
 </li>
         
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
+          <li class="md-nav__item">
   <a href="#isnt-inveniordm-depending-on-python-39" class="md-nav__link">
     <span class="md-ellipsis">
       Isn't InvenioRDM depending on Python 3.9?
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Isn't InvenioRDM depending on Python 3.9?">
-      <ul class="md-nav__list">
+</li>
         
           <li class="md-nav__item">
   <a href="#dont-i-need-rabbitmq-for-the-inveniordm-message-broker" class="md-nav__link">
@@ -1018,7 +1006,7 @@ the <code>invenio-cli</code> command-line tool in the following ways:</p>
 <h3 id="how-do-i-remove-the-inveniordm-opensearch-indexes">How do I remove the InvenioRDM OpenSearch indexes?</h3>
 <div class="language-bash highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>docker<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>-it<span class="w"> </span>invenio-rdm-starter-web-1<span class="w"> </span>invenio<span class="w"> </span>index<span class="w"> </span>destroy<span class="w"> </span>--force<span class="w"> </span>--yes-i-know
 </span></code></pre></div>
-<h2 id="isnt-inveniordm-depending-on-python-39">Isn't InvenioRDM depending on Python 3.9?</h2>
+<h3 id="isnt-inveniordm-depending-on-python-39">Isn't InvenioRDM depending on Python 3.9?</h3>
 <p>InvenioRDM Starter uses Python 3.12 (<a href="https://devguide.python.org/versions/">the current version</a>), but doesn't use any features of Python 3.10-3.12. Please report any Python 3.12-related issues you encounter. Python 3.9 reaches end-of-life in October 2025.</p>
 <h3 id="dont-i-need-rabbitmq-for-the-inveniordm-message-broker">Don't I need RabbitMQ for the InvenioRDM message broker?</h3>
 <p>The Python Celery framework can <a href="https://docs.celeryq.dev/en/stable/getting-started/backends-and-brokers/index.html">use either Redis or RabbitMQ</a> as the message broker (and Redis as the backend). I will be doing a detailed comparison of the two brokers for InvenioRDM.</p>

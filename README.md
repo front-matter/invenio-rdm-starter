@@ -146,7 +146,7 @@ docker exec -it invenio-rdm-starter-web-1 invenio db drop --yes-i-know
 docker exec -it invenio-rdm-starter-web-1 invenio index destroy --force --yes-i-know
 ```
 
-## Isn't InvenioRDM depending on Python 3.9?
+### Isn't InvenioRDM depending on Python 3.9?
 
 InvenioRDM Starter uses Python 3.12 ([the current version](https://devguide.python.org/versions/)), but doesn't use any features of Python 3.10-3.12. Please report any Python 3.12-related issues you encounter. Python 3.9 reaches end-of-life in October 2025.
 
