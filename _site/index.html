@@ -514,6 +514,39 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="FAQ">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#how-do-i-get-a-secure-ssl-certificate-on-localhost" class="md-nav__link">
+    <span class="md-ellipsis">
+      How do I get a secure SSL certificate on localhost?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#how-do-i-delete-the-inveniordm-postgres-database" class="md-nav__link">
+    <span class="md-ellipsis">
+      How do I delete the InvenioRDM Postgres database?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#how-do-i-remove-the-inveniordm-opensearch-indexes" class="md-nav__link">
+    <span class="md-ellipsis">
+      How do I remove the InvenioRDM OpenSearch indexes?
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
     </ul>
@@ -718,6 +751,39 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="FAQ">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#how-do-i-get-a-secure-ssl-certificate-on-localhost" class="md-nav__link">
+    <span class="md-ellipsis">
+      How do I get a secure SSL certificate on localhost?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#how-do-i-delete-the-inveniordm-postgres-database" class="md-nav__link">
+    <span class="md-ellipsis">
+      How do I delete the InvenioRDM Postgres database?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#how-do-i-remove-the-inveniordm-opensearch-indexes" class="md-nav__link">
+    <span class="md-ellipsis">
+      How do I remove the InvenioRDM OpenSearch indexes?
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
     </ul>
@@ -860,10 +926,14 @@ the <code>invenio-cli</code> command-line tool in the following ways:</p>
 <li>Initial setup happens via a script running at container startup instead of via invenio-cli.</li>
 </ul>
 <h2 id="faq">FAQ</h2>
-<dl>
-<dt><strong>How do I get a secure SSL certificate on localhost?</strong></dt>
-<dd><a href="https://letsencrypt.org/">Let's Encrypt</a> can automatically generate SSL certificates, and that functionality is built into the Caddy reverse proxy. Let's Encrypt doesn't work on localhost, but Caddy auto-generates a self-signed SSL certificate. This is an intermediary certificate, the corresponding root certificate isn't automatically used in a Docker Compose setup. You can copy the root certificate from your running Caddy container into your operating system certificate store. It only works on localhost and is valid for 10 years.</dd>
-</dl>
+<h3 id="how-do-i-get-a-secure-ssl-certificate-on-localhost">How do I get a secure SSL certificate on localhost?</h3>
+<p>The Caddy reverse proxy auto-generates a self-signed SSL certificate on localhost. This is an intermediary certificate, the corresponding root certificate isn't automatically used in a Docker Compose setup. You can copy the root certificate (Caddy Local Authority - 2024 ECC Root) from your running Caddy container (data/caddy/pki/local/root.crt) into your operating system certificate store. The root certificate only works on localhost and is valid for 10 years.</p>
+<h3 id="how-do-i-delete-the-inveniordm-postgres-database">How do I delete the InvenioRDM Postgres database?</h3>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>docker<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>-it<span class="w"> </span>invenio-rdm-starter-web-1<span class="w"> </span>invenio<span class="w"> </span>db<span class="w"> </span>drop<span class="w"> </span>--yes-i-know
+</span></code></pre></div>
+<h3 id="how-do-i-remove-the-inveniordm-opensearch-indexes">How do I remove the InvenioRDM OpenSearch indexes?</h3>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>docker<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>-it<span class="w"> </span>invenio-rdm-starter-web-1<span class="w"> </span>invenio<span class="w"> </span>index<span class="w"> </span>destroy<span class="w"> </span>--force<span class="w"> </span>--yes-i-know
+</span></code></pre></div>
 
 
 

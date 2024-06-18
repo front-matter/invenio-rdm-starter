@@ -134,5 +134,18 @@ the `invenio-cli` command-line tool in the following ways:
 
 ## FAQ
 
-**How do I get a secure SSL certificate on localhost?**
-: [Let's Encrypt](https://letsencrypt.org/) can automatically generate SSL certificates, and that functionality is built into the Caddy reverse proxy. Let's Encrypt doesn't work on localhost, but Caddy auto-generates a self-signed SSL certificate. This is an intermediary certificate, the corresponding root certificate isn't automatically used in a Docker Compose setup. You can copy the root certificate from your running Caddy container into your operating system certificate store. It only works on localhost and is valid for 10 years.
+### How do I get a secure SSL certificate on localhost?
+
+The Caddy reverse proxy auto-generates a self-signed SSL certificate on localhost. This is an intermediary certificate, the corresponding root certificate isn't automatically used in a Docker Compose setup. You can copy the root certificate (Caddy Local Authority - 2024 ECC Root) from your running Caddy container (data/caddy/pki/local/root.crt) into your operating system certificate store. The root certificate only works on localhost and is valid for 10 years.
+
+### How do I delete the InvenioRDM Postgres database?
+
+```bash
+docker exec -it invenio-rdm-starter-web-1 invenio db drop --yes-i-know
+```
+
+### How do I remove the InvenioRDM OpenSearch indexes?
+
+```bash
+docker exec -it invenio-rdm-starter-web-1 invenio index destroy --force --yes-i-know
+```
