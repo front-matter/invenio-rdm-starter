@@ -549,6 +549,48 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#isnt-inveniordm-depending-on-python-39" class="md-nav__link">
+    <span class="md-ellipsis">
+      Isn't InvenioRDM depending on Python 3.9?
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Isn't InvenioRDM depending on Python 3.9?">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#dont-i-need-rabbitmq-for-the-inveniordm-message-broker" class="md-nav__link">
+    <span class="md-ellipsis">
+      Don't I need RabbitMQ for the InvenioRDM message broker?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#why-use-debian-instead-of-almalinux-as-linux-distribution-for-the-docker-image" class="md-nav__link">
+    <span class="md-ellipsis">
+      Why use Debian instead of Almalinux as Linux distribution for the Docker image?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#why-use-gunicorn-instead-of-uwsgi-as-the-python-application-server" class="md-nav__link">
+    <span class="md-ellipsis">
+      Why use gunicorn instead of uwsgi as the Python application server?
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -786,6 +828,48 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#isnt-inveniordm-depending-on-python-39" class="md-nav__link">
+    <span class="md-ellipsis">
+      Isn't InvenioRDM depending on Python 3.9?
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Isn't InvenioRDM depending on Python 3.9?">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#dont-i-need-rabbitmq-for-the-inveniordm-message-broker" class="md-nav__link">
+    <span class="md-ellipsis">
+      Don't I need RabbitMQ for the InvenioRDM message broker?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#why-use-debian-instead-of-almalinux-as-linux-distribution-for-the-docker-image" class="md-nav__link">
+    <span class="md-ellipsis">
+      Why use Debian instead of Almalinux as Linux distribution for the Docker image?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#why-use-gunicorn-instead-of-uwsgi-as-the-python-application-server" class="md-nav__link">
+    <span class="md-ellipsis">
+      Why use gunicorn instead of uwsgi as the Python application server?
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -934,6 +1018,14 @@ the <code>invenio-cli</code> command-line tool in the following ways:</p>
 <h3 id="how-do-i-remove-the-inveniordm-opensearch-indexes">How do I remove the InvenioRDM OpenSearch indexes?</h3>
 <div class="language-bash highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>docker<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>-it<span class="w"> </span>invenio-rdm-starter-web-1<span class="w"> </span>invenio<span class="w"> </span>index<span class="w"> </span>destroy<span class="w"> </span>--force<span class="w"> </span>--yes-i-know
 </span></code></pre></div>
+<h2 id="isnt-inveniordm-depending-on-python-39">Isn't InvenioRDM depending on Python 3.9?</h2>
+<p>InvenioRDM Starter uses Python 3.12 (<a href="https://devguide.python.org/versions/">the current version</a>), but doesn't use any features of Python 3.10-3.12. Please report any Python 3.12-related issues you encounter. Python 3.9 reaches end-of-life in October 2025.</p>
+<h3 id="dont-i-need-rabbitmq-for-the-inveniordm-message-broker">Don't I need RabbitMQ for the InvenioRDM message broker?</h3>
+<p>The Python Celery framework can <a href="https://docs.celeryq.dev/en/stable/getting-started/backends-and-brokers/index.html">use either Redis or RabbitMQ</a> as the message broker (and Redis as the backend). I will be doing a detailed comparison of the two brokers for InvenioRDM.</p>
+<h3 id="why-use-debian-instead-of-almalinux-as-linux-distribution-for-the-docker-image">Why use Debian instead of Almalinux as Linux distribution for the Docker image?</h3>
+<p>The <a href="https://hub.docker.com/_/python">official Python Docker images</a> use either Debian or Alpine, making them a good starting point (e.g. security fixes) for the InvenioRDM Docker image. Almalinux has a <a href="https://almalinux.org/blog/future-of-almalinux/">complicated relationship with RedHat Linux</a>. Alpine generates smaller images compared to Debian but most developers are less familar with Alpine and some people <a href="https://pythonspeed.com/articles/alpine-docker-python/">report issues</a> with building Python packages on Alpine. InvenioRDM Starter uses Debian 12 (Bookworm), released in June 2023.</p>
+<h3 id="why-use-gunicorn-instead-of-uwsgi-as-the-python-application-server">Why use <code>gunicorn</code> instead of <code>uwsgi</code> as the Python application server?</h3>
+<p>Both are popular Python application servers. More importantly InvenioRDM Starter uses one configuration and Docker container for both the web UI and API, simplifying deployment.</p>
 
 
 

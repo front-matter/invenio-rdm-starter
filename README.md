@@ -145,3 +145,19 @@ docker exec -it invenio-rdm-starter-web-1 invenio db drop --yes-i-know
 ```bash
 docker exec -it invenio-rdm-starter-web-1 invenio index destroy --force --yes-i-know
 ```
+
+## Isn't InvenioRDM depending on Python 3.9?
+
+InvenioRDM Starter uses Python 3.12 ([the current version](https://devguide.python.org/versions/)), but doesn't use any features of Python 3.10-3.12. Please report any Python 3.12-related issues you encounter. Python 3.9 reaches end-of-life in October 2025.
+
+### Don't I need RabbitMQ for the InvenioRDM message broker?
+
+The Python Celery framework can [use either Redis or RabbitMQ](https://docs.celeryq.dev/en/stable/getting-started/backends-and-brokers/index.html) as the message broker (and Redis as the backend). I will be doing a detailed comparison of the two brokers for InvenioRDM.
+
+### Why use Debian instead of Almalinux as Linux distribution for the Docker image?
+
+The [official Python Docker images](https://hub.docker.com/_/python) use either Debian or Alpine, making them a good starting point (e.g. security fixes) for the InvenioRDM Docker image. Almalinux has a [complicated relationship with RedHat Linux](https://almalinux.org/blog/future-of-almalinux/). Alpine generates smaller images compared to Debian but most developers are less familar with Alpine and some people [report issues](https://pythonspeed.com/articles/alpine-docker-python/) with building Python packages on Alpine. InvenioRDM Starter uses Debian 12 (Bookworm), released in June 2023.
+
+### Why use `gunicorn` instead of `uwsgi` as the Python application server?
+
+Both are popular Python application servers. More importantly InvenioRDM Starter uses one configuration and Docker container for both the web UI and API, simplifying deployment.
