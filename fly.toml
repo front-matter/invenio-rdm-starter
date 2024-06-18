@@ -7,6 +7,7 @@ app = 'invenio-rdm-starter'
 primary_region = 'fra'
 
 [build]
+  image = "ghcr.io/front-matter/invenio-rdm-starter:latest"
 
 [http_service]
   internal_port = 5000
