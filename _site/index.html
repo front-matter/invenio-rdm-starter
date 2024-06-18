@@ -507,6 +507,15 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#faq" class="md-nav__link">
+    <span class="md-ellipsis">
+      FAQ
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -702,6 +711,15 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#faq" class="md-nav__link">
+    <span class="md-ellipsis">
+      FAQ
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -748,7 +766,7 @@
 <p>Run <code>docker-compose up</code> in the same directory as the <code>docker-compose.yml</code> file.</p>
 <div class="language-bash highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>docker<span class="w"> </span>compose<span class="w"> </span>up
 </span></code></pre></div>
-<p>Open a web browser and navigate to <a href="https://localhost">https://localhost</a>.</p>
+<p>Open a web browser and navigate to <a href="https://localhost">https://localhost</a>. One default admin user is created during setup: email <code>admin@inveniosoftware.org</code>, password <code>changeme</code>.</p>
 <h2 id="configuration">Configuration</h2>
 <p>The <code>docker-compose.yml</code> configuration can be modified to suit your needs using environment variables in an <code>.env</code> file in the same folder:</p>
 <h3 id="flask">Flask</h3>
@@ -782,7 +800,7 @@
 </ul>
 <h3 id="invenio-theme">Invenio-Theme</h3>
 <ul>
-<li><code>INVENIO_THEME_HEADER_LOGO</code> - The header logo used by InvenioRDM, defaults to <code>/static/images/logo.png</code>.</li>
+<li><code>INVENIO_THEME_HEADER_LOGO</code> - The header logo used by InvenioRDM, defaults to <code>images/starter-white.svg</code>.</li>
 <li><code>INVENIO_THEME_FRONTPAGE_TITLE</code> - The frontpage title used by InvenioRDM, defaults to <code>InvenioRDM Starter</code>.</li>
 <li><code>INVENIO_THEME_SHOW_FRONTPAGE_INTRO_SECTION</code> - Set to <code>True</code> to show the frontpage intro section, defaults to <code>False</code>.</li>
 </ul>
@@ -839,7 +857,13 @@ the <code>invenio-cli</code> command-line tool in the following ways:</p>
 <li>The Docker image uses <code>gunicorn</code> as the WSGI server instead of <code>uwsgi</code>.</li>
 <li>Docker Compose uses <code>Caddy</code> as the reverse proxy server instead of <code>Nginx</code>. InvenioRDM Starter will run locally at <code>https://localhost</code>, and uses a self-signed ssl certificate issued by <code>Caddy</code>.</li>
 <li>Docker Compose uses <code>Redis</code> as the message broker instead of <code>RabbitMQ</code></li>
+<li>Initial setup happens via a script running at container startup instead of via invenio-cli.</li>
 </ul>
+<h2 id="faq">FAQ</h2>
+<dl>
+<dt><strong>How do I get a secure SSL certificate on localhost?</strong></dt>
+<dd><a href="https://letsencrypt.org/">Let's Encrypt</a> can automatically generate SSL certificates, and that functionality is built into the Caddy reverse proxy. Let's Encrypt doesn't work on localhost, but Caddy auto-generates a self-signed SSL certificate. This is an intermediary certificate, the corresponding root certificate isn't automatically used in a Docker Compose setup. You can copy the root certificate from your running Caddy container into your operating system certificate store. It only works on localhost and is valid for 10 years.</dd>
+</dl>
 
 
 

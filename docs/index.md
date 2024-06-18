@@ -41,7 +41,7 @@ Run `docker-compose up` in the same directory as the `docker-compose.yml` file.
 docker compose up
 ```
 
-Open a web browser and navigate to [https://localhost](https://localhost).
+Open a web browser and navigate to [https://localhost](https://localhost). One default admin user is created during setup: email `admin@inveniosoftware.org`, password `changeme`.
 
 ## Configuration
 
@@ -75,7 +75,7 @@ The `docker-compose.yml` configuration can be modified to suit your needs using 
 
 ### Invenio-Theme
 
-* `INVENIO_THEME_HEADER_LOGO` - The header logo used by InvenioRDM, defaults to `/static/images/logo.png`.
+* `INVENIO_THEME_HEADER_LOGO` - The header logo used by InvenioRDM, defaults to `images/starter-white.svg`.
 * `INVENIO_THEME_FRONTPAGE_TITLE` - The frontpage title used by InvenioRDM, defaults to `InvenioRDM Starter`.
 * `INVENIO_THEME_SHOW_FRONTPAGE_INTRO_SECTION` - Set to `True` to show the frontpage intro section, defaults to `False`.
 
@@ -130,3 +130,9 @@ the `invenio-cli` command-line tool in the following ways:
 * The Docker image uses `gunicorn` as the WSGI server instead of `uwsgi`.
 * Docker Compose uses `Caddy` as the reverse proxy server instead of `Nginx`. InvenioRDM Starter will run locally at `https://localhost`, and uses a self-signed ssl certificate issued by `Caddy`.
 * Docker Compose uses `Redis` as the message broker instead of `RabbitMQ`
+* Initial setup happens via a script running at container startup instead of via invenio-cli.
+
+## FAQ
+
+**How do I get a secure SSL certificate on localhost?**
+: [Let's Encrypt](https://letsencrypt.org/) can automatically generate SSL certificates, and that functionality is built into the Caddy reverse proxy. Let's Encrypt doesn't work on localhost, but Caddy auto-generates a self-signed SSL certificate. This is an intermediary certificate, the corresponding root certificate isn't automatically used in a Docker Compose setup. You can copy the root certificate from your running Caddy container into your operating system certificate store. It only works on localhost and is valid for 10 years.
