@@ -17,7 +17,8 @@
 @lightBlue: #bae6fd;
 @lightGrey: #e2e8f0;
 @darkBlue: #075985;
-@darkGrey: #64748b;
+@mediumGrey: #64748b;
+@darkGrey: #475569;
 @darkRed: #7f1d1d;
 @darkGreen: #065f46;
 
@@ -45,7 +46,7 @@
 @embargoed-components-background-color: #fbf8ee;
 @embargoed-components-border-color: #c9ba9b;
 
-@footerLightColor: @grey;
+@footerLightColor: @mediumGrey;
 @footerDarkColor: @darkGrey;
 @subFooterColor: @darkGrey;
 @footerTextLightColor: @white;
