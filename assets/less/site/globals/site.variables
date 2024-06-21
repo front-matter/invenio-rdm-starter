@@ -3,38 +3,89 @@
 ***********************************************/
 
 /*-------------------
+       Fonts
+--------------------*/
+
+@fontName          : 'Lato';
+
+/*-------------------
     Brand Colors
 --------------------*/
 
-@white: #ffffff;
-@red: #dc2626;
-@orange: #ea580c;
-@green: #059669;
-@teal: #0d9488;
-@blue: #0284c7;
-@yellow: #eab308;
-@grey: #94A3B8;
-@lightBlue: #bae6fd;
-@lightGrey: #e2e8f0;
-@darkBlue: #075985;
-@mediumGrey: #64748b;
-@darkGrey: #475569;
-@darkRed: #7f1d1d;
-@darkGreen: #065f46;
+@primaryColor        : @blue;
+@secondaryColor      : @black;
 
-@primaryColor: @blue;
-@secondaryColor: @red;
-@positiveColor: @green;
-@neutralColor: @grey;
-@negativeColor: @orange;
-@primaryDarkenColor: @darkBlue;
+@lightPrimaryColor   : @lightBlue;
+@lightSecondaryColor : @lightBlack;
+
+/*-------------------
+    Focused Input
+--------------------*/
+
+@focusedFormBorderColor: @red;
+@focusedFormMutedBorderColor: @red;
+
+/*-------------------
+       Links
+--------------------*/
+
+@linkColor           : @red;
+@linkUnderline       : none;
+@linkHoverColor      : @darkRed;
+@linkHoverUnderline  : @linkUnderline;
 
 /*-------------------
       Site Colors
+      using Tailwind CSS Colors https://tailwindcss.com/docs/customizing-colors
 --------------------*/
 
-@signupColor: @green;
-@primaryLabelColor: @darkBlue;
+/*---  Colors  ---*/
+@red              : #dc2626;
+@orange           : #ea580c;
+@yellow           : #ca8a04;
+@olive            : #65a30d; // lime
+@green            : #16a34a;
+@teal             : #0d9488;
+@blue             : #2563eb;
+@violet           : #7c3aed;
+@purple           : #9333ea;
+@pink             : #db2777;
+@brown            : #d97706; // amber
+@grey             : #4b5563;
+@black            : #1B1C1D; 
+
+/*---  Light Colors  ---*/
+@lightRed         : #f87171;
+@lightOrange      : #fb923c;
+@lightYellow      : #facc15;
+@lightOlive       : #a3e635; // lime
+@lightGreen       : #4ade80;
+@lightTeal        : #2dd4bf;
+@lightBlue        : #60a5fa;
+@lightViolet      : #a78bfa;
+@lightPurple      : #c084fc;
+@lightPink        : #f472b6;
+@lightBrown       : #fbbf24; // amber
+@lightGrey        : #9ca3af;
+@lightBlack       : #1f2937; // grey
+
+/*---  Dark Colors  ---*/
+
+@darkRed         : #991b1b;
+@darkOrange      : #9a3412;
+@darkYellow      : #854d0e;
+@darkOlive       : #3f6212; // lime
+@darkGreen       : #166534;
+@darkTeal        : #115e59;
+@darkBlue        : #1e40af;
+@darkViolet      : #5b21b6;
+@darkPurple      : #6b21a8;
+@darkPink        : #9d174d;
+@darkBrown       : #92400e;// amber
+
+/*-------------------
+    Invenio RDM Colors
+--------------------*/
 
 @accessRightOpen: @green;
 @accessRightRestricted: @red;
@@ -45,41 +96,18 @@
 @restricted-components-border-color: #e0b4b4;
 @embargoed-components-background-color: #fbf8ee;
 @embargoed-components-border-color: #c9ba9b;
-
-@footerLightColor: @mediumGrey;
-@footerDarkColor: @darkGrey;
-@subFooterColor: @darkGrey;
-@footerTextLightColor: @white;
-@footerTextDarkColor: @white;
-
-@errorTextColor: @red;
-@focusedFormBorderColor: @red;
-@focusedFormMutedBorderColor: @red;
-
-@highlightHeaderColor: @lightGrey;
-@highlightBackgroundColor: @highlightHeaderColor;
-@highlightBackgroundColorHover:  darken(saturate(@highlightHeaderColor, 20), 15, relative);
-@highlightLandingPageBackgroundColor: rgba(173, 206, 224, 0.52);
-@selectedColor: @lightGrey;
-
-
-@navbarBackgroundImage: e("");
-@navbarBackgroundColor: @grey;
 @versionActiveColor: @lightGrey;
 
-@mutedAccordionHeaderColor: @lightGrey;
-@defaultBrandColor: @darkGrey;
+@orcidColor: #A6CE39;
+@orcidActiveColor: saturate(darken(@orcidColor, 5), 15, relative);
 
+@signupColor: @green;
+@primaryLabelColor: @darkBlue;
 
-/*-------------------
-      Links
---------------------*/
-
-@linkColor: @red;
-@linkHoverColor: darken(saturate(@linkColor, 20), 15, relative);
-
-/*-------------------
-      Fonts
---------------------*/
-
-@fontName: 'Lato';
+@navbarBackgroundImage: e(""); // remove background image
+@navbarBackgroundColor: lighten(@grey, 15);
+@footerLightColor: @grey;
+@footerDarkColor: @lightBlack;
+@subFooterColor: @lightBlack;
+@footerTextLightColor: @white;
+@footerTextDarkColor: @white;

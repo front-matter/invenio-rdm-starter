@@ -10,7 +10,7 @@ primary_region = 'fra'
   image = "ghcr.io/front-matter/invenio-rdm-starter:latest"
 
 [deploy]
-  release_command = "setup.sh"
+# release_command = "./setup.sh"
 
 [env]
   # Flask-Babel
@@ -21,6 +21,8 @@ primary_region = 'fra'
   INVENIO_THEME_LOGO = "images/starter-white.svg"
   INVENIO_THEME_FRONTPAGE_TITLE = "InvenioRDM Starter"
   INVENIO_THEME_SHOW_FRONTPAGE_INTRO_SECTION = "False"
+
+  INVENIO_SEARCH_INDEX_PREFIX = "invenio-rdm-"
 
 [http_service]
   internal_port = 5000
