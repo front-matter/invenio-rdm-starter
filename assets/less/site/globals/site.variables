@@ -49,7 +49,7 @@
 @olive            : #84cc16; // lime
 @green            : #22c55e;
 @teal             : #14b8a6;
-@blue             : #3b82f6;
+@blue             : #0ea5e9; // sky
 @violet           : #8b5cf6;
 @purple           : #a855f7;
 @pink             : #ec4899;
@@ -64,7 +64,7 @@
 @lightOlive       : #bef264; // lime
 @lightGreen       : #86efac;
 @lightTeal        : #5eead4;
-@lightBlue        : #93c5fd;
+@lightBlue        : #7dd3fc; // sky
 @lightViolet      : #c4b5fd;
 @lightPurple      : #d8b4fe;
 @lightPink        : #f9a8d4;
@@ -86,7 +86,7 @@
 @darkOlive       : #4d7c0f; // lime
 @darkGreen       : #15803d;
 @darkTeal        : #0f766e;
-@darkBlue        : #1d4ed8;
+@darkBlue        : #0369a1; // sky
 @darkViolet      : #6d28d9;
 @darkPurple      : #7e22ce;
 @darkPink        : #be185d;
@@ -100,13 +100,13 @@
 @accessRightOpen: @green;
 @accessRightRestricted: @red;
 @accessRightEmbargoed: @yellow;
-@accessRightMetadataOnly: @teal;
+@accessRightMetadataOnly: @olive;
 
 @restricted-components-background-color: #feeaea;
 @restricted-components-border-color: #e0b4b4;
 @embargoed-components-background-color: #fbf8ee;
 @embargoed-components-border-color: #c9ba9b;
-@versionActiveColor: @midWhite;
+@versionActiveColor: @darkWhite;
 
 @orcidColor: #A6CE39;
 @orcidActiveColor: saturate(darken(@orcidColor, 5), 15, relative);
@@ -115,8 +115,8 @@
 @primaryLabelColor: @darkPrimaryColor;
 
 @navbarBackgroundImage: e(""); // remove background image
-@navbarBackgroundColor: @lightGrey;
-@footerLightColor: @lightGrey;
+@navbarBackgroundColor: @grey;
+@footerLightColor: @grey;
 @footerDarkColor: @darkGrey;
 @subFooterColor: @darkGrey;
 @footerTextLightColor: @white;

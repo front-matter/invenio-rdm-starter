@@ -1,0 +1,6 @@
+/***********************************************
+         Invenio RDM Starter Label Overrides
+***********************************************/
+
+@neutralLabelColor: @teal;
+@neutralBorderLabelColor @teal;

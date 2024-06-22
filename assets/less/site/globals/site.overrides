@@ -3,5 +3,5 @@
 ***********************************************/
 
 html.cover-page {
-  background-color: @lightGrey;
+  background-color: @grey;
 }

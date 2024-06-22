@@ -12,6 +12,7 @@ dependencies = [
     "importlib-metadata~=6.11.0",
     "gunicorn~=22.0.0",
     "material-plausible-plugin~=0.2.0",
+    "invenio-rdm-records @ git+https://github.com/front-matter/invenio-rdm-records@e47ba629cfcb213140bf0a7eeedc9978ea932c82",
 ]
 readme = "README.md"
 requires-python = ">= 3.9"

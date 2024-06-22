@@ -467,7 +467,7 @@ invenio-previewer==2.2.1
     # via invenio-app-rdm
 invenio-queues==1.0.1
     # via invenio-stats
-invenio-rdm-records==10.7.1
+invenio-rdm-records @ git+https://github.com/front-matter/invenio-rdm-records@e47ba629cfcb213140bf0a7eeedc9978ea932c82
     # via invenio-app-rdm
 invenio-records==2.3.0
     # via invenio-app-rdm

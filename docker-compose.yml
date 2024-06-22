@@ -57,7 +57,7 @@ services:
       # - INVENIO_I18N_LANGUAGES=${INVENIO_I18N_LANGUAGES:-[("de", _("German"))]}
 
       # Invenio-Theme
-      - INVENIO_THEME_LOGO=${INVENIO_THEME_LOGO:-images/invenio-rdm.svg}
+      - INVENIO_THEME_LOGO=${INVENIO_THEME_LOGO:-images/invenio-rdm-white.svg}
       - INVENIO_THEME_FRONTPAGE_TITLE=${INVENIO_THEME_FRONTPAGE_TITLE:-InvenioRDM Starter}
       - INVENIO_THEME_SHOW_FRONTPAGE_INTRO_SECTION=False
 
