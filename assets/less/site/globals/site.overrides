@@ -1,0 +1,7 @@
+/***********************************************
+         Invenio RDM Starter Site Overrides
+***********************************************/
+
+html.cover-page {
+  background-color: @lightGrey;
+}

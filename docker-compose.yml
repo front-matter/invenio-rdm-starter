@@ -54,11 +54,10 @@ services:
       - INVENIO_SECRET_KEY=${INVENIO_SECRET_KEY:-changeme}
       
       # Invenio-I18N
-      # TODO: fix tuple parsing
-      # - INVENIO_I18N_LANGUAGES=${INVENIO_I18N_LANGUAGES:-'[("de", _("German"))]'}
+      # - INVENIO_I18N_LANGUAGES=${INVENIO_I18N_LANGUAGES:-[("de", _("German"))]}
 
       # Invenio-Theme
-      - INVENIO_THEME_LOGO=${INVENIO_THEME_LOGO:-images/starter-white.svg}
+      - INVENIO_THEME_LOGO=${INVENIO_THEME_LOGO:-images/invenio-rdm.svg}
       - INVENIO_THEME_FRONTPAGE_TITLE=${INVENIO_THEME_FRONTPAGE_TITLE:-InvenioRDM Starter}
       - INVENIO_THEME_SHOW_FRONTPAGE_INTRO_SECTION=False
 
@@ -89,6 +88,7 @@ services:
 
       # Invenio-Search
       - INVENIO_SEARCH_HOSTS=['search:9200']
+      # - INVENIO_SEARCH_CLIENT_CONFIG=${INVENIO_SEARCH_CLIENT_CONFIG}
       - INVENIO_SEARCH_INDEX_PREFIX=${INVENIO_SEARCH_INDEX_PREFIX:-invenio-rdm-}
 
       # Logging
@@ -111,6 +111,7 @@ services:
     environment:
       - INVENIO_SQLALCHEMY_DATABASE_URI=${INVENIO_SQLALCHEMY_DATABASE_URI:-postgresql+psycopg2://inveniordm:inveniordm@db/inveniordm}
       - INVENIO_SEARCH_HOSTS=['search:9200']
+      # - INVENIO_SEARCH_CLIENT_CONFIG=${INVENIO_SEARCH_CLIENT_CONFIG}
       - INVENIO_SEARCH_INDEX_PREFIX=${INVENIO_SEARCH_INDEX_PREFIX:-invenio-rdm-}
 
       - INVENIO_CACHE_TYPE=${INVENIO_CACHE_TYPE:-redis}

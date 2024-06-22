@@ -13,10 +13,13 @@
 --------------------*/
 
 @primaryColor        : @blue;
-@secondaryColor      : @black;
+@secondaryColor      : @grey;
 
 @lightPrimaryColor   : @lightBlue;
-@lightSecondaryColor : @lightBlack;
+@lightSecondaryColor : @lightGrey;
+
+@darkPrimaryColor    : @darkBlue;
+@darkSecondaryColor  : @darkGrey;
 
 /*-------------------
     Focused Input
@@ -40,48 +43,55 @@
 --------------------*/
 
 /*---  Colors  ---*/
-@red              : #dc2626;
-@orange           : #ea580c;
-@yellow           : #ca8a04;
-@olive            : #65a30d; // lime
-@green            : #16a34a;
-@teal             : #0d9488;
-@blue             : #2563eb;
-@violet           : #7c3aed;
-@purple           : #9333ea;
-@pink             : #db2777;
-@brown            : #d97706; // amber
-@grey             : #4b5563;
+@red              : #ef4444;
+@orange           : #f97316;
+@yellow           : #eab308;
+@olive            : #84cc16; // lime
+@green            : #22c55e;
+@teal             : #14b8a6;
+@blue             : #3b82f6;
+@violet           : #8b5cf6;
+@purple           : #a855f7;
+@pink             : #ec4899;
+@brown            : #f59e0b; // amber
+@grey             : #64748b; // slate
 @black            : #1B1C1D; 
 
 /*---  Light Colors  ---*/
-@lightRed         : #f87171;
-@lightOrange      : #fb923c;
-@lightYellow      : #facc15;
-@lightOlive       : #a3e635; // lime
-@lightGreen       : #4ade80;
-@lightTeal        : #2dd4bf;
-@lightBlue        : #60a5fa;
-@lightViolet      : #a78bfa;
-@lightPurple      : #c084fc;
-@lightPink        : #f472b6;
-@lightBrown       : #fbbf24; // amber
-@lightGrey        : #9ca3af;
-@lightBlack       : #1f2937; // grey
+@lightRed         : #fca5a5;
+@lightOrange      : #fdba74;
+@lightYellow      : #fde047;
+@lightOlive       : #bef264; // lime
+@lightGreen       : #86efac;
+@lightTeal        : #5eead4;
+@lightBlue        : #93c5fd;
+@lightViolet      : #c4b5fd;
+@lightPurple      : #d8b4fe;
+@lightPink        : #f9a8d4;
+@lightBrown       : #fcd34d; // amber
+@lightGrey        : #cbd5e1; // slate
+@lightBlack       : #1e293b;
+
+/*---   Neutrals  ---*/
+@fullBlack        : #000000;
+@offWhite         : #F9FAFB;
+@darkWhite        : #F3F4F5;
+@midWhite         : #DCDDDE;
+@white            : #FFFFFF;
 
 /*---  Dark Colors  ---*/
-
-@darkRed         : #991b1b;
-@darkOrange      : #9a3412;
-@darkYellow      : #854d0e;
-@darkOlive       : #3f6212; // lime
-@darkGreen       : #166534;
-@darkTeal        : #115e59;
-@darkBlue        : #1e40af;
-@darkViolet      : #5b21b6;
-@darkPurple      : #6b21a8;
-@darkPink        : #9d174d;
-@darkBrown       : #92400e;// amber
+@darkRed         : #b91c1c;
+@darkOrange      : #c2410c;
+@darkYellow      : #a16207;
+@darkOlive       : #4d7c0f; // lime
+@darkGreen       : #15803d;
+@darkTeal        : #0f766e;
+@darkBlue        : #1d4ed8;
+@darkViolet      : #6d28d9;
+@darkPurple      : #7e22ce;
+@darkPink        : #be185d;
+@darkBrown       : #92400e; // amber
+@darkGrey        : #1e293b; // slate
 
 /*-------------------
     Invenio RDM Colors
@@ -96,18 +106,18 @@
 @restricted-components-border-color: #e0b4b4;
 @embargoed-components-background-color: #fbf8ee;
 @embargoed-components-border-color: #c9ba9b;
-@versionActiveColor: @lightGrey;
+@versionActiveColor: @midWhite;
 
 @orcidColor: #A6CE39;
 @orcidActiveColor: saturate(darken(@orcidColor, 5), 15, relative);
 
 @signupColor: @green;
-@primaryLabelColor: @darkBlue;
+@primaryLabelColor: @darkPrimaryColor;
 
 @navbarBackgroundImage: e(""); // remove background image
-@navbarBackgroundColor: lighten(@grey, 15);
-@footerLightColor: @grey;
-@footerDarkColor: @lightBlack;
-@subFooterColor: @lightBlack;
+@navbarBackgroundColor: @lightGrey;
+@footerLightColor: @lightGrey;
+@footerDarkColor: @darkGrey;
+@subFooterColor: @darkGrey;
 @footerTextLightColor: @white;
 @footerTextDarkColor: @white;
