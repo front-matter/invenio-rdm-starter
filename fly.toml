@@ -18,7 +18,7 @@ primary_region = 'fra'
   INVENIO_BABEL_DEFAULT_TIMEZONE = "UTC"
 
   # Invenio-Theme
-  INVENIO_THEME_LOGO = "images/starter-white.svg"
+  INVENIO_THEME_LOGO = "images/invenio-rdm-white.svg"
   INVENIO_THEME_FRONTPAGE_TITLE = "InvenioRDM Starter"
   INVENIO_THEME_SHOW_FRONTPAGE_INTRO_SECTION = "False"
 
@@ -31,7 +31,7 @@ primary_region = 'fra'
 [http_service]
   internal_port = 5000
   force_https = true
-  auto_stop_machines = true
+  auto_stop_machines = false
   auto_start_machines = true
   min_machines_running = 1
   processes = ['web']
