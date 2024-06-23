@@ -37,6 +37,6 @@ primary_region = 'fra'
   processes = ['web']
 
 [[vm]]
-  memory = '2gb'
+  memory = '1gb'
   cpu_kind = 'shared'
   cpus = 4
