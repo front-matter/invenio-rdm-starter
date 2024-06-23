@@ -24,13 +24,17 @@ primary_region = 'fra'
 
   INVENIO_SEARCH_INDEX_PREFIX = "invenio-rdm-"
 
+[processes]
+  web "gunicorn invenio_app.wsgi:application --bind 0.0.0.0:5000 --workers 4"
+  worker "celery -A invenio_app.celery worker --beat --events --loglevel=WARNING"
+
 [http_service]
   internal_port = 5000
   force_https = true
   auto_stop_machines = true
   auto_start_machines = true
   min_machines_running = 1
-  processes = ['app']
+  processes = ['web']
 
 [[vm]]
   memory = '2gb'
