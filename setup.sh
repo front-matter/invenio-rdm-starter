@@ -30,7 +30,10 @@ if [ ! -e $SETUP_COMPLETED ]; then
     invenio rdm-records fixtures
 
     # Creating demo records...
-    invenio rdm-records demo
+    invenio rdm-records demo records --user user@demo.org
+
+    # Creating demo communities
+    invenio rdm-records demo communities --user community@demo.org
 
     # Declaring queues...
     invenio queues declare

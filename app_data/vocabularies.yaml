@@ -1,3 +1,9 @@
+creatorsroles:
+  pid-type: crr
+  data-file: vocabularies/roles.yaml
+contributorsroles:
+  pid-type: cor
+  data-file: vocabularies/roles.yaml
 subjects:
   pid-type: sub
   schemes:
@@ -12,7 +18,7 @@ subjects:
 #  data-file: vocabularies/names.yaml
 licenses:
   pid-type: lic
-  data-file: vocabularies/cc_licences.csv
+  data-file: vocabularies/licences.csv
 languages:
   pid-type: lng
   data-file: vocabularies/languages.yaml
@@ -22,6 +28,9 @@ relationtypes:
 resourcetypes:
   pid-type: rsrct
   data-file: vocabularies/resource_types.yaml
+communitytypes:
+  pid-type: comtyp
+  data-file: vocabularies/community_types.yaml
 # TODO: Uncoment this if you want to have all affiliations with ROR identifiers.
 # affiliations:
 #   pid-type: aff
