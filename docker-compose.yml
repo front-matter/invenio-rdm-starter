@@ -87,8 +87,7 @@ services:
       - INVENIO_OAISERVER_ID_PREFIX=${OAISERVER_ID_PREFIX:-invenio-rdm}
 
       # Invenio-Search
-      - INVENIO_SEARCH_HOSTS=['search:9200']
-      # - INVENIO_SEARCH_CLIENT_CONFIG=${INVENIO_SEARCH_CLIENT_CONFIG}
+      - INVENIO_SEARCH_HOSTS=${INVENIO_SEARCH_HOSTS:-['search:9200']}
       - INVENIO_SEARCH_INDEX_PREFIX=${INVENIO_SEARCH_INDEX_PREFIX:-invenio-rdm-}
 
       # Logging
@@ -110,8 +109,7 @@ services:
       - uploaded_data:/opt/invenio/var/instance/data
     environment:
       - INVENIO_SQLALCHEMY_DATABASE_URI=${INVENIO_SQLALCHEMY_DATABASE_URI:-postgresql+psycopg2://inveniordm:inveniordm@db/inveniordm}
-      - INVENIO_SEARCH_HOSTS=['search:9200']
-      # - INVENIO_SEARCH_CLIENT_CONFIG=${INVENIO_SEARCH_CLIENT_CONFIG}
+      - INVENIO_SEARCH_HOSTS=${INVENIO_SEARCH_HOSTS:-['search:9200']}
       - INVENIO_SEARCH_INDEX_PREFIX=${INVENIO_SEARCH_INDEX_PREFIX:-invenio-rdm-}
 
       - INVENIO_CACHE_TYPE=${INVENIO_CACHE_TYPE:-redis}
