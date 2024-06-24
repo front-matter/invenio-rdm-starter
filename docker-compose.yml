@@ -24,7 +24,6 @@ services:
       - caddy_data:/data
       - caddy_config:/config
   web:
-    command: "setup.sh"
     image: ghcr.io/front-matter/invenio-rdm-starter:latest
     volumes:
       - uploaded_data:/opt/invenio/var/instance/data
