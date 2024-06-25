@@ -79,6 +79,10 @@
 @midWhite         : #DCDDDE;
 @white            : #FFFFFF;
 
+@darkTextColor    : @lightBlack;
+@mutedTextColor   : @grey;
+@lightTextColor   : @lightGrey;
+
 /*---  Dark Colors  ---*/
 @darkRed         : #b91c1c;
 @darkOrange      : #c2410c;

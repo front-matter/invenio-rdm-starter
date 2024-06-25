@@ -1,0 +1,15 @@
+/***********************************************
+         Invenio RDM Starter Menu Overrides
+***********************************************/
+
+#rdm-burger-menu-icon,
+#rdm-close-burger-menu-icon {
+  .navicon {
+    background: @white;
+
+    &:before,
+    &:after {
+      background: @white;
+    }
+  }
+}
