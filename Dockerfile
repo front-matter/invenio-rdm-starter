@@ -6,8 +6,7 @@ FROM python:3.12-bookworm AS builder
 # - https://pythonspeed.com/articles/multi-stage-docker-python/
 
 ENV LANG=en_US.UTF-8 \
-    LANGUAGE=en_US:en \
-    VIRTUAL_ENV=/opt/invenio/.venv
+    LANGUAGE=en_US:en
 
 # Install OS package dependencies
 RUN --mount=type=cache,sharing=locked,target=/var/cache/apt \
@@ -18,9 +17,13 @@ RUN --mount=type=cache,sharing=locked,target=/var/cache/apt \
 RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - && \
     apt-get install -y nodejs && apt-get clean
 
-RUN python3 -m venv ${VIRTUAL_ENV}
-# Make sure we use the virtualenv:
-ENV PATH="${VIRTUAL_ENV}/bin:$PATH"
+# Install uv and activate virtualenv
+COPY --from=ghcr.io/astral-sh/uv:0.3.3 /uv /bin/uv
+RUN uv venv /opt/invenio/.venv
+# Use the virtual environment automatically
+ENV VIRTUAL_ENV=/opt/invenio/.venv
+# Place entry points in the environment at the front of the path
+ENV PATH="/opt/invenio/.venv:$PATH"
 
 ENV WORKING_DIR=/opt/invenio \
     PYTHONDONTWRITEBYTECODE=1 \
@@ -29,8 +32,10 @@ ENV WORKING_DIR=/opt/invenio \
 
 WORKDIR ${INVENIO_INSTANCE_PATH}
 
-COPY pyproject.toml requirements.lock ./
-RUN --mount=type=cache,target=/var/cache/pip pip install --no-cache-dir -r requirements.lock
+COPY pyproject.toml .
+RUN --mount=type=cache,target=/root/.cache/uv \
+    uv pip install -r pyproject.toml
+COPY . .
 
 COPY site ${INVENIO_INSTANCE_PATH}/site
 COPY static ${INVENIO_INSTANCE_PATH}/static
@@ -41,7 +46,7 @@ COPY translations ${INVENIO_INSTANCE_PATH}/translations
 COPY ./invenio.cfg ${INVENIO_INSTANCE_PATH}
 
 # Build Javascript assets
-RUN --mount=type=cache,target=/var/cache/assets invenio collect --verbose && invenio webpack buildall
+RUN --mount=type=cache,target=/var/cache/assets uv run invenio collect --verbose && uv run invenio webpack buildall
 
 FROM python:3.12-slim-bookworm AS runtime
 
