@@ -1,4 +1,4 @@
-FROM python:3.12 AS builder
+FROM python:3.12-bookworm AS builder
 
 # Dockerfile that builds the InvenioRDM Starter Docker image. Based on the following:
 # - https://medium.com/@albertazzir/blazing-fast-python-docker-builds-with-poetry-a78a66f5aed0
