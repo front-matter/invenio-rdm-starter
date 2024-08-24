@@ -63,7 +63,7 @@ services:
 
       # Invenio-Records-Resources
       - INVENIO_SITE_UI_URL=${INVENIO_SITE_UI_URL:-https://localhost}
-      - INVENIO_SITE_API_URL=${INVENIO_SITE_UI_API_URL:-https://localhost/api}
+      - INVENIO_SITE_API_URL=${INVENIO_SITE_API_URL:-https://localhost/api}
 
       # Invenio-RDM-Records
       - INVENIO_DATACITE_ENABLED=${INVENIO_DATACITE_ENABLED:-False}
@@ -92,15 +92,6 @@ services:
 
       # Logging
       - INVENIO_LOGGING_CONSOLE_LEVEL=${INVENIO_LOGGING_CONSOLE_LEVEL:-WARNING}
-      
-      # Invenio-Mail
-      - INVENIO_MAIL_SUPPRESS_SEND=${INVENIO_MAIL_SUPPRESS_SEND:-True}
-      - INVENIO_MAIL_SERVER=${INVENIO_MAIL_SERVER:-smtp.gmail.com}
-      - INVENIO_MAIL_PORT=${INVENIO_MAIL_PORT:-465}
-      - INVENIO_MAIL_USE_SSL=${INVENIO_MAIL_USE_SSL:-True}
-      - INVENIO_MAIL_USERNAME=${INVENIO_MAIL_USERNAME:-InvenioRDM Starter}
-      - INVENIO_SECURITY_EMAIL_SENDER=${INVENIO_SECURITY_EMAIL_SENDER:-resend}
-      - INVENIO_MAIL_PASSWORD=${INVENIO_MAIL_PASSWORD:-changeme}
     depends_on:
       # search:
       #   condition: service_started
@@ -126,6 +117,15 @@ services:
       - INVENIO_COMMUNITIES_IDENTITIES_CACHE_REDIS_URL=${INVENIO_COMMUNITIES_IDENTITIES_CACHE_REDIS_URL:-redis://cache:6379/4}
       - INVENIO_BROKER_URL=${INVENIO_BROKER_URL:-redis://cache:6379/5}
       - INVENIO_CELERY_BROKER_URL=${INVENIO_BROKER_URL:-redis://cache:6379/5}
+
+      - INVENIO_MAIL_SUPPRESS_SEND=${INVENIO_MAIL_SUPPRESS_SEND:-True}
+      - INVENIO_MAIL_SERVER=${INVENIO_MAIL_SERVER:-smtp.gmail.com}
+      - INVENIO_MAIL_PORT=${INVENIO_MAIL_PORT:-465}
+      - INVENIO_MAIL_USERNAME=${INVENIO_MAIL_USERNAME:-InvenioRDM Starter}
+      - INVENIO_MAIL_PASSWORD=${INVENIO_MAIL_PASSWORD:-changeme}
+      - INVENIO_MAIL_USE_SSL=${INVENIO_MAIL_USE_SSL:-True}
+      - INVENIO_MAIL_USE_TLS=${INVENIO_MAIL_USE_TLS:-False}
+      - INVENIO_SECURITY_EMAIL_SENDER=${INVENIO_SECURITY_EMAIL_SENDER:-}
     depends_on:
       # search:
       #   condition: service_started
