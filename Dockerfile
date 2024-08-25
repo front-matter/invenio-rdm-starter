@@ -32,9 +32,9 @@ ENV WORKING_DIR=/opt/invenio \
 
 WORKDIR ${INVENIO_INSTANCE_PATH}
 
-COPY pyproject.toml .
+COPY pyproject.toml requirements.txt ./
 RUN --mount=type=cache,target=/root/.cache/uv \
-    uv pip install -r pyproject.toml
+    uv pip install -r requirements.txt
 COPY . .
 
 COPY site ${INVENIO_INSTANCE_PATH}/site
