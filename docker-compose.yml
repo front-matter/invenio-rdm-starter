@@ -134,7 +134,7 @@ services:
       # db:
       #   condition: service_started
   cache:
-    image: redis:7.2.5-bookworm
+    image: valkey/valkey:7.2.5-bookworm
     restart: "unless-stopped"
     ports:
       - "6379:6379"
