@@ -1294,7 +1294,7 @@ wheels = [
 
 [[package]]
 name = "invenio-app-rdm"
-version = "12.0.3"
+version = "12.0.5"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "cairosvg" },
@@ -1334,9 +1334,9 @@ dependencies = [
     { name = "invenio-theme" },
     { name = "invenio-userprofiles" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/de/20/d72d46af3f2f617566c595c686ee1442b330e523a93afb20bad6a15bdaea/invenio-app-rdm-12.0.3.tar.gz", hash = "sha256:373983da25e65e43e5830c6f7ecd65bdc6e4f4547002ef51cff9606dd8faaeb0", size = 416975 }
+sdist = { url = "https://files.pythonhosted.org/packages/9e/35/5c2026c040c391bdfce4e5aae1ed1dbb917cf9bb442c00109e1ebe2d37ce/invenio-app-rdm-12.0.5.tar.gz", hash = "sha256:4d1f6275b4bedaabe27f0ef7cc2de857fe7dc0c020d52857432d4f90e6f2e50d", size = 417147 }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/64/c4/a7319e031284ea2ca9459637fd28ed767b01cb405024969fff2a7660e2d8/invenio_app_rdm-12.0.3-py2.py3-none-any.whl", hash = "sha256:e671f78848cab836e8951a4d42031e7fafef4fa5897710aab825d27e0a8f05f6", size = 864964 },
+    { url = "https://files.pythonhosted.org/packages/e1/f0/c1fb3d3488b588953ac2ac2b72edbce488f58588642041537efe76bb9131/invenio_app_rdm-12.0.5-py2.py3-none-any.whl", hash = "sha256:0ea49cecd095a9c274d5421a5da1afed27474ee3b493cf066e4206dbb3c8c3c7", size = 865033 },
 ]
 
 [[package]]
@@ -1807,7 +1807,7 @@ wheels = [
 
 [[package]]
 name = "invenio-rdm-starter"
-version = "0.3.0"
+version = "0.3.1"
 source = { editable = "." }
 dependencies = [
     { name = "gunicorn" },
@@ -1822,7 +1822,7 @@ dependencies = [
 requires-dist = [
     { name = "gunicorn", specifier = "~=22.0.0" },
     { name = "importlib-metadata", specifier = "~=6.11.0" },
-    { name = "invenio-app-rdm", specifier = "~=12.0.3" },
+    { name = "invenio-app-rdm", specifier = "~=12.0.5" },
     { name = "invenio-search", extras = ["opensearch2"], specifier = "~=2.3.1" },
     { name = "material-plausible-plugin", specifier = "~=0.2.0" },
     { name = "ruff", specifier = ">=0.6.2" },
