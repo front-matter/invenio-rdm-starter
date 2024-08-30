@@ -9,17 +9,14 @@ primary_region = 'fra'
 [build]
   image = "ghcr.io/front-matter/invenio-rdm-starter:latest"
 
-[deploy]
-# release_command = "./setup.sh"
-
 [env]
   # Flask-Babel
   INVENIO_BABEL_DEFAULT_LOCALE = "en"
   INVENIO_BABEL_DEFAULT_TIMEZONE = "UTC"
 
   # Invenio-Theme
-  INVENIO_THEME_LOGO = "images/invenio-rdm-white.svg"
-  INVENIO_THEME_FRONTPAGE_TITLE = "InvenioRDM Starter"
+  INVENIO_THEME_LOGO = "images/rogue-scholar.svg"
+  INVENIO_THEME_FRONTPAGE_TITLE = "Rogue Scholar Beta"
   INVENIO_THEME_SHOW_FRONTPAGE_INTRO_SECTION = "False"
 
   INVENIO_SEARCH_INDEX_PREFIX = "invenio-rdm-"
