@@ -55,7 +55,7 @@ RUN --mount=type=cache,sharing=locked,target=/var/cache/apt apt-get update -y --
     apt-get install apt-utils libcairo2 -y --no-install-recommends && apt-get clean
 
 ENV VIRTUAL_ENV=/opt/invenio/.venv \
-    PATH="/opt/invenio/.venv/bin:$PATH" \
+    PATH="/opt/invenio/.venv:$PATH" \
     WORKING_DIR=/opt/invenio \
     INVENIO_INSTANCE_PATH=/opt/invenio/var/instance
 
