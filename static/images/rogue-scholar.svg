@@ -2,11 +2,11 @@
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
 <svg width="100%" height="100%" viewBox="0 0 250 75" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
     <g transform="matrix(1,0,0,1,-1115.3,-1716.77)">
-        <g transform="matrix(1.60684,0,0,1.60684,1160.75,1767.34)">
+        <g transform="matrix(1.60684,0,0,1.60684,1157.75,1767.34)">
             <g>
-                <g transform="matrix(22.4042,0,0,22.4042,108.123,0)">
+                <g transform="matrix(19.9149,0,0,19.9149,127.266,0)">
                 </g>
-                <text x="0px" y="0px" style="font-family:'CoolBritannia-Sans', 'Cool Britannia';font-size:22.404px;fill:white;">Rogue Schol<tspan x="91.7px 100.729px " y="0px 0px ">ar</tspan></text>
+                <text x="0px" y="0px" style="font-family:'Lato-Bold', 'Lato', sans-serif;font-weight:700;font-size:19.915px;fill:white;">Rogue Scholar</text>
             </g>
         </g>
         <g transform="matrix(0.872032,0,0,0.872032,1137.53,1774.54)">
