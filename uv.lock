@@ -179,6 +179,34 @@ wheels = [
 ]
 
 [[package]]
+name = "boto3"
+version = "1.35.9"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "botocore" },
+    { name = "jmespath" },
+    { name = "s3transfer" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/06/03/af407a265d00c1e2565713289046cb6c6172eef84b96a1f9bd777e4a371b/boto3-1.35.9.tar.gz", hash = "sha256:07e0f335d801765999da67325455ea8219c1a6d7f06bdaad0975ee505276bcbe", size = 108625 }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/d5/40/63c4770e7205a5494d0248301683152e5f4b6d6072b090194211969d6950/boto3-1.35.9-py3-none-any.whl", hash = "sha256:1ee9c52d83e8f4902300e985d62688cf31ca8fc47a80534b4295350ebc418e46", size = 139141 },
+]
+
+[[package]]
+name = "botocore"
+version = "1.35.9"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "jmespath" },
+    { name = "python-dateutil" },
+    { name = "urllib3" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/c1/c5/8a09caf700fcad8b61555cdc9c6ae78e64ccd84155dfa10e87e8c0ca3f68/botocore-1.35.9.tar.gz", hash = "sha256:9e44572fd2401b89dd58bf8b71ac2c36d5b0437f8cbf40de83302c499965fb54", size = 12703004 }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/ed/e1/efbd5dbd705072b384313a82fd53b11baad7901cb4672c42534c768815fd/botocore-1.35.9-py3-none-any.whl", hash = "sha256:92962460e4f35d139a23bca28149722030143257ee2916de442243c2464a7434", size = 12492776 },
+]
+
+[[package]]
 name = "cachelib"
 version = "0.9.0"
 source = { registry = "https://pypi.org/simple" }
@@ -1022,6 +1050,15 @@ wheels = [
 ]
 
 [[package]]
+name = "fsspec"
+version = "2024.6.1"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/90/b6/eba5024a9889fcfff396db543a34bef0ab9d002278f163129f9f01005960/fsspec-2024.6.1.tar.gz", hash = "sha256:fad7d7e209dd4c1208e3bbfda706620e0da5142bebbd9c384afb95b07e798e49", size = 284584 }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/5e/44/73bea497ac69bafde2ee4269292fa3b41f1198f4bb7bbaaabde30ad29d4a/fsspec-2024.6.1-py3-none-any.whl", hash = "sha256:3cb443f8bcd2efb31295a5b9fdb02aee81d8452c80d28f97a6d0959e6cee101e", size = 177561 },
+]
+
+[[package]]
 name = "ftfy"
 version = "4.4.3"
 source = { registry = "https://pypi.org/simple" }
@@ -1813,6 +1850,7 @@ dependencies = [
     { name = "gunicorn" },
     { name = "importlib-metadata" },
     { name = "invenio-app-rdm" },
+    { name = "invenio-s3" },
     { name = "invenio-search", extra = ["opensearch2"] },
     { name = "material-plausible-plugin" },
     { name = "ruff" },
@@ -1823,6 +1861,7 @@ requires-dist = [
     { name = "gunicorn", specifier = "~=22.0.0" },
     { name = "importlib-metadata", specifier = "~=6.11.0" },
     { name = "invenio-app-rdm", specifier = "~=12.0.5" },
+    { name = "invenio-s3", specifier = "~=1.0.0" },
     { name = "invenio-search", extras = ["opensearch2"], specifier = "~=2.3.1" },
     { name = "material-plausible-plugin", specifier = "~=0.2.0" },
     { name = "ruff", specifier = ">=0.6.2" },
@@ -1967,6 +2006,20 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/6a/ac/66db34c26c3d3e3b7edfb0af6a3424bd258616ade6199e6698d521feede8/invenio-rest-1.3.1.tar.gz", hash = "sha256:a7e45e36fda31b66067013c1f69b014e65e39cde58636f0499e01fcaf2618799", size = 35267 }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/79/77/f80f10a3cf467ff0d9641a20315fb3e69946bb6d4b48dd87b3fc8b2c9900/invenio_rest-1.3.1-py2.py3-none-any.whl", hash = "sha256:7c8ff04d6e2460bbf1867e9f8f8220c326a10280b7039f853c7dfaa12b73bf8c", size = 21103 },
+]
+
+[[package]]
+name = "invenio-s3"
+version = "1.0.6"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "boto3" },
+    { name = "invenio-files-rest" },
+    { name = "s3fs" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/da/77/ce4e8d8426b9e2de19d0f3c79ff263754dcc97660e55f78fee5cccea0824/invenio-s3-1.0.6.tar.gz", hash = "sha256:81646647ad1a9fe1678921c6b7c6f4777f2fcdcf23bcaaf6043460d114663cdc", size = 24987 }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/2b/49/2c5173231e81e58f64af5cefcfd0d6780a3618cfe76c32f47ddbeb086a7a/invenio_s3-1.0.6-py2.py3-none-any.whl", hash = "sha256:e8021c21e32f0101934edb959e9f353019a90eb1cbeba4b7da3a9a1b1ed68fdc", size = 11311 },
 ]
 
 [[package]]
@@ -2158,6 +2211,15 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/ed/55/39036716d19cab0747a5020fc7e907f362fbf48c984b14e62127f7e68e5d/jinja2-3.1.4.tar.gz", hash = "sha256:4a3aee7acbbe7303aede8e9648d13b8bf88a429282aa6122a993f0ac800cb369", size = 240245 }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/31/80/3a54838c3fb461f6fec263ebf3a3a41771bd05190238de3486aae8540c36/jinja2-3.1.4-py3-none-any.whl", hash = "sha256:bc5dd2abb727a5319567b7a813e6a2e7318c39f4f487cfe6c89c6f9c7d25197d", size = 133271 },
+]
+
+[[package]]
+name = "jmespath"
+version = "1.0.1"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/00/2a/e867e8531cf3e36b41201936b7fa7ba7b5702dbef42922193f05c8976cd6/jmespath-1.0.1.tar.gz", hash = "sha256:90261b206d6defd58fdd5e85f478bf633a2901798906be2ad389150c5c60edbe", size = 25843 }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/31/b4/b9b800c45527aadd64d5b442f9b932b00648617eb5d63d2c7a6587b7cafc/jmespath-1.0.1-py3-none-any.whl", hash = "sha256:02e2e4cc71b5bcab88332eebf907519190dd9e6e82107fa7f83b1003a6252980", size = 20256 },
 ]
 
 [[package]]
@@ -3308,6 +3370,31 @@ wheels = [
     { url = "https://files.pythonhosted.org/packages/79/a9/0f2f21fe15ba537c46598f96aa9ae4a3d4b9ec64926664617ca6a8c772f4/ruff-0.6.2-py3-none-win32.whl", hash = "sha256:279d5f7d86696df5f9549b56b9b6a7f6c72961b619022b5b7999b15db392a4da", size = 7961901 },
     { url = "https://files.pythonhosted.org/packages/b0/80/fff12ffe11853d9f4ea3e5221e6dd2e93640a161c05c9579833e09ad40a7/ruff-0.6.2-py3-none-win_amd64.whl", hash = "sha256:d9f3469c7dd43cd22eb1c3fc16926fb8258d50cb1b216658a07be95dd117b0f2", size = 8783320 },
     { url = "https://files.pythonhosted.org/packages/56/91/577cdd64cce5e74d3f8b5ecb93f29566def569c741eb008aed4f331ef821/ruff-0.6.2-py3-none-win_arm64.whl", hash = "sha256:f28fcd2cd0e02bdf739297516d5643a945cc7caf09bd9bcb4d932540a5ea4fa9", size = 8225886 },
+]
+
+[[package]]
+name = "s3fs"
+version = "0.4.2"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "botocore" },
+    { name = "fsspec" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/d9/9a/504cb277632c4d325beabbd03bb43778f0decb9be22d9e0e6c62f44540c7/s3fs-0.4.2.tar.gz", hash = "sha256:2ca5de8dc18ad7ad350c0bd01aef0406aa5d0fff78a561f0f710f9d9858abdd0", size = 57527 }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/b8/e4/b8fc59248399d2482b39340ec9be4bb2493846ac23641b43115a7e5cd675/s3fs-0.4.2-py3-none-any.whl", hash = "sha256:91c1dfb45e5217bd441a7a560946fe865ced6225ff7eb0fb459fe6e601a95ed3", size = 19791 },
+]
+
+[[package]]
+name = "s3transfer"
+version = "0.10.2"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "botocore" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/cb/67/94c6730ee4c34505b14d94040e2f31edf144c230b6b49e971b4f25ff8fab/s3transfer-0.10.2.tar.gz", hash = "sha256:0711534e9356d3cc692fdde846b4a1e4b0cb6519971860796e6bc4c7aea00ef6", size = 144095 }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/3c/4a/b221409913760d26cf4498b7b1741d510c82d3ad38381984a3ddc135ec66/s3transfer-0.10.2-py3-none-any.whl", hash = "sha256:eca1c20de70a39daee580aef4986996620f365c4e0fda6a86100231d62f1bf69", size = 82716 },
 ]
 
 [[package]]

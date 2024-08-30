@@ -11,6 +11,7 @@ license = "MIT"
 dependencies = [
     "invenio-app-rdm~=12.0.5",
     "invenio-search[opensearch2]~=2.3.1",
+    "invenio-s3~=1.0.0",
     "importlib-metadata~=6.11.0",
     "gunicorn~=22.0.0",
     "material-plausible-plugin~=0.2.0",
