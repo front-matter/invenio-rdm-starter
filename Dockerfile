@@ -21,11 +21,10 @@ RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - && \
 COPY --from=ghcr.io/astral-sh/uv:0.3.3 /uv /bin/uv
 RUN uv venv /opt/invenio/.venv
 # Use the virtual environment automatically
-ENV VIRTUAL_ENV=/opt/invenio/.venv
-# Place entry points in the environment at the front of the path
-ENV PATH="/opt/invenio/.venv:$PATH"
-
-ENV WORKING_DIR=/opt/invenio \
+ENV VIRTUAL_ENV=/opt/invenio/.venv \
+    # Place entry points in the environment at the front of the path
+    PATH="/opt/invenio/.venv/bin:$PATH" \
+    WORKING_DIR=/opt/invenio \
     PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1 \
     INVENIO_INSTANCE_PATH=/opt/invenio/var/instance
@@ -55,7 +54,7 @@ RUN --mount=type=cache,sharing=locked,target=/var/cache/apt apt-get update -y --
     apt-get install apt-utils libcairo2 -y --no-install-recommends && apt-get clean
 
 ENV VIRTUAL_ENV=/opt/invenio/.venv \
-    PATH="/opt/invenio/.venv:$PATH" \
+    PATH="/opt/invenio/.venv/bin:$PATH" \
     WORKING_DIR=/opt/invenio \
     INVENIO_INSTANCE_PATH=/opt/invenio/var/instance
 
