@@ -1331,7 +1331,7 @@ wheels = [
 
 [[package]]
 name = "invenio-app-rdm"
-version = "12.0.5"
+version = "12.0.9"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "cairosvg" },
@@ -1371,9 +1371,9 @@ dependencies = [
     { name = "invenio-theme" },
     { name = "invenio-userprofiles" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/9e/35/5c2026c040c391bdfce4e5aae1ed1dbb917cf9bb442c00109e1ebe2d37ce/invenio-app-rdm-12.0.5.tar.gz", hash = "sha256:4d1f6275b4bedaabe27f0ef7cc2de857fe7dc0c020d52857432d4f90e6f2e50d", size = 417147 }
+sdist = { url = "https://files.pythonhosted.org/packages/ec/db/74a15eaf5a75482fde313dfc6699d78f15c401704d2767461d0c0b7431e6/invenio-app-rdm-12.0.9.tar.gz", hash = "sha256:3520be603105d9996f845bec328167b690b7ead4c362f1263d24fe3e6778e7d5", size = 417877 }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/e1/f0/c1fb3d3488b588953ac2ac2b72edbce488f58588642041537efe76bb9131/invenio_app_rdm-12.0.5-py2.py3-none-any.whl", hash = "sha256:0ea49cecd095a9c274d5421a5da1afed27474ee3b493cf066e4206dbb3c8c3c7", size = 865033 },
+    { url = "https://files.pythonhosted.org/packages/41/9a/25176a2819b3986b46ed384930ef5c6a43a5198dfebe91c616d772d139f0/invenio_app_rdm-12.0.9-py2.py3-none-any.whl", hash = "sha256:1f4a95329c4658c09a0ce91b610cd14e0633c8a0387e12a63e7d52df7537cff4", size = 865667 },
 ]
 
 [[package]]
@@ -1806,7 +1806,7 @@ wheels = [
 
 [[package]]
 name = "invenio-rdm-records"
-version = "10.7.1"
+version = "10.8.3"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "arrow" },
@@ -1837,9 +1837,9 @@ dependencies = [
     { name = "pyyaml" },
     { name = "types-requests" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/17/34/89806d535f86f664392c04ae6e6d3a52333118c03567bc6fc426859f8f71/invenio-rdm-records-10.7.1.tar.gz", hash = "sha256:4cfe9b303620da9d49f467e18a7cae6d066ea5bd04f3533f46b028e1bc479c13", size = 904435 }
+sdist = { url = "https://files.pythonhosted.org/packages/7d/76/afa9456fc70064043192fd9521e09bdb1b94fbc179d59a974d84084e1aad/invenio-rdm-records-10.8.3.tar.gz", hash = "sha256:bd9d97492cbcc16e346f0d49a6297197d4144b3f6a2692515bc6dba063326535", size = 907066 }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/bb/15/898ee98f8af79b7558e5e0b4e67a85821f78b6b8e59fdb87e295e0069f68/invenio_rdm_records-10.7.1-py2.py3-none-any.whl", hash = "sha256:00ae88e2256fcab00bc2983dd35bc50530c5769e338cf5830d866d48b5dc80c7", size = 1433101 },
+    { url = "https://files.pythonhosted.org/packages/c9/f6/e454950f4a3d95e14bdb46ba7f3c832bd91abbb08038cd9994de11d4f3e7/invenio_rdm_records-10.8.3-py2.py3-none-any.whl", hash = "sha256:68dde521da5e847a88c1f7351a4d2c9890f539b3438538a54b84f38d62cb0b45", size = 1435263 },
 ]
 
 [[package]]
@@ -1860,7 +1860,7 @@ dependencies = [
 requires-dist = [
     { name = "gunicorn", specifier = "~=22.0.0" },
     { name = "importlib-metadata", specifier = "~=6.11.0" },
-    { name = "invenio-app-rdm", specifier = "~=12.0.5" },
+    { name = "invenio-app-rdm", specifier = "~=12.0.9" },
     { name = "invenio-s3", specifier = "~=1.0.0" },
     { name = "invenio-search", extras = ["opensearch2"], specifier = "~=2.3.1" },
     { name = "material-plausible-plugin", specifier = "~=0.2.0" },

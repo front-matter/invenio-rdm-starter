@@ -363,7 +363,7 @@ invenio-administration==2.2.4
     #   invenio-users-resources
 invenio-app==1.5.0
     # via invenio-app-rdm
-invenio-app-rdm==12.0.5
+invenio-app-rdm==12.0.9
     # via invenio-rdm-starter (pyproject.toml)
 invenio-assets==3.0.3
     # via
@@ -532,7 +532,7 @@ invenio-previewer==2.2.1
     # via invenio-app-rdm
 invenio-queues==1.0.1
     # via invenio-stats
-invenio-rdm-records==10.8.0
+invenio-rdm-records==10.8.3
     # via invenio-app-rdm
 invenio-records==2.3.0
     # via

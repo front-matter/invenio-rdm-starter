@@ -18,7 +18,7 @@ RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - && \
     apt-get install -y nodejs && apt-get clean
 
 # Install uv and activate virtualenv
-COPY --from=ghcr.io/astral-sh/uv:0.3.3 /uv /bin/uv
+COPY --from=ghcr.io/astral-sh/uv:0.4.15 /uv /bin/uv
 RUN uv venv /opt/invenio/.venv
 # Use the virtual environment automatically
 ENV VIRTUAL_ENV=/opt/invenio/.venv \
