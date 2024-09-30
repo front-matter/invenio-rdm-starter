@@ -133,7 +133,7 @@ commonmeta-py==0.8.6
     # via invenio-rdm-records
 counter-robots==2018.6
     # via invenio-stats
-cryptography==43.0.0
+cryptography==43.0.1
     # via
     #   invenio-accounts
     #   pyjwt
