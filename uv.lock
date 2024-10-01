@@ -1,8 +1,6 @@
 version = 1
 requires-python = ">=3.12"
 resolution-markers = [
-    "python_full_version < '3.10'",
-    "python_full_version >= '3.10'",
 ]
 
 [[package]]
@@ -1331,7 +1329,7 @@ wheels = [
 
 [[package]]
 name = "invenio-app-rdm"
-version = "12.0.9"
+version = "12.0.10"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "cairosvg" },
@@ -1371,9 +1369,9 @@ dependencies = [
     { name = "invenio-theme" },
     { name = "invenio-userprofiles" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/ec/db/74a15eaf5a75482fde313dfc6699d78f15c401704d2767461d0c0b7431e6/invenio-app-rdm-12.0.9.tar.gz", hash = "sha256:3520be603105d9996f845bec328167b690b7ead4c362f1263d24fe3e6778e7d5", size = 417877 }
+sdist = { url = "https://files.pythonhosted.org/packages/e0/f6/fdbfbf0cdb9a6dabc0bae9b067e5073bd531c29f3d59b03d37e49e393640/invenio-app-rdm-12.0.10.tar.gz", hash = "sha256:0b5f4ed954782f0015b3b1a603fd76df124665515f93a471d7bb6ed94b4355be", size = 418073 }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/41/9a/25176a2819b3986b46ed384930ef5c6a43a5198dfebe91c616d772d139f0/invenio_app_rdm-12.0.9-py2.py3-none-any.whl", hash = "sha256:1f4a95329c4658c09a0ce91b610cd14e0633c8a0387e12a63e7d52df7537cff4", size = 865667 },
+    { url = "https://files.pythonhosted.org/packages/ba/77/35604d1adb85264ae1fef0a73e62bd0dbf60ff0bb848be84a29c6891af93/invenio_app_rdm-12.0.10-py2.py3-none-any.whl", hash = "sha256:9aef573ae84551621be39003e04cf33441136b1b73ecf7a5be6bb4ff73d6d664", size = 865731 },
 ]
 
 [[package]]
@@ -1860,7 +1858,7 @@ dependencies = [
 requires-dist = [
     { name = "gunicorn", specifier = "~=22.0.0" },
     { name = "importlib-metadata", specifier = "~=6.11.0" },
-    { name = "invenio-app-rdm", specifier = "~=12.0.9" },
+    { name = "invenio-app-rdm", specifier = "~=12.0.10" },
     { name = "invenio-s3", specifier = "~=1.0.0" },
     { name = "invenio-search", extras = ["opensearch2"], specifier = "~=2.3.1" },
     { name = "material-plausible-plugin", specifier = "~=0.2.0" },
@@ -2038,8 +2036,7 @@ wheels = [
 [package.optional-dependencies]
 opensearch2 = [
     { name = "opensearch-dsl" },
-    { name = "opensearch-py", version = "2.4.2", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.10'" },
-    { name = "opensearch-py", version = "2.7.1", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.10'" },
+    { name = "opensearch-py" },
 ]
 
 [[package]]
@@ -2773,8 +2770,7 @@ name = "opensearch-dsl"
 version = "2.1.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
-    { name = "opensearch-py", version = "2.4.2", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.10'" },
-    { name = "opensearch-py", version = "2.7.1", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.10'" },
+    { name = "opensearch-py" },
     { name = "python-dateutil" },
     { name = "six" },
 ]
@@ -2785,36 +2781,14 @@ wheels = [
 
 [[package]]
 name = "opensearch-py"
-version = "2.4.2"
-source = { registry = "https://pypi.org/simple" }
-resolution-markers = [
-    "python_full_version < '3.10'",
-]
-dependencies = [
-    { name = "certifi", marker = "python_full_version < '3.10'" },
-    { name = "python-dateutil", marker = "python_full_version < '3.10'" },
-    { name = "requests", marker = "python_full_version < '3.10'" },
-    { name = "six", marker = "python_full_version < '3.10'" },
-    { name = "urllib3", marker = "python_full_version < '3.10'" },
-]
-sdist = { url = "https://files.pythonhosted.org/packages/cd/05/a82e2594c3f8da4534d29e854128227a06033c47d98c448d9685df428d24/opensearch-py-2.4.2.tar.gz", hash = "sha256:564f175af134aa885f4ced6846eb4532e08b414fff0a7976f76b276fe0e69158", size = 183054 }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/6a/88/8f48281e1f8d48746ab7061a7c2ab37b4a57b358f04159cd9daa3dafe04b/opensearch_py-2.4.2-py2.py3-none-any.whl", hash = "sha256:7867319132133e2974c09f76a54eb1d502b989229be52da583d93ddc743ea111", size = 258578 },
-]
-
-[[package]]
-name = "opensearch-py"
 version = "2.7.1"
 source = { registry = "https://pypi.org/simple" }
-resolution-markers = [
-    "python_full_version >= '3.10'",
-]
 dependencies = [
-    { name = "certifi", marker = "python_full_version >= '3.10'" },
-    { name = "events", marker = "python_full_version >= '3.10'" },
-    { name = "python-dateutil", marker = "python_full_version >= '3.10'" },
-    { name = "requests", marker = "python_full_version >= '3.10'" },
-    { name = "urllib3", marker = "python_full_version >= '3.10'" },
+    { name = "certifi" },
+    { name = "events" },
+    { name = "python-dateutil" },
+    { name = "requests" },
+    { name = "urllib3" },
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/c4/ca/5be52de5c69ecd327c16f3fc0dba82b7ffda5bbd0c0e215bdf23a4d12b12/opensearch_py-2.7.1.tar.gz", hash = "sha256:67ab76e9373669bc71da417096df59827c08369ac3795d5438c9a8be21cbd759", size = 226630 }
 wheels = [
