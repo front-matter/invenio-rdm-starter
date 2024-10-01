@@ -133,7 +133,7 @@ commonmeta-py==0.8.6
     # via invenio-rdm-records
 counter-robots==2018.6
     # via invenio-stats
-cryptography==43.0.0
+cryptography==43.0.1
     # via
     #   invenio-accounts
     #   pyjwt
@@ -229,7 +229,7 @@ flask-celeryext==0.5.0
     # via invenio-celery
 flask-collect-invenio==1.4.0
     # via invenio-assets
-flask-cors==4.0.1
+flask-cors==5.0.0
     # via invenio-rest
 flask-iiif==0.6.3
     # via invenio-rdm-records
@@ -938,7 +938,7 @@ s3fs==0.4.2
     # via invenio-s3
 s3transfer==0.10.2
     # via boto3
-sentry-sdk==1.45.1
+sentry-sdk==2.8.0
     # via invenio-logging
 setuptools==73.0.1
     # via
@@ -1111,7 +1111,7 @@ webencodings==0.5.1
     #   cssselect2
     #   html5lib
     #   tinycss2
-werkzeug==2.2.3
+werkzeug==3.0.3
     # via
     #   flask
     #   flask-kvsession-invenio
