@@ -42,7 +42,7 @@ COPY assets ${INVENIO_INSTANCE_PATH}/assets
 COPY templates ${INVENIO_INSTANCE_PATH}/templates
 COPY app_data ${INVENIO_INSTANCE_PATH}/app_data
 COPY translations ${INVENIO_INSTANCE_PATH}/translations
-COPY ./invenio.cfg ${INVENIO_INSTANCE_PATH}/invenio.cfg
+COPY ./invenio.cfg ${INVENIO_INSTANCE_PATH}
 
 # Build Javascript assets
 RUN --mount=type=cache,target=/var/cache/assets uv run invenio collect --verbose && uv run invenio webpack buildall
@@ -65,6 +65,7 @@ COPY --from=builder ${INVENIO_INSTANCE_PATH}/assets ${INVENIO_INSTANCE_PATH}/ass
 COPY --from=builder ${INVENIO_INSTANCE_PATH}/templates ${INVENIO_INSTANCE_PATH}/templates
 COPY --from=builder ${INVENIO_INSTANCE_PATH}/app_data ${INVENIO_INSTANCE_PATH}/app_data
 COPY --from=builder ${INVENIO_INSTANCE_PATH}/translations ${INVENIO_INSTANCE_PATH}/translations
+COPY --from=builder ${INVENIO_INSTANCE_PATH}/invenio.cfg ${INVENIO_INSTANCE_PATH}/invenio.cfg
 
 COPY ./setup.sh /opt/invenio/.venv/bin/setup.sh
 
