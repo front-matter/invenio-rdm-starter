@@ -1,7 +1,5 @@
 version = 1
 requires-python = ">=3.12"
-resolution-markers = [
-]
 
 [[package]]
 name = "alabaster"
@@ -813,7 +811,7 @@ wheels = [
 
 [[package]]
 name = "flask-iiif"
-version = "0.6.3"
+version = "1.1.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "blinker" },
@@ -823,9 +821,9 @@ dependencies = [
     { name = "pillow" },
     { name = "six" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/3b/90/bba8db5796283d015a5c17d6320ce073858823d0698a1822ea2bfd9ca8ac/flask-iiif-0.6.3.tar.gz", hash = "sha256:a8651407df950efff18f5779afca644d142cd2e0c3439432ef5d4fb0bc7f12d4", size = 32840 }
+sdist = { url = "https://files.pythonhosted.org/packages/54/47/cc13d612e6526d026c0fa7ed9fb4cc6071beeba21b0155d3b3fad92656a9/flask-iiif-1.1.0.tar.gz", hash = "sha256:960a270475a1417bf096137079233878472cb88b2564fb2e8c7c0efcf6177fb2", size = 35187 }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/c2/dd/8b4b13ef50b841e008a9d09a61e83007320e1109fd05f5a11d9aaf564f14/flask_iiif-0.6.3-py2.py3-none-any.whl", hash = "sha256:8f9df5320811cc2e5903b6748029f0bd214b9852eeb69777e8e94416398db451", size = 34692 },
+    { url = "https://files.pythonhosted.org/packages/3d/6b/47725be8d25963e14a31d01b5b9ad504b5f2550ee82a3c5181067f2fe845/flask_iiif-1.1.0-py2.py3-none-any.whl", hash = "sha256:573d14065896e02cb2ab92279883e314f5b4cc8da05ee86b9d95f33933cfe557", size = 36493 },
 ]
 
 [[package]]
@@ -1804,7 +1802,7 @@ wheels = [
 
 [[package]]
 name = "invenio-rdm-records"
-version = "10.8.3"
+version = "10.8.6"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "arrow" },
@@ -1835,9 +1833,9 @@ dependencies = [
     { name = "pyyaml" },
     { name = "types-requests" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/7d/76/afa9456fc70064043192fd9521e09bdb1b94fbc179d59a974d84084e1aad/invenio-rdm-records-10.8.3.tar.gz", hash = "sha256:bd9d97492cbcc16e346f0d49a6297197d4144b3f6a2692515bc6dba063326535", size = 907066 }
+sdist = { url = "https://files.pythonhosted.org/packages/21/a8/17400060b02278f3814aa8012885f3627cf288d40e124934388724a3344f/invenio-rdm-records-10.8.6.tar.gz", hash = "sha256:b3e9c45588859c00cf8742791e8feb1cf1057da6fe9048ad631d58ecfff4fb3d", size = 907555 }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/c9/f6/e454950f4a3d95e14bdb46ba7f3c832bd91abbb08038cd9994de11d4f3e7/invenio_rdm_records-10.8.3-py2.py3-none-any.whl", hash = "sha256:68dde521da5e847a88c1f7351a4d2c9890f539b3438538a54b84f38d62cb0b45", size = 1435263 },
+    { url = "https://files.pythonhosted.org/packages/bc/2e/7eadfe6363ffc0bbb665f9bc0c0cf89c21c308e4118ac7545b43afec4dd9/invenio_rdm_records-10.8.6-py2.py3-none-any.whl", hash = "sha256:13838847948d60cd58aae259c7bc8b759af2fdfa8a1fb59dbb1ad3afcceb234a", size = 1435272 },
 ]
 
 [[package]]
@@ -1848,6 +1846,7 @@ dependencies = [
     { name = "gunicorn" },
     { name = "importlib-metadata" },
     { name = "invenio-app-rdm" },
+    { name = "invenio-rdm-records" },
     { name = "invenio-s3" },
     { name = "invenio-search", extra = ["opensearch2"] },
     { name = "material-plausible-plugin" },
@@ -1859,6 +1858,7 @@ requires-dist = [
     { name = "gunicorn", specifier = "~=22.0.0" },
     { name = "importlib-metadata", specifier = "~=6.11.0" },
     { name = "invenio-app-rdm", specifier = "~=12.0.10" },
+    { name = "invenio-rdm-records", specifier = "~=10.8.6" },
     { name = "invenio-s3", specifier = "~=1.0.0" },
     { name = "invenio-search", extras = ["opensearch2"], specifier = "~=2.3.1" },
     { name = "material-plausible-plugin", specifier = "~=0.2.0" },

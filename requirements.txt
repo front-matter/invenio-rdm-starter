@@ -231,7 +231,7 @@ flask-collect-invenio==1.4.0
     # via invenio-assets
 flask-cors==5.0.0
     # via invenio-rest
-flask-iiif==0.6.3
+flask-iiif==1.1.0
     # via invenio-rdm-records
 flask-kvsession-invenio==0.6.3
     # via invenio-accounts
@@ -532,8 +532,10 @@ invenio-previewer==2.2.1
     # via invenio-app-rdm
 invenio-queues==1.0.1
     # via invenio-stats
-invenio-rdm-records==10.8.3
-    # via invenio-app-rdm
+invenio-rdm-records==10.8.6
+    # via
+    #   invenio-rdm-starter (pyproject.toml)
+    #   invenio-app-rdm
 invenio-records==2.3.0
     # via
     #   invenio-app-rdm
