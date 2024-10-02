@@ -25,6 +25,7 @@ services:
       - caddy_config:/config
   web:
     image: ghcr.io/front-matter/invenio-rdm-starter:latest
+    pull_policy: if_not_present
     volumes:
       - uploaded_data:/opt/invenio/var/instance/data
       - archived_data:/opt/invenio/var/instance/archive
@@ -76,6 +77,7 @@ services:
       - INVENIO_RDM_ALLOW_METADATA_ONLY_RECORDS=${INVENIO_RDM_ALLOW_METADATA_ONLY_RECORDS:-True}
       - INVENIO_RDM_ALLOW_RESTRICTED_RECORDS=${INVENIO_RDM_ALLOW_RESTRICTED_RECORDS:-True}
       - INVENIO_RDM_ALLOW_EXTERNAL_DOI_VERSIONING=${INVENIO_RDM_ALLOW_EXTERNAL_DOI_VERSIONING:-True}
+      
       - INVENIO_RDM_CITATION_STYLES_DEFAULT=${INVENIO_RDM_CITATION_STYLES_DEFAULT:-apa}
       - INVENIO_SECURITY_EMAIL_SENDER=${INVENIO_SECURITY_EMAIL_SENDER:-}
       # TODO: fix tuple parsing
@@ -107,11 +109,12 @@ services:
         condition: service_started
       cache:
         condition: service_started
-      # db:
-      #   condition: service_started
+      db:
+        condition: service_started
   worker:
     command: "celery -A invenio_app.celery worker --beat --events --loglevel=WARNING"
     image: ghcr.io/front-matter/invenio-rdm-starter:latest
+    pull_policy: if_not_present
     volumes:
       - uploaded_data:/opt/invenio/var/instance/data
     environment:
@@ -137,7 +140,7 @@ services:
 
       # Invenio-Files-REST
       - INVENIO_FILES_REST_STORAGE_FACTORY=${INVENIO_FILES_REST_STORAGE_FACTORY:-invenio_s3.s3fs_storage_factory}
-      
+
       # Invenio-S3
       - INVENIO_S3_ENDPOINT_URL=${INVENIO_S3_ENDPOINT_URL:-}
       - INVENIO_S3_ACCESS_KEY_ID=${INVENIO_S3_ACCESS_KEY_ID:-}
@@ -148,22 +151,22 @@ services:
         condition: service_started
       cache:
         condition: service_started
-      # db:
-      #   condition: service_started
+      db:
+        condition: service_started
   cache:
     image: valkey/valkey:7.2.5-bookworm
     restart: "unless-stopped"
     ports:
       - "6379:6379"
-  # db:
-  #   image: postgres:16.2
-  #   restart: "unless-stopped"
-  #   environment:
-  #     - POSTGRES_USER=${POSTGRES_USER:-inveniordm}
-  #     - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-inveniordm}
-  #     - POSTGRES_DB=${POSTGRES_DB:-inveniordm}
-  #   ports:
-  #     - 5432:5432
+  db:
+    image: postgres:16.4-bookworm
+    restart: "unless-stopped"
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER:-inveniordm}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-inveniordm}
+      - POSTGRES_DB=${POSTGRES_DB:-inveniordm}
+    ports:
+      - 5432:5432
   search:
     image: opensearchproject/opensearch:2.12.0
     restart: "unless-stopped"
