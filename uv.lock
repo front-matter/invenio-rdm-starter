@@ -1860,7 +1860,7 @@ requires-dist = [
     { name = "invenio-app-rdm", specifier = "~=12.0.10" },
     { name = "invenio-rdm-records", specifier = "~=10.8.6" },
     { name = "invenio-s3", specifier = "~=1.0.0" },
-    { name = "invenio-search", extras = ["opensearch2"], specifier = "~=2.3.1" },
+    { name = "invenio-search", extras = ["opensearch2"], specifier = "~=2.4.1" },
     { name = "material-plausible-plugin", specifier = "~=0.2.0" },
     { name = "ruff", specifier = ">=0.6.2" },
 ]
@@ -2022,15 +2022,15 @@ wheels = [
 
 [[package]]
 name = "invenio-search"
-version = "2.3.1"
+version = "2.4.1"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "dictdiffer" },
     { name = "invenio-base" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/8f/7e/c468d87879e06b1dbd029d1454bc5865a4c99828adcc6bcb9c6d41240651/invenio-search-2.3.1.tar.gz", hash = "sha256:ecbb420d4804b3a4fca8bcc9f8b5941067b06204b5a3c62ec997270f3c0e6ba6", size = 46494 }
+sdist = { url = "https://files.pythonhosted.org/packages/3d/5d/3b89690cbacf5f2b2a2fe30a3785b2666327a1302fa096a7afa2171d4251/invenio-search-2.4.1.tar.gz", hash = "sha256:569df7a0db6b84951acecbd60b5871c9f06aaf61421bf493f9ce646f685eb0a6", size = 46391 }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/9c/2a/3f14e50e1d24a64480e3be03202f1ddace2d1e98933aa868854d878357b3/invenio_search-2.3.1-py2.py3-none-any.whl", hash = "sha256:1f9789993bcb5339688e88ec60993802e33c6e94954cb0702d0a43c7c6f94e6b", size = 25642 },
+    { url = "https://files.pythonhosted.org/packages/b0/b6/4b214048daa1ea3dfb2f849f89eb35262c30a2bea9397063d1eba8b1772a/invenio_search-2.4.1-py2.py3-none-any.whl", hash = "sha256:ced2c342a69b8a27262728b00c51d014eaf32a1330499decac192fa810141d21", size = 25839 },
 ]
 
 [package.optional-dependencies]
