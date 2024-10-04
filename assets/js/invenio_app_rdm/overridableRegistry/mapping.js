@@ -8,4 +8,6 @@
  * Add here all the overridden components of your app.
  */
 
-export const overriddenComponents = {}
+export const overriddenComponents = {
+  "RecordsResultsListItem.layout": RecordsResultsListItem,
+};
