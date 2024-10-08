@@ -16,19 +16,22 @@
         <div class="ui grid app-rdm-footer">
         <div class="rdm-footer five wide tablet two wide computer column">
           <h2 class="ui small header">{{ _ ("About") }}</h2>
-          {% trans rogue_scholar_overview="https://rogue-scholar.org/about" %}
+          {% trans rogue_scholar_overview="https://feedback.rogue-scholar.org/about" %}
             <p><a href="{{ rogue_scholar_overview }}" target="_blank">Overview</a></p>
           {% endtrans %}
-          {% trans rogue_scholar_faq="https://rogue-scholar.org/about#faq" %}
+          {% trans rogue_scholar_faq="https://feedback.rogue-scholar.org/about#faq" %}
             <p><a href="{{ rogue_scholar_faq }}" target="_blank">FAQ</a></p>
           {% endtrans %}
-          {% trans rogue_scholar_stats="https://rogue-scholar.org/about#stats" %}
+          {% trans rogue_scholar_stats="https://feedback.rogue-scholar.org/about#stats" %}
             <p><a href="{{ rogue_scholar_stats }}" target="_blank">Stats</a></p>
           {% endtrans %}
+          {% trans rogue_scholar_register="https://feedback.rogue-scholar.org/auth/signin" %}
+          <p><a href="{{ rogue_scholar_register }}" target="_blank">Register Your Blog</a></p>
+        {% endtrans %}
         </div>
         <div class="rdm-footer five wide tablet two wide computer column">
           <h2 class="ui small header">{{ _ ("Community") }}</h2>
-          {% trans rogue_scholar_board="https://rogue-scholar.org/board" %}
+          {% trans rogue_scholar_board="https://feedback.rogue-scholar.org/board" %}
             <p><a href="{{ rogue_scholar_board }}" target="_blank">Advisory Board</a></p>
           {% endtrans %}
           {% trans rogue_scholar_blog="https://blog.front-matter.io/tag/rogue-scholar/" %}
