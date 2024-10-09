@@ -31,10 +31,16 @@ git clone https://github.com/front-matter/invenio-rdm-starter.git
 cd invenio-rdm-starter
 ```
 
-Run `docker-compose up` in the same directory as the `docker-compose.yml` file.
+Run `docker compose up` in the same directory as the `docker-compose.yml` file.
 
 ```bash
 docker compose up
+```
+
+If you run `docker compose up` for the first time, the InvenioRDM setup script needs to run. This script will create the InvenioRDM database, initialize the OpenSearch indexes, and create an admin user. The script will also install the default InvenioRDM records and communities.
+
+```bash
+docker exec -it invenio-rdm-starter-worker-1 setup.sh
 ```
 
 Open a web browser and navigate to [https://localhost](https://localhost). One default admin user is created during setup: email `admin@inveniosoftware.org`, password `changeme`.
@@ -126,13 +132,13 @@ the `invenio-cli` command-line tool in the following ways:
 * The Docker image uses `gunicorn` as the WSGI server instead of `uwsgi`.
 * Docker Compose uses `Caddy` as the reverse proxy server instead of `Nginx`. InvenioRDM Starter will run locally at `https://localhost`, and uses a self-signed ssl certificate issued by `Caddy`.
 * Docker Compose uses `Redis` as the message broker instead of `RabbitMQ`
-* Initial setup happens via a script running at container startup instead of via invenio-cli.
+* Initial setup happens via a script instead of via invenio-cli.
 
 ## FAQ
 
 ### How do I get a secure SSL certificate on localhost?
 
-The Caddy reverse proxy auto-generates a self-signed SSL certificate on localhost. This is an intermediary certificate, the corresponding root certificate isn't automatically used in a Docker Compose setup. You can copy the root certificate (Caddy Local Authority - 2024 ECC Root) from your running Caddy container (data/caddy/pki/local/root.crt) into your operating system certificate store. The root certificate only works on localhost and is valid for 10 years.
+The Caddy reverse proxy auto-generates a self-signed SSL certificate on localhost. This is an intermediary certificate, the corresponding root certificate isn't automatically used in a Docker Compose setup. You can copy the root certificate (Caddy Local Authority - 2024 ECC Root) from your running Caddy container (data/caddy/pki/authorities/local/root.crt) into your operating system certificate store. The root certificate only works on localhost and is valid for 10 years.
 
 ### How do I delete the InvenioRDM Postgres database?
 
