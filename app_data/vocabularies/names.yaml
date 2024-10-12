@@ -1,0 +1,72 @@
+- name: Fenner, Martin
+  id: 0000-0003-1419-2405
+  identifiers:
+    - identifier: https://orcid.org/0000-0003-1419-2405
+  affiliations:
+    - name: Front Matter
+- name: Rzepa, Henry
+  id: 0000-0002-8635-8390
+  identifiers:
+    - identifier: https://orcid.org/0000-0002-8635-8390
+  affiliations:
+    - id: 041kmwe10
+- name: Page, Roderic
+  id: 0000-0002-7101-9767
+  identifiers:
+    - identifier: https://orcid.org/0000-0002-7101-9767
+  affiliations:
+    - id: 00vtgdb53
+- name: Aryani, Amir
+  id: 0000-0002-4259-9774
+  identifiers: 
+    - identifier: https://orcid.org/0000-0002-4259-9774
+  affiliations:
+    - id: 031rekg67
+- name: Pampel, Heinz
+  id: 0000-0003-3334-2771
+  identifiers:
+    - identifier: https://orcid.org/0000-0003-3334-2771
+  affiliations:
+    - id: 01hcx6992
+- name: Habermann, Ted
+  id: 0000-0003-3585-6733
+  identifiers:
+    - identifier: https://orcid.org/0000-0003-3585-6733
+  affiliations:
+    id: 05bp8ka05
+- name: Greshake Tzovaras, Bastian
+  id: 0000-0002-9925-9623
+  identifiers:
+    - identifier: https://orcid.org/0000-0002-9925-9623
+- name: Taylor, Mike
+  id: 0000-0002-1003-5675
+  identifiers:
+    - identifier: https://orcid.org/0000-0002-1003-5675
+- name: Wedel, Matt
+  id: 0000-0001-6082-3103
+  identifiers:
+    - identifier: https://orcid.org/0000-0001-6082-3103
+  affiliations:
+    - id: 05167c961
+- name: Alperin, Juan Pablo
+  id: 0000-0002-9344-7439
+  identifiers:
+    - identifier: https://orcid.org/0000-0002-9344-7439
+- name: Salmon, Maëlle
+  id: 0000-0002-2815-0399
+  identifiers:
+    - identifier: https://orcid.org/0000-0002-2815-0399
+- name: Di Giambattista, Chiara
+- name: König, Mareike
+- name: Beucke, Daniel
+  id: 0000-0003-4905-1936
+  identifiers:
+    - identifier: https://orcid.org/0000-0003-4905-1936
+  affiliations:
+    id: 05745n787
+- name: Meinecke, Isabella
+  id: 0000-0001-8337-3619
+  identifiers:
+    - identifier: https://orcid.org/0000-0001-8337-3619
+  affiliations:
+    - id: 00pwcvj19

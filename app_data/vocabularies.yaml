@@ -13,9 +13,9 @@ subjects:
       data-file: vocabularies/subjects_oecd_fos.yaml
 # Minimimal example vocabularies
 # can be used for quick testing, or a basis for building your own customized vocabularies.
-#names:
-#  pid-type: names
-#  data-file: vocabularies/names.yaml
+names:
+  pid-type: names
+  data-file: vocabularies/names.yaml
 licenses:
   pid-type: lic
   data-file: vocabularies/licences.csv
@@ -32,10 +32,6 @@ communitytypes:
   pid-type: comtyp
   data-file: vocabularies/community_types.yaml
 # TODO: Uncoment this if you want to have all affiliations with ROR identifiers.
-# affiliations:
-#   pid-type: aff
-#   schemes:
-#     - id: ROR
-#       name: Research Organization Registry
-#       uri: "https://ror.org/"
-#       data-file: vocabularies/affiliations_ror.yaml
+affiliations:
+  pid-type: aff
+  data-file: vocabularies/affiliations_ror.yaml
