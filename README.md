@@ -158,6 +158,12 @@ docker exec -it invenio-rdm-starter-web-1 invenio index destroy --force --yes-i-
 docker exec -it invenio-rdm-starter-web-1 invenio rdm rebuild-all-indices
 ```
 
+### How do I add vocabularies to a running InvenioRDM instance, e.g. names or affiliations?
+
+```bash
+docker exec -it invenio-rdm-starter-web-1 invenio rdm-records add-to-fixture affiliations
+```
+
 ### Isn't InvenioRDM depending on Python 3.9?
 
 InvenioRDM v12.0 supports Python 3.9-3.12. InvenioRDM Starter uses Python 3.12 ([the current version](https://devguide.python.org/versions/)), but doesn't use any features of Python 3.10-3.12. Please report any Python 3.12-related issues you encounter. Python 3.9 reaches end-of-life in October 2025.
