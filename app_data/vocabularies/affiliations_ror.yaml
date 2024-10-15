@@ -293,3 +293,31 @@
   name: Universidad Nacional Autónoma de México
   title:
     en: Universidad Nacional Autónoma de México
+- id: 018mejw64
+  identifiers:
+  - identifier: 018mejw64
+    scheme: ror
+  name: Deutsche Forschungsgemeinschaft
+  title:
+    en: German Research Foundation
+- id: 00k4n6c32
+  identifiers:
+  - identifier: 00k4n6c32
+    scheme: ror
+  name: European Commission
+  title:
+    en: European Commission
+- id: 00yjd3n13
+  identifiers:
+  - identifier: 00yjd3n13
+    scheme: ror
+  name: Swiss National Science Foundation
+  title:
+    en: Swiss National Science Foundation
+- id: 04wfr2810
+  identifiers:
+  - identifier: 04wfr2810
+    scheme: ror
+  name: European Molecular Biology Organization
+  title:
+    en: European Molecular Biology Organization
