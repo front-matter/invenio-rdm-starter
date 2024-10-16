@@ -7,8 +7,6 @@ contributorsroles:
 subjects:
   pid-type: sub
   data-file: vocabularies/subjects_oecd_fos.yaml
-# Minimimal example vocabularies
-# can be used for quick testing, or a basis for building your own customized vocabularies.
 names:
   pid-type: names
   data-file: vocabularies/names.yaml
@@ -30,3 +28,11 @@ communitytypes:
 affiliations:
   pid-type: aff
   data-file: vocabularies/affiliations_ror.yaml
+funders:
+  pid-type: fun
+  data-file: vocabularies/funders.yaml
+# 'awards' contain a reference to a funder so the fixtures need to be run
+# after 'funders'
+awards:
+  pid-type: awa
+  data-file: vocabularies/awards.yaml
