@@ -1171,15 +1171,15 @@ wheels = [
 
 [[package]]
 name = "idutils"
-version = "1.2.1"
+version = "1.4.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "isbnlib" },
     { name = "six" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/31/bf/373a19718c80dfb30d17a0274026cd17ed999050429d39c79eda0189f503/idutils-1.2.1.tar.gz", hash = "sha256:d09220edd893c3164837890f0d1da303111a16a231dd9dd331c64d3d6f2b52cb", size = 27546 }
+sdist = { url = "https://files.pythonhosted.org/packages/c0/68/0d1de4d70ecb19e579d49add2c7ef37e42e0dca88d003ee3584ba155bc7d/idutils-1.4.0.tar.gz", hash = "sha256:c9f6d97f4f46420ebf6f8a56707181d29d2708b28e79d1e07c2f19b740e720b0", size = 30988 }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/70/dc/e2dc4f45905a62ee9d88eb2fc5f2853ef828cbd3c6db285c7b4eb6cf9a17/idutils-1.2.1-py2.py3-none-any.whl", hash = "sha256:908aabada07bb26e5e8f2d78ff222611b493cd721a05f1451f96d373a48f504d", size = 14642 },
+    { url = "https://files.pythonhosted.org/packages/27/98/a8f2f579b47916a3abee72e11d39fc3bc9253100f9c13341c726f650fbd2/idutils-1.4.0-py2.py3-none-any.whl", hash = "sha256:0370b68a0b013dfe7b1a5158cb2eda740073a75d3e32c0ba435287cf9ff99715", size = 21149 },
 ]
 
 [[package]]
@@ -1844,6 +1844,7 @@ version = "0.3.1"
 source = { editable = "." }
 dependencies = [
     { name = "gunicorn" },
+    { name = "idutils" },
     { name = "importlib-metadata" },
     { name = "invenio-app-rdm" },
     { name = "invenio-rdm-records" },
@@ -1856,6 +1857,7 @@ dependencies = [
 [package.metadata]
 requires-dist = [
     { name = "gunicorn", specifier = "~=22.0.0" },
+    { name = "idutils", specifier = "~=1.4.0" },
     { name = "importlib-metadata", specifier = "~=6.11.0" },
     { name = "invenio-app-rdm", specifier = "~=12.0.10" },
     { name = "invenio-rdm-records", specifier = "~=10.8.6" },

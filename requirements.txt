@@ -310,8 +310,9 @@ idna==3.8
     # via
     #   email-validator
     #   requests
-idutils==1.2.1
+idutils==1.4.0
     # via
+    #   invenio-rdm-starter (pyproject.toml)
     #   datacite
     #   marshmallow-utils
 imagesize==1.4.1
