@@ -1900,7 +1900,7 @@ requires-dist = [
     { name = "invenio-s3", specifier = "~=1.0.0" },
     { name = "invenio-search", extras = ["opensearch2"], specifier = "~=2.4.1" },
     { name = "material-plausible-plugin", specifier = "~=0.2.0" },
-    { name = "ruff", specifier = ">=0.6.2" },
+    { name = "ruff", specifier = ">=0.7.0" },
 ]
 
 [[package]]

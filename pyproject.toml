@@ -18,7 +18,7 @@ dependencies = [
     "importlib-metadata~=6.11.0",
     "gunicorn~=22.0.0",
     "material-plausible-plugin~=0.2.0",
-    "ruff>=0.6.2",
+    "ruff>=0.7.0",
 ]
 
 [build-system]
