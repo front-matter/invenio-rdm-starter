@@ -226,7 +226,7 @@
                     <div class="right floated right aligned column">
                       {%- set id_doi = record.pids.get('doi', {}).get('identifier') %}
                       {% if id_doi %}
-                        <a class="no-text-decoration" href="{{ id_doi|pid_url('doi') }}">
+                        <a class="no-text-decoration" target="_blank" href="{{ id_doi|pid_url('doi') }}">
                           <img class="ml-5 inline-id-icon" src="{{ url_for('static', filename='images/doi.svg') }}" alt="DOI icon"/>
                           {{ id_doi|pid_url('doi') }}
                         </a>
