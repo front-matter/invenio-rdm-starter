@@ -214,26 +214,20 @@
 
               <section id="record-info"
                        aria-label="{{ _('Publication date and version number') }}">
-                <div class="ui grid middle aligned">
-                  <div class="two column row">
-                    <div class="left floated left aligned column">
-                      <span class="ui" title="{{ _('Publication date') }}">
-                        {{ _('Published') }} {{ record.ui.publication_date_l10n_long }}
-                      </span>
-                      <span
-                        class="label text-muted"> | {{ _('Version {version_number}').format(version_number=record.ui.version) }}</span>
-                    </div>
-                    <div class="right floated right aligned column">
-                      {%- set id_doi = record.pids.get('doi', {}).get('identifier') %}
-                      {% if id_doi %}
-                        <a class="no-text-decoration" target="_blank" href="{{ id_doi|pid_url('doi') }}">
-                          <img class="ml-5 inline-id-icon" src="{{ url_for('static', filename='images/doi.svg') }}" alt="DOI icon"/>
-                          {{ id_doi|pid_url('doi') }}
-                        </a>
-                      {% endif %}
-                    </div>
-                  </div>
-                </div>
+                <span class="ui" title="{{ _('Publication date') }}">
+                  {{ _('Published') }} {{ record.ui.publication_date_l10n_long }}
+                </span>
+                <span
+                  class="label text-muted"> | {{ _('Version {version_number}').format(version_number=record.ui.version) }}</span>
+
+                {%- set id_doi = record.pids.get('doi', {}).get('identifier') %}
+                {% if id_doi %}
+                  <span class="label text-muted"> | </span>
+                  <a class="no-text-decoration" target="_blank" href="{{ id_doi|pid_url('doi') }}">
+                    <img class="ml-5 inline-id-icon" src="{{ url_for('static', filename='images/doi.svg') }}" alt="DOI icon"/>
+                    {{ id_doi|pid_url('doi') }}
+                  </a>
+                {% endif %}
               </section>
               <div class="ui divider hidden"></div>
 

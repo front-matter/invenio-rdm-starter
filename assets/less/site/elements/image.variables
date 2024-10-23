@@ -1,0 +1,13 @@
+/***********************************************
+         Invenio RDM Starter Image Variables
+***********************************************/
+
+/* Size */
+@miniWidth: 35px;
+@tinyWidth: 80px;
+@smallWidth: 150px;
+@mediumWidth: 250px;
+@largeWidth: 450px;
+@bigWidth: 600px;
+@hugeWidth: 800px;
+@massiveWidth: 960px;
