@@ -224,31 +224,13 @@
                         class="label text-muted"> | {{ _('Version {version_number}').format(version_number=record.ui.version) }}</span>
                     </div>
                     <div class="right floated right aligned column">
-
-                      {% if record.ui.resource_type %}
-                        <span role="note"
-                              class="ui label horizontal small neutral mb-5"
-                              aria-label="{{ _('Resource type') }}"
-                        >
-                          {{ record.ui.resource_type.title_l10n }}
-                        </span>
+                      {%- set id_doi = record.pids.get('doi', {}).get('identifier') %}
+                      {% if id_doi %}
+                        <a class="no-text-decoration" href="{{ id_doi|pid_url('doi') }}">
+                          <img class="ml-5 inline-id-icon" src="{{ url_for('static', filename='images/doi.svg') }}" alt="DOI icon"/>
+                          {{ id_doi|pid_url('doi') }}
+                        </a>
                       {% endif %}
-
-                      <span role="note"
-                            class="ui label horizontal small access-status {{ record.ui.access_status.id }} mb-5"
-                            data-tooltip="{{ record.ui.access_status.description_l10n }}"
-                            data-inverted=""
-                            aria-label="{{ _('Access status') }}"
-                      >
-                        {% if record.ui.access_status.icon %}
-                          <i class="icon {{ record.ui.access_status.icon }}"
-                             aria-hidden="true"></i>
-                        {% endif %}
-                        <span
-                          aria-label="{{ record.ui.access_status.description_l10n }}">
-                          {{ record.ui.access_status.title_l10n }}
-                        </span>
-                      </span>
                     </div>
                   </div>
                 </div>
