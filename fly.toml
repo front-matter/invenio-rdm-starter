@@ -33,6 +33,13 @@ primary_region = 'fra'
   min_machines_running = 1
   processes = ['web']
 
+# [[http_service.checks]]
+#  grace_period = "10s"
+#  interval = "30s"
+#  method = "GET"
+#  timeout = "5s"
+#  path = "/"
+
 [[vm]]
   memory = '2gb'
   cpu_kind = 'shared'
