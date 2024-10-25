@@ -1,0 +1,7 @@
+/***********************************************
+         Invenio RDM Starter Menu Overrides
+***********************************************/
+
+#mobile-record-management.ui.grid > .column {
+  border-bottom: none;
+}
