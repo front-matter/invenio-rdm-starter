@@ -3,3 +3,58 @@
 ***********************************************/
 
 @highlightHeaderColor: @lightGrey;
+
+.ui.container.page-subheader-outer {
+  background-color: @highlightHeaderColor;
+  padding-top: @celledPadding;
+  padding-bottom: @celledPadding;
+  margin-bottom: @defaultMargin;
+
+  &.with-submenu {
+    margin-bottom: 0;
+  }
+
+  &:not(.compact):not(.with-submenu){
+    box-shadow: 0 -@secondaryPointingBorderWidth 0 @borderColor inset;
+  }
+
+  &.compact {
+    min-height: 5em;
+    .ui.container.page-subheader {
+      min-height: 3em;
+    }
+  }
+
+  & + #communities-carousel {
+    margin-top: -@defaultMargin;
+  }
+}
+
+.ui.container.page-subheader {
+  align-items: center;
+  display: flex;
+
+  &.compact {
+    height: 3em;
+  }
+
+  &.stackable.menu {
+    @media all and (max-width: @largestMobileScreen) {
+      width: 100% !important; // Overwriting semantic-ui's `auto !important` for same breakpoint on .ui.container
+    }
+  }
+
+  .page-subheader-element{
+    height: inherit;
+    display: flex;
+    align-items: center;
+    padding: 0.5em;
+
+    &:first-of-type {
+      padding-left: 0;
+    }
+    &:last-of-type {
+      padding-right: 0;
+    }
+  }
+}
