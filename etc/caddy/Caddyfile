@@ -1,4 +1,4 @@
-localhost :443 {
+:6000 {
 	# redirect legacy URLs
 	@blogs path /blogs /blogs/*
 	@posts path /posts /posts/*
@@ -8,9 +8,6 @@ localhost :443 {
 	redir @posts https://legacy.rogue-scholar.org{uri}
 	redir @lang https://legacy.rogue-scholar.org{uri}
 
-	root /static/* /opt/invenio/var/instance/static
-	try_files {path} {path}/ /index.html
-	reverse_proxy web:5000
-	file_server
-	encode gzip
+	# requests get proxied to the backend server
+	reverse_proxy 0.0.0.0:5000
 }
