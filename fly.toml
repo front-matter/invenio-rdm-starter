@@ -24,6 +24,7 @@ primary_region = 'fra'
 [processes]
   web = "gunicorn invenio_app.wsgi:application --bind 0.0.0.0:5000 --workers 4"
   worker = "celery -A invenio_app.celery worker --beat --events --loglevel=WARNING"
+  proxy = "caddy run"
 
 [http_service]
   internal_port = 5000
