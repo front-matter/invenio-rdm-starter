@@ -51,7 +51,10 @@ FROM python:3.12-slim-bookworm AS runtime
 
 # Install OS package dependencies
 RUN --mount=type=cache,sharing=locked,target=/var/cache/apt apt-get update -y --fix-missing && \
-    apt-get install apt-utils libcairo2 -y --no-install-recommends && apt-get clean
+    apt-get install apt-utils gpg libcairo2 debian-keyring debian-archive-keyring apt-transport-https curl -y --no-install-recommends && \
+    curl -1sLf 'https://dl.cloudsmith.io/public/caddy/stable/gpg.key' | gpg --dearmor -o /usr/share/keyrings/caddy-stable-archive-keyring.gpg && \
+    curl -1sLf 'https://dl.cloudsmith.io/public/caddy/stable/debian.deb.txt' | tee /etc/apt/sources.list.d/caddy-stable.list && \
+    apt update && apt install caddy && apt-get clean 
 
 ENV VIRTUAL_ENV=/opt/invenio/.venv \
     PATH="/opt/invenio/.venv/bin:$PATH" \
@@ -66,6 +69,7 @@ COPY --from=builder ${INVENIO_INSTANCE_PATH}/templates ${INVENIO_INSTANCE_PATH}/
 COPY --from=builder ${INVENIO_INSTANCE_PATH}/app_data ${INVENIO_INSTANCE_PATH}/app_data
 COPY --from=builder ${INVENIO_INSTANCE_PATH}/translations ${INVENIO_INSTANCE_PATH}/translations
 COPY --from=builder ${INVENIO_INSTANCE_PATH}/invenio.cfg ${INVENIO_INSTANCE_PATH}/invenio.cfg
+COPY ./Caddyfile /etc/caddy/Caddyfile
 
 COPY ./setup.sh /opt/invenio/.venv/bin/setup.sh
 
