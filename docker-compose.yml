@@ -61,6 +61,7 @@ services:
       - INVENIO_THEME_LOGO=${INVENIO_THEME_LOGO:-images/invenio-rdm-white.svg}
       - INVENIO_THEME_SITENAME=${INVENIO_THEME_SITENAME:-InvenioRDM Starter}
       - INVENIO_THEME_FRONTPAGE_TITLE=${INVENIO_THEME_FRONTPAGE_TITLE:-InvenioRDM Starter}
+      - INVENIO_THEME_FRONTPAGE_SUBTITLE=${INVENIO_THEME_FRONTPAGE_SUBTITLE:-A starter project for the turn-key research data management repository.}
       - INVENIO_THEME_SHOW_FRONTPAGE_INTRO_SECTION=False
 
       # Invenio-Records-Resources
