@@ -6,9 +6,6 @@
 app = 'rogue-scholar-caddy'
 primary_region = 'fra'
 
-[build]
-  image = 'caddy:2.8.4'
-
 [http_service]
   internal_port = 8080
   force_https = true
@@ -21,3 +18,7 @@ primary_region = 'fra'
   memory = '1gb'
   cpu_kind = 'shared'
   cpus = 1
+
+[mounts]
+  source = "caddy_data"
+  destination = "/data"
