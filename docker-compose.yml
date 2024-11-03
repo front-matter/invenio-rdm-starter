@@ -8,8 +8,7 @@
 # - Reverse proxy: Caddy (exposed ports: 80, 443)
 # - Web application: Gunicorn (exposed port: none)
 # - DB: (PostgresSQL) (exposed port: 5432)
-# - Cache: Redis (exposed port: 6379)
-# - Message queue: RabbbitMQ (exposed port: 5672)
+# - Cache and message queue: Redis (exposed port: 6379)
 # - Search platform: (OpenSearch) (exposed ports: 9200, 9300)
 
 services:
