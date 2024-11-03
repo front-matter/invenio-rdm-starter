@@ -4,7 +4,7 @@
 #
 
 app = 'rogue-scholar-caddy'
-primary_region = 'ams'
+primary_region = 'fra'
 
 [build]
   image = 'caddy:2.8.4'
