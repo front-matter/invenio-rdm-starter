@@ -1,5 +1,5 @@
-0.0.0.0:6000 {
-	# redirect legacy URLs
+:8080 {
+	# redirect Rogue Scholar legacy URLs
 	@blogs path /blogs /blogs/*
 	@posts path /posts /posts/*
 	@lang path /en /en/* /de /de/* /es /es/* /fr /fr/* /it /it/* /pt /pt/* /tr /tr/*
@@ -8,6 +8,5 @@
 	redir @posts https://legacy.rogue-scholar.org{uri}
 	redir @lang https://legacy.rogue-scholar.org{uri}
 
-	# requests get proxied to the backend server
-	reverse_proxy 0.0.0.0:5000
+	redir / https://rogue-scholar.org{uri}
 }
