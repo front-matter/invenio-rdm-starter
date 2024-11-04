@@ -5,14 +5,13 @@
 	}
 }
 :8080 {
-	@posts path /posts/*
-	@lang path /en/* /de/* /es/* /fr/* /it/* /pt/* /tr/*
-	@legacy path /about /board
-
 	# redirect Rogue Scholar legacy URLs
+	@posts path /posts/* /en/posts/* /de/posts/* /es/posts/* /fr/posts/* /it/posts/* /pt/posts/* /tr/posts/*
+	@about path /about /en/about /de/about /es/about /fr/about /it/about /pt/about /tr/about
+	@board path /board /en/board /de/board /es/board /fr/board /it/board /pt/board /tr/board
 	redir @posts https://legacy.rogue-scholar.org{uri}
-	redir @lang https://legacy.rogue-scholar.org{uri}
-	redir @legacy https://legacy.rogue-scholar.org{uri}
+	redir @about https://legacy.rogue-scholar.org{uri}
+	redir @board https://legacy.rogue-scholar.org{uri}
 
 	uri replace /en /
 	uri replace /de /
@@ -21,7 +20,6 @@
 	uri replace /it /
 	uri replace /pt /
 	uri replace /tr /
-	uri replace /posts /
 
 	handle /blogs* {
 		handle /blogs/* {
@@ -45,6 +43,9 @@
 	}
 
 	handle {
+		handle /posts {
+			uri replace /posts /
+		}
 		uri replace / /search
 		uri query {
 			query>q
