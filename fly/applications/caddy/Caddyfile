@@ -34,7 +34,7 @@
 		uri query -tags
 		uri query -language
 
-		reverse_proxy 2a09:8280:1::39:a377:0 {
+		reverse_proxy invenio-rdm-starter.flycast {
 			header_up Host beta.rogue-scholar.org
 		}
 	}
