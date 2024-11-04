@@ -34,7 +34,7 @@ primary_region = 'fra'
 
 [http_service]
   internal_port = 5000
-  force_https = true
+  # force_https = true
   auto_stop_machines = false
   auto_start_machines = true
   min_machines_running = 1

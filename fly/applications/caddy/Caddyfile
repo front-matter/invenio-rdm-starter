@@ -5,34 +5,56 @@
 	}
 }
 :8080 {
-	route {
-		@posts path /posts/*
-		@lang path /en/* /de/* /es/* /fr/* /it/* /pt/* /tr/*
-		@legacy path /about /board
-		@query query p=* q=*
+	@posts path /posts/*
+	@lang path /en/* /de/* /es/* /fr/* /it/* /pt/* /tr/*
+	@legacy path /about /board
 
-		# redirect Rogue Scholar legacy URLs
-		redir @posts https://legacy.rogue-scholar.org{uri}
-		redir @lang https://legacy.rogue-scholar.org{uri}
-		redir @legacy https://legacy.rogue-scholar.org{uri}
+	# redirect Rogue Scholar legacy URLs
+	redir @posts https://legacy.rogue-scholar.org{uri}
+	redir @lang https://legacy.rogue-scholar.org{uri}
+	redir @legacy https://legacy.rogue-scholar.org{uri}
 
-		uri replace /en /
-		uri replace /de /
-		uri replace /es /
-		uri replace /fr /
-		uri replace /it /
-		uri replace /pt /
-		uri replace /tr /
-		uri replace /posts /
-		uri replace /blogs /communities
-		uri replace /blogs/* /communities/*
+	uri replace /en /
+	uri replace /de /
+	uri replace /es /
+	uri replace /fr /
+	uri replace /it /
+	uri replace /pt /
+	uri replace /tr /
+	uri replace /posts /
 
-		uri query query>q
-		uri query page>p
-		uri query -category
-		uri query -generator
-		uri query -tags
-		uri query -language
+	handle /blogs* {
+		handle /blogs/* {
+			uri path_regexp /blogs/([^/]+) /communities/$1/records
+		}
+		handle {
+			uri replace /blogs /communities/search
+		}
+
+		uri query {
+			query>q
+			page>p
+			-category
+			-generator
+			-language
+		}
+
+		reverse_proxy invenio-rdm-starter.flycast {
+			header_up Host beta.rogue-scholar.org
+		}
+	}
+
+	handle {
+		uri replace / /search
+		uri query {
+			query>q
+			tags>f
+			page>p
+			-category
+			-generator
+			-language
+			f (\D+) subject:$1
+		}
 
 		reverse_proxy invenio-rdm-starter.flycast {
 			header_up Host beta.rogue-scholar.org
