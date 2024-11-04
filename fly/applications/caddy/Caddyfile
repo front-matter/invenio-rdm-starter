@@ -1,18 +1,17 @@
-# {
-# 	auto_https off
-# }
 {
+	auto_https off
 	log {
 		level DEBUG
 	}
 }
 :8080 {
-	# redirect Rogue Scholar legacy URLs
 	route {
 		@posts path /posts/*
 		@lang path /en/* /de/* /es/* /fr/* /it/* /pt/* /tr/*
 		@legacy path /about /board
+		@query query p=* q=*
 
+		# redirect Rogue Scholar legacy URLs
 		redir @posts https://legacy.rogue-scholar.org{uri}
 		redir @lang https://legacy.rogue-scholar.org{uri}
 		redir @legacy https://legacy.rogue-scholar.org{uri}
@@ -28,7 +27,15 @@
 		uri replace /blogs /communities
 		uri replace /blogs/* /communities/*
 
-		redir https://beta.rogue-scholar.org{uri}
-		# reverse_proxy 66.241.124.87
+		uri query query>q
+		uri query page>p
+		uri query -category
+		uri query -generator
+		uri query -tags
+		uri query -language
+
+		reverse_proxy 2a09:8280:1::39:a377:0 {
+			header_up Host beta.rogue-scholar.org
+		}
 	}
 }
