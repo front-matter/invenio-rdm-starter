@@ -17,15 +17,17 @@
 
 {%- block frontpage_search %}
 <div id="frontpage-search-bar" class="ui container fluid frontpage-header">
-<div class="ui container grid rel-mt-2">
+<div class="ui container grid">
   <div class="row">
-    <div class="four column centered center aligned">
+    <div class="sixteen wide mobile four wide computer column"></div>
+    <div class="sixteen wide mobile eight wide computer column centered">
       {%- block frontpage_title %}
-      <h1 class="ui center aligned header inverted">
+      <h1 class="ui left aligned header inverted">
         {{ _(config.THEME_FRONTPAGE_TITLE) }}
-        <div class="sub header left aligned">{{ _(config.THEME_FRONTPAGE_SUBTITLE) }}</div>
+        <div class="sub header">{{ _(config.THEME_FRONTPAGE_SUBTITLE) }}</div>
       </h1>
     </div>
+    <div class="sixteen wide mobile four wide computer column"></div>
   </div>
     {%- endblock frontpage_title %}
     {%- block frontpage_form %}
