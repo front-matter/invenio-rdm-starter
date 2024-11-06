@@ -46,54 +46,52 @@
 			}
 		}
 	}
-}
 
-handle /blogs* {
-	handle /blogs/* {
-		uri path_regexp /blogs/([^/]+) /communities/$1/records
-	}
-	handle {
-		uri replace /blogs /communities/search
-	}
+	handle /blogs* {
+		handle /blogs/* {
+			uri path_regexp /blogs/([^/]+) /communities/$1/records
+		}
+		handle {
+			uri replace /blogs /communities/search
+		}
 
-	uri query {
-		query>q
-		page>p
-		-category
-		-generator
-		-language
-	}
+		uri query {
+			query>q
+			page>p
+			-category
+			-generator
+			-language
+		}
 
-	reverse_proxy https://beta.rogue-scholar.org {
-		header_up Host {upstream_hostport}
-		transport http {
-			tls_insecure_skip_verify
+		reverse_proxy https://beta.rogue-scholar.org {
+			header_up Host {upstream_hostport}
+			transport http {
+				tls_insecure_skip_verify
+			}
+		}
+
+		handle {
+			handle /posts {
+				uri replace /posts /
+			}
+			handle / {
+				uri replace / /search
+			}
+			uri query {
+				query>q
+				tags>f
+				page>p
+				-category
+				-generator
+				-language
+				f (\D+) subject:$1
+			}
+
+			reverse_proxy https://beta.rogue-scholar.org {
+				header_up Host {upstream_hostport}
+				transport http {
+					tls_insecure_skip_verify
+				}
+			}
 		}
 	}
-}
-
-handle {
-	handle /posts {
-		uri replace /posts /
-	}
-	handle / {
-		uri replace / /search
-	}
-	uri query {
-		query>q
-		tags>f
-		page>p
-		-category
-		-generator
-		-language
-		f (\D+) subject:$1
-	}
-
-	reverse_proxy https://beta.rogue-scholar.org {
-		header_up Host {upstream_hostport}
-		transport http {
-			tls_insecure_skip_verify
-		}
-	}
-}
-}
