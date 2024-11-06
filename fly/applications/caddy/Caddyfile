@@ -1,10 +1,15 @@
 {
 	auto_https off
 	log {
-		level DEBUG
+		level ERROR
 	}
 }
 :8080 {
+	# issue Let's Encrypt certificate with DNS challenge on DigitalOcean
+	# tls {
+	# 	dns digitalocean {env.DO_TOKEN}
+	# }
+
 	# redirect Rogue Scholar legacy URLs
 	@posts path /posts/* /en/posts/* /de/posts/* /es/posts/* /fr/posts/* /it/posts/* /pt/posts/* /tr/posts/*
 	@about path /about /en/about /de/about /es/about /fr/about /it/about /pt/about /tr/about
@@ -20,6 +25,24 @@
 	uri replace /it /
 	uri replace /pt /
 	uri replace /tr /
+
+	handle /blogs/syldavia_gazette* {
+		uri path_regexp /blogs/syldavia_gazette /communities/syldavia_gazette/records
+
+		uri query {
+			query>q
+			page>p
+			-category
+			-generator
+			-language
+		}
+
+		# header fly-replay "app=invenio-rdm-starter"
+
+		reverse_proxy 2a09:8280:1::39:a377:0 {
+			header_up Host beta.rogue-scholar.org
+		}
+	}
 
 	handle /blogs* {
 		handle /blogs/* {
