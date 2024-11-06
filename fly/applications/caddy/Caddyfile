@@ -12,11 +12,7 @@
 
 	# redirect Rogue Scholar legacy URLs
 	@posts path /posts/* /en/posts/* /de/posts/* /es/posts/* /fr/posts/* /it/posts/* /pt/posts/* /tr/posts/*
-	@about path /about /en/about /de/about /es/about /fr/about /it/about /pt/about /tr/about
-	@board path /board /en/board /de/board /es/board /fr/board /it/board /pt/board /tr/board
 	redir @posts https://legacy.rogue-scholar.org{uri}
-	redir @about https://legacy.rogue-scholar.org{uri}
-	redir @board https://legacy.rogue-scholar.org{uri}
 
 	uri replace /en /
 	uri replace /de /
@@ -25,27 +21,6 @@
 	uri replace /it /
 	uri replace /pt /
 	uri replace /tr /
-
-	# header fly-replay "app=invenio-rdm-starter"
-
-	handle /blogs/syldavia_gazette* {
-		uri path_regexp /blogs/syldavia_gazette /communities/syldavia_gazette/records
-
-		uri query {
-			query>q
-			page>p
-			-category
-			-generator
-			-language
-		}
-
-		reverse_proxy https://beta.rogue-scholar.org {
-			header_up Host {upstream_hostport}
-			transport http {
-				tls_insecure_skip_verify
-			}
-		}
-	}
 
 	handle /blogs* {
 		handle /blogs/* {
