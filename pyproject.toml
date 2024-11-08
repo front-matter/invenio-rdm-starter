@@ -15,6 +15,7 @@ dependencies = [
     "invenio-search[opensearch2]~=2.4.1",
     "invenio-s3~=1.0.0",
     "idutils~=1.4.0",
+    "babel-edtf~=1.2.0",
     "importlib-metadata~=6.11.0",
     "gunicorn~=22.0.0",
     "material-plausible-plugin~=0.2.0",

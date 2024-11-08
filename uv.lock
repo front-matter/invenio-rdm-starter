@@ -99,15 +99,15 @@ wheels = [
 
 [[package]]
 name = "babel-edtf"
-version = "1.1.4"
+version = "1.2.1"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "babel" },
     { name = "edtf" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/db/e4/0e588f7818a4a5906558145259da89c6b896ee8d1d1e0e6b46913b9e25bb/babel-edtf-1.1.4.tar.gz", hash = "sha256:728d6d4b787356cdfcca61980a8b9b41b00edf96cec66fb2ee1035196b9c9643", size = 17640 }
+sdist = { url = "https://files.pythonhosted.org/packages/f9/25/b2ca3f471b91d37f59ec4304b5f98bdb6001e174a431dda34cf98b2a217c/babel-edtf-1.2.1.tar.gz", hash = "sha256:1ed0c454e123ed7579510d9531eae5af4399272b0dff897d3d42f68e9bed8d8e", size = 18138 }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/b5/1e/3ce8c64c26de8a48662c613529c9bed96b7566c95481d0c418a9d57a8fe9/babel_edtf-1.1.4-py2.py3-none-any.whl", hash = "sha256:93c80d6b5c227f6da5a5b8ae8b8a2f18a60706b18a0dbd00f28a609437db3295", size = 6286 },
+    { url = "https://files.pythonhosted.org/packages/0d/f5/10fe146e609bcae84bfd32384c3e7ed837cf038c1306a7a72b11eeb165cf/babel_edtf-1.2.1-py2.py3-none-any.whl", hash = "sha256:706529185b335f05ca4567c468f4ec307ad36fa9ce13b63671f1e113a57f7d55", size = 6452 },
 ]
 
 [[package]]
@@ -654,16 +654,15 @@ wheels = [
 
 [[package]]
 name = "edtf"
-version = "4.0.1"
+version = "5.0.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "pyparsing" },
     { name = "python-dateutil" },
-    { name = "six" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/a9/5f/1e2e40520f60ac4d0faed04aa2f4fd1fbf82fbb779a1a26188668c611762/edtf-4.0.1.tar.gz", hash = "sha256:4f4a7425a4a32862f5870de4facecc9050f01a57e19394eb9739fb970cab810e", size = 37325 }
+sdist = { url = "https://files.pythonhosted.org/packages/7b/24/0a9053bea41c2860046416f3d136283233ce307adb218d406dede64a8fac/edtf-5.0.0.tar.gz", hash = "sha256:7393c570b4838c8cbc05b0687c6ea0578039ba007c8ce125206f44f18f2dea5d", size = 45617 }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/32/9d/96936cfaf90fc13961cdc7dc8d637f8fd93d95b2eb69f24d6600f325a1c9/edtf-4.0.1-py2.py3-none-any.whl", hash = "sha256:744135d392774c636425d8ed6dc9182093f2c0174ca9f3f7968588b0168d826c", size = 32968 },
+    { url = "https://files.pythonhosted.org/packages/cb/08/746096971fae3585928a631912bdd4393f5ab5696706bd34cbdcccf763fc/edtf-5.0.0-py3-none-any.whl", hash = "sha256:b38ca29fa166a5c628b899a76e73a9f4cc732da565b85e737af4c0e457775f5e", size = 40319 },
 ]
 
 [[package]]
@@ -1877,6 +1876,7 @@ name = "invenio-rdm-starter"
 version = "0.3.1"
 source = { editable = "." }
 dependencies = [
+    { name = "babel-edtf" },
     { name = "gunicorn" },
     { name = "idutils" },
     { name = "importlib-metadata" },
@@ -1891,6 +1891,7 @@ dependencies = [
 
 [package.metadata]
 requires-dist = [
+    { name = "babel-edtf", specifier = "~=1.2.0" },
     { name = "gunicorn", specifier = "~=22.0.0" },
     { name = "idutils", specifier = "~=1.4.0" },
     { name = "importlib-metadata", specifier = "~=6.11.0" },
@@ -2550,7 +2551,7 @@ wheels = [
 
 [[package]]
 name = "marshmallow-utils"
-version = "0.9.2"
+version = "0.9.3"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "arrow" },
@@ -2567,9 +2568,9 @@ dependencies = [
     { name = "uritemplate" },
     { name = "werkzeug" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/aa/af/d1374a3e2f5db98ab9b63c04280028b895aa977446d01ed25f8a238337a0/marshmallow-utils-0.9.2.tar.gz", hash = "sha256:412df674800031fdebbbb9ae6aba69feb3c7be3078a1a309de3f1742793f5a6e", size = 44508 }
+sdist = { url = "https://files.pythonhosted.org/packages/a2/1c/be154d00c06f909fd7ec3cf84f6aeaf2d04dc217906c0634fe48e4cdbb08/marshmallow-utils-0.9.3.tar.gz", hash = "sha256:c7f78fa7114dfef7ed08b6cdf6b53cc1678d5d060c7ad43aaa57576ae69c5ca9", size = 44601 }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/1f/4a/19697aaee9de1f048fbe6f3321dbdcc4f1e0262e11a02079b69a5604f88b/marshmallow_utils-0.9.2-py2.py3-none-any.whl", hash = "sha256:2373caa5ce1b03289cfe9f027bf1fd4e934f02a89ac4b112b1130bacc30363c6", size = 65942 },
+    { url = "https://files.pythonhosted.org/packages/a1/ed/4177f873485575bdcd5afb2c6e5fc4ca4db6b745dfa05ab9f732fcddc322/marshmallow_utils-0.9.3-py2.py3-none-any.whl", hash = "sha256:23a64dd1b0986a1d79123cfe7edaba3d52db2c380c2eac90b1859135a5aced47", size = 65987 },
 ]
 
 [[package]]

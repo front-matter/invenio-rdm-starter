@@ -33,8 +33,9 @@ babel==2.16.0
     #   invenio-search-ui
     #   marshmallow-utils
     #   sphinx
-babel-edtf==1.1.4
+babel-edtf==1.2.1
     # via
+    #   invenio-rdm-starter (pyproject.toml)
     #   invenio-rdm-records
     #   invenio-records-resources
     #   marshmallow-utils
@@ -165,7 +166,7 @@ docutils==0.19
     #   sphinx
 dojson==1.5.0
     # via invenio-oaiserver
-edtf==4.0.1
+edtf==5.0.0
     # via
     #   babel-edtf
     #   marshmallow-utils
@@ -553,6 +554,7 @@ invenio-records-permissions==0.20.0
     # via invenio-records-resources
 invenio-records-resources==5.10.0
     # via
+    #   invenio-rdm-starter (pyproject.toml)
     #   invenio-administration
     #   invenio-drafts-resources
     #   invenio-github
@@ -713,7 +715,7 @@ marshmallow==3.22.0
     #   webargs
 marshmallow-oneofschema==3.1.1
     # via marshmallow-utils
-marshmallow-utils==0.9.1
+marshmallow-utils==0.9.3
     # via invenio-records-resources
 material-plausible-plugin==0.2.0
     # via invenio-rdm-starter (pyproject.toml)
@@ -935,7 +937,7 @@ rpds-py==0.20.0
     # via
     #   jsonschema
     #   referencing
-ruff==0.6.2
+ruff==0.7.3
     # via invenio-rdm-starter (pyproject.toml)
 s3fs==0.4.2
     # via invenio-s3
@@ -961,7 +963,6 @@ six==1.16.0
     #   base32-lib
     #   bleach
     #   citeproc-py-styles
-    #   edtf
     #   flask-iiif
     #   flask-kvsession-invenio
     #   flask-restful
