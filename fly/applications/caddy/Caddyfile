@@ -1,72 +1,9 @@
 {
-	# auto_https off
+	auto_https off
 	log {
 		level ERROR
 	}
 }
 :8080 {
-	# issue Let's Encrypt certificate with DNS challenge on DigitalOcean
-	# tls {
-	# 	dns digitalocean {env.DO_TOKEN}
-	# }
-
-	# redirect Rogue Scholar legacy URLs
-	@posts path /posts/* /en/posts/* /de/posts/* /es/posts/* /fr/posts/* /it/posts/* /pt/posts/* /tr/posts/*
-	redir @posts https://legacy.rogue-scholar.org{uri}
-
-	uri replace /en /
-	uri replace /de /
-	uri replace /es /
-	uri replace /fr /
-	uri replace /it /
-	uri replace /pt /
-	uri replace /tr /
-
-	handle /blogs* {
-		handle /blogs/* {
-			uri path_regexp /blogs/([^/]+) /communities/$1/records
-		}
-		handle {
-			uri replace /blogs /communities/search
-		}
-
-		uri query {
-			query>q
-			page>p
-			-category
-			-generator
-			-language
-		}
-
-		reverse_proxy https://beta.rogue-scholar.org {
-			header_up Host {upstream_hostport}
-			transport http {
-				tls_insecure_skip_verify
-			}
-		}
-
-		handle {
-			handle /posts {
-				uri replace /posts /
-			}
-			handle / {
-				uri replace / /search
-			}
-			uri query {
-				query>q
-				tags>f
-				page>p
-				-category
-				-generator
-				-language
-				f (\D+) subject:$1
-			}
-
-			reverse_proxy https://beta.rogue-scholar.org {
-				header_up Host {upstream_hostport}
-				transport http {
-					tls_insecure_skip_verify
-				}
-			}
-		}
-	}
+	redir https://rogue-scholar.org{uri}
+}
