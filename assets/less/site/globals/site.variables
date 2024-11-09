@@ -12,29 +12,29 @@
     Brand Colors
 --------------------*/
 
-@primaryColor        : @blue;
+@primaryColor        : @sky;
 @secondaryColor      : @grey;
 
-@lightPrimaryColor   : @lightBlue;
+@lightPrimaryColor   : @lightSky;
 @lightSecondaryColor : @lightGrey;
 
-@darkPrimaryColor    : @darkBlue;
+@darkPrimaryColor    : @darkSky;
 @darkSecondaryColor  : @darkGrey;
 
 /*-------------------
     Focused Input
 --------------------*/
 
-@focusedFormBorderColor: @red;
-@focusedFormMutedBorderColor: @red;
+@focusedFormBorderColor: @darkBlue;
+@focusedFormMutedBorderColor: @blue;
 
 /*-------------------
        Links
 --------------------*/
 
-@linkColor           : @red;
+@linkColor           : @darkBlue;
 @linkUnderline       : none;
-@linkHoverColor      : @darkRed;
+@linkHoverColor      : @blue;
 @linkHoverUnderline  : @linkUnderline;
 
 /*-------------------
@@ -49,7 +49,8 @@
 @olive            : #84cc16; // lime
 @green            : #22c55e;
 @teal             : #14b8a6;
-@blue             : #0ea5e9; // sky
+@sky              : #0ea5e9;
+@blue             : #3b82f6;
 @violet           : #8b5cf6;
 @purple           : #a855f7;
 @pink             : #ec4899;
@@ -64,7 +65,8 @@
 @lightOlive       : #bef264; // lime
 @lightGreen       : #86efac;
 @lightTeal        : #5eead4;
-@lightBlue        : #7dd3fc; // sky
+@lightSky         : #7dd3fc;
+@lightBlue        : #93c5fd;
 @lightViolet      : #c4b5fd;
 @lightPurple      : #d8b4fe;
 @lightPink        : #f9a8d4;
@@ -90,7 +92,8 @@
 @darkOlive       : #4d7c0f; // lime
 @darkGreen       : #15803d;
 @darkTeal        : #0f766e;
-@darkBlue        : #0369a1; // sky
+@darkSky         : #0369a1;
+@darkBlue        : #1d4ed8;
 @darkViolet      : #6d28d9;
 @darkPurple      : #7e22ce;
 @darkPink        : #be185d;
