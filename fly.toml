@@ -24,7 +24,7 @@ primary_region = 'fra'
   # Invenio-Theme
   INVENIO_THEME_FRONTPAGE_TITLE = "Science blogging on steroids."
   INVENIO_THEME_FRONTPAGE_SUBTITLE = "The Rogue Scholar science blog archive improves science blogs in important ways, including full-text search, long-term archiving, DOIs and metadata, and communities."
-  INVENIO_THEME_LOGO = "images/rogue-scholar.svg"
+  INVENIO_THEME_LOGO = "images/rogue-scholar-white.svg"
   INVENIO_THEME_SHOW_FRONTPAGE_INTRO_SECTION = "False"
   INVENIO_THEME_SITENAME = "Rogue Scholar"
 
