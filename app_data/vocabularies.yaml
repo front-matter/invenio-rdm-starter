@@ -12,7 +12,7 @@ names:
   data-file: vocabularies/names.yaml
 licenses:
   pid-type: lic
-  data-file: vocabularies/rs_licences.csv
+  data-file: vocabularies/licences.csv
 languages:
   pid-type: lng
   data-file: vocabularies/languages.yaml
