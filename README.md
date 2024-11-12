@@ -140,6 +140,8 @@ the `invenio-cli` command-line tool in the following ways:
 
 The Caddy reverse proxy auto-generates a self-signed SSL certificate on localhost. This is an intermediary certificate, the corresponding root certificate isn't automatically used in a Docker Compose setup. You can copy the root certificate (Caddy Local Authority - 2024 ECC Root) from your running Caddy container (data/caddy/pki/authorities/local/root.crt) into your operating system certificate store. The root certificate only works on localhost and is valid for 10 years.
 
+Alternatively allow requests to localhost over HTTPS even when an invalid certificate is presented. In Chrome go to chrome://flags/#allow-insecure-localhost
+
 ### How do I delete the InvenioRDM Postgres database?
 
 ```bash
