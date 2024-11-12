@@ -25,16 +25,16 @@
     Focused Input
 --------------------*/
 
-@focusedFormBorderColor: @darkBlue;
-@focusedFormMutedBorderColor: @blue;
+@focusedFormBorderColor: @red;
+@focusedFormMutedBorderColor: @red;
 
 /*-------------------
        Links
 --------------------*/
 
-@linkColor           : @darkBlue;
+@linkColor           : @red;
 @linkUnderline       : none;
-@linkHoverColor      : @blue;
+@linkHoverColor      : @darkRed;
 @linkHoverUnderline  : @linkUnderline;
 
 /*-------------------
