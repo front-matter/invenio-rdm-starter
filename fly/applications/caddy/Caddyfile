@@ -1,9 +1,0 @@
-{
-	auto_https off
-	log {
-		level ERROR
-	}
-}
-:8080 {
-	redir https://rogue-scholar.org{uri}
-}
