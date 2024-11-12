@@ -3,7 +3,6 @@
   Copyright (C) 2019-2020 CERN.
   Copyright (C) 2019-2020 Northwestern University.
   Copyright (C) 2021 Graz University of Technology.
-  Copyright (C) 2024 Front Matter.
 
   Invenio App RDM is free software; you can redistribute it and/or modify it
   under the terms of the MIT License; see LICENSE file for more details.
@@ -15,42 +14,42 @@
       {%- block footer_top_left %}
         <div class="ui grid app-rdm-footer">
         <div class="rdm-footer five wide tablet two wide computer column">
-          <h2 class="ui small header">{{ _ ("About") }}</h2>
-          {% trans rogue_scholar_overview="/about" %}
-            <p><a href="{{ rogue_scholar_overview }}" target="_blank">Overview</a></p>
+          <h2 class="ui small header">{{ _("About InvenioRDM") }}</h2>
+          {% trans invenio_rdm="http://inveniosoftware.org/products/rdm" %}
+            <p><a href="{{ invenio_rdm }}">Product page</a></p>
           {% endtrans %}
-          {% trans rogue_scholar_faq="/about#faq" %}
-            <p><a href="{{ rogue_scholar_faq }}" target="_blank">FAQ</a></p>
+          {% trans invenio_rdm_features="https://inveniosoftware.org/products/rdm/#features" %}
+            <p><a href="{{ invenio_rdm_features }}">Features</a></p>
           {% endtrans %}
-          {% trans rogue_scholar_stats="/about#stats" %}
-            <p><a href="{{ rogue_scholar_stats }}" target="_blank">Stats</a></p>
+          {% trans invenio_rdm_roadmap="https://inveniosoftware.org/products/rdm/roadmap/" %}
+            <p><a href="{{ invenio_rdm_roadmap }}">Roadmap</a></p>
           {% endtrans %}
-          {% trans rogue_scholar_register="/auth/signin" %}
-          <p><a href="{{ rogue_scholar_register }}" target="_blank">Register Your Blog</a></p>
-        {% endtrans %}
+          {% trans invenio_rdm_demo_site="http://inveniordm.web.cern.ch" %}
+            <p><a href="{{ invenio_rdm_demo_site }}">Demo site</a></p>
+          {% endtrans %}
+        </div>
+        <div class="rdm-footer five wide tablet two wide computer column">
+          <h2 class="ui small header">{{ _ ("Get involved") }}</h2>
+          {% trans invenio_rdm_gh="https://github.com/inveniosoftware/invenio-app-rdm" %}
+            <p><a href="{{ invenio_rdm_gh }}">GitHub</a></p>
+          {% endtrans %}
+          {% trans invenio_rdm_milestones="https://github.com/inveniosoftware/product-rdm" %}
+            <p><a href="{{ invenio_rdm_milestones }}">Project Milestones</a></p>
+          {% endtrans %}
+          {% trans invenio_rdm_docs_site="http://inveniordm.docs.cern.ch" %}
+            <p><a href="{{ invenio_rdm_docs_site }}">Documentation</a></p>
+          {% endtrans %}
         </div>
         <div class="rdm-footer five wide tablet two wide computer column">
           <h2 class="ui small header">{{ _ ("Community") }}</h2>
-          {% trans rogue_scholar_board="/board" %}
-            <p><a href="{{ rogue_scholar_board }}" target="_blank">Advisory Board</a></p>
+          {% trans invenio_rdm_chatroom="https://discord.gg/8qatqBC" %}
+            <p><a href="{{ invenio_rdm_chatroom }}">Chatroom</a></p>
           {% endtrans %}
-          {% trans rogue_scholar_blog="https://blog.front-matter.io/tag/rogue-scholar/" %}
-            <p><a href="{{ rogue_scholar_blog }}" target="_blank">Blog</a></p>
+          {% trans invenio_rdm_talk="https://invenio-talk.web.cern.ch/c/projects/invenio-rdm" %}
+            <p><a href="{{ invenio_rdm_talk }}">Forum</a></p>
           {% endtrans %}
-          {% trans rogue_scholar_documentation="https://docs.rogue-scholar.org/" %}
-            <p><a href="{{ rogue_scholar_documentation }}" target="_blank">Documentation</a></p>
-          {% endtrans %}
-          {% trans rogue_scholar_discussions="https://github.com/front-matter/rogue-scholar/discussions" %}
-            <p><a href="{{ rogue_scholar_discussions }}" target="_blank">Discussions</a></p>
-          {% endtrans %}
-        </div>
-        <div class="rdm-footer five wide tablet two wide computer column">
-          <h2 class="ui small header">{{ _("Support") }}</h2>
-          {% trans rogue_scholar_donate="https://ko-fi.com/rogue_scholar" %}
-            <p><a href="{{ rogue_scholar_donate }}" target="_blank">Donate</a></p>
-          {% endtrans %}
-          {% trans rogue_scholar_status="https://status.rogue-scholar.org/" %}
-            <p><a href="{{ rogue_scholar_status }}" target="_blank">Status</a></p>
+          {% trans invenio_events="https://inveniosoftware.org/events/" %}
+            <p><a href="{{ invenio_events }}">Events & training</a></p>
           {% endtrans %}
         </div>
 
