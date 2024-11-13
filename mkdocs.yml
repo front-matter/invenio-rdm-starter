@@ -19,8 +19,8 @@ markdown_extensions:
   - def_list
 theme:
   name: material
-  custom_dir: overrides
-  logo: assets/logo.png
+  custom_dir: docs
+  logo: docs/assets/logo.png
   palette:    
     - media: "(prefers-color-scheme: light)"
       scheme: starter-light
