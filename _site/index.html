@@ -806,7 +806,8 @@
 <p>When you run Docker Compose for the first time, run the setup script to set up the InvenioRDM database and Elasticsearch indexes.</p>
 <div class="language-bash highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>docker<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>-it<span class="w"> </span>invenio-rdm-starter-worker-1<span class="w"> </span>setup.sh
 </span></code></pre></div>
-<p>Open a web browser and navigate to <a href="https://localhost">https://localhost</a>. One default admin user (email <code>admin@inveniosoftware.org</code>) is created during setup. Go to <a href="https://localhost/lost-password/">https://localhost/lost-password/</a> to trigger a password reset - you find the reset link in the Docker Compose logs.</p>
+<p>Open a web browser and navigate to <a href="https://localhost">https://localhost</a>. One default admin user (email <code>admin@inveniosoftware.org</code>) is created during setup. Go to <a href="https://localhost/lost-password/">https://localhost/lost-password/</a> to trigger a password reset - you find the reset link in the Docker Compose logs. Follow the link and set a new password:</p>
+<p><img alt="Reset Password" src="assets/reset-password.png" /></p>
 <h2 id="configuration">Configuration</h2>
 <p>The <code>docker-compose.yml</code> configuration can be modified to suit your needs using environment variables in an <code>.env</code> file in the same folder:</p>
 <h3 id="flask">Flask</h3>
