@@ -20,7 +20,7 @@ markdown_extensions:
 theme:
   name: material
   custom_dir: docs
-  logo: docs/assets/logo.png
+  logo: assets/logo.png
   palette:    
     - media: "(prefers-color-scheme: light)"
       scheme: starter-light
