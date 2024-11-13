@@ -41,7 +41,13 @@ Run `docker-compose up` in the same directory as the `docker-compose.yml` file.
 docker compose up
 ```
 
-Open a web browser and navigate to [https://localhost](https://localhost). One default admin user is created during setup: email `admin@inveniosoftware.org`, password `changeme`.
+When you run Docker Compose for the first time, run the setup script to set up the InvenioRDM database and Elasticsearch indexes.
+
+```bash
+docker exec -it invenio-rdm-starter-worker-1 setup.sh
+```
+
+Open a web browser and navigate to [https://localhost](https://localhost). One default admin user is created during setup: email `admin@inveniosoftware.org`. The password is generated randomly.
 
 ## Configuration
 
@@ -138,6 +144,8 @@ the `invenio-cli` command-line tool in the following ways:
 
 The Caddy reverse proxy auto-generates a self-signed SSL certificate on localhost. This is an intermediary certificate, the corresponding root certificate isn't automatically used in a Docker Compose setup. You can copy the root certificate (Caddy Local Authority - 2024 ECC Root) from your running Caddy container (data/caddy/pki/local/root.crt) into your operating system certificate store. The root certificate only works on localhost and is valid for 10 years.
 
+Alternatively allow requests to localhost over HTTPS even when an invalid certificate is presented. In Chrome go to chrome://flags/#allow-insecure-localhost and enable the flag.
+
 ### How do I delete the InvenioRDM Postgres database?
 
 ```bash
@@ -148,6 +156,18 @@ docker exec -it invenio-rdm-starter-web-1 invenio db drop --yes-i-know
 
 ```bash
 docker exec -it invenio-rdm-starter-web-1 invenio index destroy --force --yes-i-know
+```
+
+### How do I schedule a reindex of the InvenioRDM database?
+
+```bash
+docker exec -it invenio-rdm-starter-web-1 invenio rdm rebuild-all-indices
+```
+
+### How do I add vocabularies to a running InvenioRDM instance, e.g. names or affiliations?
+
+```bash
+docker exec -it invenio-rdm-starter-web-1 invenio rdm-records add-to-fixture affiliations
 ```
 
 ### Isn't InvenioRDM depending on Python 3.9?
