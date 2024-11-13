@@ -47,7 +47,7 @@ When you run Docker Compose for the first time, run the setup script to set up t
 docker exec -it invenio-rdm-starter-worker-1 setup.sh
 ```
 
-Open a web browser and navigate to [https://localhost](https://localhost). One default admin user is created during setup: email `admin@inveniosoftware.org`. The password is generated randomly.
+Open a web browser and navigate to [https://localhost](https://localhost). One default admin user (email `admin@inveniosoftware.org`) is created during setup. Go to [https://localhost/lost-password/](https://localhost/lost-password/) to trigger a password reset - you find the reset link in the Docker Compose logs.
 
 ## Configuration
 
