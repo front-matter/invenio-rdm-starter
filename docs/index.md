@@ -142,6 +142,10 @@ the `invenio-cli` command-line tool in the following ways:
 
 ## FAQ
 
+### Where can I ask questions about InvenioRDM Starter?
+
+Please use the [InvenioRDM Starter GitHub Discussions](https://github.com/front-matter/invenio-rdm-starter/discussions). You can ask general InvenioRDM questions in the Inveniosoftware Discord Chatroom [https://discord.gg/8qatqBC](https://discord.gg/8qatqBC).
+
 ### How do I get a secure SSL certificate on localhost?
 
 The Caddy reverse proxy auto-generates a self-signed SSL certificate on localhost. This is an intermediary certificate, the corresponding root certificate isn't automatically used in a Docker Compose setup. You can copy the root certificate (Caddy Local Authority - 2024 ECC Root) from your running Caddy container (data/caddy/pki/local/root.crt) into your operating system certificate store. The root certificate only works on localhost and is valid for 10 years.
@@ -178,7 +182,7 @@ InvenioRDM Starter uses Python 3.12 ([the current version](https://devguide.pyth
 
 ### Don't I need RabbitMQ for the InvenioRDM message broker?
 
-The Python Celery framework can [use either Redis or RabbitMQ](https://docs.celeryq.dev/en/stable/getting-started/backends-and-brokers/index.html) as the message broker (and Redis as the backend). I will be doing a detailed comparison of the two brokers for InvenioRDM.
+The Python Celery framework can [use either Redis or RabbitMQ](https://docs.celeryq.dev/en/stable/getting-started/backends-and-brokers/index.html) as the message broker (and Redis as the backend).
 
 ### Why use Debian instead of Almalinux as Linux distribution for the Docker image?
 
