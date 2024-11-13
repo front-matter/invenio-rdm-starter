@@ -477,6 +477,20 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#how-do-i-schedule-a-reindex-of-the-inveniordm-database" class="md-nav__link">
+    How do I schedule a reindex of the InvenioRDM database?
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#how-do-i-add-vocabularies-to-a-running-inveniordm-instance-eg-names-or-affiliations" class="md-nav__link">
+    How do I add vocabularies to a running InvenioRDM instance, e.g. names or affiliations?
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#isnt-inveniordm-depending-on-python-39" class="md-nav__link">
     Isn't InvenioRDM depending on Python 3.9?
   </a>
@@ -700,6 +714,20 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#how-do-i-schedule-a-reindex-of-the-inveniordm-database" class="md-nav__link">
+    How do I schedule a reindex of the InvenioRDM database?
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#how-do-i-add-vocabularies-to-a-running-inveniordm-instance-eg-names-or-affiliations" class="md-nav__link">
+    How do I add vocabularies to a running InvenioRDM instance, e.g. names or affiliations?
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#isnt-inveniordm-depending-on-python-39" class="md-nav__link">
     Isn't InvenioRDM depending on Python 3.9?
   </a>
@@ -775,7 +803,10 @@
 <p>Run <code>docker-compose up</code> in the same directory as the <code>docker-compose.yml</code> file.</p>
 <div class="language-bash highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>docker<span class="w"> </span>compose<span class="w"> </span>up
 </span></code></pre></div>
-<p>Open a web browser and navigate to <a href="https://localhost">https://localhost</a>. One default admin user is created during setup: email <code>admin@inveniosoftware.org</code>, password <code>changeme</code>.</p>
+<p>When you run Docker Compose for the first time, run the setup script to set up the InvenioRDM database and Elasticsearch indexes.</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>docker<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>-it<span class="w"> </span>invenio-rdm-starter-worker-1<span class="w"> </span>setup.sh
+</span></code></pre></div>
+<p>Open a web browser and navigate to <a href="https://localhost">https://localhost</a>. One default admin user (email <code>admin@inveniosoftware.org</code>) is created during setup. Go to <a href="https://localhost/lost-password/">https://localhost/lost-password/</a> to trigger a password reset - you find the reset link in the Docker Compose logs.</p>
 <h2 id="configuration">Configuration</h2>
 <p>The <code>docker-compose.yml</code> configuration can be modified to suit your needs using environment variables in an <code>.env</code> file in the same folder:</p>
 <h3 id="flask">Flask</h3>
@@ -871,11 +902,18 @@ the <code>invenio-cli</code> command-line tool in the following ways:</p>
 <h2 id="faq">FAQ</h2>
 <h3 id="how-do-i-get-a-secure-ssl-certificate-on-localhost">How do I get a secure SSL certificate on localhost?</h3>
 <p>The Caddy reverse proxy auto-generates a self-signed SSL certificate on localhost. This is an intermediary certificate, the corresponding root certificate isn't automatically used in a Docker Compose setup. You can copy the root certificate (Caddy Local Authority - 2024 ECC Root) from your running Caddy container (data/caddy/pki/local/root.crt) into your operating system certificate store. The root certificate only works on localhost and is valid for 10 years.</p>
+<p>Alternatively allow requests to localhost over HTTPS even when an invalid certificate is presented. In Chrome go to chrome://flags/#allow-insecure-localhost and enable the flag.</p>
 <h3 id="how-do-i-delete-the-inveniordm-postgres-database">How do I delete the InvenioRDM Postgres database?</h3>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>docker<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>-it<span class="w"> </span>invenio-rdm-starter-web-1<span class="w"> </span>invenio<span class="w"> </span>db<span class="w"> </span>drop<span class="w"> </span>--yes-i-know
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>docker<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>-it<span class="w"> </span>invenio-rdm-starter-web-1<span class="w"> </span>invenio<span class="w"> </span>db<span class="w"> </span>drop<span class="w"> </span>--yes-i-know
 </span></code></pre></div>
 <h3 id="how-do-i-remove-the-inveniordm-opensearch-indexes">How do I remove the InvenioRDM OpenSearch indexes?</h3>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>docker<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>-it<span class="w"> </span>invenio-rdm-starter-web-1<span class="w"> </span>invenio<span class="w"> </span>index<span class="w"> </span>destroy<span class="w"> </span>--force<span class="w"> </span>--yes-i-know
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>docker<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>-it<span class="w"> </span>invenio-rdm-starter-web-1<span class="w"> </span>invenio<span class="w"> </span>index<span class="w"> </span>destroy<span class="w"> </span>--force<span class="w"> </span>--yes-i-know
+</span></code></pre></div>
+<h3 id="how-do-i-schedule-a-reindex-of-the-inveniordm-database">How do I schedule a reindex of the InvenioRDM database?</h3>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>docker<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>-it<span class="w"> </span>invenio-rdm-starter-web-1<span class="w"> </span>invenio<span class="w"> </span>rdm<span class="w"> </span>rebuild-all-indices
+</span></code></pre></div>
+<h3 id="how-do-i-add-vocabularies-to-a-running-inveniordm-instance-eg-names-or-affiliations">How do I add vocabularies to a running InvenioRDM instance, e.g. names or affiliations?</h3>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>docker<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>-it<span class="w"> </span>invenio-rdm-starter-web-1<span class="w"> </span>invenio<span class="w"> </span>rdm-records<span class="w"> </span>add-to-fixture<span class="w"> </span>affiliations
 </span></code></pre></div>
 <h3 id="isnt-inveniordm-depending-on-python-39">Isn't InvenioRDM depending on Python 3.9?</h3>
 <p>InvenioRDM Starter uses Python 3.12 (<a href="https://devguide.python.org/versions/">the current version</a>), but doesn't use any features of Python 3.10-3.12. Please report any Python 3.12-related issues you encounter. Python 3.9 reaches end-of-life in October 2025.</p>
