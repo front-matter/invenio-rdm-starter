@@ -2,21 +2,21 @@
          Invenio RDM Starter List Overrides
 ***********************************************/
 
-/***********************************************
-         Invenio RDM Starter List Overrides
-***********************************************/
+@orderedCountName: ordered;
+@orderedCountContent: counters(ordered, ".");
+@orderedCountDistance: 1.25rem;
 
 ol.details-list {
-  counter-reset: ordered 1;
-
   li {
     padding-left: 0 !important;
     line-height: 20px !important;
-    display: list-item !important;
-    list-style: decimal !important;
 
     &:not(:last-child) {
       margin-bottom: 0.25rem !important;
     }
-  }
+}
+ol.details-list > .item:before {
+  margin-left: -(@orderedCountDistance);
+  counter-increment: @orderedCountName;
+  content: @orderedCountContent;
 }
