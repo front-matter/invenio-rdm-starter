@@ -1,0 +1,338 @@
+{#
+  Copyright (C) 2020-2021 CERN.
+  Copyright (C) 2020-2021 Northwestern University.
+  Copyright (C) 2021 New York University.
+
+  Invenio RDM Records is free software; you can redistribute it and/or modify
+  it under the terms of the MIT License; see LICENSE file for more details.
+#}
+
+
+{%- from "invenio_app_rdm/records/macros/detail.html" import show_section_custom_fields, show_references, show_add_titles,
+show_alternate_identifiers, show_related_identifiers, show_funding, show_dates %}
+
+{% set hasContent = namespace(value=false) %}
+{% set hasContent.value = record.ui.additional_titles or
+                    metadata.identifiers or
+                    record.ui.related_identifiers or
+                    metadata.funding or
+                    record.ui.dates or
+                    metadata.references
+%}
+
+{# Check if custom field has values if no other content #}
+{% if record.ui.custom_fields and not hasContent.value %}
+  {% for section_cfg in custom_fields_ui %}
+    {% for field_cfg in section_cfg.fields %}
+      {% if record.custom_fields.get(field_cfg.field) %}
+        {% set hasContent.value = true %}
+      {% endif %}
+    {% endfor %}
+  {% endfor %}
+{% endif %}
+
+{% set rights = record.ui.get('rights') %}
+{% set funding = record.ui.get('funding') %}
+
+{% if hasContent.value %}
+  <h2 id="record-details-heading">{{ _('Additional details') }}</h2>
+
+  <div class="ui divider"></div>
+
+  {% if record.ui.additional_titles %}
+    {% if record.ui.additional_titles|length > 5 %}
+      <div class="ui fluid accordion padded grid rel-mb-1">
+        <div class="active title sixteen wide mobile four wide tablet three wide computer column">
+          <h3 class="ui header">
+            <div
+              id="additional-titles-accordion-trigger"
+              role="button"
+              tabindex="0"
+              aria-expanded="true"
+              aria-controls="additional-titles-panel"
+              class="trigger"
+            >
+              <i class="caret right icon" aria-hidden="true"></i>{{ _('Additional titles') }}
+            </div>
+          </h3>
+        </div>
+        <div
+          id="additional-titles-panel"
+          role="region"
+          aria-labelledby="additional-titles-accordion-trigger"
+          class="active content sixteen wide mobile twelve wide tablet thirteen wide computer column"
+        >
+          <dl class="details-list">
+            {{ show_add_titles(record.ui.additional_titles) }}
+          </dl>
+        </div>
+      </div>
+    {% else %}
+      <div class="ui grid">
+        <div class="sixteen wide mobile four wide tablet three wide computer column">
+          <h3 class="ui header">{{ _('Additional titles') }}</h3>
+        </div>
+        <div class="sixteen wide mobile twelve wide tablet thirteen wide computer column">
+          <dl class="details-list">
+            {{ show_add_titles(record.ui.additional_titles) }}
+          </dl>
+        </div>
+      </div>
+    {% endif %}
+    <div class="ui divider"></div>
+  {% endif %}
+
+  {% if metadata.identifiers %}
+    {% if metadata.identifiers|length > 5 %}
+      <div class="ui fluid accordion padded grid rel-mb-1">
+        <div class="active title sixteen wide mobile four wide tablet three wide computer column">
+          <h3 class="ui header">
+            <div
+              id="identifiers-accordion-trigger"
+              role="button"
+              tabindex="0"
+              aria-expanded="true"
+              aria-controls="identifiers-panel"
+              class="trigger"
+            >
+              <i class="caret right icon" aria-hidden="true"></i>{{ _('Identifiers') }}
+            </div>
+          </h3>
+        </div>
+        <div
+          id="identifiers-panel"
+          role="region"
+          aria-labelledby="identifiers-accordion-trigger"
+          class="active content sixteen wide mobile twelve wide tablet thirteen wide computer column"
+        >
+          <dl class="details-list">
+            {{ show_alternate_identifiers(metadata.identifiers) }}
+          </dl>
+        </div>
+      </div>
+    {% else %}
+      <div class="ui grid">
+        <div class="sixteen wide mobile four wide tablet three wide computer column">
+          <h3 class="ui header">{{ _('Identifiers') }}</h3>
+        </div>
+        <div class="sixteen wide mobile twelve wide tablet thirteen wide computer column">
+          <dl class="details-list">
+            {{ show_alternate_identifiers(metadata.identifiers) }}
+          </dl>
+        </div>
+      </div>
+    {% endif %}
+    <div class="ui divider"></div>
+  {% endif %}
+
+  {% if record.ui.related_identifiers %}
+    {% if record.ui.related_identifiers|length > 5 %}
+      <div class="ui fluid accordion padded grid rel-mb-1">
+        <div class="active title sixteen wide mobile four wide tablet three wide computer column">
+          <h3 class="ui header">
+            <div
+              id="related-works-accordion-trigger"
+              role="button"
+              tabindex="0"
+              aria-expanded="true"
+              aria-controls="related-works-panel"
+              class="trigger"
+            >
+              <i class="caret right icon" aria-hidden="true"></i>{{ _('Related works') }}
+            </div>
+          </h3>
+        </div>
+        <div
+          id="related-works-panel"
+          role="region"
+          aria-labelledby="related-works-accordion-trigger"
+          class="active content sixteen wide mobile twelve wide tablet thirteen wide computer column"
+        >
+          {{ show_related_identifiers(record.ui.related_identifiers) }}
+        </div>
+      </div>
+    {% else %}
+      <div class="ui grid">
+        <div class="sixteen wide mobile four wide tablet three wide computer column">
+          <h3 class="ui header">{{ _('Related works') }}</h3>
+        </div>
+        <div class="sixteen wide mobile twelve wide tablet thirteen wide computer column">
+          {{ show_related_identifiers(record.ui.related_identifiers) }}
+        </div>
+      </div>
+    {% endif %}
+    <div class="ui divider"></div>
+  {% endif %}
+
+  {% if funding %}
+   {% if funding|length > 5 %}
+    <div class="ui fluid accordion padded grid rel-mb-1">
+      <div class="active title sixteen wide mobile four wide tablet three wide computer column">
+        <h3 class="ui header">
+          <div
+            id="funding-accordion-trigger"
+            role="button"
+            tabindex="0"
+            aria-expanded="true"
+            aria-controls="funding-panel"
+            class="trigger"
+          >
+            <i class="caret right icon" aria-hidden="true"></i>{{ _('Funding') }}
+          </div>
+        </h3>
+      </div>
+      <div
+        id="funding-panel"
+        role="region"
+        aria-labelledby="funding-accordion-trigger"
+        class="active content sixteen wide mobile twelve wide tablet thirteen wide computer column"
+      >
+        <dl class="details-list">
+          {{ show_funding(funding) }}
+        </dl>
+      </div>
+    </div>
+    {% else %}
+      <div class="ui grid">
+        <div class="sixteen wide mobile four wide tablet three wide computer column">
+          <h3 class="ui header">{{ _('Funding') }}</h3>
+        </div>
+        <div class="sixteen wide mobile twelve wide tablet thirteen wide computer column">
+          <dl class="details-list">
+            {{ show_funding(funding) }}
+          </dl>
+        </div>
+      </div>
+    {% endif %}
+    <div class="ui divider"></div>
+  {% endif %}
+
+  {% if record.ui.dates %}
+    {% if record.ui.dates|length > 5 %}
+      <div class="ui fluid accordion padded grid rel-mb-1">
+        <div class="active title sixteen wide mobile four wide tablet three wide computer column">
+          <h3 class="ui header">
+            <div
+              id="dates-accordion-trigger"
+              role="button"
+              tabindex="0"
+              aria-expanded="true"
+              aria-controls="dates-panel"
+              class="trigger"
+            >
+              <i class="caret right icon" aria-hidden="true"></i>{{ _('Dates') }}
+            </div>
+          </h3>
+        </div>
+        <div
+          id="dates-panel"
+          role="region"
+          aria-labelledby="dates-accordion-trigger"
+          class="active content sixteen wide mobile twelve wide tablet thirteen wide computer column"
+        >
+          <dl class="details-list">
+            {{ show_dates(record.ui.dates) }}
+          </dl>
+        </div>
+      </div>
+    {% else %}
+      <div class="ui grid">
+        <div class="sixteen wide mobile four wide tablet three wide computer column">
+          <h3 class="ui header">{{ _('Dates') }}</h3>
+        </div>
+        <div class="sixteen wide mobile twelve wide tablet thirteen wide computer column">
+          <dl class="details-list">
+            {{ show_dates(record.ui.dates) }}
+          </dl>
+        </div>
+      </div>
+    {% endif %}
+    <div class="ui divider"></div>
+  {% endif %}
+
+  {% if record.custom_fields %}
+
+    {%- for section_cfg in custom_fields_ui %}
+      {% set section_has_fields = namespace(value=false) %}
+      {% set section_format = section_cfg.section | replace(" ", "-") %}
+      {# Show the section if at least one of its fields is in record #}
+      {% for field_cfg in section_cfg.fields %}
+        {% if record.custom_fields.get(field_cfg.field) %}
+          {% set section_has_fields.value = true %}
+        {% endif %}
+      {% endfor %}
+
+      {% if section_has_fields.value %}
+        <div class="ui fluid accordion padded grid rel-mb-1">
+          <div class="active title sixteen wide mobile four wide tablet three wide computer column">
+            <h3 class="ui header">
+              <div
+                id="custom-fields-accordion-trigger"
+                role="button"
+                tabindex="0"
+                aria-expanded="true"
+                aria-controls="custom-fields-panel"
+                class="trigger"
+              >
+                <i class="caret right icon" aria-hidden="true"></i>{{ section_cfg.section }}
+              </div>
+            </h3>
+          </div>
+          <div
+            id="custom-fields-panel"
+            role="region"
+            aria-labelledby="custom-fields-accordion-trigger"
+            class="active content sixteen wide mobile twelve wide tablet thirteen wide computer column"
+          >
+              {% set section_format = section_cfg.section | replace(" ", "-") %}
+              <dl class="details-list">
+                {{ show_section_custom_fields(record.ui.custom_fields, section_cfg.fields) }}
+              </dl>
+          </div>
+        </div>
+        <div class="ui divider"></div>
+      {% endif %}
+    {%- endfor %}
+  {% endif %}
+
+  {% if metadata.references %}
+    {% if metadata.references|length > 5 %}
+      <div class="ui fluid accordion padded grid rel-mb-1">
+        <div class="active title sixteen wide mobile four wide tablet three wide computer column">
+          <h3 class="ui header">
+            <div
+              id="references-accordion-trigger"
+              role="button"
+              tabindex="0"
+              aria-expanded="true"
+              aria-controls="references-panel"
+              class="trigger"
+            >
+              <i class="caret right icon" aria-hidden="true"></i>{{ _('References') }}
+            </div>
+          </h3>
+        </div>
+        <div
+          id="references-panel"
+          role="region"
+          aria-labelledby="references-accordion-trigger"
+          class="active content sixteen wide mobile twelve wide tablet thirteen wide computer column"
+        >
+          {{ show_references(metadata.references) }}
+        </div>
+      </div>
+    {% else %}
+      <div class="ui grid">
+        <div class="sixteen wide mobile four wide tablet three wide computer column">
+          <h3 class="ui header">{{ _('References') }}</h3>
+        </div>
+        <div class="sixteen wide mobile twelve wide tablet thirteen wide computer column">
+          {{ show_references(metadata.references) }}
+        </div>
+      </div>
+    {% endif %}
+    <div class="ui divider"></div>
+  {% endif %}
+{% endif %}
+
+{% block extras %}{% endblock %}
