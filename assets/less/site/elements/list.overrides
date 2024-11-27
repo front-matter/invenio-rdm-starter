@@ -7,16 +7,16 @@
 ***********************************************/
 
 ol.details-list {
+  counter-reset: ordered 1;
+
   li {
     padding-left: 0 !important;
     line-height: 20px !important;
+    display: list-item !important;
+    list-style: decimal !important;
 
     &:not(:last-child) {
       margin-bottom: 0.25rem !important;
     }
   }
-}
-
-ol.details-list > .item:before {
-  content: @orderedCountContent;
 }
