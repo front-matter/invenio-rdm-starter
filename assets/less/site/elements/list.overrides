@@ -3,7 +3,7 @@
 ***********************************************/
 
 @orderedCountName: ordered;
-@orderedCountContent: counters(ordered) ". ");
+@orderedCountContent: counters(ordered) ". ";
 @orderedCountColor: @textColor;
 @orderedCountDistance: 1.5rem;
 @orderedCountOpacity: 0.8;
@@ -20,6 +20,7 @@ ol.details-list {
     }
   }
   li.item:before {
+    display: inline-block;
     position: absolute;
     top: auto;
     left: auto;
