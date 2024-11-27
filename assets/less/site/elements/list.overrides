@@ -15,8 +15,8 @@ ol.details-list {
       margin-bottom: 0.25rem !important;
     }
 }
-ol.details-list > .item:before {
-  margin-left: -(@orderedCountDistance);
-  counter-increment: @orderedCountName;
-  content: @orderedCountContent;
+ol.details-list li.item:before {
+  margin-left: -(@orderedCountDistance) !important;
+  counter-increment: @orderedCountName !important;
+  content: @orderedCountContent !important;
 }
