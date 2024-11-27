@@ -135,25 +135,31 @@
 
 
 {% macro show_references(references) %}
-  <div class="ui ordered relaxed list details-list">
+  <ol class="ui ordered list details-list">
     {% for reference in references %}
       {% set reference_string = reference.reference %}
       {% if 'identifier' in reference %}
         {% if 'scheme' in reference %}
-          {%- set id_doi = reference.identifier %}
-          {% if id_doi %}
-            <div class="item">{{ reference_string }}
-              <a class="no-text-decoration" target="_blank" href="{{ id_doi|pid_url('doi') }}">
-                {{ id_doi|pid_url('doi') }}
+          {% set id = reference.identifier %}
+          {% if 'doi' == reference.scheme %}
+            <li class="item">{{ reference_string }}
+              <a class="no-text-decoration" target="_blank" href="{{ id|pid_url('doi') }}">
+                {{ id|pid_url('doi') }}
               </a>
-            </div>
+            </li>
+          {% elif 'url' == reference.scheme %}
+            <li class="item">{{ reference_string }}
+              <a class="no-text-decoration" target="_blank" href="{{ id }}">
+                {{ id }}
+              </a>
+            </li>
           {% endif %}
         {% endif %}
       {% else %}
-        <div class="item">{{ reference_string }}</div>
+        <li class="item">{{ reference_string }}</li>
       {% endif %}
     {% endfor %}
-  </div>
+  </ol>
 {% endmacro %}
 
 

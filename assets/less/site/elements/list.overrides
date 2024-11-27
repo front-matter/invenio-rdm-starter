@@ -1,0 +1,22 @@
+/***********************************************
+         Invenio RDM Starter List Overrides
+***********************************************/
+
+/***********************************************
+         Invenio RDM Starter List Overrides
+***********************************************/
+
+ol.details-list {
+  li {
+    padding-left: 0 !important;
+    line-height: 20px !important;
+
+    &:not(:last-child) {
+      margin-bottom: 0.25rem !important;
+    }
+  }
+}
+
+ol.details-list > .item:before {
+  content: @orderedCountContent;
+}
