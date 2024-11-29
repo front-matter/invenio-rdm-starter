@@ -1022,16 +1022,15 @@ wheels = [
 
 [[package]]
 name = "flask-webpackext"
-version = "1.0.2"
+version = "2.0.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "flask" },
-    { name = "pynpm" },
     { name = "pywebpack" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/af/68/3350b8553eaedcf8c48aa0f79404a7a332f4630715b566d4e2475d888350/flask-webpackext-1.0.2.tar.gz", hash = "sha256:36e4b2d19f3e12e0bb370248094e1631a0cf8e607e76ca8c437718395b90c7ad", size = 24148 }
+sdist = { url = "https://files.pythonhosted.org/packages/2c/15/10bafe1a2c041df276951582c821477206bf94c313ab4b11db002e8d73d6/flask_webpackext-2.0.0.tar.gz", hash = "sha256:7432c2e8d9039238f2f8476b004520278cd13ea3f802f9695536f273dce67f7e", size = 25360 }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/c1/d1/60d1a90be326b7d1d87e4a0d8e5aeadb843a8766642138fea3a802511a66/flask_webpackext-1.0.2-py2.py3-none-any.whl", hash = "sha256:6313903d5aad5f330cb14ce97e7fec22541da413d5fe71b33b1f1a2eb69e426f", size = 15718 },
+    { url = "https://files.pythonhosted.org/packages/e1/34/f4638174e8f6ca5271c0e9723310075295d4818db9daaebf6badda5d231e/flask_webpackext-2.0.0-py2.py3-none-any.whl", hash = "sha256:7b9d382d13de23e722095727038201cdeca1f046f3c287eae81271e9336062d8", size = 14705 },
 ]
 
 [[package]]
@@ -1360,7 +1359,7 @@ wheels = [
 
 [[package]]
 name = "invenio-app-rdm"
-version = "12.0.10"
+version = "12.0.12"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "cairosvg" },
@@ -1382,7 +1381,7 @@ dependencies = [
     { name = "invenio-i18n" },
     { name = "invenio-indexer" },
     { name = "invenio-jsonschemas" },
-    { name = "invenio-logging", extra = ["sentry-sdk"] },
+    { name = "invenio-logging" },
     { name = "invenio-mail" },
     { name = "invenio-oaiserver" },
     { name = "invenio-oauth2server" },
@@ -1400,24 +1399,23 @@ dependencies = [
     { name = "invenio-theme" },
     { name = "invenio-userprofiles" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/e0/f6/fdbfbf0cdb9a6dabc0bae9b067e5073bd531c29f3d59b03d37e49e393640/invenio-app-rdm-12.0.10.tar.gz", hash = "sha256:0b5f4ed954782f0015b3b1a603fd76df124665515f93a471d7bb6ed94b4355be", size = 418073 }
+sdist = { url = "https://files.pythonhosted.org/packages/f6/71/17005dc9e1cdaa4f91f1c94f54c584705c4131a05d5cafa7612cea6a3f93/invenio-app-rdm-12.0.12.tar.gz", hash = "sha256:56f5791bf2e12cc0ae44e84f4b98b940b2825d298e1d89b8dddf252d921b1caa", size = 418413 }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/ba/77/35604d1adb85264ae1fef0a73e62bd0dbf60ff0bb848be84a29c6891af93/invenio_app_rdm-12.0.10-py2.py3-none-any.whl", hash = "sha256:9aef573ae84551621be39003e04cf33441136b1b73ecf7a5be6bb4ff73d6d664", size = 865731 },
+    { url = "https://files.pythonhosted.org/packages/bf/3a/4f2550049765594351a7c205197c37a5847ed4f0545aebbee8853d947c2e/invenio_app_rdm-12.0.12-py2.py3-none-any.whl", hash = "sha256:e7a709f5a4ffdbdfb34d78cc8bd3a2df80bb07f346639366b2a0fc80187d0569", size = 865997 },
 ]
 
 [[package]]
 name = "invenio-assets"
-version = "3.0.3"
+version = "3.1.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "flask-collect-invenio" },
     { name = "flask-webpackext" },
     { name = "invenio-base" },
-    { name = "pywebpack" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/40/fc/a8140985157d7048b1afb31051df0127252477d2e548112fea5708291787/invenio-assets-3.0.3.tar.gz", hash = "sha256:620dffcaf228dd947aab9fc74f62bad20444a8f494ba2dda177c7b88e393c7d0", size = 27342 }
+sdist = { url = "https://files.pythonhosted.org/packages/3c/d2/aba7729d8a6a7baeab8184e4ddeed0bf58d4497edeeb492875a873c651dc/invenio_assets-3.1.0.tar.gz", hash = "sha256:0e5d86363a7088353ca24dce63df87278d82c98ada80db79222530cdac19aa6c", size = 28937 }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/7d/cc/928f37b867a019b7d04cf86d0a67703ff3c9aef289f4689c244e493c9e67/invenio_assets-3.0.3-py2.py3-none-any.whl", hash = "sha256:578fb3b7fdc4c0cc34ee7e3be3dd49e880d3fbc225499b09d54cfedec92fb48d", size = 16690 },
+    { url = "https://files.pythonhosted.org/packages/c5/2e/c44eec202feb40c2b400d80b38f314595b11685ac935b91c12a1bb353907/invenio_assets-3.1.0-py2.py3-none-any.whl", hash = "sha256:0641235db3687941f486f8cb2c0a59186130c2db79b7ec459ef10e6e736c36bd", size = 16844 },
 ]
 
 [[package]]
@@ -1895,7 +1893,7 @@ requires-dist = [
     { name = "gunicorn", specifier = "~=22.0.0" },
     { name = "idutils", specifier = "~=1.4.0" },
     { name = "importlib-metadata", specifier = "~=6.11.0" },
-    { name = "invenio-app-rdm", specifier = "~=12.0.10" },
+    { name = "invenio-app-rdm", specifier = "~=12.0.12" },
     { name = "invenio-rdm-records", specifier = "~=10.8.6" },
     { name = "invenio-records-resources", specifier = "~=5.10.0" },
     { name = "invenio-s3", specifier = "~=1.0.0" },
@@ -3187,15 +3185,15 @@ wheels = [
 
 [[package]]
 name = "pywebpack"
-version = "2.0.1"
+version = "2.1.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "importlib-metadata" },
     { name = "pynpm" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/f7/d4/cc605e4ea2093058d5c35ca15de028e82f4d8524f25242e5874f27069173/pywebpack-2.0.1.tar.gz", hash = "sha256:abb44d8f20797eb33c00415de523f32beeadd72310839af7b31c65e347d91178", size = 30224 }
+sdist = { url = "https://files.pythonhosted.org/packages/cf/50/8110373f6c1e1216b3dc791ccbe388630632578369be35b40f23cc78e339/pywebpack-2.1.0.tar.gz", hash = "sha256:ecc6b731db3b9448822ecb236923912379782dd81c6a3fba7cae8fa368b8db6c", size = 33304 }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/68/e2/06f2211768d5d8b7bbf8c1f7b6385d5413dd8140b63b04731a3d28c86542/pywebpack-2.0.1-py2.py3-none-any.whl", hash = "sha256:1fdd5f5582eed1bd211bc890b42fffd4f8a90000ec0697f42c5182ce0839f800", size = 16709 },
+    { url = "https://files.pythonhosted.org/packages/d7/79/5fb3ce5c011e40551d75afbbc99f4a185ae28af726a86b70dec7527c0a69/pywebpack-2.1.0-py2.py3-none-any.whl", hash = "sha256:d7ce2b0ce41ecd2809ae3cc7f8c4a8f927cf9f96da1340cd7e80b6b1dc5b55f9", size = 17598 },
 ]
 
 [[package]]
