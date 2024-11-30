@@ -1893,7 +1893,7 @@ requires-dist = [
     { name = "gunicorn", specifier = "~=22.0.0" },
     { name = "idutils", specifier = "~=1.4.0" },
     { name = "importlib-metadata", specifier = "~=6.11.0" },
-    { name = "invenio-app-rdm", specifier = "~=12.0.12" },
+    { name = "invenio-app-rdm", specifier = "~=12.0.10" },
     { name = "invenio-rdm-records", specifier = "~=10.8.6" },
     { name = "invenio-records-resources", specifier = "~=5.10.0" },
     { name = "invenio-s3", specifier = "~=1.0.0" },
