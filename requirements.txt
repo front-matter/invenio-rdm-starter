@@ -630,7 +630,7 @@ itsdangerous==2.0.1
     #   invenio-rest
 jedi==0.19.1
     # via ipython
-jinja2==3.1.4
+jinja2==3.1.5
     # via
     #   flask
     #   flask-babel
