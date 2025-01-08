@@ -4,10 +4,9 @@ site_url: https://starter.front-matter.io
 repo_url: https://github.com/front-matter/invenio-rdm-starter
 edit_uri: edit/main/docs/
 repo_name: front-matter/invenio-rdm-starter
-copyright: Copyright &copy; 2024 Front Matter
+copyright: Copyright &copy; 2024-2025 Front Matter
 plugins:
   - search
-  - material-plausible
 markdown_extensions:
   - pymdownx.highlight:
       anchor_linenums: true
@@ -40,11 +39,8 @@ extra:
     - icon: fontawesome/solid/paper-plane
       link: mailto:<info@front-matter.io>
     - icon: fontawesome/brands/mastodon 
-      link: https://mozilla.social/@martin
+      link: https://hachyderm.io/@mfenner
     - icon: fontawesome/brands/github
       link: https://github.com/front-matter/invenio-rdm-starter
-  analytics:
-    provider: plausible
-    domain: starter.front-matter.io
 extra_css:
   - stylesheets/extra.css
