@@ -18,7 +18,7 @@ RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - && \
     apt-get install -y nodejs && apt-get clean
 
 # Install uv and activate virtualenv
-COPY --from=ghcr.io/astral-sh/uv:0.4.15 /uv /bin/uv
+COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
 RUN uv venv /opt/invenio/.venv
 # Use the virtual environment automatically
 ENV VIRTUAL_ENV=/opt/invenio/.venv \
@@ -83,4 +83,4 @@ RUN adduser invenio --uid ${INVENIO_USER_ID} --gid 0 --no-create-home --disabled
 # USER invenio
 
 EXPOSE 5000
-CMD ["gunicorn", "invenio_app.wsgi:application", "--bind", "0.0.0.0:5000", "--workers", "4"]
+CMD ["gunicorn", "invenio_app.wsgi:application", "--bind", "0.0.0.0:5000", "--workers", "4", "--access-logfile", "-", "--error-logfile", "-"]
