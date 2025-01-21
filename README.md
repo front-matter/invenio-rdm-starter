@@ -126,6 +126,7 @@ The `docker-compose.yml` configuration can be modified to suit your needs using 
 * `INVENIO_S3_ACCESS_KEY_ID='CHANGE_ME'` - S3 access key id
 * `INVENIO_S3_SECRET_ACCESS_KEY='CHANGE_ME'` - S3 secret access key
 * `INVENIO_S3_REGION_NAME='us-east-1'` - S3 region
+* `INVENIO_S3_BUCKET_NAME=` - S3 bucket name
 
 ## Architecture
 
