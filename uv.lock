@@ -1498,7 +1498,7 @@ wheels = [
 
 [[package]]
 name = "invenio-app-rdm"
-version = "12.0.12"
+version = "12.0.13"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "cairosvg" },
@@ -1538,9 +1538,9 @@ dependencies = [
     { name = "invenio-theme" },
     { name = "invenio-userprofiles" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/f6/71/17005dc9e1cdaa4f91f1c94f54c584705c4131a05d5cafa7612cea6a3f93/invenio-app-rdm-12.0.12.tar.gz", hash = "sha256:56f5791bf2e12cc0ae44e84f4b98b940b2825d298e1d89b8dddf252d921b1caa", size = 418413 }
+sdist = { url = "https://files.pythonhosted.org/packages/d5/40/4bced89f653b0a75148bd5da6e1ed4cfd80f6fe3576af5942cf00aaa4777/invenio_app_rdm-12.0.13.tar.gz", hash = "sha256:13f1fd3d8f4ba6b1bbfa2c723e174314e45a0429b9e03f5284e3dff9c9b41796", size = 471858 }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/bf/3a/4f2550049765594351a7c205197c37a5847ed4f0545aebbee8853d947c2e/invenio_app_rdm-12.0.12-py2.py3-none-any.whl", hash = "sha256:e7a709f5a4ffdbdfb34d78cc8bd3a2df80bb07f346639366b2a0fc80187d0569", size = 865997 },
+    { url = "https://files.pythonhosted.org/packages/9e/01/db649e12873631025dad0fcf26ec230dd4b5a04605e4c4389248caa26f45/invenio_app_rdm-12.0.13-py2.py3-none-any.whl", hash = "sha256:1ea4ab09543756163fb53f4ab9b97710dcaa9d9e78cb7f65165160c808cb784a", size = 866101 },
 ]
 
 [[package]]
@@ -2007,7 +2007,7 @@ wheels = [
 
 [[package]]
 name = "invenio-rdm-starter"
-version = "0.5.0"
+version = "0.5.1"
 source = { editable = "." }
 dependencies = [
     { name = "babel-edtf" },
@@ -2028,7 +2028,7 @@ requires-dist = [
     { name = "gunicorn", specifier = "~=22.0.0" },
     { name = "idutils", specifier = "~=1.4.0" },
     { name = "importlib-metadata", specifier = "~=6.11.0" },
-    { name = "invenio-app-rdm", specifier = "~=12.0.10" },
+    { name = "invenio-app-rdm", specifier = "~=12.0.13" },
     { name = "invenio-rdm-records", specifier = "~=10.8.6" },
     { name = "invenio-records-resources", specifier = "~=5.10.0" },
     { name = "invenio-s3", specifier = "~=1.0.0" },

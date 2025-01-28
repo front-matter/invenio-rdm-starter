@@ -367,7 +367,7 @@ invenio-administration==2.2.4
     #   invenio-users-resources
 invenio-app==1.5.0
     # via invenio-app-rdm
-invenio-app-rdm==12.0.12
+invenio-app-rdm==12.0.13
     # via invenio-rdm-starter (pyproject.toml)
 invenio-assets==3.1.0
     # via
@@ -503,7 +503,7 @@ invenio-mail==2.1.1
     #   invenio-oauthclient
 invenio-notifications==0.6.0
     # via invenio-users-resources
-invenio-oaiserver==2.2.3
+invenio-oaiserver==2.3.0
     # via
     #   invenio-app-rdm
     #   invenio-communities
