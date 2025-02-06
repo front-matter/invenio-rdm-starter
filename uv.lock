@@ -2007,16 +2007,12 @@ wheels = [
 
 [[package]]
 name = "invenio-rdm-starter"
-version = "0.5.1"
+version = "12.0.13"
 source = { editable = "." }
 dependencies = [
-    { name = "babel-edtf" },
+    { name = "commonmeta-py" },
     { name = "gunicorn" },
-    { name = "idutils" },
-    { name = "importlib-metadata" },
     { name = "invenio-app-rdm" },
-    { name = "invenio-rdm-records" },
-    { name = "invenio-records-resources" },
     { name = "invenio-s3" },
     { name = "invenio-search", extra = ["opensearch2"] },
     { name = "ruff" },
@@ -2024,14 +2020,10 @@ dependencies = [
 
 [package.metadata]
 requires-dist = [
-    { name = "babel-edtf", specifier = "~=1.2.0" },
+    { name = "commonmeta-py", specifier = ">=0.8.6" },
     { name = "gunicorn", specifier = "~=22.0.0" },
-    { name = "idutils", specifier = "~=1.4.0" },
-    { name = "importlib-metadata", specifier = "~=6.11.0" },
     { name = "invenio-app-rdm", specifier = "~=12.0.13" },
-    { name = "invenio-rdm-records", specifier = "~=10.8.6" },
-    { name = "invenio-records-resources", specifier = "~=5.10.0" },
-    { name = "invenio-s3", specifier = "~=1.0.0" },
+    { name = "invenio-s3", specifier = "~=1.0.7" },
     { name = "invenio-search", extras = ["opensearch2"], specifier = "~=2.4.1" },
     { name = "ruff", specifier = ">=0.9.0" },
 ]
