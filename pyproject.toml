@@ -1,6 +1,6 @@
 [project]
 name = "invenio-rdm-starter"
-version = "12.0.13.3"
+version = "12.0.13.4"
 description = "Starter for the invenio-rdm turn-key research data management repository"
 authors = [
     { name = "Martin Fenner", email = "martin@front-matter.io" }
@@ -14,6 +14,7 @@ dependencies = [
     "invenio-s3~=1.0.7",
     "gunicorn~=22.0.0",
     "ruff>=0.9.0",
+    "sentry-sdk~=2.8.0",
     "commonmeta-py>=0.8.6",
 ]
 

@@ -2007,7 +2007,7 @@ wheels = [
 
 [[package]]
 name = "invenio-rdm-starter"
-version = "12.0.13.3"
+version = "12.0.13.4"
 source = { editable = "." }
 dependencies = [
     { name = "commonmeta-py" },
@@ -2016,6 +2016,7 @@ dependencies = [
     { name = "invenio-s3" },
     { name = "invenio-search", extra = ["opensearch2"] },
     { name = "ruff" },
+    { name = "sentry-sdk" },
 ]
 
 [package.metadata]
@@ -2026,6 +2027,7 @@ requires-dist = [
     { name = "invenio-s3", specifier = "~=1.0.7" },
     { name = "invenio-search", extras = ["opensearch2"], specifier = "~=2.4.1" },
     { name = "ruff", specifier = ">=0.9.0" },
+    { name = "sentry-sdk", specifier = "~=2.8.0" },
 ]
 
 [[package]]
@@ -3690,6 +3692,19 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/c0/0a/1cdbabf9edd0ea7747efdf6c9ab4e7061b085aa7f9bfc36bb1601563b069/s3transfer-0.10.4.tar.gz", hash = "sha256:29edc09801743c21eb5ecbc617a152df41d3c287f67b615f73e5f750583666a7", size = 145287 }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/66/05/7957af15543b8c9799209506df4660cba7afc4cf94bfb60513827e96bed6/s3transfer-0.10.4-py3-none-any.whl", hash = "sha256:244a76a24355363a68164241438de1b72f8781664920260c48465896b712a41e", size = 83175 },
+]
+
+[[package]]
+name = "sentry-sdk"
+version = "2.8.0"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "certifi" },
+    { name = "urllib3" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/c9/9d/d61d64819ecb0481647229c3ee8ddc00887552acc23745fd65d0d4d066f3/sentry_sdk-2.8.0.tar.gz", hash = "sha256:aa4314f877d9cd9add5a0c9ba18e3f27f99f7de835ce36bd150e48a41c7c646f", size = 273663 }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/80/f4/8e1be145ce63c4ef4e126ee362992ae1ada5e716723883912b74829583e7/sentry_sdk-2.8.0-py2.py3-none-any.whl", hash = "sha256:6051562d2cfa8087bb8b4b8b79dc44690f8a054762a29c07e22588b1f619bfb5", size = 300617 },
 ]
 
 [[package]]
