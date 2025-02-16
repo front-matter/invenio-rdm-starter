@@ -1,9 +1,6 @@
 FROM python:3.12-bookworm AS builder
 
-# Dockerfile that builds the InvenioRDM Starter Docker image. Based on the following:
-# - https://medium.com/@albertazzir/blazing-fast-python-docker-builds-with-poetry-a78a66f5aed0
-# - https://pythonspeed.com/articles/smaller-python-docker-images/
-# - https://pythonspeed.com/articles/multi-stage-docker-python/
+# Dockerfile that builds the InvenioRDM Starter Docker image.
 
 ENV LANG=en_US.UTF-8 \
     LANGUAGE=en_US:en
@@ -15,15 +12,15 @@ RUN --mount=type=cache,sharing=locked,target=/var/cache/apt \
 
 # Install Node.js
 RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - && \
-    apt-get install -y nodejs && apt-get clean
+    apt-get install -y nodejs --no-install-recommends && apt-get clean
 
 # Install uv and activate virtualenv
 COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
 RUN uv venv /opt/invenio/.venv
+
 # Use the virtual environment automatically
 ENV VIRTUAL_ENV=/opt/invenio/.venv \
     UV_PROJECT_ENVIRONMENT=/opt/invenio/.venv \
-    # Place entry points in the environment at the front of the path
     PATH="/opt/invenio/.venv/bin:$PATH" \
     WORKING_DIR=/opt/invenio \
     PYTHONDONTWRITEBYTECODE=1 \
@@ -56,6 +53,9 @@ RUN --mount=type=cache,target=/root/.cache/uv \
 RUN --mount=type=cache,target=/var/cache/assets invenio collect --verbose && invenio webpack buildall
 
 FROM python:3.12-slim-bookworm AS runtime
+
+ENV LANG=en_US.UTF-8 \
+    LANGUAGE=en_US:en
 
 # Install OS package dependencies
 RUN --mount=type=cache,sharing=locked,target=/var/cache/apt apt-get update -y --fix-missing && \
