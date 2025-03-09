@@ -250,6 +250,27 @@
   tags:
     - depositable
     - linkable
+- id: publication-blogpost
+  icon: file alternate
+  props:
+    csl: post-weblog
+    datacite_general: Preprint
+    datacite_type: "BlogPost"
+    openaire_resourceType: "0016"
+    openaire_type: publication
+    eurepo: info:eu-repo/semantics/preprint
+    schema.org: https://schema.org/BlogPosting
+    subtype: publication-blogpost
+    type: publication
+    marc21_type: publication
+    marc21_subtype: preprint
+  title:
+    en: Blog post
+    sv: blogginlägg
+    de: Blogbeitrag
+  tags:
+    - depositable
+    - linkable
 - id: publication-deliverable
   icon: file alternate
   props:
@@ -943,4 +964,3 @@
   tags:
     - depositable
     - linkable
-    

@@ -8,8 +8,8 @@
 # - Reverse proxy: Caddy (exposed ports: 80, 443)
 # - Web application: Gunicorn (exposed port: none)
 # - DB: (PostgresSQL) (exposed port: 5432)
-# - Cache and message queue: Redis (exposed port: 6379)
-# - Search platform: (OpenSearch) (exposed ports: 9200, 9300)
+# - Cache and message queue: Valkey (exposed port: 6379)
+# - Search platform: OpenSearch (exposed ports: 9200, 9300)
 
 services:
   proxy:
@@ -111,8 +111,8 @@ services:
         condition: service_started
       cache:
         condition: service_started
-      # db:
-      #   condition: service_started
+      db:
+        condition: service_started
   worker:
     command: "celery -A invenio_app.celery worker --beat --events --loglevel=WARNING"
     image: ghcr.io/front-matter/invenio-rdm-starter:latest
@@ -153,22 +153,22 @@ services:
         condition: service_started
       cache:
         condition: service_started
-      # db:
-      #   condition: service_started
+      db:
+        condition: service_started
   cache:
     image: valkey/valkey:7.2.5-bookworm
     restart: "unless-stopped"
     ports:
       - "6379:6379"
-  # db:
-  #   image: postgres:16.4-bookworm
-  #   restart: "unless-stopped"
-  #   environment:
-  #     - POSTGRES_USER=${POSTGRES_USER:-inveniordm}
-  #     - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-inveniordm}
-  #     - POSTGRES_DB=${POSTGRES_DB:-inveniordm}
-  #   ports:
-  #     - 5432:5432
+  db:
+    image: postgres:16.4-bookworm
+    restart: "unless-stopped"
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER:-inveniordm}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-inveniordm}
+      - POSTGRES_DB=${POSTGRES_DB:-inveniordm}
+    ports:
+      - 5432:5432
   search:
     image: opensearchproject/opensearch:2.12.0
     restart: "unless-stopped"

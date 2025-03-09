@@ -2007,10 +2007,9 @@ wheels = [
 
 [[package]]
 name = "invenio-rdm-starter"
-version = "12.0.14.0"
+version = "12.0.14.1"
 source = { editable = "." }
 dependencies = [
-    { name = "commonmeta-py" },
     { name = "gunicorn" },
     { name = "invenio-app-rdm" },
     { name = "invenio-s3" },
@@ -2021,7 +2020,6 @@ dependencies = [
 
 [package.metadata]
 requires-dist = [
-    { name = "commonmeta-py", specifier = ">=0.8.6" },
     { name = "gunicorn", specifier = "~=22.0.0" },
     { name = "invenio-app-rdm", specifier = "~=12.0.14" },
     { name = "invenio-s3", specifier = "~=1.0.7" },
