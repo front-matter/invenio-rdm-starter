@@ -1,4 +1,5 @@
 version = 1
+revision = 1
 requires-python = ">=3.12"
 
 [[package]]
@@ -1796,15 +1797,20 @@ wheels = [
 
 [[package]]
 name = "invenio-logging"
-version = "2.1.4"
+version = "2.1.5"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "invenio-celery" },
     { name = "invenio-db" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/50/bb/8b1bb0ac0b5e28ed3d24bd0183eff7cf9ef91d8bdda6ed70435a858d8baf/invenio_logging-2.1.4.tar.gz", hash = "sha256:4a77eccd6d5a8be0d144972ddbb885d725403e89b3915a6ada1b5c51c15922c0", size = 22746 }
+sdist = { url = "https://files.pythonhosted.org/packages/39/db/568ba88c49b18c5cdcf35061fa1db13bfd98a4a0e28c4e291d9925c8cedf/invenio_logging-2.1.5.tar.gz", hash = "sha256:1e5efc411c9708e74ed50b7022c8c064c389795639f8028323781e7df3b2eae0", size = 22836 }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/34/5b/bd45c3c1ca14be5a076de3088a3dc2e6ed8ba8aa6d9fd057345c21dec947/invenio_logging-2.1.4-py2.py3-none-any.whl", hash = "sha256:2bcd75284a52e1a317c2a5aa8de44b14e7852054ffef84f5adf7307e61df781f", size = 11707 },
+    { url = "https://files.pythonhosted.org/packages/05/30/75f8fe821b88c23280952d2d6190b5b04e9aaa6b204f33a7e30d70f24b7c/invenio_logging-2.1.5-py2.py3-none-any.whl", hash = "sha256:2c1eba52fe925b099089883729bd9e834ba6dffbccdd11555899e5d62e67a8ab", size = 11759 },
+]
+
+[package.optional-dependencies]
+sentry = [
+    { name = "sentry-sdk", extra = ["flask"] },
 ]
 
 [[package]]
@@ -2007,25 +2013,25 @@ wheels = [
 
 [[package]]
 name = "invenio-rdm-starter"
-version = "12.0.14.1"
+version = "12.0.14.2"
 source = { editable = "." }
 dependencies = [
     { name = "gunicorn" },
     { name = "invenio-app-rdm" },
+    { name = "invenio-logging", extra = ["sentry"] },
     { name = "invenio-s3" },
     { name = "invenio-search", extra = ["opensearch2"] },
     { name = "ruff" },
-    { name = "sentry-sdk" },
 ]
 
 [package.metadata]
 requires-dist = [
     { name = "gunicorn", specifier = "~=22.0.0" },
     { name = "invenio-app-rdm", specifier = "~=12.0.14" },
+    { name = "invenio-logging", extras = ["sentry"], specifier = ">=2.1.5" },
     { name = "invenio-s3", specifier = "~=1.0.7" },
     { name = "invenio-search", extras = ["opensearch2"], specifier = "~=2.4.1" },
     { name = "ruff", specifier = ">=0.9.0" },
-    { name = "sentry-sdk", specifier = "~=2.8.0" },
 ]
 
 [[package]]
@@ -3694,15 +3700,22 @@ wheels = [
 
 [[package]]
 name = "sentry-sdk"
-version = "2.8.0"
+version = "1.45.1"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "certifi" },
     { name = "urllib3" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/c9/9d/d61d64819ecb0481647229c3ee8ddc00887552acc23745fd65d0d4d066f3/sentry_sdk-2.8.0.tar.gz", hash = "sha256:aa4314f877d9cd9add5a0c9ba18e3f27f99f7de835ce36bd150e48a41c7c646f", size = 273663 }
+sdist = { url = "https://files.pythonhosted.org/packages/c8/28/02c0cd9184f9108e3c52519f9628b215077a3854240e0b17ae845e664855/sentry_sdk-1.45.1.tar.gz", hash = "sha256:a16c997c0f4e3df63c0fc5e4207ccb1ab37900433e0f72fef88315d317829a26", size = 244774 }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/80/f4/8e1be145ce63c4ef4e126ee362992ae1ada5e716723883912b74829583e7/sentry_sdk-2.8.0-py2.py3-none-any.whl", hash = "sha256:6051562d2cfa8087bb8b4b8b79dc44690f8a054762a29c07e22588b1f619bfb5", size = 300617 },
+    { url = "https://files.pythonhosted.org/packages/fe/9f/105366a122efa93f0cb1914f841747d160788e4d022d0488d2d44c2ba26c/sentry_sdk-1.45.1-py2.py3-none-any.whl", hash = "sha256:608887855ccfe39032bfd03936e3a1c4f4fc99b3a4ac49ced54a4220de61c9c1", size = 267163 },
+]
+
+[package.optional-dependencies]
+flask = [
+    { name = "blinker" },
+    { name = "flask" },
+    { name = "markupsafe" },
 ]
 
 [[package]]
