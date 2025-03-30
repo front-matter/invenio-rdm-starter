@@ -1499,7 +1499,7 @@ wheels = [
 
 [[package]]
 name = "invenio-app-rdm"
-version = "12.0.14"
+version = "12.0.16"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "cairosvg" },
@@ -1539,9 +1539,9 @@ dependencies = [
     { name = "invenio-theme" },
     { name = "invenio-userprofiles" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/be/2c/2b1a6aa1928d2c1ee511fe1e98842a0b60375ce028bfc97e06ba232c339d/invenio_app_rdm-12.0.14.tar.gz", hash = "sha256:aac25f3cfdd6a5f87efeae17f59101a3680d4d9d70ea7cb887351cdf0611a9eb", size = 472156 }
+sdist = { url = "https://files.pythonhosted.org/packages/b8/75/35632780ef89b6855141e3695b642814aa601795efdc8f98294541bb50b4/invenio_app_rdm-12.0.16.tar.gz", hash = "sha256:61223390f63cc08bee4213bda99953fd7592f8ab76538e08498ca5192c01aae3", size = 504493 }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/9a/0a/9119938583a32dbe6e462b6ddfa097d66385e92068f95e3fc29b33b7c0d5/invenio_app_rdm-12.0.14-py2.py3-none-any.whl", hash = "sha256:35d41fe9219b3fdb407abcdfa3b2455fdb0889862208985df78746ce894db9e8", size = 866157 },
+    { url = "https://files.pythonhosted.org/packages/0b/5d/9179fbb2b97e4d17a07eadaf690f9f58b0db19cceba6fa2986cc208b1e4d/invenio_app_rdm-12.0.16-py2.py3-none-any.whl", hash = "sha256:b3c70485589728ee7c5238640e63be923133a5bd9762ae367e4f4dfe02d24681", size = 950709 },
 ]
 
 [[package]]
@@ -2013,7 +2013,7 @@ wheels = [
 
 [[package]]
 name = "invenio-rdm-starter"
-version = "12.0.14.2"
+version = "12.0.16.0"
 source = { editable = "." }
 dependencies = [
     { name = "gunicorn" },
@@ -2027,7 +2027,7 @@ dependencies = [
 [package.metadata]
 requires-dist = [
     { name = "gunicorn", specifier = "~=22.0.0" },
-    { name = "invenio-app-rdm", specifier = "~=12.0.14" },
+    { name = "invenio-app-rdm", specifier = "~=12.0.16" },
     { name = "invenio-logging", extras = ["sentry"], specifier = ">=2.1.5" },
     { name = "invenio-s3", specifier = "~=1.0.7" },
     { name = "invenio-search", extras = ["opensearch2"], specifier = "~=2.4.1" },
