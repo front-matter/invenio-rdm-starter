@@ -1,0 +1,10 @@
+/***********************************************
+    Invenio App RDM Starter Item Overrides
+***********************************************/
+
+article > section#record-info {
+  margin-bottom: 0.5rem;
+}
+article > .ui.divider.hidden {
+  display: none;
+}

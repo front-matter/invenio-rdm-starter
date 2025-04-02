@@ -1,0 +1,8 @@
+/***********************************************
+         Invenio RDM Starter Accordion Overrides
+***********************************************/
+
+.row.ui.accordion.affiliations {
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+}
