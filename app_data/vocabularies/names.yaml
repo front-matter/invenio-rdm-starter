@@ -1,7 +1,6 @@
-- name: Carberry, Josiah
-  id: 0000-0002-1825-0097
+- id: 0000-0002-1825-0097
+  name: Carberry, Josiah
   identifiers:
     - identifier: https://orcid.org/0000-0002-1825-0097
   affiliations:
-    - name: Brown University
     - id: 05gq02987

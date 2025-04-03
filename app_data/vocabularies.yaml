@@ -6,10 +6,11 @@ contributorsroles:
   data-file: vocabularies/roles.yaml
 subjects:
   pid-type: sub
-  data-file: vocabularies/subjects_oecd_fos.yaml
-names:
-  pid-type: names
-  data-file: vocabularies/names.yaml
+  schemes:
+    - id: FOS
+      name: Fields of Science and Technology
+      uri: "http://www.oecd.org/science/inno/38235147.pdf"
+      data-file: vocabularies/subjects_oecd_fos.yaml
 licenses:
   pid-type: lic
   data-file: vocabularies/licences.csv
@@ -36,3 +37,8 @@ funders:
 awards:
   pid-type: awa
   data-file: vocabularies/awards.yaml
+# 'names' contain a reference to a affiliations so the fixtures need to be run
+# after 'affiliations'
+names:
+  pid-type: names
+  data-file: vocabularies/names.yaml
