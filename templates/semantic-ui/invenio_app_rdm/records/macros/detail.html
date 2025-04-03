@@ -137,9 +137,9 @@
 {% macro show_references(references) %}
   <ol class="ui ordered list details-list">
     {% for reference in references %}
-      {% set reference_string = reference.reference %}
-      {% if 'identifier' in reference %}
-        {% if 'scheme' in reference %}
+      {% set reference_string = reference.reference | safe %}
+      {% if reference.identifier %}
+        {% if reference.scheme %}
           {% set id = reference.identifier %}
           {% if 'doi' == reference.scheme %}
             <li class="item">{{ reference_string }}
