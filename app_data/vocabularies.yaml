@@ -28,7 +28,11 @@ communitytypes:
   data-file: vocabularies/community_types.yaml
 affiliations:
   pid-type: aff
-  data-file: vocabularies/affiliations_ror.yaml
+  schemes:
+    - id: ROR
+      name: Research Organization Registry
+      uri: "https://ror.org/"
+      data-file: vocabularies/affiliations_ror.yaml
 funders:
   pid-type: fun
   data-file: vocabularies/funders.yaml

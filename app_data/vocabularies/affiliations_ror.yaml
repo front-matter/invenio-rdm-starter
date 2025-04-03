@@ -1,336 +1,338 @@
-- id: 019wvm592
-  identifiers:
-  - identifier: 019wvm592
-    scheme: ror
-  name: Australian National University
-  title:
-    en: Australian National University
-- id: 02bfwt286
-  identifiers:
-  - identifier: 02bfwt286
-    scheme: ror
-  name: Monash University
-  title:
-    en: Monash University
-- id: 05745n787
-  identifiers:
-  - identifier: 05745n787
-    scheme: ror
-  name: Göttingen State and University Library
-  title:
-    en: Göttingen State and University Library
-- id: 00pwcvj19
-  identifiers:
-  - identifier: 00pwcvj19
-    scheme: ror
-  name: Hamburg State and University Library
-  title:
-    en: Hamburg State and University Library
-- id: 01hcx6992
-  identifiers:
-  - identifier: 01hcx6992
-    scheme: ror
-  name: Humboldt-Universität zu Berlin
-  title:
-    en: Humboldt-Universität zu Berlin
-- id: 041kmwe10
-  identifiers:
-  - identifier: 041kmwe10
-    scheme: ror
-  name: Imperial College London
-  title:
-    en: Imperial College London
-- id: 00vtgdb53
-  identifiers:
-  - identifier: 00vtgdb53
-    scheme: ror
-  name: University of Glasgow
-  title:
-    en: University of Glasgow
-- id: 031rekg67
-  identifiers:
-  - identifier: 031rekg67
-    scheme: ror
-  name: Swinburne University of Technology
-  title:
-    en: Swinburne University of Technology
-- id: 05bp8ka05
-  identifiers:
-  - identifier: 05bp8ka05
-    scheme: ror
-  name: Metadata Game Changers
-  title:
-    en: Metadata Game Changers
-- id: 05167c961
-  identifiers:
-  - identifier: 05167c961
-    scheme: ror
-  name: Western University of Health Sciences
-  title:
-    en: Western University of Health Sciences
-- id: 0342dzm54
-  identifiers:
-  - identifier: 0342dzm54
-    scheme: ror
-  name: Liberate Science
-  title:
-    en: Liberate Science
-- id: 027bh9e22
-  identifiers:
-  - identifier: 027bh9e22
-    scheme: ror
-  name: Leiden University
-  title:
-    en: Leiden University
-- id: 02h1qnm70
-  identifiers:
-  - identifier: 02h1qnm70
-    scheme: ror
-  name: Alexander von Humboldt Institute for Internet and Society
-  title:
-    en: Alexander von Humboldt Institute for Internet and Society
-- id: 00f2yqf98
-  identifiers:
-  - identifier: 00f2yqf98
-    scheme: ror
-  name: Medizinische Hochschule Hannover
-  title:
-    en: Hannover Medical School
-- id: 008zgvp64
-  identifiers:
-  - identifier: 008zgvp64
-    scheme: ror
-  name: Public Library of Science
-  title:
-    en: Public Library of Science
-- id: 04wxnsj81
-  identifiers:
-  - identifier: 04wxnsj81
-    scheme: ror
-  name: DataCite
-  title:
-    en: DataCite
-- id: 03yty8687
-  identifiers:
-  - identifier: 03yty8687
-    scheme: ror
-  name: GigaScience Press
-  title:
-    en: GigaScience Press
-- id: 040qyzk67
-  identifiers:
-  - identifier: 040qyzk67
-    scheme: ror
-  name: University of Camagüey
-  title:
-    en: University of Camagüey
-- id: 052gg0110
-  identifiers:
-  - identifier: 052gg0110
-    scheme: ror
-  name: University of Oxford
-  title:
-    en: University of Oxford
-- id: 0105w2p42
-  identifiers:
-  - identifier: 0105w2p42
-    scheme: ror
-  name: Royal Library of Belgium
-  title:
-    en: Royal Library of Belgium
-- id: 03qt6ba18
-  identifiers:
-  - identifier: 03qt6ba18
-    scheme: ror
-  name: Georgia State University
-  title:
-    en: Georgia State University
-- id: 00dmfq477
-  identifiers:
-  - identifier: 00dmfq477
-    scheme: ror
-  name: University of California Office of the President
-  title:
-    en: University of California Office of the President
-- id: 03ykbk197
-  identifiers:
-  - identifier: 03ykbk197
-    scheme: ror
-  name: University of Portsmouth
-  title:
-    en: University of Portsmouth
-- id: 0524sp257
-  identifiers:
-  - identifier: 0524sp257
-    scheme: ror
-  name: University of Bristol
-  title:
-    en: University of Bristol
-- id: 02jx3x895
-  identifiers:
-  - identifier: 02jx3x895
-    scheme: ror
-  name: University College London
-  title:
-    en: University College London
-- id: 00d9ah105
-  identifiers:
-  - identifier: 00d9ah105
-    scheme: ror
-  name: University of California, Merced
-  title:
-    en: University of California, Merced
-- id: 047426m28
-  identifiers:
-  - identifier: 047426m28
-    scheme: ror
-  name: University of Illinois Urbana-Champaign
-  title:
-    en: University of Illinois Urbana-Champaign
-- id: 026zzn846
-  identifiers:
-  - identifier: 026zzn846
-    scheme: ror
-  name: Queen Mary University of London
-  title:
-    en: Queen Mary University of London
-- id: 00ayhx656
-  identifiers:
-  - identifier: 00ayhx656
-    scheme: ror
-  name: University of Sussex
-  title:
-    en: University of Sussex
-- id: 03yeq9x20
-  identifiers:
-  - identifier: 03yeq9x20
-    scheme: ror
-  name: University of Lincoln
-  title:
-    en: University of Lincoln
-- id: 02mb95055
-  identifiers:
-  - identifier: 02mb95055
-    scheme: ror
-  name: Birbeck, University of London
-  title:
-    en: Birbeck, University of London
-- id: 02twcfp32
-  identifiers:
-  - identifier: 02twcfp32
-    scheme: ror
-  name: Crossref
-  title:
-    en: Crossref
-- id: 04fa4r544
-  identifiers:
-  - identifier: 04fa4r544
-    scheme: ror
-  name: ORCID
-  title:
-    en: ORCID
-- id: 01ggx4157
+- acronym: CERN
+  country: CH
+  country_name: Switzerland
+  id: 01ggx4157
   identifiers:
   - identifier: 01ggx4157
     scheme: ror
-  name: European Organization of Nuclear Research
+  - identifier: grid.9132.9
+    scheme: grid
+  - identifier: 0000 0001 2156 142X
+    scheme: isni
+  location_name: Geneva
+  name: European Organization for Nuclear Research
+  status: active
   title:
-    en: European Organization of Nuclear Research
-- id: 046ak2485
+    de: Europäische Organisation für Kernforschung
+    en: European Organization for Nuclear Research
+    fr: Organisation européenne pour la recherche nucléaire
+  types:
+  - facility
+  - funder
+- acronym: BNL
+  aliases:
+  - Office of Science Brookhaven National Laboratory
+  - United States Department of Energy Office of Science Brookhaven National Laboratory
+  country: US
+  country_name: United States
+  id: 02ex6cf31
   identifiers:
-  - identifier: 046ak2485
+  - identifier: 02ex6cf31
     scheme: ror
-  name: Freie Universität Berlin
+  - identifier: grid.202665.5
+    scheme: grid
+  - identifier: 0000 0001 2188 4229
+    scheme: isni
+  location_name: Upton
+  name: Brookhaven National Laboratory
+  status: active
   title:
-    en: Free University of Berlin
-- id: 04ers2y35
+    en: Brookhaven National Laboratory
+  types:
+  - facility
+  - funder
+- aliases:
+  - Eko-Konnect Research and Education Initiative
+  country: NG
+  country_name: Nigeria
+  id: 047h63042
   identifiers:
-  - identifier: 04ers2y35
+  - identifier: 047h63042
     scheme: ror
-  name: University of Bremen
+  - identifier: grid.503642.6
+    scheme: grid
+  location_name: Lagos
+  name: Eko-Konnect
+  status: active
   title:
-    en: University of Bremen
-- id: 04aj4c181
+    en: Eko-Konnect
+  types:
+  - nonprofit
+- acronym: HZDR
+  country: DE
+  country_name: Germany
+  id: 01zy2cs03
   identifiers:
-  - identifier: 04aj4c181
+  - identifier: 01zy2cs03
     scheme: ror
-  name: Technische Informationsbibliothek (TIB)
+  - identifier: grid.40602.30
+    scheme: grid
+  - identifier: 0000 0001 2158 0612
+    scheme: isni
+  location_name: Dresden
+  name: Helmholtz-Zentrum Dresden-Rossendorf
+  status: active
   title:
-    en: Technische Informationsbibliothek (TIB)
-- id: 05dhe8b71
+    de: Helmholtz-Zentrum Dresden-Rossendorf
+  types:
+  - facility
+  - funder
+- acronym: INFN
+  country: IT
+  country_name: Italy
+  id: 005ta0471
   identifiers:
-  - identifier: 05dhe8b71
+  - identifier: 005ta0471
     scheme: ror
-  name: British Library
+  - identifier: grid.6045.7
+    scheme: grid
+  - identifier: 0000 0004 1757 5281
+    scheme: isni
+  location_name: Rome
+  name: Istituto Nazionale di Fisica Nucleare
+  status: active
   title:
-    en: British Library
-- id: 02jz4aj89
+    en: National Institute for Nuclear Physics
+    it: Istituto Nazionale di Fisica Nucleare
+  types:
+  - government
+  - funder
+- acronym: JRC
+  country: BE
+  country_name: Belgium
+  id: 04j5wtv36
   identifiers:
-  - identifier: 02jz4aj89
+  - identifier: 04j5wtv36
     scheme: ror
-  name: Maastricht University
+  - identifier: grid.489339.c
+    scheme: grid
+  - identifier: 0000 0004 0635 247X
+    scheme: isni
+  location_name: Brussels
+  name: Directorate-General Joint Research Centre
+  status: active
   title:
-    en: Maastricht University
-- id: 051fd9666
+    de: Gemeinsame Forschungsstelle
+    en: Directorate-General Joint Research Centre
+    fr: Centre commun de recherche
+  types:
+  - government
+  - funder
+- acronym: NU
+  country: US
+  country_name: United States
+  id: 000e0be47
   identifiers:
-  - identifier: 051fd9666
+  - identifier: 000e0be47
     scheme: ror
-  name: Case Western Reserve University
+  - identifier: grid.16753.36
+    scheme: grid
+  - identifier: 0000 0001 2299 3507
+    scheme: isni
+  location_name: Evanston
+  name: Northwestern University
+  status: active
   title:
-    en: Case Western Reserve University
-- id: 02dpqcy73
+    en: Northwestern University
+  types:
+  - education
+  - funder
+- country: 'NO'
+  country_name: Norway
+  id: 04mcehe57
   identifiers:
-  - identifier: 02dpqcy73
+  - identifier: 04mcehe57
     scheme: ror
-  name: Centre de Biophysique Moléculaire
+  - identifier: grid.459209.3
+    scheme: grid
+  location_name: Trondheim
+  name: Tind Technologies (Norway)
+  status: active
   title:
-    en: Centre de Biophysique Moléculaire
-- id: 01tmp8f25
+    en: Tind Technologies (Norway)
+  types:
+  - company
+- acronym: ULAKBIM
+  country: TR
+  country_name: Turkey
+  id: 017k52s24
   identifiers:
-  - identifier: 01tmp8f25
+  - identifier: 017k52s24
     scheme: ror
-  name: Universidad Nacional Autónoma de México
+  - identifier: grid.509244.e
+    scheme: grid
+  - identifier: 0000 0004 0574 2652
+    scheme: isni
+  location_name: Ankara
+  name: Turkish Academic Network and Information Center
+  status: active
   title:
-    en: Universidad Nacional Autónoma de México
-- id: 018mejw64
+    en: Turkish Academic Network and Information Center
+    tr: Ulusal Akademik Ağ ve Bilgi Merkezi
+  types:
+  - facility
+- country: AT
+  country_name: Austria
+  id: 00d7xrm67
   identifiers:
-  - identifier: 018mejw64
+  - identifier: 00d7xrm67
     scheme: ror
-  name: Deutsche Forschungsgemeinschaft
+  - identifier: grid.410413.3
+    scheme: grid
+  - identifier: 0000 0001 2294 748X
+    scheme: isni
+  location_name: Graz
+  name: Graz University of Technology
+  status: active
   title:
-    en: German Research Foundation
-- id: 00k4n6c32
+    de: Technische Universität Graz
+    en: Graz University of Technology
+  types:
+  - education
+  - funder
+- acronym: TUW
+  aliases:
+  - Technische Universität Wien
+  - Vienna University of Technology
+  country: AT
+  country_name: Austria
+  id: 04d836q62
   identifiers:
-  - identifier: 00k4n6c32
+  - identifier: 04d836q62
     scheme: ror
-  name: European Commission
+  - identifier: grid.5329.d
+    scheme: grid
+  - identifier: 0000 0004 1937 0669
+    scheme: isni
+  location_name: Vienna
+  name: TU Wien
+  status: active
   title:
-    en: European Commission
-- id: 00yjd3n13
+    de: TU Wien
+  types:
+  - education
+  - funder
+- acronym: UHH
+  aliases:
+  - University of Hamburg
+  country: DE
+  country_name: Germany
+  id: 00g30e956
   identifiers:
-  - identifier: 00yjd3n13
+  - identifier: 00g30e956
     scheme: ror
-  name: Swiss National Science Foundation
+  - identifier: grid.9026.d
+    scheme: grid
+  - identifier: 0000 0001 2287 2617
+    scheme: isni
+  location_name: Hamburg
+  name: Universität Hamburg
+  status: active
   title:
-    en: Swiss National Science Foundation
-- id: 04wfr2810
+    de: Universität Hamburg
+    en: Hamburg University
+  types:
+  - education
+  - funder
+- acronym: WWU
+  aliases:
+  - Universitaet Muenster
+  - University of Muenster
+  - Westfälische Wilhelms-Universität Münster
+  country: DE
+  country_name: Germany
+  id: 00pd74e08
   identifiers:
-  - identifier: 04wfr2810
+  - identifier: 00pd74e08
     scheme: ror
-  name: European Molecular Biology Organization
+  - identifier: grid.5949.1
+    scheme: grid
+  - identifier: 0000 0001 2172 9288
+    scheme: isni
+  location_name: Münster
+  name: University of Münster
+  status: active
   title:
-    en: European Molecular Biology Organization
-- id: 04h13ss13
+    de: Universität Münster
+    en: University of Münster
+  types:
+  - education
+  - funder
+- acronym: WACREN
+  country: GH
+  country_name: Ghana
+  id: 006rqpt26
   identifiers:
-  - identifier: 04h13ss13
+  - identifier: 006rqpt26
     scheme: ror
-  name: The Geneva Learning Foundation
+  - identifier: grid.463700.6
+    scheme: grid
+  location_name: Accra
+  name: West and Central African Research and Education Network
+  status: active
   title:
-    en: The Geneva Learning Foundation
-- id: 05gq02987
+    en: West and Central African Research and Education Network
+  types:
+  - other
+- acronym: CIT
+  aliases:
+  - Caltech
+  country: US
+  country_name: United States
+  id: 05dxps055
   identifiers:
-  - identifier: 05gq02987
+  - identifier: 05dxps055
     scheme: ror
-  name: Brown University
+  - identifier: grid.20861.3d
+    scheme: grid
+  - identifier: 0000 0001 0706 8890
+    scheme: isni
+  location_name: Pasadena
+  name: California Institute of Technology
+  status: active
   title:
-    en: Brown University
+    en: California Institute of Technology
+    es: Instituto de Tecnología de California
+  types:
+  - education
+  - funder
+- acronym: KTH
+  aliases:
+  - Royal Institute of Technology
+  country: SE
+  country_name: Sweden
+  id: 026vcq606
+  identifiers:
+  - identifier: 026vcq606
+    scheme: ror
+  - identifier: grid.5037.1
+    scheme: grid
+  - identifier: 0000 0001 2158 1746
+    scheme: isni
+  location_name: Stockholm
+  name: KTH Royal Institute of Technology
+  status: active
+  title:
+    en: KTH Royal Institute of Technology
+    fi: Kuninkaallinen teknillinen korkeakoulu
+    sv: Kungliga Tekniska högskolan
+  types:
+  - education
+  - funder
+- acronym: DF
+  aliases:
+  - datafutures
+  country: DE
+  country_name: Germany
+  id: 01653xx13
+  identifiers:
+  - identifier: 01653xx13
+    scheme: ror
+  location_name: Leipzig
+  name: Data Futures GmbH
+  status: active
+  title:
+    de: Data Futures GmbH
+  types:
+  - nonprofit
+  
