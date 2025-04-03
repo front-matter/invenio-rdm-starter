@@ -1,6 +1,6 @@
 [project]
 name = "invenio-rdm-starter"
-version = "12.0.17.0"
+version = "12.0.17.1"
 description = "Starter for the invenio-rdm turn-key research data management repository"
 authors = [
     { name = "Martin Fenner", email = "martin@front-matter.io" }
@@ -14,7 +14,7 @@ dependencies = [
     "invenio-logging[sentry]>=2.1.5",
     "invenio-s3~=1.0.7",
     "gunicorn~=22.0.0",
-    "ruff>=0.9.0",
+    "ruff>=0.11.2",
 ]
 
 [tool.hatch.build.targets.wheel]
