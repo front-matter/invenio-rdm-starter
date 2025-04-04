@@ -15,6 +15,7 @@ dependencies = [
     "invenio-s3~=1.0.7",
     "gunicorn~=22.0.0",
     "ruff>=0.11.2",
+    "mkdocs-material>=8.5.11",
 ]
 
 [tool.hatch.build.targets.wheel]

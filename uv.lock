@@ -2021,6 +2021,7 @@ dependencies = [
     { name = "invenio-logging", extra = ["sentry"] },
     { name = "invenio-s3" },
     { name = "invenio-search", extra = ["opensearch2"] },
+    { name = "mkdocs-material" },
     { name = "ruff" },
 ]
 
@@ -2031,6 +2032,7 @@ requires-dist = [
     { name = "invenio-logging", extras = ["sentry"], specifier = ">=2.1.5" },
     { name = "invenio-s3", specifier = "~=1.0.7" },
     { name = "invenio-search", extras = ["opensearch2"], specifier = "~=2.4.1" },
+    { name = "mkdocs-material", specifier = ">=8.5.11" },
     { name = "ruff", specifier = ">=0.11.2" },
 ]
 
