@@ -152,7 +152,7 @@ the `invenio-cli` command-line tool in the following ways:
 
 ### Where can I ask questions about InvenioRDM Starter?
 
-Please use the [InvenioRDM Starter GitHub Discussions](https://github.com/front-matter/invenio-rdm-starter/discussions). You can ask general InvenioRDM questions in the Inveniosoftware Discord Chatroom [https://discord.gg/8qatqBC](https://discord.gg/8qatqBC).
+You can ask both InvenioRDM Starter and general InvenioRDM questions in the Inveniosoftware Discord Chatroom [https://discord.gg/8qatqBC](https://discord.gg/8qatqBC).
 
 ### How do I get a secure SSL certificate on localhost?
 
