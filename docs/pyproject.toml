@@ -1,7 +1,7 @@
 [project]
 name = "docs"
 version = "0.1.0"
-description = "Add your description here"
+description = "InvenioRDM Starter Documentation"
 readme = "README.md"
 requires-python = ">=3.12.9"
 dependencies = [
