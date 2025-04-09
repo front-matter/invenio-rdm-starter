@@ -1,4 +1,4 @@
-FROM python:3.12-bookworm AS builder
+FROM python:3.13-bookworm AS builder
 
 # Dockerfile that builds the InvenioRDM Starter Docker image.
 
@@ -52,7 +52,7 @@ RUN --mount=type=cache,target=/root/.cache/uv \
 # Build Javascript assets
 RUN --mount=type=cache,target=/var/cache/assets invenio collect --verbose && invenio webpack buildall
 
-FROM python:3.12-slim-bookworm AS runtime
+FROM python:3.13-slim-bookworm AS runtime
 
 ENV LANG=en_US.UTF-8 \
     LANGUAGE=en_US:en
