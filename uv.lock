@@ -1253,14 +1253,14 @@ wheels = [
 
 [[package]]
 name = "gunicorn"
-version = "22.0.0"
+version = "23.0.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "packaging" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/1e/88/e2f93c5738a4c1f56a458fc7a5b1676fc31dcdbb182bef6b40a141c17d66/gunicorn-22.0.0.tar.gz", hash = "sha256:4a0b436239ff76fb33f11c07a16482c521a7e09c1ce3cc293c2330afe01bec63", size = 3639760 }
+sdist = { url = "https://files.pythonhosted.org/packages/34/72/9614c465dc206155d93eff0ca20d42e1e35afc533971379482de953521a4/gunicorn-23.0.0.tar.gz", hash = "sha256:f014447a0101dc57e294f6c18ca6b40227a4c90e9bdb586042628030cba004ec", size = 375031 }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/29/97/6d610ae77b5633d24b69c2ff1ac3044e0e565ecbd1ec188f02c45073054c/gunicorn-22.0.0-py3-none-any.whl", hash = "sha256:350679f91b24062c86e386e198a15438d53a7a8207235a78ba1b53df4c4378d9", size = 84443 },
+    { url = "https://files.pythonhosted.org/packages/cb/7d/6dac2a6e1eba33ee43f318edbed4ff29151a49b5d37f080aad1e6469bca4/gunicorn-23.0.0-py3-none-any.whl", hash = "sha256:ec400d38950de4dfd418cff8328b2c8faed0edb0d517d3394e457c317908ca4d", size = 85029 },
 ]
 
 [[package]]
@@ -1453,7 +1453,7 @@ wheels = [
 
 [[package]]
 name = "invenio-app-rdm"
-version = "12.0.18"
+version = "12.0.19"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "cairosvg" },
@@ -1493,9 +1493,9 @@ dependencies = [
     { name = "invenio-theme" },
     { name = "invenio-userprofiles" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/a0/0b/e1ac802fca11fbc53996348b2c18f3b42bb8022dbf7fca867c282a37dc39/invenio_app_rdm-12.0.18.tar.gz", hash = "sha256:ec51593bbf9daeb9c6b716bc735d70490e8e0267f7f38b2268631c2e9523f332", size = 505220 }
+sdist = { url = "https://files.pythonhosted.org/packages/0a/a9/d86973ceacbc24f8e2d6ae3cb95dc8c17951742513a856c6d684870d9034/invenio_app_rdm-12.0.19.tar.gz", hash = "sha256:2432df8637bd2fdc9cc84cf271b9f6b294bdbb665ebf241d0f6284f5311e249d", size = 505339 }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/42/c2/3858c5f0141d4152ed68c7a9c864fee682eec19a0b101d9d24a08b23fe67/invenio_app_rdm-12.0.18-py2.py3-none-any.whl", hash = "sha256:8e2e706ef9c3d5c736bc9622c7ec2e215c8c3cadff5913d19c7d81868cc9fe04", size = 951191 },
+    { url = "https://files.pythonhosted.org/packages/73/78/63b3fb88988bb7787e0439a686df518fc62905cfcb44470c5a6370683c88/invenio_app_rdm-12.0.19-py2.py3-none-any.whl", hash = "sha256:07552a9d7d0f5b67eb2036954e7b97b11ef01cf251feb08cc84f352f19cc65be", size = 951266 },
 ]
 
 [[package]]
@@ -1980,7 +1980,7 @@ dependencies = [
 
 [package.metadata]
 requires-dist = [
-    { name = "gunicorn", specifier = "~=22.0.0" },
+    { name = "gunicorn", specifier = "~=23.0.0" },
     { name = "invenio-app-rdm", specifier = "~=12.0.18" },
     { name = "invenio-logging", extras = ["sentry"], specifier = ">=2.1.5" },
     { name = "invenio-s3", specifier = "~=1.0.7" },
@@ -2163,7 +2163,7 @@ opensearch2 = [
 
 [[package]]
 name = "invenio-search-ui"
-version = "2.8.7"
+version = "2.8.9"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "babel" },
@@ -2171,9 +2171,9 @@ dependencies = [
     { name = "invenio-base" },
     { name = "invenio-i18n" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/cd/29/5d37203f401f33ec0b058e0255c4d6de803d4d2d6e041372f528969e4ffa/invenio-search-ui-2.8.7.tar.gz", hash = "sha256:58710fbcfe06f8d146a48ca233671699c0f40ea87b5a5579e83017e7d3121b9a", size = 92967 }
+sdist = { url = "https://files.pythonhosted.org/packages/c0/a9/afd5d7e96cbb64b282d5cc1794e4214a9c6901ef0db08a862a98693d02de/invenio_search_ui-2.8.9.tar.gz", hash = "sha256:d9bb8c4408d68624123a1fb72d06df1e8eeb7a06dace80419d74be8e322187d5", size = 98576 }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/44/8b/c4a177bc9de074fa7c6e0e1290ece66b2b788c9b8e9df897dd220dd7601b/invenio_search_ui-2.8.7-py2.py3-none-any.whl", hash = "sha256:67d21ef16c5c03c475edfbc3104237c4a2ea0dc22dbefb98fd2c2a997efad7ca", size = 216882 },
+    { url = "https://files.pythonhosted.org/packages/c1/75/d0e80c036fc4982a8cdafcf24b3eb0bb8a923152c4315f55e4d7a27769bf/invenio_search_ui-2.8.9-py2.py3-none-any.whl", hash = "sha256:e635ae183159714f8bab1217e6e00c0565f67559f3ca74546bc097a8be8251ae", size = 217015 },
 ]
 
 [[package]]
