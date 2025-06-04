@@ -23,7 +23,7 @@ services:
       - caddy_data:/data
       - caddy_config:/config
   web:
-    image: ghcr.io/front-matter/invenio-rdm-starter:v12.0.18.0
+    image: ghcr.io/front-matter/invenio-rdm-starter:v12.1.0.0
     pull_policy: if_not_present
     volumes:
       - uploaded_data:/opt/invenio/var/instance/data
@@ -115,7 +115,7 @@ services:
         condition: service_started
   worker:
     command: "celery -A invenio_app.celery worker --beat --events --loglevel=WARNING"
-    image: ghcr.io/front-matter/invenio-rdm-starter:v12.0.18.0
+    image: ghcr.io/front-matter/invenio-rdm-starter:v12.1.0.0
     pull_policy: if_not_present
     volumes:
       - uploaded_data:/opt/invenio/var/instance/data
@@ -130,8 +130,8 @@ services:
       - INVENIO_CELERY_RESULT_BACKEND=${INVENIO_CELERY_RESULT_BACKEND:-redis://cache:6379/2}
       - INVENIO_RATELIMIT_STORAGE_URL=${INVENIO_RATELIMIT_STORAGE_URL:-redis://cache:6379/3}
       - INVENIO_COMMUNITIES_IDENTITIES_CACHE_REDIS_URL=${INVENIO_COMMUNITIES_IDENTITIES_CACHE_REDIS_URL:-redis://cache:6379/4}
-      - INVENIO_BROKER_URL=${INVENIO_BROKER_URL:-amqp://guest:guest@mq:5672/}
-      - INVENIO_CELERY_BROKER_URL=${INVENIO_BROKER_URL:-amqp://guest:guest@mq:5672/}
+      - INVENIO_BROKER_URL=${INVENIO_BROKER_URL:-redis://cache:6379/5}
+      - INVENIO_CELERY_BROKER_URL=${INVENIO_BROKER_URL:-redis://cache:6379/6}
 
       - INVENIO_MAIL_SUPPRESS_SEND=${INVENIO_MAIL_SUPPRESS_SEND:-True}
       - INVENIO_MAIL_SERVER=${INVENIO_MAIL_SERVER:-smtp.gmail.com}
@@ -169,12 +169,6 @@ services:
       - POSTGRES_DB=${POSTGRES_DB:-inveniordm}
     ports:
       - 5432:5432
-  mq:
-    image: rabbitmq:3.13-management-alpine
-    restart: "unless-stopped"
-    ports:
-      - "15672:15672"
-      - "5672:5672"
   search:
     image: opensearchproject/opensearch:2.12.0
     restart: "unless-stopped"

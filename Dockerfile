@@ -5,17 +5,16 @@ FROM python:3.13-bookworm AS builder
 ENV LANG=en_US.UTF-8 \
     LANGUAGE=en_US:en
 
-# Install OS package dependencies
+# Install OS package dependencies and Node.js in a single layer
 RUN --mount=type=cache,sharing=locked,target=/var/cache/apt \
-    apt-get update --fix-missing && apt-get install -y build-essential libssl-dev libffi-dev \
-    python3-dev cargo pkg-config curl --no-install-recommends
-
-# Install Node.js
-RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - && \
-    apt-get install -y nodejs --no-install-recommends && apt-get clean
+    apt-get update --fix-missing && \
+    apt-get install -y build-essential libssl-dev libffi-dev \
+    python3-dev cargo pkg-config curl --no-install-recommends && \
+    curl -fsSL https://deb.nodesource.com/setup_20.x | bash - && \
+    apt-get install -y nodejs --no-install-recommends
 
 # Install uv and activate virtualenv
-COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
+COPY --from=ghcr.io/astral-sh/uv:0.7.10 /uv /uvx /bin/
 RUN uv venv /opt/invenio/.venv
 
 # Use the virtual environment automatically
@@ -30,27 +29,33 @@ ENV VIRTUAL_ENV=/opt/invenio/.venv \
     UV_PYTHON_DOWNLOADS=0 \
     INVENIO_INSTANCE_PATH=/opt/invenio/var/instance
 
-WORKDIR ${INVENIO_INSTANCE_PATH}
+WORKDIR ${WORKING_DIR}
 
+# Copy dependency files first for better layer caching
 COPY pyproject.toml uv.lock ./
 RUN --mount=type=cache,target=/root/.cache/uv \
     uv sync --frozen --no-install-project --no-dev
+
+# Copy application code
 COPY . .
 
+# Copy application files to instance path
 COPY site ${INVENIO_INSTANCE_PATH}/site
 COPY static ${INVENIO_INSTANCE_PATH}/static
 COPY assets ${INVENIO_INSTANCE_PATH}/assets
 COPY templates ${INVENIO_INSTANCE_PATH}/templates
 COPY app_data ${INVENIO_INSTANCE_PATH}/app_data
 COPY translations ${INVENIO_INSTANCE_PATH}/translations
-COPY ./invenio.cfg ${INVENIO_INSTANCE_PATH}
+COPY ./invenio.cfg ${INVENIO_INSTANCE_PATH}/
 
 # Install Python dependencies
 RUN --mount=type=cache,target=/root/.cache/uv \
     uv sync --frozen --no-dev
 
 # Build Javascript assets
-RUN --mount=type=cache,target=/var/cache/assets invenio collect --verbose && invenio webpack buildall
+RUN --mount=type=cache,target=/var/cache/assets \
+    invenio collect --verbose && \
+    invenio webpack buildall
 
 FROM python:3.13-slim-bookworm AS runtime
 
@@ -58,9 +63,10 @@ ENV LANG=en_US.UTF-8 \
     LANGUAGE=en_US:en
 
 # Install OS package dependencies
-RUN --mount=type=cache,sharing=locked,target=/var/cache/apt apt-get update -y --fix-missing && \
-    apt-get install apt-utils gpg libcairo2 debian-keyring debian-archive-keyring apt-transport-https curl -y --no-install-recommends && \
-    apt-get clean 
+RUN --mount=type=cache,sharing=locked,target=/var/cache/apt \
+    apt-get update --fix-missing && \
+    apt-get install -y apt-utils gpg libcairo2 debian-keyring \
+    debian-archive-keyring apt-transport-https curl --no-install-recommends
 
 ENV VIRTUAL_ENV=/opt/invenio/.venv \
     PATH="/opt/invenio/.venv/bin:$PATH" \
