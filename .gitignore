@@ -158,4 +158,4 @@ cython_debug/
 docker/opensearch/*
 
 # mkdocs
-docs/_site
+_site
