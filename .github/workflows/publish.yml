@@ -22,7 +22,7 @@ jobs:
         run: uv venv &&
           uv pip install mkdocs-material
       - name: Build documentation
-        run: uv mkdocs build --site-dir docs
+        run: uv run mkdocs build --site-dir docs
       - name: Deploy to Netlify
         uses: jsmrcaga/action-netlify-deploy@v2.4.0
         with:
