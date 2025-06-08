@@ -21,4 +21,4 @@ jobs:
       - name: Install dependencies
         run: uv venv &&
           uv pip install mkdocs-material
-      - run: uv run mkdocs gh-deploy --force
+      - run: cd docs && uv run mkdocs gh-deploy --force
