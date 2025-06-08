@@ -21,3 +21,10 @@ jobs:
       - name: Install dependencies
         run: uv venv &&
           uv pip install mkdocs-material
+      - name: Build documentation
+        run: uv mkdocs build --site-dir docs
+      - name: Deploy to Netlify
+        uses: jsmrcaga/action-netlify-deploy@v2.0.0
+        with:
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+          NETLIFY_DEPLOY_TO_PROD: true
