@@ -23,7 +23,7 @@ jobs:
           python-version: "3.13.2"
       - name: Install dependencies
         run: uv venv &&
-          uv pip install mkdocs-material
+          uv sync
       - name: Build documentation
         run: uv run mkdocs build
       - name: Deploy to Netlify
