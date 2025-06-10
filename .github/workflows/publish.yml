@@ -9,9 +9,6 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: ./docs
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
@@ -22,14 +19,13 @@ jobs:
         with:
           python-version: "3.13.2"
       - name: Install dependencies
-        run: uv venv &&
-          uv sync
+        run: uv venv &&uv sync
       - name: Build documentation
         run: uv run mkdocs build
       - name: Deploy to Netlify
         uses: nwtgck/actions-netlify@v3.0
         with:
-          publish-dir: "./docs/_site"
+          publish-dir: "./_site"
           production-branch: main
           github-token: ${{ secrets.GITHUB_TOKEN }}
           deploy-message: "Deploy from GitHub Actions"

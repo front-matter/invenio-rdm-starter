@@ -25,3 +25,6 @@ build-backend = "hatchling.build"
 [tool.ruff]
 line-length = 79
 include = ["pyproject.toml", "site/**/*.py"]
+
+[project.optional-dependencies]
+docs = ["mkdocs-material>=8.5.11"]
