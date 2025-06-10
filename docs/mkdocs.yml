@@ -1,5 +1,6 @@
 site_name: InvenioRDM Starter
-site_dir: _site
+docs_dir: ..
+site_dir: docs/_site
 site_url: https://starter.front-matter.io
 repo_url: https://github.com/front-matter/invenio-rdm-starter
 edit_uri: edit/main/
@@ -18,7 +19,7 @@ markdown_extensions:
   - def_list
 theme:
   name: material
-  logo: assets/logo.png
+  logo: docs/assets/logo.png
   palette:
     - media: "(prefers-color-scheme: light)"
       scheme: starter-light
@@ -36,10 +37,10 @@ theme:
 extra:
   social:
     - icon: fontawesome/solid/paper-plane
-      link: mailto:<info@front-matter.io>
+      link: mailto:info@front-matter.io
     - icon: fontawesome/brands/mastodon
       link: https://hachyderm.io/@mfenner
     - icon: fontawesome/brands/github
       link: https://github.com/front-matter/invenio-rdm-starter
 extra_css:
-  - stylesheets/extra.css
+  - docs/stylesheets/extra.css

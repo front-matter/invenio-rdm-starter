@@ -1,5 +1,0 @@
-[build]
-base = "docs/"
-publish = "docs/_site"
-command = "mkdocs build"
-environment = { PYTHON_VERSION = "3.13" }

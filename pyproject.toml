@@ -25,6 +25,3 @@ build-backend = "hatchling.build"
 [tool.ruff]
 line-length = 79
 include = ["pyproject.toml", "site/**/*.py"]
-
-[tool.uv.workspace]
-members = ["docs"]
