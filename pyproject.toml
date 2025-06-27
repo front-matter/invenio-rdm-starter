@@ -27,8 +27,8 @@ include = ["site/invenio_rdm_starter/*.py"]
 line-length = 79
 include = ["pyproject.toml", "site/**/*.py"]
 
-[project.optional-dependencies]
-docs = ["mkdocs-material>=8.5.11"]
-
 [tool.uv.sources]
 invenio-rest = { git = "https://github.com/front-matter/invenio-rest", branch = "maint-1.x" }
+
+[project.optional-dependencies]
+docs = ["mkdocs-material>=8.5.11"]
