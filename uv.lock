@@ -1083,15 +1083,15 @@ wheels = [
 
 [[package]]
 name = "flask-webpackext"
-version = "2.0.0"
+version = "2.1.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "flask" },
     { name = "pywebpack" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/2c/15/10bafe1a2c041df276951582c821477206bf94c313ab4b11db002e8d73d6/flask_webpackext-2.0.0.tar.gz", hash = "sha256:7432c2e8d9039238f2f8476b004520278cd13ea3f802f9695536f273dce67f7e", size = 25360, upload-time = "2024-11-28T17:14:30.625Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/f6/b4/43fcb72a19ee53ee04b6c922633152e38eedc433745a537439ed520ec548/flask_webpackext-2.1.0.tar.gz", hash = "sha256:89ab631f3c3744e2bbd8cdd088249806e680f66b0bd6b7b972c2de93304706f5", size = 25947, upload-time = "2025-03-28T21:00:32.771Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/e1/34/f4638174e8f6ca5271c0e9723310075295d4818db9daaebf6badda5d231e/flask_webpackext-2.0.0-py2.py3-none-any.whl", hash = "sha256:7b9d382d13de23e722095727038201cdeca1f046f3c287eae81271e9336062d8", size = 14705, upload-time = "2024-11-28T17:14:29.604Z" },
+    { url = "https://files.pythonhosted.org/packages/9f/a1/ea664d8510223f214e4cc8ad376066e9b0392bc728d2d212c6c2495663da/flask_webpackext-2.1.0-py2.py3-none-any.whl", hash = "sha256:8183d316b205d5ce6bb4212e399c17c085d40b28193af9525161d119a6cf6cc4", size = 15057, upload-time = "2025-03-28T21:00:31.556Z" },
 ]
 
 [[package]]
@@ -1483,16 +1483,16 @@ wheels = [
 
 [[package]]
 name = "invenio-assets"
-version = "3.1.0"
+version = "3.2.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "flask-collect-invenio" },
     { name = "flask-webpackext" },
     { name = "invenio-base" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/3c/d2/aba7729d8a6a7baeab8184e4ddeed0bf58d4497edeeb492875a873c651dc/invenio_assets-3.1.0.tar.gz", hash = "sha256:0e5d86363a7088353ca24dce63df87278d82c98ada80db79222530cdac19aa6c", size = 28937, upload-time = "2024-11-28T21:14:24.777Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/3a/32/4db0b460e4bde15ac1690a8ebbbb560d38045be75231c89a7cd2fce4d86b/invenio_assets-3.2.0.tar.gz", hash = "sha256:8822e17782a1d4b1704519bb42a01ab181daaf39342b98ce5de8114e2c40d612", size = 30202, upload-time = "2025-03-28T21:24:05.079Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/c5/2e/c44eec202feb40c2b400d80b38f314595b11685ac935b91c12a1bb353907/invenio_assets-3.1.0-py2.py3-none-any.whl", hash = "sha256:0641235db3687941f486f8cb2c0a59186130c2db79b7ec459ef10e6e736c36bd", size = 16844, upload-time = "2024-11-28T21:14:23.159Z" },
+    { url = "https://files.pythonhosted.org/packages/7c/8c/95d54f4a3b2f954d2d7bcd1b24dad10c25440caa3f5dc9ca97f051cb6023/invenio_assets-3.2.0-py2.py3-none-any.whl", hash = "sha256:db08a1d2ae34089791fe21f886fabfcc5e162ade9fdf69e2a79af75e11457a8b", size = 20730, upload-time = "2025-03-28T21:24:04.059Z" },
 ]
 
 [[package]]
@@ -1744,11 +1744,6 @@ wheels = [
     { url = "https://files.pythonhosted.org/packages/05/30/75f8fe821b88c23280952d2d6190b5b04e9aaa6b204f33a7e30d70f24b7c/invenio_logging-2.1.5-py2.py3-none-any.whl", hash = "sha256:2c1eba52fe925b099089883729bd9e834ba6dffbccdd11555899e5d62e67a8ab", size = 11759, upload-time = "2025-02-21T13:58:24.274Z" },
 ]
 
-[package.optional-dependencies]
-sentry = [
-    { name = "sentry-sdk", extra = ["flask"] },
-]
-
 [[package]]
 name = "invenio-mail"
 version = "2.2.0"
@@ -1949,12 +1944,13 @@ wheels = [
 
 [[package]]
 name = "invenio-rdm-starter"
-version = "12.1.0.0"
+version = "12.1.0.1"
 source = { editable = "." }
 dependencies = [
     { name = "gunicorn" },
     { name = "invenio-app-rdm" },
-    { name = "invenio-logging", extra = ["sentry"] },
+    { name = "invenio-assets" },
+    { name = "invenio-rest" },
     { name = "invenio-s3" },
     { name = "invenio-search", extra = ["opensearch2"] },
     { name = "ruff" },
@@ -1969,7 +1965,8 @@ docs = [
 requires-dist = [
     { name = "gunicorn", specifier = "~=23.0.0" },
     { name = "invenio-app-rdm", specifier = "~=12.1.0" },
-    { name = "invenio-logging", extras = ["sentry"], specifier = ">=2.1.5,<3.0.0" },
+    { name = "invenio-assets", specifier = "~=3.2.0" },
+    { name = "invenio-rest", git = "https://github.com/front-matter/invenio-rest?branch=maint-1.x" },
     { name = "invenio-s3", specifier = "~=1.0.7" },
     { name = "invenio-search", extras = ["opensearch2"], specifier = "~=2.4.1" },
     { name = "mkdocs-material", marker = "extra == 'docs'", specifier = ">=8.5.11" },
@@ -2102,8 +2099,8 @@ wheels = [
 
 [[package]]
 name = "invenio-rest"
-version = "1.5.0"
-source = { registry = "https://pypi.org/simple" }
+version = "1.5.2"
+source = { git = "https://github.com/front-matter/invenio-rest?branch=maint-1.x#8e5e5fb65f57eecbed16e9a3bc84df9da875d2c4" }
 dependencies = [
     { name = "flask-cors" },
     { name = "invenio-base" },
@@ -2111,10 +2108,6 @@ dependencies = [
     { name = "itsdangerous" },
     { name = "marshmallow" },
     { name = "webargs" },
-]
-sdist = { url = "https://files.pythonhosted.org/packages/91/c3/50a9af17bfef9902f11e33dbcd59dc0e399c82190a084d321fc174eed98b/invenio_rest-1.5.0.tar.gz", hash = "sha256:e338f76aaf56a92cd18df3d54532c26f1c77fbeb44f1197fdd98fcc2c78b92ab", size = 36892, upload-time = "2024-12-02T16:12:01.173Z" }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/ed/c1/6805f0dcd7f140778f4884e1975b68607217b98e3665a85e6d5e2f0c6ed6/invenio_rest-1.5.0-py2.py3-none-any.whl", hash = "sha256:dc57a22dd45a4043e27e2ca2cee44b2ccb337e6c94d5f5aaf17e1571b3e4f69e", size = 21419, upload-time = "2024-12-02T16:12:00.038Z" },
 ]
 
 [[package]]
@@ -3485,26 +3478,6 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/c0/0a/1cdbabf9edd0ea7747efdf6c9ab4e7061b085aa7f9bfc36bb1601563b069/s3transfer-0.10.4.tar.gz", hash = "sha256:29edc09801743c21eb5ecbc617a152df41d3c287f67b615f73e5f750583666a7", size = 145287, upload-time = "2024-11-20T21:06:05.981Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/66/05/7957af15543b8c9799209506df4660cba7afc4cf94bfb60513827e96bed6/s3transfer-0.10.4-py3-none-any.whl", hash = "sha256:244a76a24355363a68164241438de1b72f8781664920260c48465896b712a41e", size = 83175, upload-time = "2024-11-20T21:06:03.961Z" },
-]
-
-[[package]]
-name = "sentry-sdk"
-version = "1.45.1"
-source = { registry = "https://pypi.org/simple" }
-dependencies = [
-    { name = "certifi" },
-    { name = "urllib3" },
-]
-sdist = { url = "https://files.pythonhosted.org/packages/c8/28/02c0cd9184f9108e3c52519f9628b215077a3854240e0b17ae845e664855/sentry_sdk-1.45.1.tar.gz", hash = "sha256:a16c997c0f4e3df63c0fc5e4207ccb1ab37900433e0f72fef88315d317829a26", size = 244774, upload-time = "2024-07-26T13:48:32.375Z" }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/fe/9f/105366a122efa93f0cb1914f841747d160788e4d022d0488d2d44c2ba26c/sentry_sdk-1.45.1-py2.py3-none-any.whl", hash = "sha256:608887855ccfe39032bfd03936e3a1c4f4fc99b3a4ac49ced54a4220de61c9c1", size = 267163, upload-time = "2024-07-26T13:48:29.38Z" },
-]
-
-[package.optional-dependencies]
-flask = [
-    { name = "blinker" },
-    { name = "flask" },
-    { name = "markupsafe" },
 ]
 
 [[package]]
