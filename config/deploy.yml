@@ -82,7 +82,7 @@ env:
     - INVENIO_GITHUB_APP_CREDENTIALS
 accessories:
   db:
-    image: paradedb/paradedb:0.15.22-pg17
+    image: paradedb/paradedb:0.16.0-pg17
     host: 176.9.24.117
     port: 5432
     directories:
