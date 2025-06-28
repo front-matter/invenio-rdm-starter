@@ -4,6 +4,8 @@ servers:
   web:
     hosts:
       - 176.9.24.117
+    labels:
+      service: invenio-rdm-starter
   worker:
     hosts:
       - 176.9.24.117

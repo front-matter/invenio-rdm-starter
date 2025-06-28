@@ -1,4 +1,6 @@
 FROM python:3.13-bookworm AS builder
+LABEL service="invenio-rdm-starter"
+LABEL maintainer="Front Matter <info@front-matter.io>"
 
 # Dockerfile that builds the InvenioRDM Starter Docker image.
 
