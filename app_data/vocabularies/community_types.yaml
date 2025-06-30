@@ -23,3 +23,8 @@
     en: "Blog"
     sv: "Blogg"
     de: "Blog"
+- id: "subject"
+  title:
+    en: "Subject Area"
+    sv: "Ämnesområde"
+    de: "Fachgebiet"
