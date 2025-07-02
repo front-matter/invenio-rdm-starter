@@ -53,6 +53,7 @@ env:
     INVENIO_CELERY_BROKER_URL: redis://inveniordm-cache:6379/5
     INVENIO_SEARCH_HOSTS: inveniordm-search:9200
     INVENIO_SEARCH_INDEX_PREFIX: invenio-rdm-starter-
+    INVENIO_OAISERVER_ID_PREFIX: invenio-rdm-starter-
     INVENIO_THEME_SITENAME: InvenioRDM Starter
     INVENIO_THEME_FRONTPAGE_TITLE: "InvenioRDM Starter"
     INVENIO_THEME_FRONTPAGE_SUBTITLE: "A starter project for the turn-key research data management repository."
