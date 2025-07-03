@@ -6,7 +6,7 @@ echo "-- Setup InvenioRDM --"
 invenio db init create
 
 # Creating files location...
-invenio files location create --default default  ${INVENIO_DATADIR}
+invenio files location create --default default  "file://${INVENIO_DATADIR}"
 
 # Creating admin role...
 invenio roles create admin
