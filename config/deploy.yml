@@ -118,7 +118,7 @@ accessories:
       publish:
         - 9600:9600
 volumes:
-  - uploaded_data:/opt/invenio/var/instance/data
-  - archived_data:/opt/invenio/var/instance/archive
+  - /opt/starter/data:/opt/invenio/var/instance/data
+  - /opt/starter/archive:/opt/invenio/var/instance/archive
 deploy_timeout: 45
 primary_role: web
