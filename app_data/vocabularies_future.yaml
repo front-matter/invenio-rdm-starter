@@ -1,9 +1,0 @@
-affiliations:
-  readers:
-    - type: yaml
-      args:
-        origin: "./app_data/affiliations_ror_complete.yaml"
-  writers:
-    - type: affiliations-service
-      args:
-        update: false
