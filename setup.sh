@@ -27,11 +27,8 @@ invenio communities custom-fields init
 # Creating rdm fixtures...
 invenio rdm-records fixtures
 
-# Creating demo records...
-# invenio rdm-records demo records --user user@demo.org
-
-# Creating demo communities
-# invenio rdm-records demo communities --user community@demo.org
+# rebuilding all indices...
+invenio rdm rebuild-all-indices
 
 # Declaring queues...
 invenio queues declare
