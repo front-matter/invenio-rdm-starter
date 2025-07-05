@@ -41,6 +41,7 @@ env:
     INVENIO_SITE_UI_URL: https://demo.front-matter.io
     INVENIO_SITE_API_URL: https://demo.front-matter.io/api
     INVENIO_WSGI_PROXIES: 4
+    INVENIO_DATADIR: /opt/invenio/var/instance/data
     # accessories db, cache, search
     POSTGRES_DB: starter
     INVENIO_CACHE_TYPE: redis
@@ -81,9 +82,13 @@ env:
     - INVENIO_OAUTHCLIENT_REMOTE_APPS
     - INVENIO_ORCID_APP_CREDENTIALS
     - INVENIO_GITHUB_APP_CREDENTIALS
+
+volumes:
+  - starter:/opt/invenio/var/instance/data
+
 accessories:
   db:
-    image: paradedb/paradedb:0.16.0-pg17
+    image: postgres:17.5-bookworm
     host: 176.9.24.117
     port: 5432
     directories:
@@ -117,8 +122,4 @@ accessories:
       memory: 4g
       publish:
         - 9600:9600
-volumes:
-  - /opt/starter/data:/opt/invenio/var/instance/data
-  - /opt/starter/archive:/opt/invenio/var/instance/archive
 deploy_timeout: 45
-primary_role: web
