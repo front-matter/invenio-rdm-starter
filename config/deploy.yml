@@ -89,6 +89,7 @@ volumes:
 accessories:
   db:
     image: postgres:17.5-bookworm
+    service: inveniordm-db
     host: 176.9.24.117
     port: 5432
     directories:
@@ -101,12 +102,14 @@ accessories:
         - POSTGRES_PASSWORD
   cache:
     image: valkey/valkey:7.2.5
+    service: inveniordm-cache
     host: 176.9.24.117
     port: 6379
     directories:
       - data:/data
   search:
     image: opensearchproject/opensearch:2.18.0
+    service: inveniordm-search
     host: 176.9.24.117
     port: 9200
     env:
