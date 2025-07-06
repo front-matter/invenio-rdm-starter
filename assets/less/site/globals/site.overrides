@@ -5,3 +5,26 @@
 html.cover-page {
   background-color: @grey;
 }
+
+.creatibutor-link {
+  color: @mutedTextColor;
+  margin: 0 0.25rem 0 0;
+
+  &:hover {
+    text-decoration: none;
+
+    span {
+      color: @mutedTextColor;
+      text-decoration: underline;
+    }
+
+    sup {
+      color: @mutedTextColor;
+    }
+  }
+
+  sup {
+    color: @mutedTextColor;
+    padding-left: .1rem;
+  }
+}
