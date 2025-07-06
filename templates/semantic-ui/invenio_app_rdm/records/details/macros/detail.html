@@ -1,0 +1,331 @@
+{#
+  Copyright (C) 2020-2025 CERN.
+  Copyright (C) 2024 Northwestern University.
+  Copyright (C) 2024-2025 KTH Royal Institute of Technology.
+
+  Invenio RDM Records is free software; you can redistribute it and/or modify
+  it under the terms of the MIT License; see LICENSE file for more details.
+#}
+
+
+{% macro show_detail(title, value) %}
+  <dt class="ui tiny header">{{ title }}</dt>
+  <dd>{{ value }}</dd>
+{%- endmacro %}
+
+
+{% macro show_title_detail(title, language, value) %}
+  <dt class="ui tiny header">
+    {{ title }}
+    <span class="language text-muted">
+      {{ '(' + language + ')' if language }}
+    </span>
+  </dt>
+  <dd>
+    {{ value }}
+  </dd>
+{%- endmacro %}
+
+
+{% macro show_sanitized_detail(title, value) %}
+  <dt class="ui tiny header">{{ title }}</dt>
+  <dd>
+    {{ value | sanitize_html()| safe }}
+  </dd>
+{%- endmacro %}
+
+
+{% macro list_string_values(field, values) %}
+  {% for value in values %}
+    {% set search_url = field | custom_fields_search(value) %}
+    {% if search_url %}
+      <a href="{{ search_url }}">{{ value }}</a> {{ ", " if not loop.last }}
+    {% else %}
+      {{ value }}{{ ", " if not loop.last }}
+    {% endif %}
+  {% endfor %}
+{% endmacro %}
+
+
+{% macro show_add_titles(add_titles) %}
+  {% for add_title in add_titles %}
+    {% if add_title.lang %}
+      {{ show_title_detail(add_title.type.title_l10n, add_title.lang.title_l10n, add_title.title) }}
+    {% else %}
+      {{ show_title_detail(add_title.type.title_l10n,None, add_title.title) }}
+    {% endif %}
+  {% endfor %}
+{% endmacro %}
+
+
+{% macro show_add_descriptions(add_descriptions) %}
+  {% for add_description in add_descriptions %}
+    {% set desc_type_defined = add_description.type is defined %}
+    {% set desc_text = add_description.description|default('') %}
+    <section
+      id="additional-description-{{ loop.index }}"
+      class="rel-mt-2 rich-input-content"
+      aria-label="{{ (add_description.type.title_l10n if desc_type_defined else _('Missing description type!')) }}"
+    >
+      <h2>
+        {{ add_description.type.title_l10n if desc_type_defined else _('Missing description type!') }}
+        <span class="text-muted language">
+          {{ '(' ~ add_description.lang.title_l10n ~ ')' if add_description.lang is defined else '' }}
+        </span>
+      </h2>
+      {% if desc_type_defined and add_description.type.id == "notes" %}
+        <div class="ui message warning">
+          {{ desc_text | sanitize_html() | safe }}
+        </div>
+      {% else %}
+        {{ desc_text | sanitize_html() | safe }}
+      {% endif %}
+    </section>
+  {% endfor %}
+{% endmacro %}
+
+
+{% macro show_dates(dates) %}
+  {% for date in dates %}
+    {% set date_type_title = date.get('type', {}).get('title_l10n', _('Unknown date type')) %}
+    <dt class="ui tiny header">{{ date_type_title }}</dt>
+    <dd>
+      <div>{{ date.date|default('') }}</div>
+      <div class="text-muted">{{ date.description|default('') }}</div>
+    </dd>
+  {% endfor %}
+{% endmacro %}
+
+
+{% macro show_funding(funding) %}
+  {% for fund in funding %}
+    {{ _show_funding_item(fund, loop.index0) }}
+  {% endfor %}
+{% endmacro %}
+
+
+{% macro _show_funding_item(item, index) %}
+  <dt class="ui tiny header">{{ item.funder.name if item.funder }}</dt>
+  {%- if item.award -%}
+  <dt class="ui tiny header">
+    <span class="mr-0 text-muted">
+      {% if item.award.acronym %}
+        {{ item.award.acronym }} -
+      {% endif %}
+
+      {%- if item.award.title_l10n -%}
+        {{ item.award.title_l10n }}
+      {%- endif -%}
+    </span>
+
+    {%- if item.award.number -%}
+      <span class="ui mini basic label {% if not item.award.title_l10n %}ml-0{% endif %}" id="number-label-{{ index }}">
+        {{ item.award.number }}
+      </span>
+    {%- endif -%}
+
+    {%- if item.award.identifiers -%}
+      {% for identifier in item.award.identifiers if 'url' == identifier.scheme %}
+        <a href="{{ identifier.identifier }}" target="_blank"
+          rel="noopener noreferrer" aria-label="{{ _('Open external link') }}">
+          <i class="external alternate icon"></i>
+        </a>
+      {%- endfor -%}
+    {%- endif -%}
+  </dt>
+{%- endif -%}
+{% endmacro %}
+
+{% macro show_references(references) %}
+  <ol class="ui ordered list details-list">
+    {% for reference in references %}
+      {% set reference_string = reference.reference|default('') %}
+      {% if reference.identifier %}
+        {% if reference.scheme %}
+          {% set id = reference.identifier %}
+          {% if 'doi' == reference.scheme %}
+            <li class="item">{{ reference_string }}
+              <a class="no-text-decoration" target="_blank" href="{{ id|pid_url('doi') }}">
+                {{ id|pid_url('doi') }}
+              </a>
+            </li>
+          {% elif 'url' == reference.scheme %}
+            <li class="item">{{ reference_string }}
+              <a class="no-text-decoration" target="_blank" href="{{ id }}">
+                {{ id }}
+              </a>
+            </li>
+          {% endif %}
+        {% endif %}
+      {% else %}
+        <li class="item">{{ reference_string }}</li>
+      {% endif %}
+    {% endfor %}
+  </ol>
+{% endmacro %}
+
+
+{% macro _identifiers_for_group(related_identifiers) %}
+  {% for identifier in related_identifiers %}
+    <dd>
+      {% if identifier.resource_type is defined and identifier.resource_type.title_l10n is defined %}
+        {{ identifier.resource_type.title_l10n }}:
+      {% endif %}
+
+      {% set ident_val = identifier.identifier|default('') %}
+      {% set url = ident_val|pid_url(scheme=identifier.scheme) %}
+      {% if url %}
+        <a href="{{ url }}" target="_blank" title="{{ _('Opens in new tab') }}">
+          {{ ident_val }}
+        </a>
+      {% else %}
+        {{ ident_val }}
+      {% endif %}
+
+      {% if identifier.scheme is defined and identifier.scheme %}
+        {{ ' (' ~ (identifier.scheme|get_scheme_label) ~ ')' }}
+      {% endif %}
+    </dd>
+  {% endfor %}
+{% endmacro %}
+
+
+{% macro show_related_identifiers(related_identifiers) %}
+  <dl class="details-list">
+    {%- for group in (related_identifiers|selectattr("relation_type","defined")|list) | groupby('relation_type.title_l10n') %}
+      <dt class="ui tiny header">{{ group.grouper }}</dt>
+      {{ _identifiers_for_group(group.list) }}
+    {%- endfor %}
+  </dl>
+{% endmacro %}
+
+
+{% macro show_alternate_identifiers(identifiers) %}
+  {% for alt_id in identifiers %}
+    <dt class="ui tiny header">{{ alt_id.scheme | get_scheme_label }}</dt>
+    <dd>
+      {% set url = alt_id.identifier|pid_url(scheme=alt_id.scheme) %}
+      {% if url %}
+        <a href="{{ url }}" target="_blank" title="{{ _('Opens in new tab') }}">
+          {{ alt_id.identifier }}
+        </a>
+      {% else %}
+        {{ alt_id.identifier }}
+      {% endif %}
+    </dd>
+  {% endfor %}
+{% endmacro %}
+
+
+{% macro list_languages(languages) %}
+  {% for lang in languages %}
+    {{ lang.title_l10n }}{{ ", " if not loop.last }}
+  {% endfor %}
+{% endmacro %}
+
+{% macro list_vocabulary_values(field, values, field_cfg) %}
+  {% if values.title_l10n is defined %}
+    {% set search_url = field | custom_fields_search(values.title_l10n, field_cfg) %}
+    {% if search_url %}
+      <a href="{{ search_url }}">{{ values.title_l10n | safe }}</a>
+    {% else %}
+      {{ values.title_l10n }}
+    {% endif %}
+  {% else %}
+    {% for value in values %}
+      {{ value.title_l10n }}{{ ", " if not loop.last }}
+    {% endfor %}
+  {% endif %}
+{% endmacro %}
+
+
+{% macro list_float_values(field, values) %}
+  {% for value in values %}
+    {% set search_url = field | custom_fields_search(value) %}
+    {% if search_url %}
+      <a href="{{ search_url }}">{{ "%0.2f" | format(value) }}</a>{{ " , " if not loop.last }}
+    {% else %}
+      {{ "%0.2f" | format(value) }}{{ ", " if not loop.last }}
+    {% endif %}
+  {% endfor %}
+{% endmacro %}
+
+
+{% macro show_section_custom_fields(custom_fields, section_fields) %}
+  {% for field_cfg in section_fields %}
+    {% set field_value = custom_fields.get(field_cfg.field) %}
+    {% if field_value %}
+      {% if field_cfg.template %}
+        {% include field_cfg.template %}
+      {% else %}
+        <dt class="ui tiny header">
+          {{ field_cfg.props.label }}
+          {% set namespace_url = field_cfg.display_url if field_cfg.display_url is defined else field_cfg.field | namespace_url %}
+          {% if namespace_url %}
+            <a href="{{ namespace_url }}" aria-label="{{ namespace_url }}">
+              <i class="icon external" aria-hidden="true"></i>
+            </a>
+          {% endif %}
+        </dt>
+        {% if field_value is string %}
+          <dd>
+            {% set search_url = (field_value | pid_url) if field_cfg.props.is_identifier else (field_cfg.field | custom_fields_search(field_value | safe)) %}
+            {% if search_url %}
+              <a href="{{ search_url }}">{{ field_value | safe }}</a>
+            {% else %}
+              {{ field_value | safe }}
+            {% endif %}
+          </dd>
+        {% elif field_value is boolean %}
+          <dd>
+            {% if field_value %}
+              {{ field_cfg.props.trueLabel }}
+            {% else %}
+              {{ field_cfg.props.falseLabel }}
+            {% endif %}
+          </dd>
+        {% elif field_cfg.is_vocabulary %}
+          <dd>{{ list_vocabulary_values(field_cfg.field, field_value, field_cfg) }}</dd>
+        {% elif field_value is iterable and field_value|length > 0 and field_value[0] is string %}
+          <dd>{{ list_string_values(field_cfg.field, field_value) }}</dd>
+        {% elif field_value is iterable and field_value|length > 0 and field_value[0] is number %}
+          <dd>{{ list_float_values(field_cfg.field, field_value) }}</dd>
+        {% else %}
+          <dd>{{ field_value }}</dd>
+        {% endif %}
+      {% endif %}
+    {% endif %}
+  {% endfor %}
+{% endmacro %}
+
+
+{% macro show_detail_conference(conference) %}
+  <dd>
+    {%- if conference.url %}
+      <a href="{{ conference.url }}"><i
+        class="fa fa-external-link"></i> {{ conference.title }} {{ "("+conference.acronym+")" if conference.acronym else "" }}
+      </a>
+    {%- else %}
+      {{ conference.title }}
+      {{ "("+conference.acronym+")" if conference.acronym else "" }}
+    {%- endif %}
+    {%- if conference.place %}, {{ conference.place }} {%- endif %}
+    {%- if conference.dates %}, {{ conference.dates }} {%- endif %}
+    {% if conference.session %}(Session
+      {{ conference.session }}{% if conference.session_part %}, Part
+        {{ conference.session_part }}{%- endif %}){%- endif %}
+  </dd>
+  {%- if conference.url and not conference.title %}
+    <dd><a href="{{ conference.url }}"><i
+      class="fa fa-external-link"></i> {{ _('Conference website') }}</a></dd>
+  {%- endif %}
+{% endmacro %}
+
+
+{% macro show_detail_thesis(title, thesis) %}
+  <dt class="ui tiny header">
+    {{ title }}
+  </dt>
+  <dd>{{ thesis | safe }}
+  </dd>
+{% endmacro %}
