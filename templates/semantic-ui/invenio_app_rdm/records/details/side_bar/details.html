@@ -1,0 +1,31 @@
+{#
+  Copyright (C) 2020 CERN.
+  Copyright (C) 2020 Northwestern University.
+  Copyright (C) 2021 TU Wien.
+  Copyright (C) 2022 New York University.
+
+  Invenio RDM Records is free software; you can redistribute it and/or modify
+  it under the terms of the MIT License; see LICENSE file for more details.
+#}
+
+{%- from "invenio_app_rdm/records/macros/detail.html" import
+  list_languages, show_dates, show_detail, show_detail_conference, show_detail_thesis %}
+
+<div class="sidebar-container">
+  <h2 class="ui medium top attached header mt-0">{{ _('Details')}}</h2>
+  <div id="record-details" class="ui segment bottom attached rdm-sidebar">
+
+    <dl class="details-list">
+      {{ show_detail(_('Resource type'), record_ui["ui"]["resource_type"]["title_l10n"]) if record_ui["ui"]["resource_type"] }}
+      {{ show_detail(_('Publication date'), record_ui["ui"]["publication_date_l10n"]) if record_ui["ui"]["publication_date_l10n"] }}
+      {{ show_detail(_('Publisher'), metadata.publisher) if metadata.publisher }}
+      {{ show_detail(_('Published in'), record_ui["ui"]["publishing_information"]["journal"]) if record_ui["ui"].get('publishing_information', {}).get('journal') }}
+      {{ show_detail(_('Imprint'), record_ui["ui"]["publishing_information"]["imprint"]) if record_ui["ui"].get('publishing_information', {}).get('imprint') }}
+      {{ show_detail_thesis(_('Thesis'), record_ui["ui"]["publishing_information"]["thesis"]) if record_ui["ui"].get('publishing_information', {}).get('thesis', {}) }}
+      {{ show_detail(_('Conference'), show_detail_conference(record_ui["ui"]["conference"])) if record_ui["ui"]["conference"] }}
+      {{ show_detail(_('Languages'), list_languages(record_ui["ui"]["languages"])) if record_ui["ui"]["languages"] }}
+      {{ show_detail(_('Formats'), ", ".join(metadata.formats)) if metadata.formats }}
+      {{ show_detail(_('Sizes'), ", ".join(metadata.sizes)) if metadata.sizes }}
+    </dl>
+  </div>
+</div>
