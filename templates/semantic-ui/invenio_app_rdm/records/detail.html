@@ -241,7 +241,7 @@
               <section id="record-title-section"
                        aria-label="{{ _('Record title and creators') }}">
                 <h1 id="record-title"
-                    class="wrap-overflowing-text">{{ metadata.title }}</h1>
+                    class="wrap-overflowing-text">{{ metadata.title | safe }}</h1>
 
                 {% if record_ui["ui"]["creators"] or record_ui["ui"]["contributors"] %}
                   <section id="creatibutors"
