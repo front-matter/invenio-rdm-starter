@@ -91,7 +91,7 @@ accessories:
     image: postgres:17.5-bookworm
     service: inveniordm-db
     host: 176.9.24.117
-    port: 5432
+    port: 5433
     directories:
       - data:/var/lib/postgresql/data
     env:
