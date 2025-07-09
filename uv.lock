@@ -1278,7 +1278,7 @@ wheels = [
 [[package]]
 name = "invenio-app-rdm"
 version = "13.0.0b4.dev2"
-source = { git = "https://github.com/front-matter/invenio-app-rdm?branch=rdm-parent-persistent-identifiers-none#d0daac77c3f67e30eeef0444a924f4b86f0d6632" }
+source = { git = "https://github.com/inveniosoftware/invenio-app-rdm#f3a4141d9e5aabd8426ab31b74d1b7bfaacf3da4" }
 dependencies = [
     { name = "cairosvg" },
     { name = "invenio-access" },
@@ -1849,7 +1849,7 @@ dependencies = [
 
 [[package]]
 name = "invenio-rdm-starter"
-version = "13.0.0.1"
+version = "13.0.0.2"
 source = { editable = "." }
 dependencies = [
     { name = "gunicorn" },
@@ -1869,7 +1869,7 @@ docs = [
 [package.metadata]
 requires-dist = [
     { name = "gunicorn", specifier = "~=23.0.0" },
-    { name = "invenio-app-rdm", git = "https://github.com/front-matter/invenio-app-rdm?branch=rdm-parent-persistent-identifiers-none" },
+    { name = "invenio-app-rdm", git = "https://github.com/inveniosoftware/invenio-app-rdm" },
     { name = "invenio-logging", specifier = ">=4.1.0" },
     { name = "invenio-rdm-records", git = "https://github.com/front-matter/invenio-rdm-records?branch=fix-external-doi-validation" },
     { name = "invenio-rest", git = "https://github.com/front-matter/invenio-rest?branch=152-app_allowed_hosts-is-none" },
