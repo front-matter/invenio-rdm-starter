@@ -131,6 +131,7 @@ accessories:
   backup:
     image: itbm/postgresql-backup-s3
     service: inveniordm-backup
+    host: 176.9.24.117
     env:
       clear:
         POSTGRES_DATABASE: starter
