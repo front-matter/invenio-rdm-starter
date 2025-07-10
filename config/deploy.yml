@@ -146,5 +146,4 @@ accessories:
         - S3_ENDPOINT
         - POSTGRES_USER
         - POSTGRES_PASSWORD
-
 deploy_timeout: 45

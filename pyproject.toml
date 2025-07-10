@@ -1,13 +1,13 @@
 [project]
 name = "invenio-rdm-starter"
-version = "13.0.0.2"
+version = "13.0.0.3"
 description = "Starter for the invenio-rdm turn-key research data management repository"
 authors = [{ name = "Martin Fenner", email = "martin@front-matter.io" }]
 readme = "README.md"
 requires-python = ">=3.13"
 license = "MIT"
 dependencies = [
-    "invenio-app-rdm",
+    "invenio-app-rdm>=13.0.0rc4",
     "invenio-search[opensearch2]>=3.0.0",
     "invenio-logging>=4.1.0",
     "invenio-rest",
@@ -29,7 +29,6 @@ include = ["pyproject.toml", "site/**/*.py"]
 
 [tool.uv.sources]
 invenio-rest = { git = "https://github.com/front-matter/invenio-rest", branch = "152-app_allowed_hosts-is-none" }
-invenio-app-rdm = { git = "https://github.com/inveniosoftware/invenio-app-rdm" }
 invenio-rdm-records = { git = "https://github.com/front-matter/invenio-rdm-records", branch = "fix-external-doi-validation" }
 
 [project.optional-dependencies]

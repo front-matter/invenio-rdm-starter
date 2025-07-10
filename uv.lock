@@ -1277,8 +1277,8 @@ wheels = [
 
 [[package]]
 name = "invenio-app-rdm"
-version = "13.0.0b4.dev2"
-source = { git = "https://github.com/inveniosoftware/invenio-app-rdm#f3a4141d9e5aabd8426ab31b74d1b7bfaacf3da4" }
+version = "13.0.0rc4"
+source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "cairosvg" },
     { name = "invenio-access" },
@@ -1317,6 +1317,10 @@ dependencies = [
     { name = "invenio-sitemap" },
     { name = "invenio-theme" },
     { name = "invenio-userprofiles" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/5d/04/48436d48c26b6938bc6627b065691a6b98c684282477e164fb429ed26769/invenio_app_rdm-13.0.0rc4.tar.gz", hash = "sha256:68edd3d6151a96bf334869f5bc93934063f126eaa62124c4f511b094729ee40a", size = 759986, upload-time = "2025-07-10T10:21:56.094Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/77/b3/8b73c35e4c604f9dbebf552a475c703be0e22f4b25f1eefc47eb872b80a1/invenio_app_rdm-13.0.0rc4-py2.py3-none-any.whl", hash = "sha256:a61d106c2e8c88065c9ea3dc2992868b1164feee15a7ddc7dc187fdf9c5c5784", size = 1186833, upload-time = "2025-07-10T10:21:53.72Z" },
 ]
 
 [[package]]
@@ -1849,7 +1853,7 @@ dependencies = [
 
 [[package]]
 name = "invenio-rdm-starter"
-version = "13.0.0.2"
+version = "13.0.0.3"
 source = { editable = "." }
 dependencies = [
     { name = "gunicorn" },
@@ -1869,7 +1873,7 @@ docs = [
 [package.metadata]
 requires-dist = [
     { name = "gunicorn", specifier = "~=23.0.0" },
-    { name = "invenio-app-rdm", git = "https://github.com/inveniosoftware/invenio-app-rdm" },
+    { name = "invenio-app-rdm", specifier = ">=13.0.0rc4" },
     { name = "invenio-logging", specifier = ">=4.1.0" },
     { name = "invenio-rdm-records", git = "https://github.com/front-matter/invenio-rdm-records?branch=fix-external-doi-validation" },
     { name = "invenio-rest", git = "https://github.com/front-matter/invenio-rest?branch=152-app_allowed_hosts-is-none" },
