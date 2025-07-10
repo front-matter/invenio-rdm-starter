@@ -85,6 +85,7 @@ env:
     - S3_ACCESS_KEY_ID
     - S3_SECRET_ACCESS_KEY
     - S3_BUCKET
+    - S3_ENDPOINT
 
 volumes:
   - starter:/opt/invenio/var/instance/data
@@ -142,6 +143,7 @@ accessories:
         - S3_ACCESS_KEY_ID
         - S3_SECRET_ACCESS_KEY
         - S3_BUCKET
+        - S3_ENDPOINT
         - POSTGRES_USER
         - POSTGRES_PASSWORD
 
