@@ -81,6 +81,10 @@ env:
     - INVENIO_OAUTHCLIENT_REMOTE_APPS
     - INVENIO_ORCID_APP_CREDENTIALS
     - INVENIO_GITHUB_APP_CREDENTIALS
+    # postgres backup
+    - S3_ACCESS_KEY_ID
+    - S3_SECRET_ACCESS_KEY
+    - S3_BUCKET
 
 volumes:
   - starter:/opt/invenio/var/instance/data
@@ -124,4 +128,20 @@ accessories:
       memory: 4g
       publish:
         - 9600:9600
+  backup:
+    image: itbm/postgresql-backup-s3
+    service: inveniordm-backup
+    env:
+      clear:
+        POSTGRES_DATABASE: starter
+        POSTGRES_HOST: inveniordm-db
+        SCHEDULE: "@daily"
+        DELETE_OLDER_THAN: "14 days ago"
+      secret:
+        - S3_ACCESS_KEY_ID
+        - S3_SECRET_ACCESS_KEY
+        - S3_BUCKET
+        - POSTGRES_USER
+        - POSTGRES_PASSWORD
+
 deploy_timeout: 45
