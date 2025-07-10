@@ -86,6 +86,19 @@ volumes:
   - starter:/opt/invenio/var/instance/data
 
 accessories:
+  db:
+    image: postgres:17.5-bookworm
+    service: inveniordm-db
+    host: 176.9.24.117
+    port: 5432
+    directories:
+      - data:/var/lib/postgresql/data
+    env:
+      clear:
+        POSTGRES_DB: starter
+      secret:
+        - POSTGRES_USER
+        - POSTGRES_PASSWORD
   cache:
     image: valkey/valkey:7.2.5
     service: inveniordm-cache
