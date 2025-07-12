@@ -29,7 +29,7 @@ include = ["pyproject.toml", "site/**/*.py"]
 
 [tool.uv.sources]
 invenio-rest = { git = "https://github.com/front-matter/invenio-rest", branch = "152-app_allowed_hosts-is-none" }
-invenio-rdm-records = { git = "https://github.com/front-matter/invenio-rdm-records", branch = "fix-external-doi-validation" }
+invenio-rdm-records = { git = "https://github.com/caltechlibrary/invenio-rdm-records", branch = "parent-doi" }
 
 [project.optional-dependencies]
 docs = ["mkdocs-material>=8.5.11"]

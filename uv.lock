@@ -1817,8 +1817,8 @@ wheels = [
 
 [[package]]
 name = "invenio-rdm-records"
-version = "19.3.0"
-source = { git = "https://github.com/front-matter/invenio-rdm-records?branch=fix-external-doi-validation#51c9fb2576ff47d4c687403825a618ca6b83d43f" }
+version = "19.4.0"
+source = { git = "https://github.com/caltechlibrary/invenio-rdm-records?branch=parent-doi#bfe89c6e3e350b80064b1e16b24d4e7aea6f1d9b" }
 dependencies = [
     { name = "arrow" },
     { name = "babel-edtf" },
@@ -1875,7 +1875,7 @@ requires-dist = [
     { name = "gunicorn", specifier = "~=23.0.0" },
     { name = "invenio-app-rdm", specifier = ">=13.0.0rc4" },
     { name = "invenio-logging", specifier = ">=4.1.0" },
-    { name = "invenio-rdm-records", git = "https://github.com/front-matter/invenio-rdm-records?branch=fix-external-doi-validation" },
+    { name = "invenio-rdm-records", git = "https://github.com/caltechlibrary/invenio-rdm-records?branch=parent-doi" },
     { name = "invenio-rest", git = "https://github.com/front-matter/invenio-rest?branch=152-app_allowed_hosts-is-none" },
     { name = "invenio-search", extras = ["opensearch2"], specifier = ">=3.0.0" },
     { name = "mkdocs-material", marker = "extra == 'docs'", specifier = ">=8.5.11" },
