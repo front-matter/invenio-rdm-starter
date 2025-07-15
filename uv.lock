@@ -1817,8 +1817,8 @@ wheels = [
 
 [[package]]
 name = "invenio-rdm-records"
-version = "19.4.0"
-source = { git = "https://github.com/caltechlibrary/invenio-rdm-records?branch=parent-doi#bfe89c6e3e350b80064b1e16b24d4e7aea6f1d9b" }
+version = "19.4.1"
+source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "arrow" },
     { name = "babel-edtf" },
@@ -1850,6 +1850,10 @@ dependencies = [
     { name = "pytz" },
     { name = "pyyaml" },
 ]
+sdist = { url = "https://files.pythonhosted.org/packages/f4/1d/99ffd5e2df25fca6501710209c88fb4d53fdeb9153fbe0c88f8c8c7adc94/invenio_rdm_records-19.4.1.tar.gz", hash = "sha256:582bfa58ddfeb2234384f2d7dae944c3b1a04a8089260a1998efdd60aa55d579", size = 1412297, upload-time = "2025-07-14T21:27:07.221Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/0d/c8/64bca223cb0d6628a3d5e7a36b24182e440fe6906f6a3a0436f5a0045448/invenio_rdm_records-19.4.1-py2.py3-none-any.whl", hash = "sha256:dd6f62a9dd52401687f857c88536afb04ea42a70d9423ed62e3b4317facb9068", size = 2021503, upload-time = "2025-07-14T21:27:04.115Z" },
+]
 
 [[package]]
 name = "invenio-rdm-starter"
@@ -1875,8 +1879,8 @@ requires-dist = [
     { name = "gunicorn", specifier = "~=23.0.0" },
     { name = "invenio-app-rdm", specifier = ">=13.0.0rc4" },
     { name = "invenio-logging", specifier = ">=4.1.0" },
-    { name = "invenio-rdm-records", git = "https://github.com/caltechlibrary/invenio-rdm-records?branch=parent-doi" },
-    { name = "invenio-rest", git = "https://github.com/front-matter/invenio-rest?branch=152-app_allowed_hosts-is-none" },
+    { name = "invenio-rdm-records", specifier = ">=19.4.1" },
+    { name = "invenio-rest", specifier = ">=2.0.5" },
     { name = "invenio-search", extras = ["opensearch2"], specifier = ">=3.0.0" },
     { name = "mkdocs-material", marker = "extra == 'docs'", specifier = ">=8.5.11" },
     { name = "ruff", specifier = ">=0.11.0" },
@@ -2009,8 +2013,8 @@ wheels = [
 
 [[package]]
 name = "invenio-rest"
-version = "2.0.4"
-source = { git = "https://github.com/front-matter/invenio-rest?branch=152-app_allowed_hosts-is-none#b8343ab30ceb1bf9b638cee8ac168f4caa37bfd5" }
+version = "2.0.5"
+source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "flask-cors" },
     { name = "invenio-base" },
@@ -2018,6 +2022,10 @@ dependencies = [
     { name = "itsdangerous" },
     { name = "marshmallow" },
     { name = "webargs" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/b2/f2/2c92d57cbf5d23a06d5e0b0ed9727559bb214a4b4ff32249151826e56e6c/invenio_rest-2.0.5.tar.gz", hash = "sha256:9fb6ace32ddee15a9b031c608dbb7a672d3e738438bc5c3b39c15c97164f7c08", size = 37475, upload-time = "2025-07-15T14:56:20.214Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/7e/fa/b6c8a695233e4360d5fe79fd95f471db487abe174a8db05a0414c973052f/invenio_rest-2.0.5-py2.py3-none-any.whl", hash = "sha256:a62a0e1e3a68f11434f8c0e4262ee3dc1c4c602be54ba2cb6d775e5fe63151ae", size = 21743, upload-time = "2025-07-15T14:56:18.87Z" },
 ]
 
 [[package]]

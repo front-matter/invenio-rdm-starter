@@ -10,8 +10,8 @@ dependencies = [
     "invenio-app-rdm>=13.0.0rc4",
     "invenio-search[opensearch2]>=3.0.0",
     "invenio-logging>=4.1.0",
-    "invenio-rest",
-    "invenio-rdm-records",
+    "invenio-rest>=2.0.5",
+    "invenio-rdm-records>=19.4.1",
     "gunicorn~=23.0.0",
     "ruff>=0.11.0",
 ]
@@ -26,10 +26,6 @@ include = ["site/invenio_rdm_starter/*.py"]
 [tool.ruff]
 line-length = 79
 include = ["pyproject.toml", "site/**/*.py"]
-
-[tool.uv.sources]
-invenio-rest = { git = "https://github.com/front-matter/invenio-rest", branch = "152-app_allowed_hosts-is-none" }
-invenio-rdm-records = { git = "https://github.com/caltechlibrary/invenio-rdm-records", branch = "parent-doi" }
 
 [project.optional-dependencies]
 docs = ["mkdocs-material>=8.5.11"]
