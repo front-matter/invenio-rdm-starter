@@ -13,7 +13,8 @@ RUN --mount=type=cache,sharing=locked,target=/var/cache/apt \
   apt-get install -y build-essential libssl-dev libffi-dev \
   python3-dev cargo pkg-config curl --no-install-recommends && \
   curl -fsSL https://deb.nodesource.com/setup_20.x | bash - && \
-  apt-get install -y nodejs --no-install-recommends
+  apt-get install -y nodejs --no-install-recommends && \
+  npm install -g pnpm@latest-10
 
 # Install uv and activate virtualenv
 COPY --from=ghcr.io/astral-sh/uv:0.7.15 /uv /uvx /bin/
@@ -41,15 +42,6 @@ RUN --mount=type=cache,target=/root/.cache/uv \
 # Copy application code
 COPY . .
 
-# Copy application files to instance path
-COPY site ${INVENIO_INSTANCE_PATH}/site
-COPY static ${INVENIO_INSTANCE_PATH}/static
-COPY assets ${INVENIO_INSTANCE_PATH}/assets
-COPY templates ${INVENIO_INSTANCE_PATH}/templates
-COPY app_data ${INVENIO_INSTANCE_PATH}/app_data
-COPY translations ${INVENIO_INSTANCE_PATH}/translations
-COPY ./invenio.cfg ${INVENIO_INSTANCE_PATH}/
-
 # Install Python dependencies
 RUN --mount=type=cache,target=/root/.cache/uv \
   uv sync --frozen --no-dev
@@ -58,7 +50,30 @@ RUN --mount=type=cache,target=/root/.cache/uv \
 ENV WEBPACKEXT_PROJECT=invenio_assets.webpack:rspack_project
 RUN --mount=type=cache,target=/var/cache/assets \
   invenio collect --verbose && \
-  invenio webpack buildall
+  invenio webpack create
+
+# Copy application files to instance path
+COPY ./invenio.cfg ${INVENIO_INSTANCE_PATH}/
+COPY site ${INVENIO_INSTANCE_PATH}/site
+COPY static ${INVENIO_INSTANCE_PATH}/static
+COPY assets ${INVENIO_INSTANCE_PATH}/assets
+COPY templates ${INVENIO_INSTANCE_PATH}/templates
+COPY app_data ${INVENIO_INSTANCE_PATH}/app_data
+COPY translations ${INVENIO_INSTANCE_PATH}/translations
+
+# from: https://github.com/tu-graz-library/docker-invenio-base
+# enables the option to have a deterministic javascript dependency build
+# package.json and pnpm-lock are needed, because otherwise package.json
+# is newer as pnpm-lock and pnpm-lock would not be used then
+# do this only if you know what you are doing. forgetting to update those
+# two files can cause bugs, because of possible missmatches of needed
+# javascript dependencies
+COPY ./package.json ${INVENIO_INSTANCE_PATH}/assets/
+COPY ./pnpm-lock.yaml ${INVENIO_INSTANCE_PATH}/assets/
+
+WORKDIR ${INVENIO_INSTANCE_PATH}/assets
+RUN pnpm install && \
+  pnpm run build
 
 FROM python:3.13-slim-bookworm AS runtime
 
