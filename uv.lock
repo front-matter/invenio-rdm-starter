@@ -1277,7 +1277,7 @@ wheels = [
 
 [[package]]
 name = "invenio-app-rdm"
-version = "13.0.0rc4"
+version = "13.0.0rc6"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "cairosvg" },
@@ -1318,9 +1318,9 @@ dependencies = [
     { name = "invenio-theme" },
     { name = "invenio-userprofiles" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/5d/04/48436d48c26b6938bc6627b065691a6b98c684282477e164fb429ed26769/invenio_app_rdm-13.0.0rc4.tar.gz", hash = "sha256:68edd3d6151a96bf334869f5bc93934063f126eaa62124c4f511b094729ee40a", size = 759986, upload-time = "2025-07-10T10:21:56.094Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/1b/83/f1523956f83875a16f1ecad05ce0f92621e7eb9863e23c1341983d388230/invenio_app_rdm-13.0.0rc6.tar.gz", hash = "sha256:8cdbb4d315b2b0b5962bc665140a75ea0862cba0b0dc54dbd9dd46548b08efee", size = 713530, upload-time = "2025-07-21T08:49:37.765Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/77/b3/8b73c35e4c604f9dbebf552a475c703be0e22f4b25f1eefc47eb872b80a1/invenio_app_rdm-13.0.0rc4-py2.py3-none-any.whl", hash = "sha256:a61d106c2e8c88065c9ea3dc2992868b1164feee15a7ddc7dc187fdf9c5c5784", size = 1186833, upload-time = "2025-07-10T10:21:53.72Z" },
+    { url = "https://files.pythonhosted.org/packages/6e/de/f36a1b638f4f35f548ab3a975c518ed76bf83fe531810226387aa5c74820/invenio_app_rdm-13.0.0rc6-py2.py3-none-any.whl", hash = "sha256:e2931a8836ec5fd9a788f1a05e04cc8575d638f54e786dd8bf5b88cb5a6f102d", size = 1137906, upload-time = "2025-07-21T08:49:35.254Z" },
 ]
 
 [[package]]
@@ -1857,7 +1857,7 @@ wheels = [
 
 [[package]]
 name = "invenio-rdm-starter"
-version = "13.0.0.4"
+version = "13.0.0.5"
 source = { editable = "." }
 dependencies = [
     { name = "gunicorn" },
@@ -1877,7 +1877,7 @@ docs = [
 [package.metadata]
 requires-dist = [
     { name = "gunicorn", specifier = "~=23.0.0" },
-    { name = "invenio-app-rdm", specifier = ">=13.0.0rc4" },
+    { name = "invenio-app-rdm", specifier = ">=13.0.0rc6" },
     { name = "invenio-logging", specifier = ">=4.1.0" },
     { name = "invenio-rdm-records", specifier = ">=19.4.1" },
     { name = "invenio-rest", specifier = ">=2.0.5" },

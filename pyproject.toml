@@ -1,13 +1,13 @@
 [project]
 name = "invenio-rdm-starter"
-version = "13.0.0.4"
+version = "13.0.0.5"
 description = "Starter for the invenio-rdm turn-key research data management repository"
 authors = [{ name = "Martin Fenner", email = "martin@front-matter.io" }]
 readme = "README.md"
 requires-python = ">=3.13"
 license = "MIT"
 dependencies = [
-    "invenio-app-rdm>=13.0.0rc4",
+    "invenio-app-rdm>=13.0.0rc6",
     "invenio-search[opensearch2]>=3.0.0",
     "invenio-logging>=4.1.0",
     "invenio-rest>=2.0.5",
