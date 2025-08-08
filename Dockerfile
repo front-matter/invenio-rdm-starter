@@ -1,4 +1,4 @@
-FROM python:3.13-bookworm AS builder
+FROM python:3.13.6-bookworm AS builder
 LABEL service="starter"
 LABEL maintainer="Front Matter <info@front-matter.io>"
 
@@ -12,7 +12,7 @@ RUN --mount=type=cache,sharing=locked,target=/var/cache/apt \
   apt-get update --fix-missing && \
   apt-get install -y build-essential libssl-dev libffi-dev \
   python3-dev cargo pkg-config curl --no-install-recommends && \
-  curl -fsSL https://deb.nodesource.com/setup_20.x | bash - && \
+  curl -fsSL https://deb.nodesource.com/setup_22.x | bash - && \
   apt-get install -y nodejs --no-install-recommends && \
   npm install -g pnpm@latest-10
 
@@ -75,7 +75,7 @@ WORKDIR ${INVENIO_INSTANCE_PATH}/assets
 RUN pnpm install && \
   pnpm run build
 
-FROM python:3.13-slim-bookworm AS runtime
+FROM python:3.13.6-slim-bookworm AS runtime
 
 ENV LANG=en_US.UTF-8 \
   LANGUAGE=en_US:en
