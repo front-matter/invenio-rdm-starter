@@ -19,7 +19,7 @@
     "@uppy/react": "^3.4.0",
     "admin-lte": "~2.4.8",
     "ajv": "^8.0.0",
-    "axios": "^1.7.7",
+    "axios": "^1.12.0",
     "flightjs": "~1.5.1",
     "font-awesome": "~4.5.0",
     "formik": "^2.2.9",
