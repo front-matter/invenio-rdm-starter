@@ -8,11 +8,17 @@ invenio db init create
 # Creating files location...
 invenio files location create --default default  "file://${INVENIO_DATADIR}"
 
-# Creating admin role...
+# Superuser role
 invenio roles create admin
-
-# Assigning superuser access to admin role...
 invenio access allow superuser-access role admin
+
+# Administration access role
+invenio roles create administration
+invenio access allow administration-access role administration
+
+# Administration moderation role
+invenio roles create administration-moderation
+invenio access allow administration-moderation role administration-moderation
 
 # Dropping and re-reating indices...
 invenio index destroy --force --yes-i-know
