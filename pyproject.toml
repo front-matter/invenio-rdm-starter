@@ -9,6 +9,7 @@ license = "MIT"
 dependencies = [
     "invenio-app-rdm>=13.0.5,<14.0.0",
     "invenio-search[opensearch2]>=3.0.0",
+    "invenio-previewer>=3.3.0,<3.4.0",
     "gunicorn~=23.0.0",
 ]
 
