@@ -162,3 +162,7 @@ docker/opensearch/*
 
 # mkdocs
 _site
+
+# Nixpacks local build artifacts
+.nixpacks/
+.nixpacks-cache/

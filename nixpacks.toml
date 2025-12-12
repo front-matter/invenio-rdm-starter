@@ -1,0 +1,65 @@
+# Nixpacks configuration for InvenioRDM Starter
+
+[variables]
+LANG = "en_US.UTF-8"
+LANGUAGE = "en_US:en"
+WORKING_DIR = "/opt/invenio"
+VIRTUAL_ENV = "/opt/invenio/.venv"
+INVENIO_INSTANCE_PATH = "/opt/invenio/var/instance"
+WEBPACKEXT_PROJECT = "invenio_assets.webpack:rspack_project"
+PORT = "5000"
+
+[phases.setup]
+nixPkgs = [
+  "python313",
+  "uv",
+  "nodejs_22",
+  "pnpm",
+  "cairo",
+  "curl",
+  "pkg-config",
+  "gcc",
+  "openssl",
+  "libffi",
+  "zlib",
+]
+
+[phases.install]
+# Create and use virtualenv, install Python deps with uv
+cmds = [
+  # Ensure uv is available (installer places binaries under ~/.local/bin)
+  "export PATH=\"$HOME/.local/bin:$PATH\"",
+  "uv venv ${VIRTUAL_ENV}",
+  "export PATH=\"${VIRTUAL_ENV}/bin:$PATH\"",
+  "uv sync --frozen --no-install-project --no-dev",
+]
+
+[phases.build]
+# Build Python assets and JS bundles
+cmds = [
+  "export PATH=\"${VIRTUAL_ENV}/bin:$PATH\"",
+  # Ensure WEBPACKEXT_PROJECT is available to invenio build steps
+  "export WEBPACKEXT_PROJECT=\"${WEBPACKEXT_PROJECT}\"",
+  "invenio collect --verbose",
+  "invenio webpack create",
+  "mkdir -p ${INVENIO_INSTANCE_PATH}",
+  "cp ./invenio.cfg ${INVENIO_INSTANCE_PATH}/",
+  "rsync -a site ${INVENIO_INSTANCE_PATH}/site",
+  "rsync -a static ${INVENIO_INSTANCE_PATH}/static",
+  "rsync -a assets ${INVENIO_INSTANCE_PATH}/assets",
+  "rsync -a templates ${INVENIO_INSTANCE_PATH}/templates",
+  "rsync -a app_data ${INVENIO_INSTANCE_PATH}/app_data",
+  "rsync -a translations ${INVENIO_INSTANCE_PATH}/translations",
+  # JS build using pnpm inside assets
+  "cd ${INVENIO_INSTANCE_PATH}/assets && pnpm install && pnpm run build",
+]
+
+[start]
+cmd = "gunicorn invenio_app.wsgi:application --bind 0.0.0.0:${PORT:-5000} --workers 4 --access-logfile - --error-logfile - --log-level ERROR"
+
+
+[healthcheck]
+path = "/"
+interval = "10s"
+timeout = "5s"
+retries = 12
