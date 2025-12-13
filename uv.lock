@@ -1933,7 +1933,7 @@ requires-dist = [
     { name = "invenio-app-rdm", specifier = ">=13.0.5,<14.0.0" },
     { name = "invenio-previewer", specifier = ">=3.3.0,<3.4.0" },
     { name = "invenio-search", extras = ["opensearch2"], specifier = ">=3.0.0" },
-    { name = "mkdocs-material", marker = "extra == 'docs'", specifier = ">=8.5.11" },
+    { name = "mkdocs-material", marker = "extra == 'docs'", specifier = ">=9.7.0" },
 ]
 provides-extras = ["docs"]
 

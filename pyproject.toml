@@ -25,4 +25,4 @@ line-length = 79
 include = ["pyproject.toml", "site/**/*.py"]
 
 [project.optional-dependencies]
-docs = ["mkdocs-material>=8.5.11"]
+docs = ["mkdocs-material>=9.7.0"]
