@@ -30,7 +30,7 @@ services:
       - archived_data:/opt/invenio/var/instance/archive
     environment:
       # Flask
-      - INVENIO_APP_TRUSTED_HOSTS=${INVENIO_APP_TRUSTED_HOSTS:-['0.0.0.0', 'localhost', '127.0.0.1']}
+      - INVENIO_TRUSTED_HOSTS=${INVENIO_TRUSTED_HOSTS:-['0.0.0.0', 'localhost', '127.0.0.1']}
 
       # Flask-SQLAlchemy
       - INVENIO_SQLALCHEMY_DATABASE_URI=${INVENIO_SQLALCHEMY_DATABASE_URI:-postgresql+psycopg2://inveniordm:inveniordm@db/inveniordm}
