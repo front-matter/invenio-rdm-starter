@@ -23,7 +23,7 @@ services:
       - caddy_data:/data
       - caddy_config:/config
   web:
-    image: ghcr.io/front-matter/invenio-rdm-starter:v12.1.0.0
+    image: ghcr.io/front-matter/invenio-rdm-starter:v13.0.5.0
     pull_policy: if_not_present
     volumes:
       - uploaded_data:/opt/invenio/var/instance/data
@@ -117,7 +117,7 @@ services:
         condition: service_started
   worker:
     command: "celery -A invenio_app.celery worker --beat --events --loglevel=WARNING"
-    image: ghcr.io/front-matter/invenio-rdm-starter:v12.1.0.0
+    image: ghcr.io/front-matter/invenio-rdm-starter:v13.0.5.0
     pull_policy: if_not_present
     volumes:
       - uploaded_data:/opt/invenio/var/instance/data
