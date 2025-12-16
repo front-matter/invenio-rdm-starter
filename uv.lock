@@ -1784,7 +1784,7 @@ wheels = [
 [[package]]
 name = "invenio-oauthclient"
 version = "5.3.1"
-source = { registry = "https://pypi.org/simple" }
+source = { git = "https://github.com/front-matter/invenio-oauthclient?branch=maint-v5.x#43f641cbecfaad15e881c1fe3c02c96d0c11d9bf" }
 dependencies = [
     { name = "blinker" },
     { name = "flask-oauthlib-invenio" },
@@ -1799,10 +1799,6 @@ dependencies = [
     { name = "requests-oauthlib" },
     { name = "uritemplate" },
     { name = "uritools" },
-]
-sdist = { url = "https://files.pythonhosted.org/packages/2f/b7/8b8ca35d432ed8d97e45d187efa552a75e36db1925eadfc6bf5434efdea3/invenio_oauthclient-5.3.1.tar.gz", hash = "sha256:580ef881b922a0b5e446e9a688d93e1214311bfc18888cdc1b6c6deac2937d58", size = 96991, upload-time = "2025-10-21T11:51:36.703Z" }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/97/4f/75812f59856452523f1e6cd0216310a90c0c9fb51bf9a3f31682d395b496/invenio_oauthclient-5.3.1-py2.py3-none-any.whl", hash = "sha256:669e724b39cab9e4cf35cbe82c72d9e212223c116b1409102a5e3f6facebaa31", size = 214232, upload-time = "2025-10-21T11:51:35.149Z" },
 ]
 
 [[package]]
@@ -1913,11 +1909,12 @@ wheels = [
 
 [[package]]
 name = "invenio-rdm-starter"
-version = "13.0.5.3"
+version = "13.0.5.4"
 source = { editable = "." }
 dependencies = [
     { name = "gunicorn" },
     { name = "invenio-app-rdm" },
+    { name = "invenio-oauthclient" },
     { name = "invenio-previewer" },
     { name = "invenio-search", extra = ["opensearch2"] },
 ]
@@ -1930,7 +1927,8 @@ docs = [
 [package.metadata]
 requires-dist = [
     { name = "gunicorn", specifier = "~=23.0.0" },
-    { name = "invenio-app-rdm", specifier = ">=13.0.5,<14.0.0" },
+    { name = "invenio-app-rdm", specifier = ">=13.0.6,<14.0.0" },
+    { name = "invenio-oauthclient", git = "https://github.com/front-matter/invenio-oauthclient?branch=maint-v5.x" },
     { name = "invenio-previewer", specifier = ">=3.3.0,<3.4.0" },
     { name = "invenio-search", extras = ["opensearch2"], specifier = ">=3.0.0" },
     { name = "mkdocs-material", marker = "extra == 'docs'", specifier = ">=9.7.0" },
