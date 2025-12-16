@@ -1909,7 +1909,7 @@ wheels = [
 
 [[package]]
 name = "invenio-rdm-starter"
-version = "13.0.5.4"
+version = "13.0.5.5"
 source = { editable = "." }
 dependencies = [
     { name = "gunicorn" },
