@@ -17,7 +17,7 @@ RUN --mount=type=cache,sharing=locked,target=/var/cache/apt \
   npm install -g pnpm@latest-10
 
 # Install uv and activate virtualenv
-COPY --from=ghcr.io/astral-sh/uv:0.7.15 /uv /uvx /bin/
+COPY --from=ghcr.io/astral-sh/uv:0.9.18 /uv /uvx /bin/
 RUN uv venv /opt/invenio/.venv
 
 # Use the virtual environment automatically
