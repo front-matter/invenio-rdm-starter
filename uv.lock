@@ -1784,7 +1784,7 @@ wheels = [
 [[package]]
 name = "invenio-oauthclient"
 version = "5.3.1"
-source = { git = "https://github.com/front-matter/invenio-oauthclient?branch=maint-v5.x#026ff78452a37d2d385aef321a73d34f05dc0bcf" }
+source = { git = "https://github.com/front-matter/invenio-oauthclient?branch=maint-v5.x#4f4fe7bd8d69ed97a2bc95ac0f0a2d0983af47b1" }
 dependencies = [
     { name = "blinker" },
     { name = "flask-oauthlib-invenio" },
@@ -1909,7 +1909,7 @@ wheels = [
 
 [[package]]
 name = "invenio-rdm-starter"
-version = "13.0.5.11"
+version = "13.0.5.12"
 source = { editable = "." }
 dependencies = [
     { name = "gunicorn" },
