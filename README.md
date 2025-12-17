@@ -11,7 +11,7 @@ InvenioRDM is the open source turn-key research data management platform, with d
 * a prebuilt Invenio-App-RDM Docker image.
 * a Docker Compose configuration file with sensible defaults.
 
-InvenioRDM Starter open source software and is coordinated by the InvenioRDM partner [Front Matter](https://front-matter.io).
+InvenioRDM Starter open source software and is coordinated by the InvenioRDM partner [Front Matter](https://front-matter.de).
 
 ## Requirements
 

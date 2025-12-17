@@ -1,7 +1,7 @@
 site_name: InvenioRDM Starter
 docs_dir: docs
 site_dir: _site
-site_url: https://starter.front-matter.io
+site_url: https://starter.front-matter.de
 repo_url: https://github.com/front-matter/invenio-rdm-starter
 edit_uri: edit/main/docs/
 repo_name: front-matter/invenio-rdm-starter
@@ -37,7 +37,7 @@ theme:
 extra:
   social:
     - icon: fontawesome/solid/paper-plane
-      link: mailto:info@front-matter.io
+      link: mailto:info@front-matter.de
     - icon: fontawesome/brands/mastodon
       link: https://hachyderm.io/@mfenner
     - icon: fontawesome/brands/github
