@@ -1,6 +1,6 @@
 [project]
 name = "invenio-rdm-starter"
-version = "13.0.5.12"
+version = "13.0.5.13"
 description = "Starter for the invenio-rdm turn-key research data management repository"
 authors = [{ name = "Martin Fenner", email = "martin@front-matter.de" }]
 readme = "README.md"

@@ -1,4 +1,4 @@
-FROM python:3.13.6-bookworm AS builder
+FROM python:3.13.7-bookworm AS builder
 LABEL service="starter"
 LABEL maintainer="Front Matter <info@front-matter.de>"
 
@@ -75,7 +75,7 @@ WORKDIR ${INVENIO_INSTANCE_PATH}/assets
 RUN pnpm install && \
   pnpm run build
 
-FROM python:3.13.6-slim-bookworm AS runtime
+FROM python:3.13.7-slim-bookworm AS runtime
 
 ENV LANG=en_US.UTF-8 \
   LANGUAGE=en_US:en
