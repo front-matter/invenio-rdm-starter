@@ -718,14 +718,14 @@ wheels = [
 
 [[package]]
 name = "faker"
-version = "38.2.0"
+version = "39.0.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "tzdata" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/64/27/022d4dbd4c20567b4c294f79a133cc2f05240ea61e0d515ead18c995c249/faker-38.2.0.tar.gz", hash = "sha256:20672803db9c7cb97f9b56c18c54b915b6f1d8991f63d1d673642dc43f5ce7ab", size = 1941469, upload-time = "2025-11-19T16:37:31.892Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/30/b9/0897fb5888ddda099dc0f314a8a9afb5faa7e52eaf6865c00686dfb394db/faker-39.0.0.tar.gz", hash = "sha256:ddae46d3b27e01cea7894651d687b33bcbe19a45ef044042c721ceac6d3da0ff", size = 1941757, upload-time = "2025-12-17T19:19:04.762Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/17/93/00c94d45f55c336434a15f98d906387e87ce28f9918e4444829a8fda432d/faker-38.2.0-py3-none-any.whl", hash = "sha256:35fe4a0a79dee0dc4103a6083ee9224941e7d3594811a50e3969e547b0d2ee65", size = 1980505, upload-time = "2025-11-19T16:37:30.208Z" },
+    { url = "https://files.pythonhosted.org/packages/eb/5a/26cdb1b10a55ac6eb11a738cea14865fa753606c4897d7be0f5dc230df00/faker-39.0.0-py3-none-any.whl", hash = "sha256:c72f1fca8f1a24b8da10fcaa45739135a19772218ddd61b86b7ea1b8c790dce7", size = 1980775, upload-time = "2025-12-17T19:19:02.926Z" },
 ]
 
 [[package]]
@@ -1909,7 +1909,7 @@ wheels = [
 
 [[package]]
 name = "invenio-rdm-starter"
-version = "13.0.5.13"
+version = "13.0.5.14"
 source = { editable = "." }
 dependencies = [
     { name = "gunicorn" },
@@ -2193,7 +2193,7 @@ wheels = [
 
 [[package]]
 name = "invenio-vocabularies"
-version = "8.3.2"
+version = "8.3.3"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "invenio-administration" },
@@ -2206,9 +2206,9 @@ dependencies = [
     { name = "regex" },
     { name = "sparqlwrapper" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/62/8e/a79419bf587eebbd3b410fb0b689649cec459178e770842707eb7e27256f/invenio_vocabularies-8.3.2.tar.gz", hash = "sha256:8b627f3a6e3825cce2b504a2530d818bba4aa6fd1ed8974c34b1b8407a13b441", size = 152267, upload-time = "2025-12-09T13:13:29.332Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/f2/ab/aa2f5a468679cea4f4eebebb4fe273f3645b61d013e10b89105e0c0e0afd/invenio_vocabularies-8.3.3.tar.gz", hash = "sha256:ac41bcf5c8da3d3268b9a82873fc04427396ac82782d4bc4f190fc61d6195904", size = 152318, upload-time = "2025-12-17T20:22:11.878Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/a6/c8/c8a876845830a16f4774069d24768df94ddfa44b65c1c845a2f240acc5d5/invenio_vocabularies-8.3.2-py2.py3-none-any.whl", hash = "sha256:54e251a49c2b52a6ca2a9c088ec85284525077a5658ba2bae4d3ec5fe101491b", size = 354109, upload-time = "2025-12-09T13:13:27.773Z" },
+    { url = "https://files.pythonhosted.org/packages/a3/d9/b56a0e3e0f5b237f29eaf5489e70bbf8d0cd94df65ef312bc3f400553af5/invenio_vocabularies-8.3.3-py2.py3-none-any.whl", hash = "sha256:2a7bd2186a5e83f062b3f9352ae625b7d1edde9f3c07e640b07452422a2a847d", size = 354097, upload-time = "2025-12-17T20:22:10.498Z" },
 ]
 
 [[package]]
