@@ -4,4 +4,5 @@ localhost :443 {
 	reverse_proxy web:5000
 	file_server
 	encode gzip
+	tls internal
 }

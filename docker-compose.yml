@@ -13,7 +13,7 @@
 
 services:
   proxy:
-    image: caddy:2.8.4
+    image: caddy:2.10
     restart: "unless-stopped"
     ports:
       - "80:80"
@@ -23,7 +23,7 @@ services:
       - caddy_data:/data
       - caddy_config:/config
   web:
-    image: ghcr.io/front-matter/invenio-rdm-starter:v13.0.5.0
+    image: ghcr.io/front-matter/invenio-rdm-starter:latest
     pull_policy: if_not_present
     volumes:
       - uploaded_data:/opt/invenio/var/instance/data
@@ -34,7 +34,7 @@ services:
 
       # Flask-SQLAlchemy
       - INVENIO_SQLALCHEMY_DATABASE_URI=${INVENIO_SQLALCHEMY_DATABASE_URI:-postgresql+psycopg2://inveniordm:inveniordm@db/inveniordm}
-    
+
       # Flask-Babel
       - INVENIO_BABEL_DEFAULT_LOCALE=${INVENIO_BABEL_DEFAULT_LOCALE:-en}
       - INVENIO_BABEL_DEFAULT_TIMEZONE=${INVENIO_BABEL_DEFAULT_TIMEZONE:-UTC}
@@ -45,14 +45,14 @@ services:
       - INVENIO_ACCOUNTS_SESSION_REDIS_URL=${INVENIO_ACCOUNTS_SESSION_REDIS_URL:-redis://cache:6379/1}
       - INVENIO_CELERY_RESULT_BACKEND=${INVENIO_CELERY_RESULT_BACKEND:-redis://cache:6379/2}
       - INVENIO_RATELIMIT_STORAGE_URL=${INVENIO_RATELIMIT_STORAGE_URL:-redis://cache:6379/3}
-      - INVENIO_COMMUNITIES_IDENTITIES_CACHE_REDIS_URL=${INVENIO_COMMUNITIES_IDENTITIES_CACHE_REDIS_URL:-redis://cache:6379/4}   
+      - INVENIO_COMMUNITIES_IDENTITIES_CACHE_REDIS_URL=${INVENIO_COMMUNITIES_IDENTITIES_CACHE_REDIS_URL:-redis://cache:6379/4}
       - INVENIO_BROKER_URL=${INVENIO_BROKER_URL:-redis://cache:6379/5}
       - INVENIO_CELERY_BROKER_URL=${INVENIO_CELERY_BROKER_URL:-redis://cache:6379/5}
 
       - INVENIO_MAIL_SUPPRESS_SEND=${INVENIO_MAIL_SUPPRESS_SEND:-True}
       - INVENIO_WSGI_PROXIES=4
       - INVENIO_SECRET_KEY=${INVENIO_SECRET_KEY:-changeme}
-      
+
       # Invenio-I18N
       # TODO: fix tuple parsing
       # - INVENIO_I18N_LANGUAGES=${INVENIO_I18N_LANGUAGES:-'[("de", _("German"))]'}
@@ -79,17 +79,17 @@ services:
       - INVENIO_RDM_ALLOW_METADATA_ONLY_RECORDS=${INVENIO_RDM_ALLOW_METADATA_ONLY_RECORDS:-True}
       - INVENIO_RDM_ALLOW_RESTRICTED_RECORDS=${INVENIO_RDM_ALLOW_RESTRICTED_RECORDS:-True}
       - INVENIO_RDM_ALLOW_EXTERNAL_DOI_VERSIONING=${INVENIO_RDM_ALLOW_EXTERNAL_DOI_VERSIONING:-True}
-      
+
       - INVENIO_RDM_CITATION_STYLES_DEFAULT=${INVENIO_RDM_CITATION_STYLES_DEFAULT:-apa}
       - INVENIO_SECURITY_EMAIL_SENDER=${INVENIO_SECURITY_EMAIL_SENDER:-}
       # TODO: fix tuple parsing
       # - INVENIO_RDM_CITATION_STYLES=${INVENIO_RDM_CITATION_STYLES:-"[('apa', 'APA'), ('chicago-note-bibliography', 'Chicago'), ('harvard-cite-them-right', 'Harvard')]"}
-      
+
       # Invenio-Accounts
       - INVENIO_ACCOUNTS_LOCAL_LOGIN_ENABLED=${INVENIO_ACCOUNTS_LOCAL_LOGIN_ENABLED:-True}
       - INVENIO_POCKETID_APP_CREDENTIALS_CONSUMER_KEY=${INVENIO_POCKETID_APP_CREDENTIALS_CONSUMER_KEY:-}
       - INVENIO_POCKETID_APP_CREDENTIALS_CONSUMER_SECRET=${INVENIO_POCKETID_APP_CREDENTIALS_CONSUMER_SECRET:-}
-  
+
       # OAI-PMH
       - INVENIO_OAISERVER_ID_PREFIX=${OAISERVER_ID_PREFIX:-invenio-rdm}
 
@@ -117,7 +117,7 @@ services:
         condition: service_started
   worker:
     command: "celery -A invenio_app.celery worker --beat --events --loglevel=WARNING"
-    image: ghcr.io/front-matter/invenio-rdm-starter:v13.0.5.0
+    image: ghcr.io/front-matter/invenio-rdm-starter:latest
     pull_policy: if_not_present
     volumes:
       - uploaded_data:/opt/invenio/var/instance/data
@@ -190,44 +190,6 @@ services:
     ports:
       - "9200:9200"
       - "9600:9600"
-  authentik-server:
-    command: server
-    depends_on:
-      db:
-        condition: service_healthy
-    environment:
-      AUTHENTIK_POSTGRESQL__HOST: db
-      AUTHENTIK_POSTGRESQL__NAME: ${PG_DB:-authentik}
-      AUTHENTIK_POSTGRESQL__PASSWORD: ${POSTGRES_PASSWORD}
-      AUTHENTIK_POSTGRESQL__USER: ${POSTGRES_USER}
-      AUTHENTIK_SECRET_KEY: ${AUTHENTIK_SECRET_KEY:?secret key required}
-    image: ${AUTHENTIK_IMAGE:-ghcr.io/goauthentik/server}:${AUTHENTIK_TAG:-2025.10.2}
-    ports:
-    - "9000:9000"
-    - "9443:9443"
-    restart: unless-stopped
-    volumes:
-    - ./media:/media
-    - ./custom-templates:/templates
-  authentik-worker:
-    command: worker
-    depends_on:
-      db:
-        condition: service_healthy
-    environment:
-      AUTHENTIK_POSTGRESQL__HOST: db
-      AUTHENTIK_POSTGRESQL__NAME: ${PG_DB:-authentik}
-      AUTHENTIK_POSTGRESQL__PASSWORD: ${POSTGRES_PASSWORD}
-      AUTHENTIK_POSTGRESQL__USER: ${POSTGRES_USER}
-      AUTHENTIK_SECRET_KEY: ${AUTHENTIK_SECRET_KEY:?secret key required}
-    image: ${AUTHENTIK_IMAGE:-ghcr.io/goauthentik/server}:${AUTHENTIK_TAG:-2025.10.2}
-    restart: unless-stopped
-    user: root
-    volumes:
-    - /var/run/docker.sock:/var/run/docker.sock
-    - ./media:/media
-    - ./certs:/certs
-    - ./custom-templates:/templates
 volumes:
   app_data:
   uploaded_data:
