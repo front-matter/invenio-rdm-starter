@@ -1336,7 +1336,7 @@ wheels = [
 
 [[package]]
 name = "invenio-app-rdm"
-version = "13.0.6"
+version = "13.0.7"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "cairosvg" },
@@ -1377,9 +1377,9 @@ dependencies = [
     { name = "invenio-theme" },
     { name = "invenio-userprofiles" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/cd/db/b49f2b164b92e23237d980d1a70c6e8c936513e410b1b68aa2cb8f0d3975/invenio_app_rdm-13.0.6.tar.gz", hash = "sha256:1c7e89a35efb0e97fec02f24336ffa20291723f7b282491445c0ef4b9fb586f3", size = 758394, upload-time = "2025-12-08T13:04:23Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/7c/96/b59bfa752d71fc647ebc514c44ce27413398d048719ddd18d584787f0917/invenio_app_rdm-13.0.7.tar.gz", hash = "sha256:e4d435e707cee97057208921f72aaaf6f5d69f5726ce9c2813cae5e74e2979de", size = 758785, upload-time = "2025-12-19T13:53:43.04Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/f3/65/ba46f28c252307bb434affef3731a9d0b9ff03118670cff6ce32d66df2bf/invenio_app_rdm-13.0.6-py2.py3-none-any.whl", hash = "sha256:f0657b6d484694f28be9d0f3b089dc9b2aeab10054d7887d55a5982102d1e5be", size = 1186605, upload-time = "2025-12-08T13:04:20.983Z" },
+    { url = "https://files.pythonhosted.org/packages/66/dd/196df0c66192c885459eb86527b95e594eede3d9533d5fd420999695918e/invenio_app_rdm-13.0.7-py2.py3-none-any.whl", hash = "sha256:cba6544960c564b148fb5557a37e5e51f2450ee6168c620d9f91e84ecad65659", size = 1186629, upload-time = "2025-12-19T13:53:41.099Z" },
 ]
 
 [[package]]
@@ -1784,7 +1784,7 @@ wheels = [
 [[package]]
 name = "invenio-oauthclient"
 version = "5.3.1"
-source = { git = "https://github.com/front-matter/invenio-oauthclient?branch=maint-v5.x#3d6065687033238ef79a8ee40169e63633f8bfee" }
+source = { git = "https://github.com/front-matter/invenio-oauthclient?branch=maint-v5.x#3dc333113c7f4f672ec87dbade220dc887e9972f" }
 dependencies = [
     { name = "blinker" },
     { name = "flask-oauthlib-invenio" },
@@ -2046,16 +2046,16 @@ wheels = [
 
 [[package]]
 name = "invenio-requests"
-version = "7.2.5"
+version = "7.2.6"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "invenio-records-resources" },
     { name = "invenio-theme" },
     { name = "invenio-users-resources" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/05/ad/ab62d88b640ecebab7711c957b42361d13fb8f7d1d18112c2b3e8f9ca020/invenio_requests-7.2.5.tar.gz", hash = "sha256:bbe67548c84f23c44e5ddb8667f93c9ef39cb10eabe62c1bb44214ee1db6b6df", size = 137466, upload-time = "2025-12-09T11:55:30.964Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/04/8a/ecfba7957893fdd03bc917b14b572471609a478e72a7f8dd8bbdfc3de46a/invenio_requests-7.2.6.tar.gz", hash = "sha256:d91059de4016afee8c63c0cae128e5c0b9c2d4faa510169e9669020804d7edf5", size = 137532, upload-time = "2025-12-19T13:39:50.313Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/74/27/cb8645a90b42ed62b6fbeb0a01ba7a3f10f7005e366b4ee4a3fd5605af55/invenio_requests-7.2.5-py2.py3-none-any.whl", hash = "sha256:32983a60d4c7f9e8655d63ae39d6435468ef41a723d03d8019a27219715ceb6c", size = 333483, upload-time = "2025-12-09T11:55:29.357Z" },
+    { url = "https://files.pythonhosted.org/packages/f8/60/dd3313ef9c14a52f99362e5f301979e59720f745e4e5d391a96e8b85b771/invenio_requests-7.2.6-py2.py3-none-any.whl", hash = "sha256:56e777a593feda99d82dc77bcabf9f456cf5711c8c74cae1a5bed8df719590d6", size = 333573, upload-time = "2025-12-19T13:39:48.817Z" },
 ]
 
 [[package]]
@@ -2805,7 +2805,7 @@ wheels = [
 
 [[package]]
 name = "mkdocs-material"
-version = "9.7.0"
+version = "9.7.1"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "babel" },
@@ -2820,9 +2820,9 @@ dependencies = [
     { name = "pymdown-extensions" },
     { name = "requests" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/9c/3b/111b84cd6ff28d9e955b5f799ef217a17bc1684ac346af333e6100e413cb/mkdocs_material-9.7.0.tar.gz", hash = "sha256:602b359844e906ee402b7ed9640340cf8a474420d02d8891451733b6b02314ec", size = 4094546, upload-time = "2025-11-11T08:49:09.73Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/27/e2/2ffc356cd72f1473d07c7719d82a8f2cbd261666828614ecb95b12169f41/mkdocs_material-9.7.1.tar.gz", hash = "sha256:89601b8f2c3e6c6ee0a918cc3566cb201d40bf37c3cd3c2067e26fadb8cce2b8", size = 4094392, upload-time = "2025-12-18T09:49:00.308Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/04/87/eefe8d5e764f4cf50ed91b943f8e8f96b5efd65489d8303b7a36e2e79834/mkdocs_material-9.7.0-py3-none-any.whl", hash = "sha256:da2866ea53601125ff5baa8aa06404c6e07af3c5ce3d5de95e3b52b80b442887", size = 9283770, upload-time = "2025-11-11T08:49:06.26Z" },
+    { url = "https://files.pythonhosted.org/packages/3e/32/ed071cb721aca8c227718cffcf7bd539620e9799bbf2619e90c757bfd030/mkdocs_material-9.7.1-py3-none-any.whl", hash = "sha256:3f6100937d7d731f87f1e3e3b021c97f7239666b9ba1151ab476cabb96c60d5c", size = 9297166, upload-time = "2025-12-18T09:48:56.664Z" },
 ]
 
 [[package]]
@@ -2880,7 +2880,7 @@ wheels = [
 
 [[package]]
 name = "nbclient"
-version = "0.10.2"
+version = "0.10.3"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "jupyter-client" },
@@ -2888,9 +2888,9 @@ dependencies = [
     { name = "nbformat" },
     { name = "traitlets" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/87/66/7ffd18d58eae90d5721f9f39212327695b749e23ad44b3881744eaf4d9e8/nbclient-0.10.2.tar.gz", hash = "sha256:90b7fc6b810630db87a6d0c2250b1f0ab4cf4d3c27a299b0cde78a4ed3fd9193", size = 62424, upload-time = "2024-12-19T10:32:27.164Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/8d/f3/1f6cf2ede4b026bc5f0b424cb41adf22f9c804e90a4dbd4fdb42291a35d5/nbclient-0.10.3.tar.gz", hash = "sha256:0baf171ee246e3bb2391da0635e719f27dc77d99aef59e0b04dcb935ee04c575", size = 62564, upload-time = "2025-12-19T15:50:09.331Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/34/6d/e7fa07f03a4a7b221d94b4d586edb754a9b0dc3c9e2c93353e9fa4e0d117/nbclient-0.10.2-py3-none-any.whl", hash = "sha256:4ffee11e788b4a27fabeb7955547e4318a5298f34342a4bfd01f2e1faaeadc3d", size = 25434, upload-time = "2024-12-19T10:32:24.139Z" },
+    { url = "https://files.pythonhosted.org/packages/b2/77/0c73678f5260501a271fd7342bee5d639440f2e9e07d590f1100a056d87c/nbclient-0.10.3-py3-none-any.whl", hash = "sha256:39e9bd403504dd2484dd0fd25235bb6a683ce8cd9873356e40d880696adc9e35", size = 25473, upload-time = "2025-12-19T15:50:07.671Z" },
 ]
 
 [[package]]
@@ -3825,11 +3825,11 @@ wheels = [
 
 [[package]]
 name = "soupsieve"
-version = "2.8"
+version = "2.8.1"
 source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/6d/e6/21ccce3262dd4889aa3332e5a119a3491a95e8f60939870a3a035aabac0d/soupsieve-2.8.tar.gz", hash = "sha256:e2dd4a40a628cb5f28f6d4b0db8800b8f581b65bb380b97de22ba5ca8d72572f", size = 103472, upload-time = "2025-08-27T15:39:51.78Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/89/23/adf3796d740536d63a6fbda113d07e60c734b6ed5d3058d1e47fc0495e47/soupsieve-2.8.1.tar.gz", hash = "sha256:4cf733bc50fa805f5df4b8ef4740fc0e0fa6218cf3006269afd3f9d6d80fd350", size = 117856, upload-time = "2025-12-18T13:50:34.655Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/14/a0/bb38d3b76b8cae341dad93a2dd83ab7462e6dbcdd84d43f54ee60a8dc167/soupsieve-2.8-py3-none-any.whl", hash = "sha256:0cc76456a30e20f5d7f2e14a98a4ae2ee4e5abdc7c5ea0aafe795f344bc7984c", size = 36679, upload-time = "2025-08-27T15:39:50.179Z" },
+    { url = "https://files.pythonhosted.org/packages/48/f3/b67d6ea49ca9154453b6d70b34ea22f3996b9fa55da105a79d8732227adc/soupsieve-2.8.1-py3-none-any.whl", hash = "sha256:a11fe2a6f3d76ab3cf2de04eb339c1be5b506a8a47f2ceb6d139803177f85434", size = 36710, upload-time = "2025-12-18T13:50:33.267Z" },
 ]
 
 [[package]]
