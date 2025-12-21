@@ -166,3 +166,6 @@ _site
 # Nixpacks local build artifacts
 .nixpacks/
 .nixpacks-cache/
+
+# Node modules
+node_modules
