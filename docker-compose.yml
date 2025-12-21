@@ -85,8 +85,8 @@ services:
       # TODO: fix tuple parsing
       # - INVENIO_RDM_CITATION_STYLES=${INVENIO_RDM_CITATION_STYLES:-"[('apa', 'APA'), ('chicago-note-bibliography', 'Chicago'), ('harvard-cite-them-right', 'Harvard')]"}
 
-      # Authentication - Invenio-Accounts and Invenio-OAuthclient
-      # See: https://inveniordm.docs.cern.ch/customize/authentication/
+      # Authentication
+      # See: https://inveniordm.docs.cern.ch/operate/customize/authentication/
       - INVENIO_ACCOUNTS_LOCAL_LOGIN_ENABLED=${INVENIO_ACCOUNTS_LOCAL_LOGIN_ENABLED:-True}
       - INVENIO_ACCOUNTS_DEFAULT_USER_VISIBILITY=${INVENIO_ACCOUNTS_DEFAULT_USER_VISIBILITY:-restricted}
       - INVENIO_SECURITY_CHANGEABLE=${INVENIO_SECURITY_CHANGEABLE:-True}
