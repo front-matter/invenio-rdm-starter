@@ -20,16 +20,22 @@
 <div class="ui container grid">
   <div class="row">
     <div class="sixteen wide mobile four wide computer column"></div>
+    {% if config.THEME_FRONTPAGE_TITLE is not "" and config.THEME_FRONTPAGE_SUBTITLE is not "" %}
     <div class="sixteen wide mobile eight wide computer column centered">
       {%- block frontpage_title %}
       <h1 class="ui center aligned header inverted">
+        {% if config.THEME_FRONTPAGE_TITLE is not "" %}
         {{ _(config.THEME_FRONTPAGE_TITLE) }}
+        {% endif %}
+        {% if config.THEME_FRONTPAGE_SUBTITLE is not "" %}
         <div class="sub header">{{ _(config.THEME_FRONTPAGE_SUBTITLE) }}</div>
+        {% endif %}
       </h1>
     </div>
     <div class="sixteen wide mobile four wide computer column"></div>
   </div>
     {%- endblock frontpage_title %}
+    {% endif %}
     {%- block frontpage_form %}
     <div class="row">
         <div class="sixteen wide mobile four wide computer column"></div>

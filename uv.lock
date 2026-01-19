@@ -1784,7 +1784,7 @@ wheels = [
 [[package]]
 name = "invenio-oauthclient"
 version = "5.3.1"
-source = { git = "https://github.com/front-matter/invenio-oauthclient?branch=maint-v5.x#1aec2d7fafcc17f3d062eab8e7b307061208ef8d" }
+source = { git = "https://github.com/front-matter/invenio-oauthclient?branch=maint-v5.x#d81a62f02c2f048f869394027a0463a34d004e2b" }
 dependencies = [
     { name = "blinker" },
     { name = "flask-oauthlib-invenio" },

@@ -6,7 +6,7 @@ echo "-- Setup InvenioRDM --"
 invenio db init create
 
 # Creating files location...
-invenio files location create --default default  "file://${INVENIO_DATADIR}"
+invenio files location create --default s3-default  "s3://${S3_BUCKET}"
 
 # Superuser role
 invenio roles create admin
