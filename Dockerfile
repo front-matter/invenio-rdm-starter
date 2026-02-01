@@ -88,6 +88,7 @@ RUN mkdir -p /invenio-libs && \
   cp -P /usr/lib/x86_64-linux-gnu/libpixman*.so* /invenio-libs/ && \
   cp -P /usr/lib/x86_64-linux-gnu/libpng*.so* /invenio-libs/ && \
   cp -P /usr/lib/x86_64-linux-gnu/libexpat*.so* /invenio-libs/ && \
+  cp -P /usr/lib/x86_64-linux-gnu/libbrotli*.so* /invenio-libs/ && \
   cp -P /usr/lib/x86_64-linux-gnu/libxcb*.so* /invenio-libs/ && \
   cp -P /usr/lib/x86_64-linux-gnu/libX*.so* /invenio-libs/ && \
   cp -P /usr/lib/x86_64-linux-gnu/libfribidi*.so* /invenio-libs/ && \

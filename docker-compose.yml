@@ -14,7 +14,7 @@
 x-common-env:
   # Python
   &common-env
-  PYTHONWARNINGS: "ignore::UserWarning:fs"
+  PYTHONWARNINGS: "ignore::UserWarning:fs,ignore::RuntimeWarning:invenio_oauth2server.ext"
 
   # Flask-SQLAlchemy
   INVENIO_SQLALCHEMY_DATABASE_URI: ${INVENIO_SQLALCHEMY_DATABASE_URI:-postgresql+psycopg2://inveniordm:inveniordm@db/inveniordm}
@@ -163,7 +163,7 @@ services:
     pull_policy: if_not_present
     # Skip entrypoint.py initialization - only web does DB setup
     entrypoint: []
-    command: [ "celery", "-A", "invenio_app.celery", "worker", "--beat", "--events", "--loglevel=WARNING" ]
+    command: [ "celery", "-A", "invenio_app.celery", "worker", "--beat", "--schedule=/tmp/celerybeat-schedule", "--events", "--loglevel=WARNING" ]
 
     # DHI security settings
     read_only: true
