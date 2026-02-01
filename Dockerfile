@@ -1,6 +1,6 @@
-FROM python:3.13-bookworm AS builder
+FROM python:3.13.7-bookworm AS builder
 LABEL service="starter"
-LABEL maintainer="Front Matter <info@front-matter.io>"
+LABEL maintainer="Front Matter <info@front-matter.de>"
 
 # Dockerfile that builds the InvenioRDM Starter Docker image.
 
@@ -12,12 +12,12 @@ RUN --mount=type=cache,sharing=locked,target=/var/cache/apt \
   apt-get update --fix-missing && \
   apt-get install -y build-essential libssl-dev libffi-dev \
   python3-dev cargo pkg-config curl --no-install-recommends && \
-  curl -fsSL https://deb.nodesource.com/setup_20.x | bash - && \
+  curl -fsSL https://deb.nodesource.com/setup_22.x | bash - && \
   apt-get install -y nodejs --no-install-recommends && \
   npm install -g pnpm@latest-10
 
 # Install uv and activate virtualenv
-COPY --from=ghcr.io/astral-sh/uv:0.7.15 /uv /uvx /bin/
+COPY --from=ghcr.io/astral-sh/uv:0.9.18 /uv /uvx /bin/
 RUN uv venv /opt/invenio/.venv
 
 # Use the virtual environment automatically
@@ -75,7 +75,7 @@ WORKDIR ${INVENIO_INSTANCE_PATH}/assets
 RUN pnpm install && \
   pnpm run build
 
-FROM python:3.13-slim-bookworm AS runtime
+FROM python:3.13.7-slim-bookworm AS runtime
 
 ENV LANG=en_US.UTF-8 \
   LANGUAGE=en_US:en
@@ -105,11 +105,12 @@ COPY --from=builder --chown=invenio:root ${INVENIO_INSTANCE_PATH}/translations $
 COPY --from=builder --chown=invenio:root ${INVENIO_INSTANCE_PATH}/invenio.cfg ${INVENIO_INSTANCE_PATH}/invenio.cfg
 COPY ./Caddyfile /etc/caddy/Caddyfile
 
-COPY ./setup.sh /opt/invenio/.venv/bin/setup.sh
+COPY ./entrypoint.sh /opt/invenio/.venv/bin/entrypoint.sh
+RUN chmod +x /opt/invenio/.venv/bin/entrypoint.sh
 
 WORKDIR ${WORKING_DIR}/src
 
 # USER invenio
 
 EXPOSE 5000
-CMD ["gunicorn", "invenio_app.wsgi:application", "--bind", "0.0.0.0:5000", "--workers", "4", "--access-logfile", "-", "--error-logfile", "-", "--log-level", "ERROR"]
+CMD ["gunicorn", "invenio_app.wsgi:application", "--bind", "0.0.0.0:5000", "--workers", "2", "--threads", "2", "--access-logfile", "-", "--error-logfile", "-", "--log-level", "ERROR"]

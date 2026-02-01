@@ -11,7 +11,7 @@ InvenioRDM is the open source turn-key research data management platform, with d
 * a prebuilt Invenio-App-RDM Docker image.
 * a Docker Compose configuration file with sensible defaults.
 
-InvenioRDM Starter open source software and is coordinated by the InvenioRDM partner [Front Matter](https://front-matter.io).
+InvenioRDM Starter open source software and is coordinated by the InvenioRDM partner [Front Matter](https://front-matter.de).
 
 ## Requirements
 
@@ -47,7 +47,7 @@ Open a web browser and navigate to [https://localhost](https://localhost). One d
 
 ## Configuration
 
-The `docker-compose.yml` configuration can be modified to suit your needs using environment variables in an `.env` file in the same folder:
+The `docker-compose.yml` configuration can be modified to suit your needs using environment variables in an `.env` file in the same folder. See [.env.example](.env.example) for a complete list of available configuration options with documentation.
 
 ### Flask
 
