@@ -1,8 +1,9 @@
-FROM python:3.13.7-bookworm AS builder
+FROM dhi.io/python:3.13-debian13-dev AS builder
 LABEL service="starter"
 LABEL maintainer="Front Matter <info@front-matter.de>"
 
-# Dockerfile that builds the InvenioRDM Starter Docker image.
+# Dockerfile that builds the InvenioRDM Starter Docker image using DHI
+# (Docker Hardened Image) for enhanced security
 
 ENV LANG=en_US.UTF-8 \
   LANGUAGE=en_US:en
@@ -11,7 +12,9 @@ ENV LANG=en_US.UTF-8 \
 RUN --mount=type=cache,sharing=locked,target=/var/cache/apt \
   apt-get update --fix-missing && \
   apt-get install -y build-essential libssl-dev libffi-dev \
-  python3-dev cargo pkg-config curl --no-install-recommends && \
+  python3-dev cargo pkg-config curl libcairo2 \
+  libpangocairo-1.0-0 libpq5 libxml2 libxslt1.1 \
+  libjpeg62-turbo libwebp7 libtiff6 --no-install-recommends && \
   curl -fsSL https://deb.nodesource.com/setup_22.x | bash - && \
   apt-get install -y nodejs --no-install-recommends && \
   npm install -g pnpm@latest-10
@@ -75,42 +78,84 @@ WORKDIR ${INVENIO_INSTANCE_PATH}/assets
 RUN pnpm install && \
   pnpm run build
 
-FROM python:3.13.7-slim-bookworm AS runtime
+# Gather runtime libraries into a single directory for easy copying
+RUN mkdir -p /invenio-libs && \
+  cp -P /usr/lib/x86_64-linux-gnu/libcairo*.so* /invenio-libs/ && \
+  cp -P /usr/lib/x86_64-linux-gnu/libpango*.so* /invenio-libs/ && \
+  cp -P /usr/lib/x86_64-linux-gnu/libharfbuzz*.so* /invenio-libs/ && \
+  cp -P /usr/lib/x86_64-linux-gnu/libfontconfig*.so* /invenio-libs/ && \
+  cp -P /usr/lib/x86_64-linux-gnu/libfreetype*.so* /invenio-libs/ && \
+  cp -P /usr/lib/x86_64-linux-gnu/libpixman*.so* /invenio-libs/ && \
+  cp -P /usr/lib/x86_64-linux-gnu/libpng*.so* /invenio-libs/ && \
+  cp -P /usr/lib/x86_64-linux-gnu/libexpat*.so* /invenio-libs/ && \
+  cp -P /usr/lib/x86_64-linux-gnu/libxcb*.so* /invenio-libs/ && \
+  cp -P /usr/lib/x86_64-linux-gnu/libX*.so* /invenio-libs/ && \
+  cp -P /usr/lib/x86_64-linux-gnu/libfribidi*.so* /invenio-libs/ && \
+  cp -P /usr/lib/x86_64-linux-gnu/libthai*.so* /invenio-libs/ && \
+  cp -P /usr/lib/x86_64-linux-gnu/libglib*.so* /invenio-libs/ && \
+  cp -P /usr/lib/x86_64-linux-gnu/libgobject*.so* /invenio-libs/ && \
+  cp -P /usr/lib/x86_64-linux-gnu/libdatrie*.so* /invenio-libs/ && \
+  cp -P /usr/lib/x86_64-linux-gnu/libpcre2*.so* /invenio-libs/ && \
+  cp -P /usr/lib/x86_64-linux-gnu/libffi*.so* /invenio-libs/ && \
+  cp -P /usr/lib/x86_64-linux-gnu/libbsd*.so* /invenio-libs/ && \
+  cp -P /usr/lib/x86_64-linux-gnu/libmd*.so* /invenio-libs/ && \
+  cp -P /usr/lib/x86_64-linux-gnu/libpq*.so* /invenio-libs/ && \
+  cp -P /usr/lib/x86_64-linux-gnu/libssl*.so* /invenio-libs/ && \
+  cp -P /usr/lib/x86_64-linux-gnu/libcrypto*.so* /invenio-libs/ && \
+  cp -P /usr/lib/x86_64-linux-gnu/libxml2*.so* /invenio-libs/ && \
+  cp -P /usr/lib/x86_64-linux-gnu/libxslt*.so* /invenio-libs/ && \
+  cp -P /usr/lib/x86_64-linux-gnu/libexslt*.so* /invenio-libs/ && \
+  cp -P /usr/lib/x86_64-linux-gnu/libjpeg*.so* /invenio-libs/ && \
+  cp -P /usr/lib/x86_64-linux-gnu/libwebp*.so* /invenio-libs/ && \
+  cp -P /usr/lib/x86_64-linux-gnu/libtiff*.so* /invenio-libs/ && \
+  cp -P /usr/lib/x86_64-linux-gnu/libz*.so* /invenio-libs/ && \
+  cp -P /usr/lib/x86_64-linux-gnu/liblzma*.so* /invenio-libs/ && \
+  cp -P /usr/lib/x86_64-linux-gnu/libcurl*.so* /invenio-libs/ && \
+  cp -P /usr/lib/x86_64-linux-gnu/libnghttp*.so* /invenio-libs/ 2>/dev/null || true && \
+  cp -P /usr/lib/x86_64-linux-gnu/librtmp*.so* /invenio-libs/ 2>/dev/null || true && \
+  cp -P /usr/lib/x86_64-linux-gnu/libssh*.so* /invenio-libs/ 2>/dev/null || true && \
+  cp -P /usr/lib/x86_64-linux-gnu/libicui18n*.so* /invenio-libs/ 2>/dev/null || true && \
+  cp -P /usr/lib/x86_64-linux-gnu/libicuuc*.so* /invenio-libs/ 2>/dev/null || true && \
+  cp -P /usr/lib/x86_64-linux-gnu/libicudata*.so* /invenio-libs/ 2>/dev/null || true
+
+FROM dhi.io/python:3.13-debian13 AS runtime
 
 ENV LANG=en_US.UTF-8 \
   LANGUAGE=en_US:en
 
-# Install OS package dependencies
-RUN --mount=type=cache,sharing=locked,target=/var/cache/apt \
-  apt-get update --fix-missing && \
-  apt-get install -y apt-utils gpg libcairo2 debian-keyring \
-  debian-archive-keyring apt-transport-https curl --no-install-recommends
+# DHI images are minimal - copy required Cairo libraries from builder
+# These are needed for cairosvg/cairocffi used by invenio_formatter
 
 ENV VIRTUAL_ENV=/opt/invenio/.venv \
   PATH="/opt/invenio/.venv/bin:$PATH" \
   WORKING_DIR=/opt/invenio \
   INVENIO_INSTANCE_PATH=/opt/invenio/var/instance
 
-# Create invenio user and set appropriate permissions
-ENV INVENIO_USER_ID=1000
-RUN adduser invenio --uid ${INVENIO_USER_ID} --gid 0 --no-create-home --disabled-password
+# DHI uses UID 1654 as non-root user - already configured in base image
+ENV INVENIO_USER_ID=1654
 
-COPY --from=builder --chown=invenio:root ${VIRTUAL_ENV} ${VIRTUAL_ENV}
-COPY --from=builder --chown=invenio:root ${INVENIO_INSTANCE_PATH}/site ${INVENIO_INSTANCE_PATH}/site
-COPY --from=builder --chown=invenio:root ${INVENIO_INSTANCE_PATH}/static ${INVENIO_INSTANCE_PATH}/static
-COPY --from=builder --chown=invenio:root ${INVENIO_INSTANCE_PATH}/assets ${INVENIO_INSTANCE_PATH}/assets
-COPY --from=builder --chown=invenio:root ${INVENIO_INSTANCE_PATH}/templates ${INVENIO_INSTANCE_PATH}/templates
-COPY --from=builder --chown=invenio:root ${INVENIO_INSTANCE_PATH}/app_data ${INVENIO_INSTANCE_PATH}/app_data
-COPY --from=builder --chown=invenio:root ${INVENIO_INSTANCE_PATH}/translations ${INVENIO_INSTANCE_PATH}/translations
-COPY --from=builder --chown=invenio:root ${INVENIO_INSTANCE_PATH}/invenio.cfg ${INVENIO_INSTANCE_PATH}/invenio.cfg
-COPY ./Caddyfile /etc/caddy/Caddyfile
+# DHI is shell-less by design for security
+# entrypoint.py runs initialization in Python (no shell required)
 
-COPY ./entrypoint.sh /opt/invenio/.venv/bin/entrypoint.sh
-RUN chmod +x /opt/invenio/.venv/bin/entrypoint.sh
+# Copy runtime libraries from builder (Cairo for invenio_formatter, etc.)
+COPY --from=builder /invenio-libs/* /usr/lib/x86_64-linux-gnu/
+
+COPY --from=builder --chown=1654:0 ${VIRTUAL_ENV} ${VIRTUAL_ENV}
+COPY --from=builder --chown=1654:0 ${INVENIO_INSTANCE_PATH}/site ${INVENIO_INSTANCE_PATH}/site
+COPY --from=builder --chown=1654:0 ${INVENIO_INSTANCE_PATH}/static ${INVENIO_INSTANCE_PATH}/static
+COPY --from=builder --chown=1654:0 ${INVENIO_INSTANCE_PATH}/assets ${INVENIO_INSTANCE_PATH}/assets
+COPY --from=builder --chown=1654:0 ${INVENIO_INSTANCE_PATH}/templates ${INVENIO_INSTANCE_PATH}/templates
+COPY --from=builder --chown=1654:0 ${INVENIO_INSTANCE_PATH}/app_data ${INVENIO_INSTANCE_PATH}/app_data
+COPY --from=builder --chown=1654:0 ${INVENIO_INSTANCE_PATH}/translations ${INVENIO_INSTANCE_PATH}/translations
+COPY --from=builder --chown=1654:0 ${INVENIO_INSTANCE_PATH}/invenio.cfg ${INVENIO_INSTANCE_PATH}/invenio.cfg
+COPY --chown=1654:0 ./Caddyfile /etc/caddy/Caddyfile
+COPY --chown=1654:0 --chmod=755 ./entrypoint.py ${INVENIO_INSTANCE_PATH}/entrypoint.py
+
+# Declare volumes for persistent data (writable directories managed by DHI)
+VOLUME ["/opt/invenio/var/instance/data", "/opt/invenio/var/instance/archive"]
 
 WORKDIR ${WORKING_DIR}/src
 
-# USER invenio
-
 EXPOSE 5000
+ENTRYPOINT ["python3", "/opt/invenio/var/instance/entrypoint.py"]
 CMD ["gunicorn", "invenio_app.wsgi:application", "--bind", "0.0.0.0:5000", "--workers", "2", "--threads", "2", "--access-logfile", "-", "--error-logfile", "-", "--log-level", "ERROR"]

@@ -12,8 +12,11 @@
 # - Search platform: OpenSearch (exposed ports: 9200, 9300)
 
 x-common-env:
-  # Flask-SQLAlchemy
+  # Python
   &common-env
+  PYTHONWARNINGS: "ignore::UserWarning:fs"
+
+  # Flask-SQLAlchemy
   INVENIO_SQLALCHEMY_DATABASE_URI: ${INVENIO_SQLALCHEMY_DATABASE_URI:-postgresql+psycopg2://inveniordm:inveniordm@db/inveniordm}
 
   # Invenio-Search
@@ -55,6 +58,12 @@ x-common-env:
   INVENIO_S3_BUCKET_NAME: ${INVENIO_S3_BUCKET_NAME:-}
   INVENIO_S3_ACCESS_KEY_ID: ${INVENIO_S3_ACCESS_KEY_ID:-}
   INVENIO_S3_SECRET_ACCESS_KEY: ${INVENIO_S3_SECRET_ACCESS_KEY:-}
+
+  # Admin user
+  INVENIO_ADMIN_EMAIL: ${INVENIO_ADMIN_EMAIL:-info@example.org}
+  INVENIO_ADMIN_PASSWORD: ${INVENIO_ADMIN_PASSWORD:-changeme}
+  INVENIO_DEMO_DATA: ${INVENIO_DEMO_DATA:-False}
+
 services:
   proxy:
     image: caddy:2.10
@@ -70,14 +79,28 @@ services:
     image: ghcr.io/front-matter/invenio-rdm-starter:latest
     platform: linux/amd64
     pull_policy: if_not_present
-    entrypoint: [ "/bin/bash", "/opt/invenio/var/instance/entrypoint.sh" ]
-    command: [ "gunicorn", "-b", "0.0.0.0:5000", "--access-logfile", "-", "--error-logfile", "-", "invenio_app.wsgi:application" ]
+    # entrypoint.py runs initialization then starts gunicorn (via CMD)
+
+    # DHI security settings
+    read_only: true
+    security_opt:
+      - no-new-privileges:true
+
+    # Writable mounts for read-only filesystem
+    tmpfs:
+      - /tmp:mode=1777,size=100m
+      - /var/run:mode=755,size=10m
+
     volumes:
       - uploaded_data:/opt/invenio/var/instance/data
       - archived_data:/opt/invenio/var/instance/archive
-      - ./entrypoint.sh:/opt/invenio/var/instance/entrypoint.sh:ro
     environment:
       <<: *common-env
+
+      # Python (for read-only filesystem)
+      PYTHONWARNINGS: "ignore::UserWarning:fs"
+      TMPDIR: /tmp
+      HOME: /tmp
 
       # Flask
       INVENIO_TRUSTED_HOSTS: ${INVENIO_TRUSTED_HOSTS:-['0.0.0.0', 'localhost', '127.0.0.1']}
@@ -118,10 +141,6 @@ services:
       INVENIO_SECURITY_REGISTERABLE: ${INVENIO_SECURITY_REGISTERABLE:-True}
       INVENIO_SECURITY_TRACKABLE: ${INVENIO_SECURITY_TRACKABLE:-True}
 
-      INVENIO_ADMIN_EMAIL: ${INVENIO_ADMIN_EMAIL:-info@example.org}
-      INVENIO_ADMIN_PASSWORD: ${INVENIO_ADMIN_PASSWORD:-changeme}
-      INVENIO_DEMO_DATA: ${INVENIO_DEMO_DATA:-False}
-
       INVENIO_OIDC_ISSUER: ${INVENIO_OIDC_ISSUER:-}
       INVENIO_OIDC_APP_CREDENTIALS_CONSUMER_KEY: ${INVENIO_OIDC_APP_CREDENTIALS_CONSUMER_KEY:-}
       INVENIO_OIDC_APP_CREDENTIALS_CONSUMER_SECRET: ${INVENIO_OIDC_APP_CREDENTIALS_CONSUMER_SECRET:-}
@@ -132,16 +151,42 @@ services:
         condition: service_healthy
       db:
         condition: service_healthy
+    healthcheck:
+      test: [ "CMD", "python3", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:5000/ping')" ]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 60s
   worker:
-    command: "celery -A invenio_app.celery worker --beat --events --loglevel=WARNING"
     image: ghcr.io/front-matter/invenio-rdm-starter:latest
     platform: linux/amd64
     pull_policy: if_not_present
+    # Skip entrypoint.py initialization - only web does DB setup
+    entrypoint: []
+    command: [ "celery", "-A", "invenio_app.celery", "worker", "--beat", "--events", "--loglevel=WARNING" ]
+
+    # DHI security settings
+    read_only: true
+    security_opt:
+      - no-new-privileges:true
+
+    # Writable mounts for read-only filesystem
+    tmpfs:
+      - /tmp:mode=1777,size=100m
+      - /var/run:mode=755,size=10m
+
     volumes:
       - uploaded_data:/opt/invenio/var/instance/data
     environment:
       <<: *common-env
+
+      # Python (for read-only filesystem)
+      PYTHONWARNINGS: "ignore::UserWarning:fs"
+      TMPDIR: /tmp
+      HOME: /tmp
     depends_on:
+      web:
+        condition: service_healthy
       search:
         condition: service_healthy
       cache:
