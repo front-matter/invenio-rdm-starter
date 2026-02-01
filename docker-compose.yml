@@ -153,10 +153,10 @@ services:
         condition: service_healthy
     healthcheck:
       test: [ "CMD", "python3", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:5000/ping')" ]
-      interval: 10s
-      timeout: 5s
+      interval: 30s
+      timeout: 10s
       retries: 3
-      start_period: 60s
+      start_period: 300s
   worker:
     image: ghcr.io/front-matter/invenio-rdm-starter:latest
     platform: linux/amd64
@@ -196,6 +196,7 @@ services:
   cache:
     image: valkey/valkey:7.2.5-bookworm
     restart: "unless-stopped"
+    command: [ "valkey-server", "--loglevel", "warning" ]
     ports:
       - "127.0.0.1:6379:6379"
     healthcheck:
@@ -220,6 +221,8 @@ services:
   search:
     image: opensearchproject/opensearch:2.18.0
     restart: "unless-stopped"
+    volumes:
+      - ./log4j2.properties:/usr/share/opensearch/config/log4j2.properties:ro
     environment:
       bootstrap.memory_lock: "true"
       OPENSEARCH_JAVA_OPTS: "-Xms512m -Xmx512m"
