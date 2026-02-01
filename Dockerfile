@@ -12,7 +12,7 @@ ENV LANG=en_US.UTF-8 \
 RUN --mount=type=cache,sharing=locked,target=/var/cache/apt \
   apt-get update --fix-missing && \
   apt-get install -y build-essential libssl-dev libffi-dev \
-  python3-dev cargo pkg-config curl libcairo2 \
+  python3-dev cargo pkg-config curl git libcairo2 \
   libpangocairo-1.0-0 libpq5 libxml2 libxslt1.1 \
   libjpeg62-turbo libwebp7 libtiff6 --no-install-recommends && \
   curl -fsSL https://deb.nodesource.com/setup_22.x | bash - && \
