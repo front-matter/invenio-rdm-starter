@@ -28,7 +28,7 @@
     "i18next-browser-languagedetector": "^6.1.8",
     "jquery": "^3.7.1",
     "json-diff-kit": "^1.0.34",
-    "lodash": "^4.17.21",
+    "lodash": "^4.17.23",
     "luxon": "^1.28.1",
     "papaparse": "^5.5.3",
     "path": "^0.12.7",
