@@ -1,22 +1,24 @@
 [project]
 name = "invenio-rdm-starter"
-version = "13.0.7.0"
+version = "13.0.8.1"
 description = "Starter for the invenio-rdm turn-key research data management repository"
 authors = [{ name = "Martin Fenner", email = "martin@front-matter.de" }]
 readme = "README.md"
 requires-python = ">=3.13"
 license = "MIT"
 dependencies = [
-    "invenio-app-rdm>=13.0.7,<14.0.0",
+    "invenio-app-rdm>=13.0.8,<14.0.0",
     "invenio-search[opensearch2]>=3.0.0",
+    "invenio-s3>=3.0.2",
     "invenio-previewer>=3.3.0,<3.4.0",
     "gunicorn~=23.0.0",
     "invenio-oauthclient",
+    "invenio-db",
 ]
 
 [tool.uv.sources]
 invenio-oauthclient = { git = "https://github.com/front-matter/invenio-oauthclient", branch = "maint-v5.x" }
-
+invenio-db = { git = "https://github.com/front-matter/invenio-db", branch = "cli-commands" }
 
 [build-system]
 requires = ["hatchling"]

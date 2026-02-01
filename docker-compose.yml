@@ -11,6 +11,50 @@
 # - Cache and message queue: Valkey (exposed port: 6379)
 # - Search platform: OpenSearch (exposed ports: 9200, 9300)
 
+x-common-env:
+  # Flask-SQLAlchemy
+  &common-env
+  INVENIO_SQLALCHEMY_DATABASE_URI: ${INVENIO_SQLALCHEMY_DATABASE_URI:-postgresql+psycopg2://inveniordm:inveniordm@db/inveniordm}
+
+  # Invenio-Search
+  INVENIO_SEARCH_HOSTS: ${INVENIO_SEARCH_HOSTS:-['search:9200']}
+  INVENIO_SEARCH_INDEX_PREFIX: ${INVENIO_SEARCH_INDEX_PREFIX:-invenio-rdm-}
+
+  # Invenio-App Caches and Workers
+  INVENIO_ACCOUNTS_SESSION_REDIS_URL: ${INVENIO_ACCOUNTS_SESSION_REDIS_URL:-redis://cache:6379/0}
+
+  # Mail
+  INVENIO_MAIL_SUPPRESS_SEND: ${INVENIO_MAIL_SUPPRESS_SEND:-True}
+  INVENIO_MAIL_SERVER: ${INVENIO_MAIL_SERVER:-smtp.gmail.com}
+  INVENIO_MAIL_PORT: ${INVENIO_MAIL_PORT:-587}
+  INVENIO_MAIL_USERNAME: ${INVENIO_MAIL_USERNAME:-info}
+  INVENIO_MAIL_PASSWORD: ${INVENIO_MAIL_PASSWORD:-changeme}
+  INVENIO_MAIL_USE_TLS: ${INVENIO_MAIL_USE_TLS:-True}
+  INVENIO_SECURITY_EMAIL_SENDER: ${INVENIO_SECURITY_EMAIL_SENDER:-}
+
+  # Logging
+  INVENIO_LOGGING_CONSOLE_LEVEL: ${INVENIO_LOGGING_CONSOLE_LEVEL:-INFO}
+
+  # DOI Registration
+  INVENIO_DATACITE_ENABLED: ${INVENIO_DATACITE_ENABLED:-False}
+  INVENIO_DATACITE_TEST_MODE: ${INVENIO_DATACITE_TEST_MODE:-False}
+  INVENIO_DATACITE_USERNAME: ${INVENIO_DATACITE_USERNAME:-}
+  INVENIO_DATACITE_PASSWORD: ${INVENIO_DATACITE_PASSWORD:-}
+  INVENIO_DATACITE_PREFIX: ${INVENIO_DATACITE_PREFIX:-}
+  INVENIO_DATACITE_DATACENTER_SYMBOL: ${INVENIO_DATACITE_DATACENTER_SYMBOL:-}
+
+  # Invenio-RDM-Records
+  INVENIO_RDM_ALLOW_METADATA_ONLY_RECORDS: ${INVENIO_RDM_ALLOW_METADATA_ONLY_RECORDS:-True}
+  INVENIO_RDM_ALLOW_RESTRICTED_RECORDS: ${INVENIO_RDM_ALLOW_RESTRICTED_RECORDS:-True}
+  INVENIO_RDM_ALLOW_EXTERNAL_DOI_VERSIONING: ${INVENIO_RDM_ALLOW_EXTERNAL_DOI_VERSIONING:-False}
+
+  INVENIO_RDM_CITATION_STYLES: ${INVENIO_RDM_CITATION_STYLES:-apa,chicago-author-date,harvard-cite-them-right,ieee,vancouver}
+
+  # Invenio-S3
+  INVENIO_S3_ENDPOINT_URL: ${INVENIO_S3_ENDPOINT_URL:-}
+  INVENIO_S3_BUCKET_NAME: ${INVENIO_S3_BUCKET_NAME:-}
+  INVENIO_S3_ACCESS_KEY_ID: ${INVENIO_S3_ACCESS_KEY_ID:-}
+  INVENIO_S3_SECRET_ACCESS_KEY: ${INVENIO_S3_SECRET_ACCESS_KEY:-}
 services:
   proxy:
     image: caddy:2.10
@@ -24,177 +68,118 @@ services:
       - caddy_config:/config
   web:
     image: ghcr.io/front-matter/invenio-rdm-starter:latest
+    platform: linux/amd64
     pull_policy: if_not_present
+    entrypoint: [ "/bin/bash", "/opt/invenio/var/instance/entrypoint.sh" ]
+    command: [ "gunicorn", "-b", "0.0.0.0:5000", "--access-logfile", "-", "--error-logfile", "-", "invenio_app.wsgi:application" ]
     volumes:
       - uploaded_data:/opt/invenio/var/instance/data
       - archived_data:/opt/invenio/var/instance/archive
+      - ./entrypoint.sh:/opt/invenio/var/instance/entrypoint.sh:ro
     environment:
-      # Flask
-      - INVENIO_TRUSTED_HOSTS=${INVENIO_TRUSTED_HOSTS:-['0.0.0.0', 'localhost', '127.0.0.1']}
+      <<: *common-env
 
-      # Flask-SQLAlchemy
-      - INVENIO_SQLALCHEMY_DATABASE_URI=${INVENIO_SQLALCHEMY_DATABASE_URI:-postgresql+psycopg2://inveniordm:inveniordm@db/inveniordm}
+      # Flask
+      INVENIO_TRUSTED_HOSTS: ${INVENIO_TRUSTED_HOSTS:-['0.0.0.0', 'localhost', '127.0.0.1']}
 
       # Flask-Babel
-      - INVENIO_BABEL_DEFAULT_LOCALE=${INVENIO_BABEL_DEFAULT_LOCALE:-en}
-      - INVENIO_BABEL_DEFAULT_TIMEZONE=${INVENIO_BABEL_DEFAULT_TIMEZONE:-UTC}
+      INVENIO_BABEL_DEFAULT_LOCALE: ${INVENIO_BABEL_DEFAULT_LOCALE:-en}
+      INVENIO_BABEL_DEFAULT_TIMEZONE: ${INVENIO_BABEL_DEFAULT_TIMEZONE:-UTC}
+
+      # Invenio-I18N (exclude INVENIO_BABEL_DEFAULT_LOCALE)
+      INVENIO_ISO639_LANGUAGES: ${INVENIO_ISO639_LANGUAGES:-fr,de,es,pt}
 
       # Invenio-App
-      - INVENIO_CACHE_TYPE=${INVENIO_CACHE_TYPE:-redis}
-      - INVENIO_CACHE_REDIS_URL=${INVENIO_CACHE_REDIS_URL:-redis://cache:6379/0}
-      - INVENIO_ACCOUNTS_SESSION_REDIS_URL=${INVENIO_ACCOUNTS_SESSION_REDIS_URL:-redis://cache:6379/1}
-      - INVENIO_CELERY_RESULT_BACKEND=${INVENIO_CELERY_RESULT_BACKEND:-redis://cache:6379/2}
-      - INVENIO_RATELIMIT_STORAGE_URL=${INVENIO_RATELIMIT_STORAGE_URL:-redis://cache:6379/3}
-      - INVENIO_COMMUNITIES_IDENTITIES_CACHE_REDIS_URL=${INVENIO_COMMUNITIES_IDENTITIES_CACHE_REDIS_URL:-redis://cache:6379/4}
-      - INVENIO_BROKER_URL=${INVENIO_BROKER_URL:-redis://cache:6379/5}
-      - INVENIO_CELERY_BROKER_URL=${INVENIO_CELERY_BROKER_URL:-redis://cache:6379/5}
-
-      - INVENIO_MAIL_SUPPRESS_SEND=${INVENIO_MAIL_SUPPRESS_SEND:-True}
-      - INVENIO_WSGI_PROXIES=4
-      - INVENIO_SECRET_KEY=${INVENIO_SECRET_KEY:-changeme}
-
-      # Invenio-I18N
-      # TODO: fix tuple parsing
-      # - INVENIO_I18N_LANGUAGES=${INVENIO_I18N_LANGUAGES:-'[("de", _("German"))]'}
+      INVENIO_SECRET_KEY: ${INVENIO_SECRET_KEY:-changeme}
 
       # Invenio-Theme
-      - INVENIO_THEME_LOGO=${INVENIO_THEME_LOGO:-images/invenio-rdm-white.svg}
-      - INVENIO_THEME_SITENAME=${INVENIO_THEME_SITENAME:-InvenioRDM Starter}
-      - INVENIO_THEME_FRONTPAGE_TITLE=${INVENIO_THEME_FRONTPAGE_TITLE:-InvenioRDM Starter}
-      - INVENIO_THEME_FRONTPAGE_SUBTITLE=${INVENIO_THEME_FRONTPAGE_SUBTITLE:-A starter project for the turn-key research data management repository.}
-      - INVENIO_THEME_SHOW_FRONTPAGE_INTRO_SECTION=False
+      # See: https://inveniordm.docs.cern.ch/operate/customize/look-and-feel/
+      INVENIO_THEME_LOGO: ${INVENIO_THEME_LOGO:-images/invenio-rdm-white.svg}
+      INVENIO_THEME_SITENAME: ${INVENIO_THEME_SITENAME:-InvenioRDM Starter}
+      INVENIO_THEME_FRONTPAGE_TITLE: ${INVENIO_THEME_FRONTPAGE_TITLE:-InvenioRDM Starter}
+      INVENIO_THEME_FRONTPAGE_SUBTITLE: ${INVENIO_THEME_FRONTPAGE_SUBTITLE:-A starter project for the turn-key research data management repository.}
+      INVENIO_THEME_SHOW_FRONTPAGE_INTRO_SECTION: "False"
 
       # Invenio-Records-Resources
-      - INVENIO_SITE_UI_URL=${INVENIO_SITE_UI_URL:-https://localhost}
-      - INVENIO_SITE_API_URL=${INVENIO_SITE_API_URL:-https://localhost/api}
-
-      # Invenio-RDM-Records
-      - INVENIO_DATACITE_ENABLED=${INVENIO_DATACITE_ENABLED:-False}
-      - INVENIO_DATACITE_USERNAME=${INVENIO_DATACITE_USERNAME:-}
-      - INVENIO_DATACITE_PASSWORD=${INVENIO_DATACITE_PASSWORD:-}
-      - INVENIO_DATACITE_PREFIX=${INVENIO_DATACITE_PREFIX:-}
-      - INVENIO_DATACITE_TEST_MODE=${INVENIO_DATACITE_TEST_MODE:-True}
-      - INVENIO_DATACITE_DATACENTER_SYMBOL=${INVENIO_DATACITE_DATACENTER_SYMBOL:-}
-
-      - INVENIO_RDM_ALLOW_METADATA_ONLY_RECORDS=${INVENIO_RDM_ALLOW_METADATA_ONLY_RECORDS:-True}
-      - INVENIO_RDM_ALLOW_RESTRICTED_RECORDS=${INVENIO_RDM_ALLOW_RESTRICTED_RECORDS:-True}
-      - INVENIO_RDM_ALLOW_EXTERNAL_DOI_VERSIONING=${INVENIO_RDM_ALLOW_EXTERNAL_DOI_VERSIONING:-True}
-
-      - INVENIO_RDM_CITATION_STYLES_DEFAULT=${INVENIO_RDM_CITATION_STYLES_DEFAULT:-apa}
-      - INVENIO_SECURITY_EMAIL_SENDER=${INVENIO_SECURITY_EMAIL_SENDER:-}
-      # TODO: fix tuple parsing
-      # - INVENIO_RDM_CITATION_STYLES=${INVENIO_RDM_CITATION_STYLES:-"[('apa', 'APA'), ('chicago-note-bibliography', 'Chicago'), ('harvard-cite-them-right', 'Harvard')]"}
+      INVENIO_SITE_UI_URL: ${INVENIO_SITE_UI_URL:-https://localhost}
+      INVENIO_SITE_API_URL: ${INVENIO_SITE_API_URL:-https://localhost/api}
 
       # Authentication
       # See: https://inveniordm.docs.cern.ch/operate/customize/authentication/
-      - INVENIO_ACCOUNTS_LOCAL_LOGIN_ENABLED=${INVENIO_ACCOUNTS_LOCAL_LOGIN_ENABLED:-True}
-      - INVENIO_ACCOUNTS_DEFAULT_USER_VISIBILITY=${INVENIO_ACCOUNTS_DEFAULT_USER_VISIBILITY:-restricted}
-      - INVENIO_SECURITY_CHANGEABLE=${INVENIO_SECURITY_CHANGEABLE:-True}
-      - INVENIO_SECURITY_CONFIRMABLE=${INVENIO_SECURITY_CONFIRMABLE:-True}
-      - INVENIO_SECURITY_RECOVERABLE=${INVENIO_SECURITY_RECOVERABLE:-True}
-      - INVENIO_SECURITY_REGISTERABLE=${INVENIO_SECURITY_REGISTERABLE:-True}
-      - INVENIO_SECURITY_TRACKABLE=${INVENIO_SECURITY_TRACKABLE:-True}
-      - INVENIO_SECURITY_LOGIN_WITHOUT_CONFIRMATION=${INVENIO_SECURITY_LOGIN_WITHOUT_CONFIRMATION:-True}
+      INVENIO_ACCOUNTS_LOCAL_LOGIN_ENABLED: ${INVENIO_ACCOUNTS_LOCAL_LOGIN_ENABLED:-True}
+      INVENIO_ACCOUNTS_DEFAULT_USER_VISIBILITY: ${INVENIO_ACCOUNTS_DEFAULT_USER_VISIBILITY:-restricted}
+      INVENIO_SECURITY_LOGIN_WITHOUT_CONFIRMATION: ${INVENIO_SECURITY_LOGIN_WITHOUT_CONFIRMATION:-True}
+      INVENIO_OAUTHCLIENT_AUTO_REDIRECT_TO_EXTERNAL_LOGIN: ${INVENIO_OAUTHCLIENT_AUTO_REDIRECT_TO_EXTERNAL_LOGIN:-False}
+      INVENIO_USERPROFILES_READ_ONLY: ${INVENIO_USERPROFILES_READ_ONLY:-True}
 
-      - INVENIO_OAUTHCLIENT_AUTO_REDIRECT_TO_EXTERNAL_LOGIN=${INVENIO_OAUTHCLIENT_AUTO_REDIRECT_TO_EXTERNAL_LOGIN:-False}
-      - INVENIO_OIDC_ISSUER=${INVENIO_OIDC_ISSUER:-}
-      - INVENIO_OIDC_TITLE=${INVENIO_OIDC_TITLE:-}
-      - INVENIO_OIDC_DESCRIPTION=${INVENIO_OIDC_DESCRIPTION:-}
-      - INVENIO_OIDC_ICON=${INVENIO_OIDC_ICON:-}
-      - INVENIO_OIDC_APP_CREDENTIALS_CONSUMER_KEY=${INVENIO_OIDC_APP_CREDENTIALS_CONSUMER_KEY:-}
-      - INVENIO_OIDC_APP_CREDENTIALS_CONSUMER_SECRET=${INVENIO_OIDC_APP_CREDENTIALS_CONSUMER_SECRET:-}
+      INVENIO_SECURITY_CHANGEABLE: ${INVENIO_SECURITY_CHANGEABLE:-True}
+      INVENIO_SECURITY_CONFIRMABLE: ${INVENIO_SECURITY_CONFIRMABLE:-True}
+      INVENIO_SECURITY_RECOVERABLE: ${INVENIO_SECURITY_RECOVERABLE:-True}
+      INVENIO_SECURITY_REGISTERABLE: ${INVENIO_SECURITY_REGISTERABLE:-True}
+      INVENIO_SECURITY_TRACKABLE: ${INVENIO_SECURITY_TRACKABLE:-True}
 
-      - INVENIO_USERPROFILES_READ_ONLY=${INVENIO_USERPROFILES_READ_ONLY:-True}
+      INVENIO_ADMIN_EMAIL: ${INVENIO_ADMIN_EMAIL:-info@example.org}
+      INVENIO_ADMIN_PASSWORD: ${INVENIO_ADMIN_PASSWORD:-changeme}
 
-      # OAI-PMH
-      - INVENIO_OAISERVER_ID_PREFIX=${OAISERVER_ID_PREFIX:-invenio-rdm}
-
-      # Invenio-Files-REST
-      - INVENIO_FILES_REST_STORAGE_FACTORY=invenio_s3.s3fs_storage_factory
-
-      # Invenio-S3
-      - INVENIO_S3_ENDPOINT_URL=${INVENIO_S3_ENDPOINT_URL:-}
-      - INVENIO_S3_ACCESS_KEY_ID=${INVENIO_S3_ACCESS_KEY_ID:-}
-      - INVENIO_S3_SECRET_ACCESS_KEY=${INVENIO_S3_SECRET_ACCESS_KEY:-}
-      - INVENIO_S3_BUCKET_NAME=${INVENIO_S3_BUCKET_NAME:-}
-
-      # Invenio-Search
-      - INVENIO_SEARCH_HOSTS=${INVENIO_SEARCH_HOSTS:-['search:9200']}
-      - INVENIO_SEARCH_INDEX_PREFIX=${INVENIO_SEARCH_INDEX_PREFIX:-invenio-rdm-}
-
-      # Logging
-      - INVENIO_LOGGING_CONSOLE_LEVEL=${INVENIO_LOGGING_CONSOLE_LEVEL:-WARNING}
+      INVENIO_OIDC_ISSUER: ${INVENIO_OIDC_ISSUER:-}
+      INVENIO_OIDC_APP_CREDENTIALS_CONSUMER_KEY: ${INVENIO_OIDC_APP_CREDENTIALS_CONSUMER_KEY:-}
+      INVENIO_OIDC_APP_CREDENTIALS_CONSUMER_SECRET: ${INVENIO_OIDC_APP_CREDENTIALS_CONSUMER_SECRET:-}
     depends_on:
       search:
-        condition: service_started
+        condition: service_healthy
       cache:
-        condition: service_started
+        condition: service_healthy
       db:
-        condition: service_started
+        condition: service_healthy
   worker:
     command: "celery -A invenio_app.celery worker --beat --events --loglevel=WARNING"
     image: ghcr.io/front-matter/invenio-rdm-starter:latest
+    platform: linux/amd64
     pull_policy: if_not_present
     volumes:
       - uploaded_data:/opt/invenio/var/instance/data
     environment:
-      - INVENIO_SQLALCHEMY_DATABASE_URI=${INVENIO_SQLALCHEMY_DATABASE_URI:-postgresql+psycopg2://inveniordm:inveniordm@db/inveniordm}
-      - INVENIO_SEARCH_HOSTS=${INVENIO_SEARCH_HOSTS:-['search:9200']}
-      - INVENIO_SEARCH_INDEX_PREFIX=${INVENIO_SEARCH_INDEX_PREFIX:-invenio-rdm-}
-
-      - INVENIO_CACHE_TYPE=${INVENIO_CACHE_TYPE:-redis}
-      - INVENIO_CACHE_REDIS_URL=${INVENIO_CACHE_REDIS_URL:-redis://cache:6379/0}
-      - INVENIO_ACCOUNTS_SESSION_REDIS_URL=${INVENIO_ACCOUNTS_SESSION_REDIS_URL:-redis://cache:6379/1}
-      - INVENIO_CELERY_RESULT_BACKEND=${INVENIO_CELERY_RESULT_BACKEND:-redis://cache:6379/2}
-      - INVENIO_RATELIMIT_STORAGE_URL=${INVENIO_RATELIMIT_STORAGE_URL:-redis://cache:6379/3}
-      - INVENIO_COMMUNITIES_IDENTITIES_CACHE_REDIS_URL=${INVENIO_COMMUNITIES_IDENTITIES_CACHE_REDIS_URL:-redis://cache:6379/4}
-      - INVENIO_BROKER_URL=${INVENIO_BROKER_URL:-redis://cache:6379/5}
-      - INVENIO_CELERY_BROKER_URL=${INVENIO_CELERY_BROKER_URL:-redis://cache:6379/5}
-
-      - INVENIO_MAIL_SUPPRESS_SEND=${INVENIO_MAIL_SUPPRESS_SEND:-True}
-      - INVENIO_MAIL_SERVER=${INVENIO_MAIL_SERVER:-smtp.gmail.com}
-      - INVENIO_MAIL_PORT=${INVENIO_MAIL_PORT:-587}
-      - INVENIO_MAIL_USERNAME=${INVENIO_MAIL_USERNAME:-info}
-      - INVENIO_MAIL_PASSWORD=${INVENIO_MAIL_PASSWORD:-changeme}
-      - INVENIO_MAIL_USE_SSL=${INVENIO_MAIL_USE_TLS:-True}
-      # Invenio-Files-REST
-      - INVENIO_FILES_REST_STORAGE_FACTORY=${INVENIO_FILES_REST_STORAGE_FACTORY:-invenio_s3.s3fs_storage_factory}
-
-      # Invenio-S3
-      - INVENIO_S3_ENDPOINT_URL=${INVENIO_S3_ENDPOINT_URL:-}
-      - INVENIO_S3_ACCESS_KEY_ID=${INVENIO_S3_ACCESS_KEY_ID:-}
-      - INVENIO_S3_SECRET_ACCESS_KEY=${INVENIO_S3_SECRET_ACCESS_KEY:-}
-      - INVENIO_S3_BUCKET_NAME=${INVENIO_S3_BUCKET_NAME:-}
+      <<: *common-env
     depends_on:
       search:
-        condition: service_started
+        condition: service_healthy
       cache:
-        condition: service_started
+        condition: service_healthy
       db:
-        condition: service_started
+        condition: service_healthy
   cache:
     image: valkey/valkey:7.2.5-bookworm
     restart: "unless-stopped"
     ports:
-      - "6379:6379"
+      - "127.0.0.1:6379:6379"
+    healthcheck:
+      test: [ "CMD", "valkey-cli", "ping" ]
+      interval: 5s
+      timeout: 3s
+      retries: 5
   db:
     image: postgres:17.4-bookworm
     restart: "unless-stopped"
     environment:
-      - POSTGRES_USER=${POSTGRES_USER:-inveniordm}
-      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-inveniordm}
-      - POSTGRES_DB=${POSTGRES_DB:-inveniordm}
+      POSTGRES_USER: ${POSTGRES_USER:-inveniordm}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-inveniordm}
+      POSTGRES_DB: ${POSTGRES_DB:-inveniordm}
     ports:
-      - 5432:5432
+      - "127.0.0.1:5432:5432"
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U inveniordm" ]
+      interval: 5s
+      timeout: 3s
+      retries: 5
   search:
     image: opensearchproject/opensearch:2.18.0
     restart: "unless-stopped"
     environment:
-      - bootstrap.memory_lock=true
-      - OPENSEARCH_JAVA_OPTS=-Xms512m -Xmx512m
-      - DISABLE_INSTALL_DEMO_CONFIG=true
-      - DISABLE_SECURITY_PLUGIN=true
-      - discovery.type=single-node
+      bootstrap.memory_lock: "true"
+      OPENSEARCH_JAVA_OPTS: "-Xms512m -Xmx512m"
+      DISABLE_INSTALL_DEMO_CONFIG: "true"
+      DISABLE_SECURITY_PLUGIN: "true"
+      discovery.type: "single-node"
     ulimits:
       memlock:
         soft: -1
@@ -204,8 +189,13 @@ services:
         hard: 65536
     mem_limit: 2g
     ports:
-      - "9200:9200"
-      - "9600:9600"
+      - "127.0.0.1:9200:9200"
+      - "127.0.0.1:9600:9600"
+    healthcheck:
+      test: [ "CMD-SHELL", "curl -f http://localhost:9200/_cluster/health || exit 1" ]
+      interval: 10s
+      timeout: 5s
+      retries: 10
 volumes:
   app_data:
   uploaded_data:
