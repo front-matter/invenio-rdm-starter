@@ -2128,6 +2128,7 @@ dependencies = [
     { name = "invenio-previewer" },
     { name = "invenio-s3" },
     { name = "invenio-search", extra = ["opensearch2"] },
+    { name = "setuptools" },
 ]
 
 [package.optional-dependencies]
@@ -2145,6 +2146,7 @@ requires-dist = [
     { name = "invenio-s3", specifier = ">=3.0.2" },
     { name = "invenio-search", extras = ["opensearch2"], specifier = ">=3.0.0" },
     { name = "mkdocs-material", marker = "extra == 'docs'", specifier = ">=9.7.0" },
+    { name = "setuptools", specifier = "<81" },
 ]
 provides-extras = ["docs"]
 

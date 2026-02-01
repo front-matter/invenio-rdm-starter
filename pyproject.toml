@@ -14,6 +14,7 @@ dependencies = [
     "gunicorn~=23.0.0",
     "invenio-oauthclient",
     "invenio-db",
+    "setuptools<81",
 ]
 
 [tool.uv.sources]

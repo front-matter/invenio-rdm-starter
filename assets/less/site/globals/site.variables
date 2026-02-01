@@ -32,9 +32,9 @@
        Links
 --------------------*/
 
-@linkColor           : @red;
+@linkColor           : @darkBlue;
 @linkUnderline       : none;
-@linkHoverColor      : @darkRed;
+@linkHoverColor      : @blue;
 @linkHoverUnderline  : @linkUnderline;
 
 /*-------------------
@@ -84,6 +84,7 @@
 @darkTextColor    : @lightBlack;
 @mutedTextColor   : @grey;
 @lightTextColor   : @lightGrey;
+@negativeTextColor: @darkYellow
 
 /*---  Dark Colors  ---*/
 @darkRed         : #b91c1c;
