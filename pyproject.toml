@@ -13,11 +13,12 @@ dependencies = [
     "invenio-previewer>=3.3.0,<3.4.0",
     "gunicorn~=23.0.0",
     "invenio-oauthclient",
+    "invenio-db",
 ]
 
 [tool.uv.sources]
 invenio-oauthclient = { git = "https://github.com/front-matter/invenio-oauthclient", branch = "maint-v5.x" }
-
+invenio-db = { git = "https://github.com/front-matter/invenio-db", branch = "cli-commands" }
 
 [build-system]
 requires = ["hatchling"]
