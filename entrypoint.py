@@ -182,14 +182,27 @@ def main():
                 )
 
         print("Declaring queues...")
-        run_command(["invenio", "queues", "declare"])
+        result = run_command(
+            ["invenio", "queues", "declare"], check=False, capture_output=True
+        )
+        if result.returncode != 0:
+            print(
+                f"Warning: Failed to declare queues. This is usually non-critical."
+            )
+            if result.stderr:
+                print(f"Queue declaration error: {result.stderr}")
 
         print("Custom fields and fixtures setup completed.")
+
+    print("Initialization completed successfully.")
 
     # Execute the command passed as arguments (e.g., gunicorn, celery)
     if len(sys.argv) > 1:
         print(f"Starting application: {' '.join(sys.argv[1:])}")
         os.execvp(sys.argv[1], sys.argv[1:])
+    else:
+        print("No command provided to execute.", file=sys.stderr)
+        sys.exit(1)
 
 
 if __name__ == "__main__":
@@ -197,4 +210,7 @@ if __name__ == "__main__":
         main()
     except Exception as e:
         print(f"Initialization failed: {e}", file=sys.stderr)
+        import traceback
+
+        traceback.print_exc()
         sys.exit(1)
