@@ -53,6 +53,13 @@ if ! invenio rdm-records custom-fields exists -f "journal:journal" 2>/dev/null |
   # Rebuilding all indices...
   invenio rdm rebuild-all-indices
 
+  # Creating demo records and communities if enabled...
+  if [ "${INVENIO_DEMO_DATA}" = "True" ]; then
+    invenio rdm-records demo records --user "${INVENIO_ADMIN_EMAIL}"
+    invenio rdm-records demo communities --user "${INVENIO_ADMIN_EMAIL}"
+    echo "Demo data creation completed."
+  fi
+
   # Declaring queues...
   invenio queues declare
 
