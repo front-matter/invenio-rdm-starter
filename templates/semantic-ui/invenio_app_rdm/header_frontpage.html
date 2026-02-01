@@ -18,36 +18,43 @@
 {%- block frontpage_search %}
 <div id="frontpage-search-bar" class="ui container fluid frontpage-header">
 <div class="ui container grid">
+  {%- block frontpage_title %}
+  {%- if config.THEME_FRONTPAGE_TITLE or config.THEME_FRONTPAGE_SUBTITLE %}
   <div class="row">
     <div class="sixteen wide mobile four wide computer column"></div>
     <div class="sixteen wide mobile eight wide computer column centered">
-      {%- block frontpage_title %}
       <h1 class="ui center aligned header inverted">
+        {%- if config.THEME_FRONTPAGE_TITLE %}
         {{ _(config.THEME_FRONTPAGE_TITLE) }}
+        {%- endif %}
+        {%- if config.THEME_FRONTPAGE_SUBTITLE %}
         <div class="sub header">{{ _(config.THEME_FRONTPAGE_SUBTITLE) }}</div>
+        {%- endif %}
       </h1>
     </div>
     <div class="sixteen wide mobile four wide computer column"></div>
   </div>
-    {%- endblock frontpage_title %}
-    {%- block frontpage_form %}
-    <div class="row">
-        <div class="sixteen wide mobile four wide computer column"></div>
-        <div class="sixteen wide mobile eight wide computer column center aligned">
-          <form action="{{ url_for('invenio_search_ui.search') }}" class="ui form" role="search">
-            <div class="ui fluid big action input">
-              <input type="text" name="q" class="form-control" aria-label="{{ _('Search') }}" placeholder="{{ _('Search') }}">
-              <button type="submit" class="ui icon search button" aria-label="{{ _('Search') }}">
-                <i class="search icon"></i>
-              </button>
-            </div>
-          </form>
+  {%- endif %}
+  {%- endblock frontpage_title %}
+  {%- block frontpage_form %}
+  <div class="row">
+    <div class="sixteen wide mobile four wide computer column"></div>
+    <div class="sixteen wide mobile eight wide computer column center aligned">
+      <form action="{{ url_for('invenio_search_ui.search') }}" class="ui form" role="search">
+        <div class="ui fluid big action input">
+          <input type="text" name="q" class="form-control" aria-label="{{ _('Search') }}" placeholder="{{ _('Search') }}">
+          <button type="submit" class="ui icon search button" aria-label="{{ _('Search') }}">
+            <i class="search icon"></i>
+          </button>
         </div>
-      </div>
-      <div class="ui divider hidden"></div>
-      {%- endblock frontpage_form %}
+      </form>
+    </div>
+    <div class="sixteen wide mobile four wide computer column"></div>
+  </div>
+  <div class="ui divider hidden"></div>
+  {%- endblock frontpage_form %}
 </div>
 </div>
 {%- endblock frontpage_search %}
 
-{% endblock %}
+{% endblock navbar %}

@@ -157,8 +157,12 @@ cython_debug/
 #.idea/
 docker/opensearch/*
 
-# Local Kamal folder
-.kamal
-
 # mkdocs
 _site
+
+# Nixpacks local build artifacts
+.nixpacks/
+.nixpacks-cache/
+
+# Node modules
+node_modules

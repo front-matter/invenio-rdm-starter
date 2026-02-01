@@ -1,0 +1,7 @@
+/***********************************************
+         Invenio RDM Starter Theme Header Overrides
+***********************************************/
+
+.ui.login.header {
+    margin: 20px 0;
+}
