@@ -5368,6 +5368,9 @@ packages:
   tinymce@6.8.6:
     resolution: {integrity: sha512-++XYEs8lKWvZxDCjrr8Baiw7KiikraZ5JkLMg6EdnUVNKJui0IsrAADj5MsyUeFkcEryfn2jd3p09H7REvewyg==}
 
+  tinymce@7.2.0:
+    resolution: {integrity: sha512-R460NlE4REIFuLcZd9mpHK8zRsHdOueLV2m6Wsn0JHfGhDWMcfB1IqUX2QGrSbJga93ygJbJbNMwb2sakFlE/g==}
+
   tmp@0.0.33:
     resolution: {integrity: sha512-jRCJlojKnZ3addtTOjdIqoRuPEKBvNXcGYqzO6zWZX8KfKEpnGY5jfggJQ3EjKuu8D4bJRr0y+cYJFmYbImXGw==}
     engines: {node: '>=0.6.0'}
@@ -10834,7 +10837,7 @@ snapshots:
       react-overridable: 0.0.3(@babel/runtime@7.28.6)(prop-types@15.8.1)(react@16.14.0)
       semantic-ui-css: 2.5.0
       semantic-ui-react: 2.1.5(react-dom@16.14.0(react@16.14.0))(react@16.14.0)
-      tinymce: 6.8.6
+      tinymce: 7.2.0
       yup: 0.32.11
 
   react-is@16.13.1: {}
@@ -11501,6 +11504,8 @@ snapshots:
   tiny-warning@1.0.3: {}
 
   tinymce@6.8.6: {}
+
+  tinymce@7.2.0: {}
 
   tmp@0.0.33:
     dependencies:
