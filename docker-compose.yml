@@ -98,7 +98,7 @@ services:
       <<: *common-env
 
       # Python (for read-only filesystem)
-      PYTHONWARNINGS: "ignore::UserWarning:fs"
+      PYTHONWARNINGS: "ignore::UserWarning:fs,ignore::RuntimeWarning:invenio_oauth2server.ext"
       TMPDIR: /tmp
       HOME: /tmp
 
@@ -181,7 +181,7 @@ services:
       <<: *common-env
 
       # Python (for read-only filesystem)
-      PYTHONWARNINGS: "ignore::UserWarning:fs"
+      PYTHONWARNINGS: "ignore::UserWarning:fs,ignore::RuntimeWarning:invenio_oauth2server.ext"
       TMPDIR: /tmp
       HOME: /tmp
     depends_on:
