@@ -62,7 +62,6 @@ x-common-env:
   # Admin user
   INVENIO_ADMIN_EMAIL: ${INVENIO_ADMIN_EMAIL:-info@example.org}
   INVENIO_ADMIN_PASSWORD: ${INVENIO_ADMIN_PASSWORD:-changeme}
-  INVENIO_DEMO_DATA: ${INVENIO_DEMO_DATA:-False}
 
 services:
   proxy:

@@ -1,11 +1,11 @@
-FROM dhi.io/python:3.13-debian13-dev AS builder
-LABEL service="starter"
+FROM python:3.13-bookworm AS builder
+# FROM dhi.io/python:3.13-debian13-dev AS builder
+
 LABEL maintainer="Front Matter <info@front-matter.de>"
 
-# Dockerfile that builds the InvenioRDM Starter Docker image using DHI
-# (Docker Hardened Image) for enhanced security
-
-ENV LANG=en_US.UTF-8 \
+ENV DEBIAN_FRONTEND=noninteractive \
+  TZ=Etc/UTC \
+  LANG=en_US.UTF-8 \
   LANGUAGE=en_US:en
 
 # Install OS package dependencies and Node.js in a single layer
@@ -20,7 +20,7 @@ RUN --mount=type=cache,sharing=locked,target=/var/cache/apt \
   npm install -g pnpm@latest-10
 
 # Install uv and activate virtualenv
-COPY --from=ghcr.io/astral-sh/uv:0.9.18 /uv /uvx /bin/
+COPY --from=ghcr.io/astral-sh/uv:0.9.26 /uv /uvx /bin/
 RUN uv venv /opt/invenio/.venv
 
 # Use the virtual environment automatically
@@ -64,13 +64,9 @@ COPY templates ${INVENIO_INSTANCE_PATH}/templates
 COPY app_data ${INVENIO_INSTANCE_PATH}/app_data
 COPY translations ${INVENIO_INSTANCE_PATH}/translations
 
-# from: https://github.com/tu-graz-library/docker-invenio-base
-# enables the option to have a deterministic javascript dependency build
-# package.json and pnpm-lock are needed, because otherwise package.json
-# is newer as pnpm-lock and pnpm-lock would not be used then
-# do this only if you know what you are doing. forgetting to update those
-# two files can cause bugs, because of possible missmatches of needed
-# javascript dependencies
+
+# Enable the option to have a deterministic javascript dependency build
+# From: https://github.com/tu-graz-library/docker-invenio-base
 COPY ./package.json ${INVENIO_INSTANCE_PATH}/assets/
 COPY ./pnpm-lock.yaml ${INVENIO_INSTANCE_PATH}/assets/
 
@@ -119,24 +115,20 @@ RUN mkdir -p /invenio-libs && \
   cp -P /usr/lib/x86_64-linux-gnu/libicuuc*.so* /invenio-libs/ 2>/dev/null || true && \
   cp -P /usr/lib/x86_64-linux-gnu/libicudata*.so* /invenio-libs/ 2>/dev/null || true
 
-FROM dhi.io/python:3.13-debian13 AS runtime
+FROM python:3.13-slim-bookworm AS runtime
+# FROM dhi.io/python:3.13-debian13 AS runtime
 
 ENV LANG=en_US.UTF-8 \
   LANGUAGE=en_US:en
-
-# DHI images are minimal - copy required Cairo libraries from builder
-# These are needed for cairosvg/cairocffi used by invenio_formatter
 
 ENV VIRTUAL_ENV=/opt/invenio/.venv \
   PATH="/opt/invenio/.venv/bin:$PATH" \
   WORKING_DIR=/opt/invenio \
   INVENIO_INSTANCE_PATH=/opt/invenio/var/instance
 
-# DHI uses UID 1654 as non-root user - already configured in base image
+# create non-root invenio user
 ENV INVENIO_USER_ID=1654
-
-# DHI is shell-less by design for security
-# entrypoint.py runs initialization in Python (no shell required)
+RUN adduser invenio --uid ${INVENIO_USER_ID} --gid 0 --no-create-home --disabled-password
 
 # Copy runtime libraries from builder (Cairo for invenio_formatter, etc.)
 COPY --from=builder /invenio-libs/* /usr/lib/x86_64-linux-gnu/
@@ -152,11 +144,12 @@ COPY --from=builder --chown=1654:0 ${INVENIO_INSTANCE_PATH}/invenio.cfg ${INVENI
 COPY --chown=1654:0 ./Caddyfile /etc/caddy/Caddyfile
 COPY --chown=1654:0 --chmod=755 ./entrypoint.py ${INVENIO_INSTANCE_PATH}/entrypoint.py
 
-# Declare volumes for persistent data (writable directories managed by DHI)
+# Declare volumes for persistent data
 VOLUME ["/opt/invenio/var/instance/data", "/opt/invenio/var/instance/archive"]
 
 WORKDIR ${WORKING_DIR}/src
 
+USER invenio
 EXPOSE 5000
-ENTRYPOINT ["python3", "/opt/invenio/var/instance/entrypoint.py"]
+ENTRYPOINT ["python3", "/opt/invenio/var/instance/entrypoint.sh"]
 CMD ["gunicorn", "invenio_app.wsgi:application", "--bind", "0.0.0.0:5000", "--workers", "2", "--threads", "2", "--access-logfile", "-", "--error-logfile", "-", "--log-level", "ERROR"]
