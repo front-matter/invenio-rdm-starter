@@ -1,0 +1,33 @@
+{#
+    -*- coding: utf-8 -*-
+    Copyright (C) 2022-2024 CERN.
+    Copyright (C) 2024 KTH Royal Institute of Technology.
+    Copyright (C) 2026 Front Matter.
+
+    Invenio App RDM is free software; you can redistribute it and/or modify it
+    under the terms of the MIT License; see LICENSE file for more details.
+#}
+
+<div class="footer-bottom sub-footer">
+  <div class="ui container">
+    <div class="ui grid">
+      <div class="eight wide column left middle aligned">
+        {%- block footer_bottom_left %}
+          {{ _("Powered by") }}
+          <a href="http://inveniosoftware.org/products/rdm">{{ _("InvenioRDM") }}</a>
+          {%- if config.INVENIO_APP_RDM_VERSION %}
+          <a class="ui padded text-muted" href="https://pypi.org/project/invenio-app-rdm/{{ config.INVENIO_APP_RDM_VERSION }}/">{{ config.INVENIO_APP_RDM_VERSION }}</a>
+          {%- endif %}
+        {%- endblock footer_bottom_left %}
+      </div>
+      <div class="eight wide column right aligned">
+        {%- block footer_bottom_right %}
+          {%- if config.I18N_LANGUAGES %}
+            {% from "invenio_i18n/macros/language_selector.html" import language_selector_dropdown %}
+            {{ language_selector_dropdown() }}
+          {%- endif %}
+        {%- endblock footer_bottom_right %}
+      </div>
+    </div>
+  </div>
+</div>
