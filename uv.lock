@@ -1750,7 +1750,7 @@ wheels = [
 [[package]]
 name = "invenio-db"
 version = "2.2.1"
-source = { git = "https://github.com/front-matter/invenio-db?branch=cli-commands#1f0526396b7344a654dba5a2b326bffd52089cf4" }
+source = { git = "https://github.com/front-matter/invenio-db?branch=cli-commands#a7fcbee3f8b0367d8055e622b842b2b572e2a720" }
 dependencies = [
     { name = "alembic" },
     { name = "flask-alembic" },
