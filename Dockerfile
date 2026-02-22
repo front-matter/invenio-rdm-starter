@@ -142,7 +142,8 @@ COPY --from=builder --chown=1654:0 ${INVENIO_INSTANCE_PATH}/app_data ${INVENIO_I
 COPY --from=builder --chown=1654:0 ${INVENIO_INSTANCE_PATH}/translations ${INVENIO_INSTANCE_PATH}/translations
 COPY --from=builder --chown=1654:0 ${INVENIO_INSTANCE_PATH}/invenio.cfg ${INVENIO_INSTANCE_PATH}/invenio.cfg
 COPY --chown=1654:0 ./Caddyfile /etc/caddy/Caddyfile
-COPY --chown=1654:0 --chmod=755 ./entrypoint.sh ${INVENIO_INSTANCE_PATH}/entrypoint.sh
+COPY --chown=1654:0 --chmod=755 ./entrypoint.sh /opt/invenio/.venv/bin/entrypoint.sh
+
 
 # Declare volumes for persistent data
 VOLUME ["/opt/invenio/var/instance/data", "/opt/invenio/var/instance/archive"]
@@ -151,5 +152,5 @@ WORKDIR ${WORKING_DIR}/src
 
 USER invenio
 EXPOSE 5000
-ENTRYPOINT ["/opt/invenio/var/instance/entrypoint.sh"]
+# ENTRYPOINT ["/opt/invenio/.venv/bin/entrypoint.sh"]
 CMD ["gunicorn", "invenio_app.wsgi:application", "--bind", "0.0.0.0:5000", "--workers", "2", "--threads", "2", "--access-logfile", "-", "--error-logfile", "-", "--log-level", "ERROR"]
