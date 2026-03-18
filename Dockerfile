@@ -1,5 +1,4 @@
-FROM python:3.13-bookworm AS builder
-# FROM dhi.io/python:3.13-debian13-dev AS builder
+FROM python:3.13-trixie AS builder
 
 LABEL maintainer="Front Matter <info@front-matter.de>"
 
