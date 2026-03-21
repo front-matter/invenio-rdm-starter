@@ -1,12 +1,21 @@
 # Envy configuration
 x-envy:
-  title: InvenioDRM Starter
-  description: >
-    InvenioRDM is the open source turn-key research data management platform,  with detailed documentation available [here](https://inveniordm.docs.cern.ch).  InvenioRDM Starter facilitates deployment and configuration of InvenioRDM,  allowing you to run InvenioRDM on your local computer within 15 min.
-  languageCode: en-US
-  ignoreLogs:
+  HUGO_TITLE: InvenioRDM Starter
+  HUGO_PARAMS_DESCRIPTION: >
+    InvenioRDM is the open source turn-key research data management platform,   with detailed documentation available [here](https://inveniordm.docs.cern.ch).  InvenioRDM Starter facilitates deployment and configuration of InvenioRDM,  allowing you to run InvenioRDM on your local computer within 15 min.
+  HUGO_LANGUAGE_CODE: en-US
+  HUGO_IGNORE_LOGS:
     - warning-goldmark-raw-html
-  markupGoldmarkUnsafe: "true"
+  HUGO_MARKUP_GOLDMARK_UNSAFE: "true"
+  HUGO_DEFAULT_CONTENT_LANGUAGE: "en"
+  HUGO_DEFAULT_CONTENT_LANGUAGE_IN_SUBDIR: "false"
+  HUGO_LANGUAGES: |
+    en:
+      languageName: English
+      weight: 1
+    de:
+      languageName: Deutsch
+      weight: 2
 # Shared environment variables for web and worker.
 # [Configure language(s) and locale(s) (i18n and l10n)]: https://inveniordm.docs.cern.ch/operate/customize/i18n-and-l10n/
 x-set-base: &base
