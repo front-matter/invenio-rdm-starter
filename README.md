@@ -40,7 +40,7 @@ docker compose up
 If you run `docker compose up` for the first time, the InvenioRDM setup script needs to run. This script will create the InvenioRDM database, initialize the OpenSearch indexes, and create an admin user. The script will also install the default InvenioRDM records and communities.
 
 ```bash
-docker exec -it invenio-rdm-starter-worker-1 setup.sh
+docker exec -it invenio-rdm-starter-worker-1 entrypoint.sh
 ```
 
 Open a web browser and navigate to [https://localhost](https://localhost). One default admin user is created during setup: email `admin@inveniosoftware.org`, password `changeme`.
