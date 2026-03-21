@@ -128,9 +128,6 @@ ENV/
 env.bak/
 venv.bak/
 
-# Compose
-compose.yaml
-
 # Spyder project settings
 .spyderproject
 .spyproject
@@ -162,6 +159,9 @@ docker/opensearch/*
 
 # mkdocs
 _site
+
+# hugo
+public/
 
 # Nixpacks local build artifacts
 .nixpacks/

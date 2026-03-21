@@ -1,0 +1,131 @@
+# Envy configuration
+x-envy:
+  title: InvenioDRM Starter
+  description: >
+    InvenioRDM is the open source turn-key research data management platform,  with detailed documentation available [here](https://inveniordm.docs.cern.ch).  InvenioRDM Starter facilitates deployment and configuration of InvenioRDM,  allowing you to run InvenioRDM on your local computer within 15 min.
+  languageCode: en-US
+  ignoreLogs:
+    - warning-goldmark-raw-html
+  markupGoldmarkUnsafe: "true"
+# Shared environment variables for web and worker.
+# [Configure language(s) and locale(s) (i18n and l10n)]: https://inveniordm.docs.cern.ch/operate/customize/i18n-and-l10n/
+x-set-base: &base
+  INVENIO_BABEL_DEFAULT_LOCALE: "${INVENIO_BABEL_DEFAULT_LOCALE:-en}"
+  INVENIO_ISO639_LANGUAGES: "${INVENIO_ISO639_LANGUAGES:-fr,de,es,pt}"
+  INVENIO_BABEL_DEFAULT_TIMEZONE: "${INVENIO_BABEL_DEFAULT_TIMEZONE:-UTC}"
+  INVENIO_LOGGING_CONSOLE_LEVEL: "${INVENIO_LOGGING_CONSOLE_LEVEL:-INFO}"
+  INVENIO_RDM_CITATION_STYLES: "${INVENIO_RDM_CITATION_STYLES:-apa,chicago-author-date,harvard-cite-them-right,ieee,vancouver}"
+  INVENIO_RDM_CITATION_STYLES_DEFAULT: "${INVENIO_RDM_CITATION_STYLES_DEFAULT:-}"
+  INVENIO_SEARCH_HOSTS: "${INVENIO_SEARCH_HOSTS:-['search:9200']}"
+  INVENIO_SEARCH_INDEX_PREFIX: "${INVENIO_SEARCH_INDEX_PREFIX:-invenio-rdm-}"
+  # This is a hardcoded test variable that cannot be edited in generated compose.yaml files.
+  TEST_HARDCODED_VAR: "locked-value"
+  # This is a required test variable that must be provided."
+  TEST_REQUIRED_VAR: "${TEST_REQUIRED_VAR:-?required-value}"
+  # This is a secret test variable where the value is never exposed
+  TEST_SECRET_VAR:
+    # Authentication configuration.
+    # [Authentication]: https://inveniordm.docs.cern.ch/operate/customize/authentication/
+x-set-authentication: &authentication
+  INVENIO_ACCOUNTS_DEFAULT_USER_VISIBILITY: "${INVENIO_ACCOUNTS_DEFAULT_USER_VISIBILITY:-restricted}"
+  INVENIO_ACCOUNTS_LOCAL_LOGIN_ENABLED: "${INVENIO_ACCOUNTS_LOCAL_LOGIN_ENABLED:-true}"
+  INVENIO_OAUTHCLIENT_AUTO_REDIRECT_TO_EXTERNAL_LOGIN: "${INVENIO_OAUTHCLIENT_AUTO_REDIRECT_TO_EXTERNAL_LOGIN:-false}"
+  INVENIO_OIDC_APP_CREDENTIALS_CONSUMER_KEY: "${INVENIO_OIDC_APP_CREDENTIALS_CONSUMER_KEY:-}"
+  INVENIO_OIDC_ISSUER: "${INVENIO_OIDC_ISSUER:-}"
+  INVENIO_SECURITY_CHANGEABLE: "${INVENIO_SECURITY_CHANGEABLE:-true}"
+  INVENIO_SECURITY_CONFIRMABLE: "${INVENIO_SECURITY_CONFIRMABLE:-true}"
+  INVENIO_SECURITY_LOGIN_WITHOUT_CONFIRMATION: "${INVENIO_SECURITY_LOGIN_WITHOUT_CONFIRMATION:-true}"
+  INVENIO_SECURITY_RECOVERABLE: "${INVENIO_SECURITY_RECOVERABLE:-true}"
+  INVENIO_SECURITY_REGISTERABLE: "${INVENIO_SECURITY_REGISTERABLE:-true}"
+  INVENIO_SECURITY_TRACKABLE: "${INVENIO_SECURITY_TRACKABLE:-true}"
+  INVENIO_USERPROFILES_READ_ONLY: "${INVENIO_USERPROFILES_READ_ONLY:-true}"
+# Redis/Valkey configuration for broker and cache.
+x-set-cache: &cache
+  INVENIO_ACCOUNTS_SESSION_REDIS_URL: "${INVENIO_ACCOUNTS_SESSION_REDIS_URL:-}"
+  INVENIO_CELERY_BROKER_URL: "${INVENIO_CELERY_BROKER_URL:-}"
+  INVENIO_CELERY_RESULT_BACKEND: "${INVENIO_CELERY_RESULT_BACKEND:-}"
+  INVENIO_RATELIMIT_STORAGE_URL: "${INVENIO_RATELIMIT_STORAGE_URL:-}"
+  INVENIO_CACHE_REDIS_URL: "${INVENIO_CACHE_REDIS_URL:-}"
+# Database configuration.
+x-set-db: &db
+  POSTGRES_HOST: "${POSTGRES_HOST:-postgres}"
+  POSTGRES_DB: "${POSTGRES_DB:-inveniordm}"
+  POSTGRES_USER: "${POSTGRES_USER:-postgres}"
+  POSTGRES_PASSWORD:
+  INVENIO_SQLALCHEMY_DATABASE_URI: "postgresql+psycopg2://${POSTGRES_USER:-inveniordm}:${POSTGRES_PASSWORD:-}@${POSTGRES_HOST:-postgres}:5432/${POSTGRES_DB:-inveniordm}"
+# DOI registration configuration.
+# [DOI registration]: https://inveniordm.docs.cern.ch/operate/customize/dois/
+x-set-doi: &doi
+  INVENIO_DATACITE_DATACENTER_SYMBOL: "${INVENIO_DATACITE_DATACENTER_SYMBOL:-}"
+  INVENIO_DATACITE_ENABLED: "${INVENIO_DATACITE_ENABLED:-false}"
+  INVENIO_DATACITE_PREFIX: "${INVENIO_DATACITE_PREFIX:-}"
+  INVENIO_DATACITE_TEST_MODE: "${INVENIO_DATACITE_TEST_MODE:-false}"
+  INVENIO_DATACITE_USERNAME: "${INVENIO_DATACITE_USERNAME:-}"
+  INVENIO_RDM_ALLOW_EXTERNAL_DOI_VERSIONING: "${INVENIO_RDM_ALLOW_EXTERNAL_DOI_VERSIONING:-false}"
+  INVENIO_RDM_ALLOW_METADATA_ONLY_RECORDS: "${INVENIO_RDM_ALLOW_METADATA_ONLY_RECORDS:-true}"
+  INVENIO_RDM_ALLOW_RESTRICTED_RECORDS: "${INVENIO_RDM_ALLOW_RESTRICTED_RECORDS:-true}"
+# Email configuration.
+# [Configure email submission]: https://inveniordm.docs.cern.ch/operate/customize/emails/
+x-set-mail: &mail
+  INVENIO_MAIL_SUPPRESS_SEND: "${INVENIO_MAIL_SUPPRESS_SEND:-true}"
+  INVENIO_MAIL_SERVER: "${INVENIO_MAIL_SERVER:-127.0.0.1}"
+  INVENIO_MAIL_PORT: "${INVENIO_MAIL_PORT:-25}"
+  INVENIO_MAIL_USE_TLS: "${INVENIO_MAIL_USE_TLS:-false}"
+  INVENIO_MAIL_USE_SSL: "${INVENIO_MAIL_USE_SSL:-false}"
+  INVENIO_MAIL_USERNAME: "${INVENIO_MAIL_USERNAME:-info}"
+  INVENIO_MAIL_PASSWORD:
+  INVENIO_ADMIN_EMAIL: "${INVENIO_ADMIN_EMAIL:-info@inveniosoftware.org}"
+  INVENIO_SECURITY_EMAIL_SENDER: "${INVENIO_SECURITY_EMAIL_SENDER:-{INVENIO_ADMIN_EMAIL}}"
+# S3 compatible storage backend.
+# [S3 compatible storage backend]: https://inveniordm.docs.cern.ch/operate/customize/file-uploads/s3/
+x-set-s3: &s3
+  INVENIO_S3_ENDPOINT_URL: "${INVENIO_S3_ENDPOINT_URL:-}"
+  INVENIO_S3_BUCKET_NAME: "${INVENIO_S3_BUCKET_NAME:-}"
+  INVENIO_S3_ACCESS_KEY_ID: "${INVENIO_S3_ACCESS_KEY_ID:-}"
+  INVENIO_S3_SECRET_ACCESS_KEY:
+  INVENIO_S3_REGION_NAME: "${INVENIO_S3_REGION_NAME:-us-east-1}"
+# Opensearch configuration.
+x-set-search: &search
+  DISABLE_INSTALL_DEMO_CONFIG: "${DISABLE_INSTALL_DEMO_CONFIG:-true}"
+  DISABLE_SECURITY_PLUGIN: "${DISABLE_SECURITY_PLUGIN:-true}"
+  # Java configuration. Adjust memory for production service.
+  OPENSEARCH_JAVA_OPTS: "${OPENSEARCH_JAVA_OPTS:--Xms512m -Xmx512m}"
+  bootstrap.memory_lock: "${BOOTSTRAP_MEMORY_LOCK:-true}"
+  # "Run in cluster mode for better performance and resilience.
+  discovery.type: "${DISCOVERY_TYPE:-single-node}"
+# Web configuration.
+# [Customize look-and-feel]: https://inveniordm.docs.cern.ch/operate/customize/look-and-feel/
+x-set-web: &web
+  INVENIO_SITE_UI_URL: "${INVENIO_SITE_UI_URL:-https://localhost}"
+  INVENIO_SITE_API_URL: "${INVENIO_SITE_API_URL:-https://localhost/api}"
+  INVENIO_TRUSTED_HOSTS: "${INVENIO_TRUSTED_HOSTS:-['0.0.0.0', 'localhost', '127.0.0.1']}"
+  INVENIO_THEME_FRONTPAGE_TITLE: "${INVENIO_THEME_FRONTPAGE_TITLE:-InvenioRDM Starter}"
+  INVENIO_THEME_FRONTPAGE_SUBTITLE: "${INVENIO_THEME_FRONTPAGE_SUBTITLE:-A starter project for the turn-key research data management repository.}"
+  INVENIO_THEME_LOGO: "${INVENIO_THEME_LOGO:-images/invenio-rdm.svg}"
+  INVENIO_THEME_SHOW_FRONTPAGE_INTRO_SECTION: "${INVENIO_THEME_SHOW_FRONTPAGE_INTRO_SECTION:-false}"
+  INVENIO_THEME_SITENAME: "${INVENIO_THEME_SITENAME:-InvenioRDM Starter}"
+services:
+  cache:
+    image: valkey/valkey:7.2.5-bookworm
+    command: [ "valkey-server", "--loglevel", "warning" ]
+  db:
+    image: postgres:17.4-bookworm
+    environment:
+      <<: [ *db ]
+  proxy:
+    image: caddy:2.10
+  search:
+    image: opensearchproject/opensearch:2.18.0
+    environment:
+      <<: [ *search ]
+  web:
+    image: ghcr.io/front-matter/invenio-rdm-starter:latest
+    platform: linux/amd64
+    environment:
+      <<: [ *base, *web, *authentication, *mail, *s3 ]
+  worker:
+    image: ghcr.io/front-matter/invenio-rdm-starter:latest
+    platform: linux/amd64
+    command: [ "celery", "-A", "invenio_app.celery", "worker", "--beat", "--schedule=/tmp/celerybeat-schedule", "--events", "--loglevel=WARNING" ]
+    environment:
+      <<: [ *base, *cache, *doi, *mail, *s3 ]
