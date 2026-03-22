@@ -17,7 +17,7 @@ x-envy:
       languageName: Deutsch
       weight: 2
 # Shared environment variables for web and worker.
-# [Configure language(s) and locale(s) (i18n and l10n)]: https://inveniordm.docs.cern.ch/operate/customize/i18n-and-l10n/
+# Link: https://inveniordm.docs.cern.ch/operate/customize/i18n-and-l10n/
 x-set-base: &base
   INVENIO_BABEL_DEFAULT_LOCALE: "${INVENIO_BABEL_DEFAULT_LOCALE:-en}"
   INVENIO_ISO639_LANGUAGES: "${INVENIO_ISO639_LANGUAGES:-fr,de,es,pt}"
@@ -27,17 +27,27 @@ x-set-base: &base
   INVENIO_RDM_CITATION_STYLES_DEFAULT: "${INVENIO_RDM_CITATION_STYLES_DEFAULT:-}"
   INVENIO_SEARCH_HOSTS: "${INVENIO_SEARCH_HOSTS:-['search:9200']}"
   INVENIO_SEARCH_INDEX_PREFIX: "${INVENIO_SEARCH_INDEX_PREFIX:-invenio-rdm-}"
+# Authentication.
+# https://inveniordm.docs.cern.ch/operate/customize/authentication/
 x-set-authentication: &authentication
   INVENIO_ACCOUNTS_DEFAULT_USER_VISIBILITY: "${INVENIO_ACCOUNTS_DEFAULT_USER_VISIBILITY:-restricted}"
   INVENIO_ACCOUNTS_LOCAL_LOGIN_ENABLED: "${INVENIO_ACCOUNTS_LOCAL_LOGIN_ENABLED:-true}"
   INVENIO_OAUTHCLIENT_AUTO_REDIRECT_TO_EXTERNAL_LOGIN: "${INVENIO_OAUTHCLIENT_AUTO_REDIRECT_TO_EXTERNAL_LOGIN:-false}"
   INVENIO_OIDC_APP_CREDENTIALS_CONSUMER_KEY: "${INVENIO_OIDC_APP_CREDENTIALS_CONSUMER_KEY:-}"
+  # OpenID Connect issuer URL for authentication. 
+  # Link: https://auth-wiki.logto.io/openid-connect-discovery
   INVENIO_OIDC_ISSUER: "${INVENIO_OIDC_ISSUER:-}"
+  # Allow users to change their password.
   INVENIO_SECURITY_CHANGEABLE: "${INVENIO_SECURITY_CHANGEABLE:-true}"
+  # Require email confirmation for new accounts.
   INVENIO_SECURITY_CONFIRMABLE: "${INVENIO_SECURITY_CONFIRMABLE:-true}"
+  # Require email confirmation before login.
   INVENIO_SECURITY_LOGIN_WITHOUT_CONFIRMATION: "${INVENIO_SECURITY_LOGIN_WITHOUT_CONFIRMATION:-true}"
+  # Allow users to reset their password.
   INVENIO_SECURITY_RECOVERABLE: "${INVENIO_SECURITY_RECOVERABLE:-true}"
+  # Allow users to register new accounts.
   INVENIO_SECURITY_REGISTERABLE: "${INVENIO_SECURITY_REGISTERABLE:-true}"
+  # Enable tracking of basic user login statistics.
   INVENIO_SECURITY_TRACKABLE: "${INVENIO_SECURITY_TRACKABLE:-true}"
   INVENIO_USERPROFILES_READ_ONLY: "${INVENIO_USERPROFILES_READ_ONLY:-true}"
 # Redis/Valkey configuration for broker and cache.
@@ -55,7 +65,7 @@ x-set-db: &db
   POSTGRES_PASSWORD:
   INVENIO_SQLALCHEMY_DATABASE_URI: "postgresql+psycopg2://${POSTGRES_USER:-inveniordm}:${POSTGRES_PASSWORD:-}@${POSTGRES_HOST:-postgres}:5432/${POSTGRES_DB:-inveniordm}"
 # DOI registration configuration.
-# [DOI registration]: https://inveniordm.docs.cern.ch/operate/customize/dois/
+# Link: https://inveniordm.docs.cern.ch/operate/customize/dois/
 x-set-doi: &doi
   INVENIO_DATACITE_DATACENTER_SYMBOL: "${INVENIO_DATACITE_DATACENTER_SYMBOL:-}"
   INVENIO_DATACITE_ENABLED: "${INVENIO_DATACITE_ENABLED:-false}"
@@ -66,7 +76,7 @@ x-set-doi: &doi
   INVENIO_RDM_ALLOW_METADATA_ONLY_RECORDS: "${INVENIO_RDM_ALLOW_METADATA_ONLY_RECORDS:-true}"
   INVENIO_RDM_ALLOW_RESTRICTED_RECORDS: "${INVENIO_RDM_ALLOW_RESTRICTED_RECORDS:-true}"
 # Email configuration.
-# [Configure email submission]: https://inveniordm.docs.cern.ch/operate/customize/emails/
+# Link: https://inveniordm.docs.cern.ch/operate/customize/emails/
 x-set-mail: &mail
   INVENIO_MAIL_SUPPRESS_SEND: "${INVENIO_MAIL_SUPPRESS_SEND:-true}"
   INVENIO_MAIL_SERVER: "${INVENIO_MAIL_SERVER:-127.0.0.1}"
@@ -78,7 +88,7 @@ x-set-mail: &mail
   INVENIO_ADMIN_EMAIL: "${INVENIO_ADMIN_EMAIL:-info@inveniosoftware.org}"
   INVENIO_SECURITY_EMAIL_SENDER: "${INVENIO_SECURITY_EMAIL_SENDER:-{INVENIO_ADMIN_EMAIL}}"
 # S3 compatible storage backend.
-# [S3 compatible storage backend]: https://inveniordm.docs.cern.ch/operate/customize/file-uploads/s3/
+# Link: https://inveniordm.docs.cern.ch/operate/customize/file-uploads/s3/
 x-set-s3: &s3
   INVENIO_S3_ENDPOINT_URL: "${INVENIO_S3_ENDPOINT_URL:-}"
   INVENIO_S3_BUCKET_NAME: "${INVENIO_S3_BUCKET_NAME:-}"
@@ -86,7 +96,7 @@ x-set-s3: &s3
   INVENIO_S3_SECRET_ACCESS_KEY:
   INVENIO_S3_REGION_NAME: "${INVENIO_S3_REGION_NAME:-us-east-1}"
 # Opensearch configuration.
-# [Docker]: https://docs.opensearch.org/latest/install-and-configure/install-opensearch/docker/
+# Link: https://docs.opensearch.org/latest/install-and-configure/install-opensearch/docker/
 x-set-search: &search
   DISABLE_INSTALL_DEMO_CONFIG: "${DISABLE_INSTALL_DEMO_CONFIG:-true}"
   DISABLE_SECURITY_PLUGIN: "${DISABLE_SECURITY_PLUGIN:-true}"
@@ -96,7 +106,7 @@ x-set-search: &search
   # "Run in cluster mode for better performance and resilience.
   discovery.type: "${DISCOVERY_TYPE:-single-node}"
 # Web configuration.
-# [Customize look-and-feel]: https://inveniordm.docs.cern.ch/operate/customize/look-and-feel/
+# Link: https://inveniordm.docs.cern.ch/operate/customize/look-and-feel/
 x-set-web: &web
   INVENIO_SITE_UI_URL: "${INVENIO_SITE_UI_URL:-https://localhost}"
   INVENIO_SITE_API_URL: "${INVENIO_SITE_API_URL:-https://localhost/api}"
@@ -107,24 +117,34 @@ x-set-web: &web
   INVENIO_THEME_SHOW_FRONTPAGE_INTRO_SECTION: "${INVENIO_THEME_SHOW_FRONTPAGE_INTRO_SECTION:-false}"
   INVENIO_THEME_SITENAME: "${INVENIO_THEME_SITENAME:-InvenioRDM Starter}"
 services:
+  # Describes cache service configuration.
   cache:
     image: valkey/valkey:7.2.5-bookworm
     command: [ "valkey-server", "--loglevel", "warning" ]
+  # Describes db service configuration.
   db:
     image: postgres:17.4-bookworm
     environment:
       <<: [ *db ]
+    profiles: [ dev, staging ]
+
+  # Describes proxy service configuration.
   proxy:
     image: caddy:2.10
+    profiles: [ dev, staging ]
+  # Describes search service configuration.
+  # Link: https://docs.opensearch.org/latest/install-and-configure/install-opensearch/docker/
   search:
     image: opensearchproject/opensearch:2.18.0
     environment:
       <<: [ *search ]
+  # Describes web service configuration.
   web:
     image: ghcr.io/front-matter/invenio-rdm-starter:latest
     platform: linux/amd64
     environment:
       <<: [ *base, *web, *authentication, *mail, *s3 ]
+  # Describes worker service configuration.
   worker:
     image: ghcr.io/front-matter/invenio-rdm-starter:latest
     platform: linux/amd64
