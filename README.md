@@ -2,8 +2,6 @@
 
 # InvenioRDM Starter
 
-![Screenshot](screenshot.png)
-
 ## Introduction
 
 InvenioRDM is the open source turn-key research data management platform, with detailed documentation available [here](https://inveniordm.docs.cern.ch). InvenioRDM Starter facilitates deployment and configuration of InvenioRDM, allowing you to run InvenioRDM on your local computer within 15 min. This is achieved by providing
