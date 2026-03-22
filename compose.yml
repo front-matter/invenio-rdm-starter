@@ -18,30 +18,44 @@ x-envy:
       weight: 2
 # Shared environment variables for web and worker.
 # Link: https://inveniordm.docs.cern.ch/operate/customize/i18n-and-l10n/
-x-set-base: &base
+x-set-base:
+  # The Postgres database URI that should be used for the connection.  
+  &base
+  INVENIO_SQLALCHEMY_DATABASE_URI: "postgresql+psycopg2://${POSTGRES_USER:-inveniordm}:${POSTGRES_PASSWORD:-}@${POSTGRES_HOST:-postgres}:5432/${POSTGRES_DB:-inveniordm}"
+  # Default locale (language).
   INVENIO_BABEL_DEFAULT_LOCALE: "${INVENIO_BABEL_DEFAULT_LOCALE:-en}"
-  INVENIO_ISO639_LANGUAGES: "${INVENIO_ISO639_LANGUAGES:-fr,de,es,pt}"
+  INVENIO_ISO639_LANGUAGES: "${INVENIO_ISO639_LANGUAGES:-fr,de,es}"
+  # Default time zone.
   INVENIO_BABEL_DEFAULT_TIMEZONE: "${INVENIO_BABEL_DEFAULT_TIMEZONE:-UTC}"
   INVENIO_LOGGING_CONSOLE_LEVEL: "${INVENIO_LOGGING_CONSOLE_LEVEL:-INFO}"
+  # List of availablecitation styles.
   INVENIO_RDM_CITATION_STYLES: "${INVENIO_RDM_CITATION_STYLES:-apa,chicago-author-date,harvard-cite-them-right,ieee,vancouver}"
   INVENIO_RDM_CITATION_STYLES_DEFAULT: "${INVENIO_RDM_CITATION_STYLES_DEFAULT:-}"
+  # Search configuration.
+  # Link: https://invenio-search.readthedocs.io/en/latest/configuration.html
   INVENIO_SEARCH_HOSTS: "${INVENIO_SEARCH_HOSTS:-['search:9200']}"
   INVENIO_SEARCH_INDEX_PREFIX: "${INVENIO_SEARCH_INDEX_PREFIX:-invenio-rdm-}"
 # Authentication.
 # https://inveniordm.docs.cern.ch/operate/customize/authentication/
-x-set-authentication: &authentication
+x-set-authentication:
+  # Default Email visibility value can be set to either 'restricted' or 'public'.
+  &authentication
   INVENIO_ACCOUNTS_DEFAULT_USER_VISIBILITY: "${INVENIO_ACCOUNTS_DEFAULT_USER_VISIBILITY:-restricted}"
+  # Enable local login.
   INVENIO_ACCOUNTS_LOCAL_LOGIN_ENABLED: "${INVENIO_ACCOUNTS_LOCAL_LOGIN_ENABLED:-true}"
+  # Redirect to the only external login service under specific conditions.
   INVENIO_OAUTHCLIENT_AUTO_REDIRECT_TO_EXTERNAL_LOGIN: "${INVENIO_OAUTHCLIENT_AUTO_REDIRECT_TO_EXTERNAL_LOGIN:-false}"
-  INVENIO_OIDC_APP_CREDENTIALS_CONSUMER_KEY: "${INVENIO_OIDC_APP_CREDENTIALS_CONSUMER_KEY:-}"
   # OpenID Connect issuer URL for authentication. 
   # Link: https://auth-wiki.logto.io/openid-connect-discovery
   INVENIO_OIDC_ISSUER: "${INVENIO_OIDC_ISSUER:-}"
+  INVENIO_OIDC_APP_CREDENTIALS_CONSUMER_KEY: "${INVENIO_OIDC_APP_CREDENTIALS_CONSUMER_KEY:-}"
+  INVENIO_OIDC_APP_CREDENTIALS_CONSUMER_SECRET:
+
   # Allow users to change their password.
   INVENIO_SECURITY_CHANGEABLE: "${INVENIO_SECURITY_CHANGEABLE:-true}"
   # Require email confirmation for new accounts.
   INVENIO_SECURITY_CONFIRMABLE: "${INVENIO_SECURITY_CONFIRMABLE:-true}"
-  # Require email confirmation before login.
+  # Allow users to login without first confirming their email address.
   INVENIO_SECURITY_LOGIN_WITHOUT_CONFIRMATION: "${INVENIO_SECURITY_LOGIN_WITHOUT_CONFIRMATION:-true}"
   # Allow users to reset their password.
   INVENIO_SECURITY_RECOVERABLE: "${INVENIO_SECURITY_RECOVERABLE:-true}"
@@ -49,6 +63,7 @@ x-set-authentication: &authentication
   INVENIO_SECURITY_REGISTERABLE: "${INVENIO_SECURITY_REGISTERABLE:-true}"
   # Enable tracking of basic user login statistics.
   INVENIO_SECURITY_TRACKABLE: "${INVENIO_SECURITY_TRACKABLE:-true}"
+  # Disable the update of the user profile (email, full name, etc.) when only external authentication is enabled.
   INVENIO_USERPROFILES_READ_ONLY: "${INVENIO_USERPROFILES_READ_ONLY:-true}"
 # Redis/Valkey configuration for broker and cache.
 x-set-cache: &cache
@@ -56,6 +71,7 @@ x-set-cache: &cache
   INVENIO_CELERY_BROKER_URL: "${INVENIO_CELERY_BROKER_URL:-}"
   INVENIO_CELERY_RESULT_BACKEND: "${INVENIO_CELERY_RESULT_BACKEND:-}"
   INVENIO_RATELIMIT_STORAGE_URL: "${INVENIO_RATELIMIT_STORAGE_URL:-}"
+  # URL to connect to Redis server.
   INVENIO_CACHE_REDIS_URL: "${INVENIO_CACHE_REDIS_URL:-}"
 # Database configuration.
 x-set-db: &db
@@ -63,9 +79,9 @@ x-set-db: &db
   POSTGRES_DB: "${POSTGRES_DB:-inveniordm}"
   POSTGRES_USER: "${POSTGRES_USER:-postgres}"
   POSTGRES_PASSWORD:
-  INVENIO_SQLALCHEMY_DATABASE_URI: "postgresql+psycopg2://${POSTGRES_USER:-inveniordm}:${POSTGRES_PASSWORD:-}@${POSTGRES_HOST:-postgres}:5432/${POSTGRES_DB:-inveniordm}"
-# DOI registration configuration.
-# Link: https://inveniordm.docs.cern.ch/operate/customize/dois/
+
+    # DOI registration configuration.
+    # Link: https://inveniordm.docs.cern.ch/operate/customize/dois/
 x-set-doi: &doi
   INVENIO_DATACITE_DATACENTER_SYMBOL: "${INVENIO_DATACITE_DATACENTER_SYMBOL:-}"
   INVENIO_DATACITE_ENABLED: "${INVENIO_DATACITE_ENABLED:-false}"
