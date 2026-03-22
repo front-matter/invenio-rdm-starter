@@ -133,34 +133,35 @@ x-set-web: &web
   INVENIO_THEME_SHOW_FRONTPAGE_INTRO_SECTION: "${INVENIO_THEME_SHOW_FRONTPAGE_INTRO_SECTION:-false}"
   INVENIO_THEME_SITENAME: "${INVENIO_THEME_SITENAME:-InvenioRDM Starter}"
 services:
-  # Describes cache service configuration.
+  # Describes the Redis/Valkey cache service configuration.
   cache:
     image: valkey/valkey:7.2.5-bookworm
     command: [ "valkey-server", "--loglevel", "warning" ]
-  # Describes db service configuration.
+  # Describes the Postgres database service configuration.
   db:
     image: postgres:17.4-bookworm
     environment:
       <<: [ *db ]
     profiles: [ dev, staging ]
 
-  # Describes proxy service configuration.
+  # Describes the Caddy proxy service configuration.
+  # Link: https://docker-compose.de/en/proxy/caddy/
   proxy:
     image: caddy:2.10
     profiles: [ dev, staging ]
-  # Describes search service configuration.
+  # Describes the Opensearch service configuration.
   # Link: https://docs.opensearch.org/latest/install-and-configure/install-opensearch/docker/
   search:
     image: opensearchproject/opensearch:2.18.0
     environment:
       <<: [ *search ]
-  # Describes web service configuration.
+  # Describes InvenioRDM web service configuration.
   web:
     image: ghcr.io/front-matter/invenio-rdm-starter:latest
     platform: linux/amd64
     environment:
       <<: [ *base, *web, *authentication, *mail, *s3 ]
-  # Describes worker service configuration.
+  # Describes InvenioRDM worker service configuration.
   worker:
     image: ghcr.io/front-matter/invenio-rdm-starter:latest
     platform: linux/amd64
