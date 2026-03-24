@@ -13,9 +13,6 @@ x-envy:
     en:
       languageName: English
       weight: 1
-    de:
-      languageName: Deutsch
-      weight: 2
 # Shared environment variables for web and worker.
 # Link: https://inveniordm.docs.cern.ch/operate/customize/i18n-and-l10n/
 x-set-base:
