@@ -2,7 +2,7 @@
 x-envy:
   HUGO_TITLE: InvenioRDM Starter
   HUGO_PARAMS_DESCRIPTION: >
-    InvenioRDM is the open source turn-key research data management platform,   with detailed documentation available [here](https://inveniordm.docs.cern.ch).  InvenioRDM Starter facilitates deployment and configuration of InvenioRDM,  allowing you to run InvenioRDM on your local computer within 15 min.
+    InvenioRDM is the open source turn-key research data management platform,    with detailed documentation available [here](https://inveniordm.docs.cern.ch).   InvenioRDM Starter facilitates deployment and configuration of InvenioRDM,   allowing you to run InvenioRDM on your local computer within 15 min.
   HUGO_LANGUAGE_CODE: en-US
   HUGO_IGNORE_LOGS:
     - warning-goldmark-raw-html
@@ -18,20 +18,22 @@ x-envy:
 x-set-base:
   # The Postgres database URI that should be used for the connection.  
   &base
-  INVENIO_SQLALCHEMY_DATABASE_URI: "postgresql+psycopg2://${POSTGRES_USER:-inveniordm}:${POSTGRES_PASSWORD:-}@${POSTGRES_HOST:-postgres}:5432/${POSTGRES_DB:-inveniordm}"
+  INVENIO_SQLALCHEMY_DATABASE_URI: "postgresql+psycopg2://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD:-}@${POSTGRES_HOST:-db}:5432/${POSTGRES_DB:-inveniordm}"
   # Default locale (language).
   INVENIO_BABEL_DEFAULT_LOCALE: "${INVENIO_BABEL_DEFAULT_LOCALE:-en}"
-  INVENIO_ISO639_LANGUAGES: "${INVENIO_ISO639_LANGUAGES:-fr,de,es}"
+  INVENIO_ISO639_LANGUAGES: "${INVENIO_ISO639_LANGUAGES:-de,es,fr}"
   # Default time zone.
   INVENIO_BABEL_DEFAULT_TIMEZONE: "${INVENIO_BABEL_DEFAULT_TIMEZONE:-UTC}"
   INVENIO_LOGGING_CONSOLE_LEVEL: "${INVENIO_LOGGING_CONSOLE_LEVEL:-INFO}"
   # List of availablecitation styles.
   INVENIO_RDM_CITATION_STYLES: "${INVENIO_RDM_CITATION_STYLES:-apa,chicago-author-date,harvard-cite-them-right,ieee,vancouver}"
-  INVENIO_RDM_CITATION_STYLES_DEFAULT: "${INVENIO_RDM_CITATION_STYLES_DEFAULT:-}"
+  INVENIO_RDM_CITATION_STYLES_DEFAULT: "${INVENIO_RDM_CITATION_STYLES_DEFAULT:-apa}"
   # Search configuration.
   # Link: https://invenio-search.readthedocs.io/en/latest/configuration.html
   INVENIO_SEARCH_HOSTS: "${INVENIO_SEARCH_HOSTS:-['search:9200']}"
   INVENIO_SEARCH_INDEX_PREFIX: "${INVENIO_SEARCH_INDEX_PREFIX:-invenio-rdm-}"
+  # GlitchTip error tracker
+  INVENIO_SENTRY_DSN: "${INVENIO_SENTRY_DSN:-}"
 # Authentication.
 # https://inveniordm.docs.cern.ch/operate/customize/authentication/
 x-set-authentication:
@@ -46,7 +48,7 @@ x-set-authentication:
   # Link: https://auth-wiki.logto.io/openid-connect-discovery
   INVENIO_OIDC_ISSUER: "${INVENIO_OIDC_ISSUER:-}"
   INVENIO_OIDC_APP_CREDENTIALS_CONSUMER_KEY: "${INVENIO_OIDC_APP_CREDENTIALS_CONSUMER_KEY:-}"
-  INVENIO_OIDC_APP_CREDENTIALS_CONSUMER_SECRET:
+  INVENIO_OIDC_APP_CREDENTIALS_CONSUMER_SECRET: "${INVENIO_OIDC_APP_CREDENTIALS_CONSUMER_SECRET:-}"
 
   # Allow users to change their password.
   INVENIO_SECURITY_CHANGEABLE: "${INVENIO_SECURITY_CHANGEABLE:-true}"
@@ -63,20 +65,16 @@ x-set-authentication:
   # Disable the update of the user profile (email, full name, etc.) when only external authentication is enabled.
   INVENIO_USERPROFILES_READ_ONLY: "${INVENIO_USERPROFILES_READ_ONLY:-true}"
 # Redis/Valkey configuration for broker and cache.
-x-set-cache: &cache
-  INVENIO_ACCOUNTS_SESSION_REDIS_URL: "${INVENIO_ACCOUNTS_SESSION_REDIS_URL:-}"
-  INVENIO_CELERY_BROKER_URL: "${INVENIO_CELERY_BROKER_URL:-}"
-  INVENIO_CELERY_RESULT_BACKEND: "${INVENIO_CELERY_RESULT_BACKEND:-}"
-  INVENIO_RATELIMIT_STORAGE_URL: "${INVENIO_RATELIMIT_STORAGE_URL:-}"
+x-set-cache:
+
   # URL to connect to Redis server.
-  INVENIO_CACHE_REDIS_URL: "${INVENIO_CACHE_REDIS_URL:-}"
-# Database configuration.
+  &cache
+  INVENIO_ACCOUNTS_SESSION_REDIS_URL: "${INVENIO_ACCOUNTS_SESSION_REDIS_URL:-redis://cache:6379/0}"
 x-set-db: &db
-  POSTGRES_HOST: "${POSTGRES_HOST:-postgres}"
+  POSTGRES_HOST: "${POSTGRES_HOST:-db}"
   POSTGRES_DB: "${POSTGRES_DB:-inveniordm}"
   POSTGRES_USER: "${POSTGRES_USER:-postgres}"
-  POSTGRES_PASSWORD:
-
+  POSTGRES_PASSWORD: "${POSTGRES_PASSWORD:-changeme}"
     # DOI registration configuration.
     # Link: https://inveniordm.docs.cern.ch/operate/customize/dois/
 x-set-doi: &doi
@@ -93,11 +91,11 @@ x-set-doi: &doi
 x-set-mail: &mail
   INVENIO_MAIL_SUPPRESS_SEND: "${INVENIO_MAIL_SUPPRESS_SEND:-true}"
   INVENIO_MAIL_SERVER: "${INVENIO_MAIL_SERVER:-127.0.0.1}"
-  INVENIO_MAIL_PORT: "${INVENIO_MAIL_PORT:-25}"
-  INVENIO_MAIL_USE_TLS: "${INVENIO_MAIL_USE_TLS:-false}"
+  INVENIO_MAIL_PORT: "${INVENIO_MAIL_PORT:-587}"
+  INVENIO_MAIL_USE_TLS: "${INVENIO_MAIL_USE_TLS:-true}"
   INVENIO_MAIL_USE_SSL: "${INVENIO_MAIL_USE_SSL:-false}"
   INVENIO_MAIL_USERNAME: "${INVENIO_MAIL_USERNAME:-info}"
-  INVENIO_MAIL_PASSWORD:
+  INVENIO_MAIL_PASSWORD: "${INVENIO_MAIL_PASSWORD:-}"
   INVENIO_ADMIN_EMAIL: "${INVENIO_ADMIN_EMAIL:-info@inveniosoftware.org}"
   INVENIO_SECURITY_EMAIL_SENDER: "${INVENIO_SECURITY_EMAIL_SENDER:-{INVENIO_ADMIN_EMAIL}}"
 # S3 compatible storage backend.
@@ -106,7 +104,7 @@ x-set-s3: &s3
   INVENIO_S3_ENDPOINT_URL: "${INVENIO_S3_ENDPOINT_URL:-}"
   INVENIO_S3_BUCKET_NAME: "${INVENIO_S3_BUCKET_NAME:-}"
   INVENIO_S3_ACCESS_KEY_ID: "${INVENIO_S3_ACCESS_KEY_ID:-}"
-  INVENIO_S3_SECRET_ACCESS_KEY:
+  INVENIO_S3_SECRET_ACCESS_KEY: "${INVENIO_S3_SECRET_ACCESS_KEY:-}"
   INVENIO_S3_REGION_NAME: "${INVENIO_S3_REGION_NAME:-us-east-1}"
 # Opensearch configuration.
 # Link: https://docs.opensearch.org/latest/install-and-configure/install-opensearch/docker/
@@ -137,15 +135,20 @@ services:
   # Describes the Postgres database service configuration.
   db:
     image: postgres:17.4-bookworm
+    profiles: [ dev, staging ]
     environment:
       <<: [ *db ]
-    profiles: [ dev, staging ]
 
   # Describes the Caddy proxy service configuration.
   # Link: https://docker-compose.de/en/proxy/caddy/
   proxy:
     image: caddy:2.10
     profiles: [ dev, staging ]
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
   # Describes the Opensearch service configuration.
   # Link: https://docs.opensearch.org/latest/install-and-configure/install-opensearch/docker/
   search:
@@ -155,12 +158,16 @@ services:
   # Describes InvenioRDM web service configuration.
   web:
     image: ghcr.io/front-matter/invenio-rdm-starter:latest
+    build:
+      context: .
     platform: linux/amd64
     environment:
-      <<: [ *base, *web, *authentication, *mail, *s3 ]
+      <<: [ *base, *cache, *web, *authentication, *mail, *s3 ]
   # Describes InvenioRDM worker service configuration.
   worker:
     image: ghcr.io/front-matter/invenio-rdm-starter:latest
+    build:
+      context: .
     platform: linux/amd64
     command: [ "celery", "-A", "invenio_app.celery", "worker", "--beat", "--schedule=/tmp/celerybeat-schedule", "--events", "--loglevel=WARNING" ]
     environment:

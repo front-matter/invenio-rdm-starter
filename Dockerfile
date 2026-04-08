@@ -1,40 +1,38 @@
-FROM python:3.13-trixie AS builder
+FROM python:3.14-trixie AS builder
 
 LABEL maintainer="Front Matter <info@front-matter.de>"
+LABEL org.opencontainers.image.source="https://github.com/front-matter/invenio-rdm-starter"
+LABEL org.opencontainers.image.licenses="MIT"
+LABEL org.opencontainers.image.title="InvenioRDM Starter"
+LABEL org.opencontainers.image.description="InvenioRDM is the open source turn-key research data management platform. InvenioRDM Starter facilitates deployment and configuration of InvenioRDM."
 
-ENV DEBIAN_FRONTEND=noninteractive \
-  TZ=Etc/UTC \
-  LANG=en_US.UTF-8 \
-  LANGUAGE=en_US:en
-
-# Install OS package dependencies and Node.js in a single layer
-RUN --mount=type=cache,sharing=locked,target=/var/cache/apt \
-  apt-get update --fix-missing && \
-  apt-get install -y build-essential libssl-dev libffi-dev \
-  python3-dev cargo pkg-config curl git libcairo2 \
-  libpangocairo-1.0-0 libpq5 libxml2 libxslt1.1 \
-  libjpeg62-turbo libwebp7 libtiff6 --no-install-recommends && \
-  curl -fsSL https://deb.nodesource.com/setup_22.x | bash - && \
-  apt-get install -y nodejs --no-install-recommends && \
-  npm install -g pnpm@latest-10
-
-# Install uv and activate virtualenv
-COPY --from=ghcr.io/astral-sh/uv:0.9.26 /uv /uvx /bin/
-RUN uv venv /opt/invenio/.venv
-
-# Use the virtual environment automatically
-ENV VIRTUAL_ENV=/opt/invenio/.venv \
+ENV LANG=en_US.UTF-8 \
+  LANGUAGE=en_US:en \
+  VIRTUAL_ENV=/opt/invenio/.venv \
   UV_PROJECT_ENVIRONMENT=/opt/invenio/.venv \
   PATH="/opt/invenio/.venv/bin:$PATH" \
-  WORKING_DIR=/opt/invenio \
   PYTHONDONTWRITEBYTECODE=1 \
   PYTHONUNBUFFERED=1 \
   UV_COMPILE_BYTECODE=1 \
   UV_LINK_MODE=copy \
   UV_PYTHON_DOWNLOADS=0 \
-  INVENIO_INSTANCE_PATH=/opt/invenio/var/instance
+  INVENIO_INSTANCE_PATH=/opt/invenio/var/instance \
+  WEBPACKEXT_PROJECT=invenio_assets.webpack:rspack_project
 
-WORKDIR ${WORKING_DIR}
+
+# Install OS package dependencies and Node.js in a single layer
+RUN --mount=type=cache,sharing=locked,target=/var/cache/apt \
+  apt-get update --fix-missing && \
+  curl -fsSL https://deb.nodesource.com/setup_24.x | bash - && \
+  apt-get install -y build-essential python3-dev cargo pkg-config \
+  libgdk-pixbuf-xlib-2.0-dev nodejs --no-install-recommends && \
+  npm install -g pnpm@latest-10
+
+# Install uv and activate virtualenv
+COPY --from=ghcr.io/astral-sh/uv:0.10.10 /uv /uvx /bin/
+RUN uv venv /opt/invenio/.venv
+
+WORKDIR /opt/invenio
 
 # Copy dependency files first for better layer caching
 COPY pyproject.toml uv.lock ./
@@ -44,12 +42,12 @@ RUN --mount=type=cache,target=/root/.cache/uv \
 # Copy application code
 COPY . .
 
-# Install Python dependencies
+# Install Python dependencies (use --no-editable so the project is installed as
+# a proper wheel
 RUN --mount=type=cache,target=/root/.cache/uv \
-  uv sync --frozen --no-dev
+  uv sync --frozen --no-dev --no-editable
 
 # Build Javascript assets using rspack
-ENV WEBPACKEXT_PROJECT=invenio_assets.webpack:rspack_project
 RUN --mount=type=cache,target=/var/cache/assets \
   invenio collect --verbose && \
   invenio webpack create
@@ -73,64 +71,30 @@ WORKDIR ${INVENIO_INSTANCE_PATH}/assets
 RUN pnpm install && \
   pnpm run build
 
-# Gather runtime libraries into a single directory for easy copying
-RUN mkdir -p /invenio-libs && \
-  cp -P /usr/lib/x86_64-linux-gnu/libcairo*.so* /invenio-libs/ && \
-  cp -P /usr/lib/x86_64-linux-gnu/libpango*.so* /invenio-libs/ && \
-  cp -P /usr/lib/x86_64-linux-gnu/libharfbuzz*.so* /invenio-libs/ && \
-  cp -P /usr/lib/x86_64-linux-gnu/libfontconfig*.so* /invenio-libs/ && \
-  cp -P /usr/lib/x86_64-linux-gnu/libfreetype*.so* /invenio-libs/ && \
-  cp -P /usr/lib/x86_64-linux-gnu/libpixman*.so* /invenio-libs/ && \
-  cp -P /usr/lib/x86_64-linux-gnu/libpng*.so* /invenio-libs/ && \
-  cp -P /usr/lib/x86_64-linux-gnu/libexpat*.so* /invenio-libs/ && \
-  cp -P /usr/lib/x86_64-linux-gnu/libbrotli*.so* /invenio-libs/ && \
-  cp -P /usr/lib/x86_64-linux-gnu/libxcb*.so* /invenio-libs/ && \
-  cp -P /usr/lib/x86_64-linux-gnu/libX*.so* /invenio-libs/ && \
-  cp -P /usr/lib/x86_64-linux-gnu/libfribidi*.so* /invenio-libs/ && \
-  cp -P /usr/lib/x86_64-linux-gnu/libthai*.so* /invenio-libs/ && \
-  cp -P /usr/lib/x86_64-linux-gnu/libglib*.so* /invenio-libs/ && \
-  cp -P /usr/lib/x86_64-linux-gnu/libgobject*.so* /invenio-libs/ && \
-  cp -P /usr/lib/x86_64-linux-gnu/libdatrie*.so* /invenio-libs/ && \
-  cp -P /usr/lib/x86_64-linux-gnu/libpcre2*.so* /invenio-libs/ && \
-  cp -P /usr/lib/x86_64-linux-gnu/libffi*.so* /invenio-libs/ && \
-  cp -P /usr/lib/x86_64-linux-gnu/libbsd*.so* /invenio-libs/ && \
-  cp -P /usr/lib/x86_64-linux-gnu/libmd*.so* /invenio-libs/ && \
-  cp -P /usr/lib/x86_64-linux-gnu/libpq*.so* /invenio-libs/ && \
-  cp -P /usr/lib/x86_64-linux-gnu/libssl*.so* /invenio-libs/ && \
-  cp -P /usr/lib/x86_64-linux-gnu/libcrypto*.so* /invenio-libs/ && \
-  cp -P /usr/lib/x86_64-linux-gnu/libxml2*.so* /invenio-libs/ && \
-  cp -P /usr/lib/x86_64-linux-gnu/libxslt*.so* /invenio-libs/ && \
-  cp -P /usr/lib/x86_64-linux-gnu/libexslt*.so* /invenio-libs/ && \
-  cp -P /usr/lib/x86_64-linux-gnu/libjpeg*.so* /invenio-libs/ && \
-  cp -P /usr/lib/x86_64-linux-gnu/libwebp*.so* /invenio-libs/ && \
-  cp -P /usr/lib/x86_64-linux-gnu/libtiff*.so* /invenio-libs/ && \
-  cp -P /usr/lib/x86_64-linux-gnu/libz*.so* /invenio-libs/ && \
-  cp -P /usr/lib/x86_64-linux-gnu/liblzma*.so* /invenio-libs/ && \
-  cp -P /usr/lib/x86_64-linux-gnu/libcurl*.so* /invenio-libs/ && \
-  cp -P /usr/lib/x86_64-linux-gnu/libnghttp*.so* /invenio-libs/ 2>/dev/null || true && \
-  cp -P /usr/lib/x86_64-linux-gnu/librtmp*.so* /invenio-libs/ 2>/dev/null || true && \
-  cp -P /usr/lib/x86_64-linux-gnu/libssh*.so* /invenio-libs/ 2>/dev/null || true && \
-  cp -P /usr/lib/x86_64-linux-gnu/libicui18n*.so* /invenio-libs/ 2>/dev/null || true && \
-  cp -P /usr/lib/x86_64-linux-gnu/libicuuc*.so* /invenio-libs/ 2>/dev/null || true && \
-  cp -P /usr/lib/x86_64-linux-gnu/libicudata*.so* /invenio-libs/ 2>/dev/null || true
+# Compile assets using pnpm and rspack
+WORKDIR ${INVENIO_INSTANCE_PATH}/assets
+RUN --mount=type=cache,target=/root/.local/share/pnpm/store \
+  pnpm install && \
+  pnpm run build
 
-FROM python:3.13-slim-bookworm AS runtime
-# FROM dhi.io/python:3.13-debian13 AS runtime
+FROM python:3.14-slim-trixie AS runtime
 
 ENV LANG=en_US.UTF-8 \
-  LANGUAGE=en_US:en
-
-ENV VIRTUAL_ENV=/opt/invenio/.venv \
+  LANGUAGE=en_US:en \
+  VIRTUAL_ENV=/opt/invenio/.venv \
   PATH="/opt/invenio/.venv/bin:$PATH" \
-  WORKING_DIR=/opt/invenio \
+  PYTHONUNBUFFERED=1 \
   INVENIO_INSTANCE_PATH=/opt/invenio/var/instance
 
 # create non-root invenio user
-ENV INVENIO_USER_ID=1654
-RUN adduser invenio --uid ${INVENIO_USER_ID} --gid 0 --no-create-home --disabled-password
+RUN adduser invenio --uid 1000 --gid 0 --no-create-home --disabled-password
 
-# Copy runtime libraries from builder (Cairo for invenio_formatter, etc.)
-COPY --from=builder /invenio-libs/* /usr/lib/x86_64-linux-gnu/
+# Install OS package dependencies
+RUN --mount=type=cache,sharing=locked,target=/var/cache/apt \
+  apt-get update --fix-missing && \
+  apt-get install -y apt-utils gpg libcairo2 debian-keyring \
+  debian-archive-keyring apt-transport-https curl --no-install-recommends && \
+  apt-get clean && rm -rf /var/lib/apt/lists/*
 
 COPY --from=builder --chown=1654:0 ${VIRTUAL_ENV} ${VIRTUAL_ENV}
 COPY --from=builder --chown=1654:0 ${INVENIO_INSTANCE_PATH}/site ${INVENIO_INSTANCE_PATH}/site
@@ -144,12 +108,29 @@ COPY --chown=1654:0 ./Caddyfile /etc/caddy/Caddyfile
 COPY --chown=1654:0 --chmod=755 ./entrypoint.sh /opt/invenio/.venv/bin/entrypoint.sh
 
 
-# Declare volumes for persistent data
-VOLUME ["/opt/invenio/var/instance/data", "/opt/invenio/var/instance/archive"]
+# Copy virtual environment and compiled files from builder stage
+COPY --from=builder --chown=1000:0 ${VIRTUAL_ENV} ${VIRTUAL_ENV}
+COPY --from=builder --chown=1000:0 ${INVENIO_INSTANCE_PATH}/assets ${INVENIO_INSTANCE_PATH}/assets
+COPY --from=builder --chown=1000:0 ${INVENIO_INSTANCE_PATH}/static ${INVENIO_INSTANCE_PATH}/static
+COPY --from=builder --chown=1000:0 ${INVENIO_INSTANCE_PATH}/translations ${INVENIO_INSTANCE_PATH}/translations
 
-WORKDIR ${WORKING_DIR}/src
+# Copy files needed at runtime
+COPY --chown=1000:0 app_data ${INVENIO_INSTANCE_PATH}/app_data
+COPY --chown=1000:0 site ${INVENIO_INSTANCE_PATH}/site
+COPY --chown=1000:0 templates ${INVENIO_INSTANCE_PATH}/templates
+COPY --chown=1000:0 ./invenio.cfg ${INVENIO_INSTANCE_PATH}/invenio.cfg
 
+# Prepare Gunicorn and Metrics
+COPY --chown=1000:0 ./gunicorn.conf.py ${INVENIO_INSTANCE_PATH}/
+RUN mkdir -p /tmp/prometheus_multiproc && chown 1000:0 /tmp/prometheus_multiproc
+
+# Copy scripts used at runtime
+COPY --chown=1000:0 --chmod=755 ./scripts ${INVENIO_INSTANCE_PATH}/scripts/
+
+# Copy entrypoint script and set permissions
+COPY --chown=1000:0 --chmod=755 ./entrypoint.sh /opt/invenio/.venv/bin/entrypoint.sh
+
+WORKDIR /opt/invenio/src
 USER invenio
 EXPOSE 5000
-# ENTRYPOINT ["/opt/invenio/.venv/bin/entrypoint.sh"]
-CMD ["gunicorn", "invenio_app.wsgi:application", "--bind", "0.0.0.0:5000", "--workers", "2", "--threads", "2", "--access-logfile", "-", "--error-logfile", "-", "--log-level", "ERROR"]
+CMD ["gunicorn", "invenio_app.wsgi:application", "--bind", "0.0.0.0:5000", "--workers", "2", "--threads", "4", "--config", "/opt/invenio/var/instance/gunicorn.conf.py"]

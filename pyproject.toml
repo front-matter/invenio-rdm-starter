@@ -1,25 +1,34 @@
 [project]
 name = "invenio-rdm-starter"
-version = "13.0.8.1"
+version = "13.1.0.0"
 description = "Starter for the invenio-rdm turn-key research data management repository"
 authors = [{ name = "Martin Fenner", email = "martin@front-matter.de" }]
 readme = "README.md"
-requires-python = ">=3.13"
+requires-python = ">=3.14"
 license = "MIT"
 dependencies = [
-    "invenio-app-rdm>=13.0.8,<14.0.0",
-    "invenio-search[opensearch2]>=3.0.0",
+    "invenio-app-rdm>=13.1.0,<14.0.0",
+    "invenio-search[opensearch2]>=3.1.2,<3.2.0",
     "invenio-s3>=3.0.2",
-    "invenio-previewer>=3.3.0,<3.4.0",
-    "gunicorn~=23.0.0",
     "invenio-oauthclient",
-    "invenio-db",
-    "setuptools<81",
+    "setuptools>=70,<81",
+    "gunicorn~=23.0.0",
+    "invenio-logging",
+    "structlog>=25.0",
+    "prometheus-flask-exporter>=0.23.1",                                        # no [sentry] extra
+    "sentry-sdk[flask]>=2.0,<3",
+    "structlog-sentry>=2.1.0",
+    "greenlet<3.4.0; sys_platform == 'darwin' and platform_machine == 'arm64'",
 ]
 
 [tool.uv.sources]
 invenio-oauthclient = { git = "https://github.com/front-matter/invenio-oauthclient", branch = "maint-v5.x" }
-invenio-db = { git = "https://github.com/front-matter/invenio-db", branch = "cli-commands" }
+
+[tool.uv]
+required-environments = [
+    "sys_platform == 'darwin' and platform_machine == 'arm64'",
+    "sys_platform == 'linux' and platform_machine == 'x86_64'",
+]
 
 [build-system]
 requires = ["hatchling"]
@@ -27,6 +36,9 @@ build-backend = "hatchling.build"
 
 [tool.hatch.build]
 include = ["site/invenio_rdm_starter/*.py"]
+
+[tool.hatch.build.targets.wheel]
+sources = { "site" = "" }
 
 [tool.ruff]
 line-length = 79
