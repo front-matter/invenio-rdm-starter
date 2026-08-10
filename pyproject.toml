@@ -15,7 +15,7 @@ dependencies = [
     "gunicorn~=23.0.0",
     "commonmeta-py[backend]>=0.269,<1",
     "commonmeta-rs>=0.9.74",
-    "invenio-pidbox>=0.1.9,<1",
+    "invenio-pidbox>=0.1.10,<1",
     "invenio-feeds>=0.1.16,<1",
     "invenio-logging",
     "structlog>=25.0",

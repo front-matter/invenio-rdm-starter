@@ -517,14 +517,14 @@ wheels = [
 
 [[package]]
 name = "citeproc-py"
-version = "0.10.4"
+version = "0.10.7"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "lxml" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/22/88/28fedf9948261653143a6ab4fa28e33675598abd83f0bad79bc57e6a54c1/citeproc_py-0.10.4.tar.gz", hash = "sha256:da66ca7228a18d23aacb5994320683c52e49f0d9fc5e2644ad7cca774247404e", size = 275298, upload-time = "2026-08-05T15:34:57.763Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/db/12/f91a548419892726bf675c936e48b2ed65aafff09a1f20d4ce1cfc47b218/citeproc_py-0.10.7.tar.gz", hash = "sha256:e2e56f7c4a63a659679de1055d36c6b961e10a7d65945d082f208462229d356f", size = 276235, upload-time = "2026-08-10T22:35:13.109Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/45/81/81d5d815ab3ed07cd6fff2aed538b5e72ad5abd5fe848cb53cb338671e71/citeproc_py-0.10.4-py3-none-any.whl", hash = "sha256:b170c87940e89b5732ec9e8771a6124ca681b531be071c2c031cf9a25308a075", size = 386508, upload-time = "2026-08-05T15:34:56.311Z" },
+    { url = "https://files.pythonhosted.org/packages/32/96/385eb384eec40ea60cdd4f0b3db288e7f2f53cc96f3a55883605e7fe6b3d/citeproc_py-0.10.7-py3-none-any.whl", hash = "sha256:c5192d59fdfde00a33945b9a85a11fa23200be3fac99dfa6856f06c415f7d40b", size = 386751, upload-time = "2026-08-10T22:35:11.914Z" },
 ]
 
 [[package]]
@@ -2209,16 +2209,16 @@ wheels = [
 
 [[package]]
 name = "invenio-pidbox"
-version = "0.1.9"
+version = "0.1.10"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "commonmeta-py", extra = ["backend"] },
     { name = "commonmeta-rs" },
     { name = "invenio-app-rdm" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/b7/58/e7edbd9b30a1d68535fbc004e34b5da5b5697828d01f66f84ec93f7eb1a1/invenio_pidbox-0.1.9.tar.gz", hash = "sha256:abe67079cef76a413bca503de9f75b73b2c82a8b88c0186bcae47e4e52f65c3f", size = 27123, upload-time = "2026-08-10T18:50:08.089Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/1e/c0/deb6e2588c92b375b9827925a528e592cd4833ee79bbb1f6c012445c5faf/invenio_pidbox-0.1.10.tar.gz", hash = "sha256:19e3df3b653a6b2785d0c0b4b24f9fc7ab8510bc9f0a8736e4e08ec0c216f2bf", size = 27238, upload-time = "2026-08-10T23:33:45.232Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/8c/db/7abf9d382e02b9b0e75a2bcf2f23de414948b06cbee0701650999e06a81f/invenio_pidbox-0.1.9-py3-none-any.whl", hash = "sha256:f2148495ce49b22ec02819f65408629416ddaa2238b5fa6d4526023fff5ed6c3", size = 31497, upload-time = "2026-08-10T18:50:06.586Z" },
+    { url = "https://files.pythonhosted.org/packages/61/ad/d14ddc4b60863fe3f7be5be7d09b1d45e9e0a5d2025a624580e27ef1ab0c/invenio_pidbox-0.1.10-py3-none-any.whl", hash = "sha256:117562ff6a75896a8553d8b61844dc07b2b2fc7846bbabcd24654e4191da665d", size = 31524, upload-time = "2026-08-10T23:33:42.033Z" },
 ]
 
 [[package]]
@@ -2361,7 +2361,7 @@ requires-dist = [
     { name = "invenio-feeds", specifier = ">=0.1.16,<1" },
     { name = "invenio-logging" },
     { name = "invenio-oauthclient", git = "https://github.com/front-matter/invenio-oauthclient?branch=contrib-oidc" },
-    { name = "invenio-pidbox", specifier = ">=0.1.9,<1" },
+    { name = "invenio-pidbox", specifier = ">=0.1.10,<1" },
     { name = "invenio-s3", specifier = ">=3.0.2" },
     { name = "invenio-search", extras = ["opensearch2"], specifier = ">=3.1.2,<3.2.0" },
     { name = "mkdocs-material", marker = "extra == 'docs'", specifier = ">=9.7.0" },
