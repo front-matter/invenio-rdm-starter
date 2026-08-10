@@ -1,10 +1,10 @@
 FROM python:3.14-trixie AS builder
 
 LABEL maintainer="Front Matter <info@front-matter.de>"
-LABEL org.opencontainers.image.source="https://github.com/front-matter/invenio-rdm-starter"
+LABEL org.opencontainers.image.source="https://codeberg.org/front-matter/invenio-rdm-starter"
 LABEL org.opencontainers.image.licenses="MIT"
 LABEL org.opencontainers.image.title="InvenioRDM Starter"
-LABEL org.opencontainers.image.description="InvenioRDM is the open source turn-key research data management platform. InvenioRDM Starter facilitates deployment and configuration of InvenioRDM."
+LABEL org.opencontainers.image.description="InvenioRDM Starter is a turn-key research data management repository based on the InvenioRDM software."
 
 ENV LANG=en_US.UTF-8 \
   LANGUAGE=en_US:en \
@@ -19,7 +19,6 @@ ENV LANG=en_US.UTF-8 \
   INVENIO_INSTANCE_PATH=/opt/invenio/var/instance \
   WEBPACKEXT_PROJECT=invenio_assets.webpack:rspack_project
 
-
 # Install OS package dependencies and Node.js in a single layer
 RUN --mount=type=cache,sharing=locked,target=/var/cache/apt \
   apt-get update --fix-missing && \
@@ -29,7 +28,7 @@ RUN --mount=type=cache,sharing=locked,target=/var/cache/apt \
   npm install -g pnpm@latest-10
 
 # Install uv and activate virtualenv
-COPY --from=ghcr.io/astral-sh/uv:0.10.10 /uv /uvx /bin/
+COPY --from=ghcr.io/astral-sh/uv:0.12.1 /uv /uvx /bin/
 RUN uv venv /opt/invenio/.venv
 
 WORKDIR /opt/invenio
@@ -61,30 +60,23 @@ COPY templates ${INVENIO_INSTANCE_PATH}/templates
 COPY app_data ${INVENIO_INSTANCE_PATH}/app_data
 COPY translations ${INVENIO_INSTANCE_PATH}/translations
 
-
-# Enable the option to have a deterministic javascript dependency build
-# From: https://github.com/tu-graz-library/docker-invenio-base
-COPY ./package.json ${INVENIO_INSTANCE_PATH}/assets/
-COPY ./pnpm-lock.yaml ${INVENIO_INSTANCE_PATH}/assets/
-
-WORKDIR ${INVENIO_INSTANCE_PATH}/assets
-RUN pnpm install && \
-  pnpm run build
-
 # Compile assets using pnpm and rspack
 WORKDIR ${INVENIO_INSTANCE_PATH}/assets
 RUN --mount=type=cache,target=/root/.local/share/pnpm/store \
   pnpm install && \
+  find node_modules -name tsconfig.json -not -path '*/@tsconfig/*' -delete && \
   pnpm run build
 
 FROM python:3.14-slim-trixie AS runtime
 
+# PATH carries the scripts directory so maintenance scripts run by bare name
+# from any working directory.
 ENV LANG=en_US.UTF-8 \
   LANGUAGE=en_US:en \
   VIRTUAL_ENV=/opt/invenio/.venv \
-  PATH="/opt/invenio/.venv/bin:$PATH" \
   PYTHONUNBUFFERED=1 \
-  INVENIO_INSTANCE_PATH=/opt/invenio/var/instance
+  INVENIO_INSTANCE_PATH=/opt/invenio/var/instance \
+  PATH="/opt/invenio/.venv/bin:/opt/invenio/var/instance/scripts:$PATH"
 
 # create non-root invenio user
 RUN adduser invenio --uid 1000 --gid 0 --no-create-home --disabled-password
@@ -95,18 +87,6 @@ RUN --mount=type=cache,sharing=locked,target=/var/cache/apt \
   apt-get install -y apt-utils gpg libcairo2 debian-keyring \
   debian-archive-keyring apt-transport-https curl --no-install-recommends && \
   apt-get clean && rm -rf /var/lib/apt/lists/*
-
-COPY --from=builder --chown=1654:0 ${VIRTUAL_ENV} ${VIRTUAL_ENV}
-COPY --from=builder --chown=1654:0 ${INVENIO_INSTANCE_PATH}/site ${INVENIO_INSTANCE_PATH}/site
-COPY --from=builder --chown=1654:0 ${INVENIO_INSTANCE_PATH}/static ${INVENIO_INSTANCE_PATH}/static
-COPY --from=builder --chown=1654:0 ${INVENIO_INSTANCE_PATH}/assets ${INVENIO_INSTANCE_PATH}/assets
-COPY --from=builder --chown=1654:0 ${INVENIO_INSTANCE_PATH}/templates ${INVENIO_INSTANCE_PATH}/templates
-COPY --from=builder --chown=1654:0 ${INVENIO_INSTANCE_PATH}/app_data ${INVENIO_INSTANCE_PATH}/app_data
-COPY --from=builder --chown=1654:0 ${INVENIO_INSTANCE_PATH}/translations ${INVENIO_INSTANCE_PATH}/translations
-COPY --from=builder --chown=1654:0 ${INVENIO_INSTANCE_PATH}/invenio.cfg ${INVENIO_INSTANCE_PATH}/invenio.cfg
-COPY --chown=1654:0 ./Caddyfile /etc/caddy/Caddyfile
-COPY --chown=1654:0 --chmod=755 ./entrypoint.sh /opt/invenio/.venv/bin/entrypoint.sh
-
 
 # Copy virtual environment and compiled files from builder stage
 COPY --from=builder --chown=1000:0 ${VIRTUAL_ENV} ${VIRTUAL_ENV}
