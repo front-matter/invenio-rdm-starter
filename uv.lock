@@ -2209,16 +2209,16 @@ wheels = [
 
 [[package]]
 name = "invenio-pidbox"
-version = "0.1.12"
+version = "0.1.21"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "commonmeta-py", extra = ["backend"] },
     { name = "commonmeta-rs" },
     { name = "invenio-app-rdm" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/4f/02/538e8bcc53b46ff348e1b93ede05b56048eb1cac22f6fb1bf5e9e784af90/invenio_pidbox-0.1.12.tar.gz", hash = "sha256:deeb2680ed52e98a17458fde8f84c2636f83fc952a62ac89d15aed6707429ad1", size = 28677, upload-time = "2026-08-11T00:46:50.052Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/49/aa/c2762c3c7b76be1c107f32ddb9c90c3fa8ade2f6959264a76af576635f1c/invenio_pidbox-0.1.21.tar.gz", hash = "sha256:c8683c1734f63ce0a5d0fc4436c3a1cfe022b96c73cc9489be26dce1753ac5b9", size = 32593, upload-time = "2026-08-11T08:57:11.109Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/4e/31/30f6de3f12fc76a627d3cc22e9bc4a438c57350af73e9dcb3a3338e8e088/invenio_pidbox-0.1.12-py3-none-any.whl", hash = "sha256:08686bff7e6afce0cb5f6689d3534b983f67bb6e103e7be8771faa353b00a5da", size = 34230, upload-time = "2026-08-11T00:46:48.117Z" },
+    { url = "https://files.pythonhosted.org/packages/d4/79/b7bcdc2f957463b82e05773bd4bcedfd2126aff8b5b8ca8186953565ff9c/invenio_pidbox-0.1.21-py3-none-any.whl", hash = "sha256:df2a521d80615322473f7ecd9e7f4996223b88203fea93a9727b9defe25f7ffe", size = 38947, upload-time = "2026-08-11T08:57:09.473Z" },
 ]
 
 [[package]]
@@ -2361,7 +2361,7 @@ requires-dist = [
     { name = "invenio-feeds", specifier = ">=0.1.16,<1" },
     { name = "invenio-logging" },
     { name = "invenio-oauthclient", git = "https://github.com/front-matter/invenio-oauthclient?branch=contrib-oidc" },
-    { name = "invenio-pidbox", specifier = ">=0.1.12,<1" },
+    { name = "invenio-pidbox", specifier = ">=0.1.21,<1" },
     { name = "invenio-s3", specifier = ">=3.0.2" },
     { name = "invenio-search", extras = ["opensearch2"], specifier = ">=3.1.2,<3.2.0" },
     { name = "mkdocs-material", marker = "extra == 'docs'", specifier = ">=9.7.0" },
