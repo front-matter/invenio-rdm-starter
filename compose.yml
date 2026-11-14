@@ -24,7 +24,9 @@ x-set-base:
   INVENIO_ISO639_LANGUAGES: "${INVENIO_ISO639_LANGUAGES:-de,es,fr}"
   # Default time zone.
   INVENIO_BABEL_DEFAULT_TIMEZONE: "${INVENIO_BABEL_DEFAULT_TIMEZONE:-UTC}"
-  INVENIO_LOGGING_CONSOLE_LEVEL: "${INVENIO_LOGGING_CONSOLE_LEVEL:-INFO}"
+  # Log level of web and worker (console and file).
+  INVENIO_LOGGING_CONSOLE_LEVEL: "${INVENIO_LOG_LEVEL:-WARNING}"
+  INVENIO_LOGGING_FS_LEVEL: "${INVENIO_LOG_LEVEL:-WARNING}"
   # List of availablecitation styles.
   INVENIO_RDM_CITATION_STYLES: "${INVENIO_RDM_CITATION_STYLES:-apa,chicago-author-date,harvard-cite-them-right,ieee,vancouver}"
   INVENIO_RDM_CITATION_STYLES_DEFAULT: "${INVENIO_RDM_CITATION_STYLES_DEFAULT:-apa}"
@@ -127,48 +129,108 @@ x-set-web: &web
   INVENIO_THEME_LOGO: "${INVENIO_THEME_LOGO:-images/invenio-rdm.svg}"
   INVENIO_THEME_SHOW_FRONTPAGE_INTRO_SECTION: "${INVENIO_THEME_SHOW_FRONTPAGE_INTRO_SECTION:-false}"
   INVENIO_THEME_SITENAME: "${INVENIO_THEME_SITENAME:-InvenioRDM Starter}"
+# All services start with docker compose up. Deployment platforms that provide
+# database, cache and search themselves get a copy with only web and worker:
+#   envy render compose.yml --service web --service worker
 services:
   # Describes the Redis/Valkey cache service configuration.
   cache:
     image: valkey/valkey:7.2.5-bookworm
     command: [ "valkey-server", "--loglevel", "warning" ]
+    healthcheck:
+      test: [ "CMD", "valkey-cli", "ping" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
   # Describes the Postgres database service configuration.
   db:
     image: postgres:17.4-bookworm
-    profiles: [ dev, staging ]
     environment:
       <<: [ *db ]
-
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
   # Describes the Caddy proxy service configuration.
   # Link: https://docker-compose.de/en/proxy/caddy/
   proxy:
     image: caddy:2.10
-    profiles: [ dev, staging ]
     ports:
       - "80:80"
       - "443:443"
     volumes:
       - ./Caddyfile:/etc/caddy/Caddyfile:ro
+    depends_on:
+      - web
   # Describes the Opensearch service configuration.
   # Link: https://docs.opensearch.org/latest/install-and-configure/install-opensearch/docker/
   search:
     image: opensearchproject/opensearch:2.18.0
     environment:
       <<: [ *search ]
+    healthcheck:
+      test: [ "CMD-SHELL", "curl -fs http://localhost:9200/_cluster/health || exit 1" ]
+      interval: 10s
+      timeout: 5s
+      retries: 10
   # Describes InvenioRDM web service configuration.
+  # The image is pulled if missing; a local build with the same name
+  # (docker build -t ghcr.io/front-matter/invenio-rdm-starter .) is used instead.
   web:
-    image: ghcr.io/front-matter/invenio-rdm-starter:latest
-    build:
-      context: .
+    image: ${INVENIO_RDM_STARTER_IMAGE:-ghcr.io/front-matter/invenio-rdm-starter}:${INVENIO_RDM_STARTER_TAG:-latest}
+    pull_policy: ${INVENIO_RDM_STARTER_PULL_POLICY:-missing}
     platform: linux/amd64
+    expose:
+      - "5000"
+    volumes:
+      - uploaded_data:/opt/invenio/var/instance/data
+      - archived_data:/opt/invenio/var/instance/archive
+    healthcheck:
+      test:
+        - CMD
+        - python3
+        - '-c'
+        - "import urllib.request; urllib.request.urlopen('http://localhost:5000/ping')"
+      interval: 60s
+      timeout: 20s
+      retries: 3
+      start_period: 40s
     environment:
       <<: [ *base, *cache, *web, *authentication, *mail, *s3 ]
+    depends_on:
+      search:
+        condition: service_healthy
+        required: false
+      cache:
+        condition: service_healthy
+        required: false
+      db:
+        condition: service_healthy
+        required: false
   # Describes InvenioRDM worker service configuration.
   worker:
-    image: ghcr.io/front-matter/invenio-rdm-starter:latest
-    build:
-      context: .
+    image: ${INVENIO_RDM_STARTER_IMAGE:-ghcr.io/front-matter/invenio-rdm-starter}:${INVENIO_RDM_STARTER_TAG:-latest}
+    pull_policy: ${INVENIO_RDM_STARTER_PULL_POLICY:-missing}
     platform: linux/amd64
     command: [ "celery", "-A", "invenio_app.celery", "worker", "--beat", "--schedule=/tmp/celerybeat-schedule", "--events", "--loglevel=WARNING" ]
+    volumes:
+      - uploaded_data:/opt/invenio/var/instance/data
     environment:
       <<: [ *base, *cache, *doi, *mail, *s3 ]
+    depends_on:
+      search:
+        condition: service_healthy
+        required: false
+      cache:
+        condition: service_healthy
+        required: false
+      db:
+        condition: service_healthy
+        required: false
+volumes:
+  db_data:
+  uploaded_data:
+  archived_data:
