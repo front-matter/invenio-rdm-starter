@@ -7,7 +7,7 @@ readme = "README.md"
 requires-python = ">=3.14,<3.15"
 license = "MIT"
 # The same dependencies as Rogue Scholar, except invenio-archive-it (Archive-It
-# subscription) and the invenio-oauthclient source (see below).
+# subscription).
 dependencies = [
     "invenio-app-rdm>=14.0.7,<15.0",
     "invenio-search[opensearch2]>=3.1.2,<3.2.0",
@@ -40,9 +40,8 @@ cache-keys = [
 ]
 
 [tool.uv.sources]
-# Not Rogue Scholar's max-moser/invenio-oauthclient@mm/authlib: invenio.cfg
-# needs invenio_oauthclient.contrib.oidc, which only this branch has.
-invenio-oauthclient = { git = "https://github.com/front-matter/invenio-oauthclient", branch = "contrib-oidc" }
+# The authlib rewrite, as for Rogue Scholar (see invenio_rdm_starter.oidc).
+invenio-oauthclient = { git = "https://github.com/max-moser/invenio-oauthclient", branch = "mm/authlib" }
 
 [build-system]
 requires = ["hatchling"]
