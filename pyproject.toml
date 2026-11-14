@@ -1,31 +1,47 @@
 [project]
 name = "invenio-rdm-starter"
-version = "14.0.0.0"
+version = "14.0.7.0"
 description = "Starter for the invenio-rdm turn-key research data management repository"
 authors = [{ name = "Martin Fenner", email = "martin@front-matter.de" }]
 readme = "README.md"
-requires-python = ">=3.14"
+requires-python = ">=3.14,<3.15"
 license = "MIT"
+# The same dependencies as Rogue Scholar, except invenio-archive-it (Archive-It
+# subscription) and the invenio-oauthclient source (see below).
 dependencies = [
-    "invenio-app-rdm>=14.0.0,<15.0",
+    "invenio-app-rdm>=14.0.7,<15.0",
     "invenio-search[opensearch2]>=3.1.2,<3.2.0",
     "invenio-s3>=3.0.2",
-    "invenio-oauthclient",
+    "invenio-oauthclient>=8,<11",
+    "invenio-rdm-records>=32.3.3,<33",
     "setuptools>=70,<81",
     "gunicorn~=23.0.0",
-    "commonmeta-py[backend]>=0.269,<1",
-    "commonmeta-rs>=0.9.75",
-    "invenio-pidbox>=0.1.24,<1",
-    "invenio-feeds>=0.1.16,<1",
+    "commonmeta-py[backend]>=0.314,<1",
+    "commonmeta-rs>=0.12,<1",
+    "invenio-pidbox>=0.2.25,<1",
+    "invenio-feeds>=0.3.23,<1",
     "invenio-logging",
     "structlog>=25.0",
     "prometheus-flask-exporter>=0.23.1",         # no [sentry] extra
     "sentry-sdk[flask]>=2.0,<3",
     "structlog-sentry>=2.1.0",
     "nh3>=0.2",
+    "cachelib>=0.16.1",
+]
+
+[tool.uv]
+# The image installs this project as a wheel (uv sync --no-editable) with uv's
+# cache on a build cache mount, and uv only rebuilds that wheel when a cache key
+# changes. With the default keys, which watch pyproject.toml but not the code,
+# an edit to site/invenio_rdm_starter would ship the previously built wheel.
+cache-keys = [
+    { file = "pyproject.toml" },
+    { file = "site/invenio_rdm_starter/**/*.py" },
 ]
 
 [tool.uv.sources]
+# Not Rogue Scholar's max-moser/invenio-oauthclient@mm/authlib: invenio.cfg
+# needs invenio_oauthclient.contrib.oidc, which only this branch has.
 invenio-oauthclient = { git = "https://github.com/front-matter/invenio-oauthclient", branch = "contrib-oidc" }
 
 [build-system]
@@ -53,4 +69,4 @@ include = ["pyproject.toml", "site/**/*.py"]
 
 [project.optional-dependencies]
 docs = ["mkdocs-material>=9.7.0"]
-actions = ["commonmeta-py[backend]>=0.269,<1"]
+actions = ["commonmeta-py[backend]>=0.309,<1"]
