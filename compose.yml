@@ -18,7 +18,7 @@ x-envy:
 x-set-base:
   # The Postgres database URI that should be used for the connection.  
   &base
-  INVENIO_SQLALCHEMY_DATABASE_URI: "postgresql+psycopg2://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD:-}@${POSTGRES_HOST:-db}:5432/${POSTGRES_DB:-inveniordm}"
+  INVENIO_SQLALCHEMY_DATABASE_URI: "postgresql+psycopg2://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD:-changeme}@${POSTGRES_HOST:-db}:5432/${POSTGRES_DB:-inveniordm}"
   # Default locale (language).
   INVENIO_BABEL_DEFAULT_LOCALE: "${INVENIO_BABEL_DEFAULT_LOCALE:-en}"
   INVENIO_ISO639_LANGUAGES: "${INVENIO_ISO639_LANGUAGES:-de,es,fr}"
