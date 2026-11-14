@@ -121,7 +121,7 @@ The `docker-compose.yml` configuration can be modified to suit your needs using 
 
 ### Logging
 
-* `INVENIO_LOGGING_CONSOLE_LEVEL` - The logging console level used by InvenioRDM, defaults to `WARNING`.
+* `INVENIO_LOG_LEVEL` - The console and file log level of web and worker, defaults to `WARNING`.
 
 ### Invenio-Mail
 
