@@ -147,6 +147,9 @@ x-set-web:
   # Flask
   &web
   INVENIO_TRUSTED_HOSTS: ${INVENIO_TRUSTED_HOSTS:-['0.0.0.0', 'localhost', '127.0.0.1']}
+  # Number of proxies in front of web (Caddy locally) whose X-Forwarded-*
+  # headers are trusted.
+  INVENIO_WSGI_PROXIES: ${INVENIO_WSGI_PROXIES:-1}
 
   # Invenio-I18N (exclude INVENIO_BABEL_DEFAULT_LOCALE)
   INVENIO_ISO639_LANGUAGES: ${INVENIO_ISO639_LANGUAGES:-de,es,fr}
