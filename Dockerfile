@@ -1,7 +1,7 @@
 FROM python:3.14-trixie AS builder
 
 LABEL maintainer="Front Matter <info@front-matter.de>"
-LABEL org.opencontainers.image.source="https://codeberg.org/front-matter/invenio-rdm-starter"
+LABEL org.opencontainers.image.source="https://github.com/front-matter/invenio-rdm-starter"
 LABEL org.opencontainers.image.licenses="MIT"
 LABEL org.opencontainers.image.title="InvenioRDM Starter"
 LABEL org.opencontainers.image.description="InvenioRDM Starter is a turn-key research data management repository based on the InvenioRDM software."
