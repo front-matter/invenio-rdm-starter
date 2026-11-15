@@ -87,9 +87,13 @@ x-set-base:
   PROMETHEUS_MULTIPROC_DIR: ${PROMETHEUS_MULTIPROC_DIR:-/tmp/prometheus_multiproc}
 
   # Commonmeta store (ROR organizations and ORCID persons) for invenio-pidbox,
-  # mounted read-only from the host directory COMMONMETA_HOST_DIR (see the
-  # web and worker volumes). The published copy must be checkpointed:
-  #   sqlite3 commonmeta.sqlite3 'PRAGMA wal_checkpoint(TRUNCATE);'
+  # mounted from the host directory COMMONMETA_HOST_DIR (see the web and worker
+  # volumes). The store is in WAL mode, which SQLite can only read where it can
+  # create the -shm file beside it, so the mount is read-write and the host
+  # directory must be writable by the container's group (gid 0):
+  #   chmod 775 /var/lib/commonmeta
+  # The database file stays read-only to the container (mode 444, owned by
+  # root). commonmeta write commands run on the host while the containers read.
   COMMONMETA_DB: ${COMMONMETA_DB:-/var/lib/commonmeta/commonmeta.sqlite3}
   # Writable download cache for commonmeta; the container user has no
   # writable HOME. Ephemeral by design.
@@ -214,8 +218,9 @@ services:
     volumes:
       - uploaded_data:/opt/invenio/var/instance/data
       - archived_data:/opt/invenio/var/instance/archive
-      # Shared, read-only: one store for every instance on this host.
-      - ${COMMONMETA_HOST_DIR:-/var/lib/commonmeta}:/var/lib/commonmeta:ro
+      # Shared: one store for every instance on this host. Read-write so
+      # SQLite can create the store's -shm; see COMMONMETA_DB above.
+      - ${COMMONMETA_HOST_DIR:-/var/lib/commonmeta}:/var/lib/commonmeta
     healthcheck:
       test:
         - CMD
@@ -249,8 +254,9 @@ services:
     command: [ "celery", "-A", "invenio_app.celery", "worker", "--beat", "--schedule=/tmp/celerybeat-schedule", "--events", "--loglevel=WARNING" ]
     volumes:
       - uploaded_data:/opt/invenio/var/instance/data
-      # Shared, read-only: one store for every instance on this host.
-      - ${COMMONMETA_HOST_DIR:-/var/lib/commonmeta}:/var/lib/commonmeta:ro
+      # Shared: one store for every instance on this host. Read-write so
+      # SQLite can create the store's -shm; see COMMONMETA_DB above.
+      - ${COMMONMETA_HOST_DIR:-/var/lib/commonmeta}:/var/lib/commonmeta
     environment:
       <<: [*base, *mail, *doi, *s3]
     ulimits:
