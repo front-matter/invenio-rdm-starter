@@ -71,7 +71,7 @@ The `docker-compose.yml` configuration can be modified to suit your needs using 
 
 ### Invenio-App
 
-* `INVENIO_CACHE_TYPE` - The cache type used by InvenioRDM, defaults to `redis`.
+* `INVENIO_CACHE_TYPE` - The cache type used by InvenioRDM, defaults to `flask_caching.backends.RedisCache`.
 * `INVENIO_CACHE_REDIS_URL` - The Redis cache used by InvenioRDM, defaults to `redis://cache:6379/0`.
 * `INVENIO_ACCOUNTS_SESSION_REDIS_URL` - The accounts session Redis cache used by InvenioRDM, defaults to `redis://cache:6379/1`.
 * `INVENIO_CELERY_RESULT_BACKEND` - The Celery result backend used by InvenioRDM, defaults to `redis://cache:6379/2`.
