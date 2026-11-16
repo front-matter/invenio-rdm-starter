@@ -23,8 +23,10 @@ GitHubRemoteApp logs in with GitHub's OAuth2, which has no OIDC.
 
 from __future__ import annotations
 
+import os
 import re
 import secrets
+from collections.abc import Mapping
 from urllib.parse import urlencode
 
 import requests
@@ -62,6 +64,30 @@ def default_title(name: str) -> str:
 def default_icon(name: str) -> str:
     """The login button icon for a remote app, static/images/<name>.svg."""
     return f"images/{name}.svg"
+
+
+def client_credentials(
+    name: str,
+    environ: Mapping[str, str] | None = None,
+    required: bool = False,
+) -> tuple[str | None, str | None]:
+    """Return a provider's client id and secret from the environment.
+
+    Read from INVENIO_<NAME>_CLIENT_ID and INVENIO_<NAME>_CLIENT_SECRET,
+    authlib's names for them. An empty variable counts as not set.
+
+    With required, a missing id or secret raises KeyError naming the
+    variable, rather than registering a provider that can't log anyone in.
+    """
+    env = os.environ if environ is None else environ
+    prefix = f"INVENIO_{name.upper()}"
+    credentials = []
+    for key in ("CLIENT_ID", "CLIENT_SECRET"):
+        value = env.get(f"{prefix}_{key}") or None
+        if value is None and required:
+            raise KeyError(f"{prefix}_{key}")
+        credentials.append(value)
+    return credentials[0], credentials[1]
 
 
 def normalize_orcid(value: object) -> str | None:
