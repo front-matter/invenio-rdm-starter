@@ -63,7 +63,7 @@ invenio_rdm_starter = "invenio_rdm_starter.views:create_blueprint"
 invenio_rdm_starter = "invenio_rdm_starter.views:create_api_blueprint"
 
 [tool.ruff]
-line-length = 79
+line-length = 88
 include = ["pyproject.toml", "site/**/*.py"]
 
 [project.optional-dependencies]
