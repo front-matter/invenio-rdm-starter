@@ -226,8 +226,7 @@ _i18n_language_codes = [
 
 # Other supported languages (do not include BABEL_DEFAULT_LOCALE in list).
 I18N_LANGUAGES = [
-    (code, _LANGUAGE_NAMES.get(code, _(code.upper())))
-    for code in _i18n_language_codes
+    (code, _LANGUAGE_NAMES.get(code, _(code.upper()))) for code in _i18n_language_codes
 ]
 
 # Invenio-Mail
@@ -323,9 +322,7 @@ RDM_PERSISTENT_IDENTIFIER_PROVIDERS = [
     providers.ExternalPIDProvider(
         "external",
         "doi",
-        validators=[
-            providers.BlockedPrefixes(config_names=["DATACITE_PREFIX"])
-        ],
+        validators=[providers.BlockedPrefixes(config_names=["DATACITE_PREFIX"])],
         label=_("DOI"),
     ),
     # OAI identifier
@@ -617,8 +614,7 @@ class DateHistogramFacet(LabelledFacetMixin, dsl.DateHistogramFacet):
         try:
             if "--" in filter_value:
                 start, end = [
-                    datetime.strptime(year, "%Y")
-                    for year in filter_value.split("--")
+                    datetime.strptime(year, "%Y") for year in filter_value.split("--")
                 ]
                 end = self.DATE_INTERVALS[self._params[interval_type]](end)
             else:
@@ -1023,9 +1019,7 @@ if client_credentials("discord")[0]:
 ACCOUNTS_LOGIN_VIEW_FUNCTION = (
     auto_redirect_login  # autoredirect to external login if enabled
 )
-OAUTHCLIENT_AUTO_REDIRECT_TO_EXTERNAL_LOGIN = (
-    False  # autoredirect to external login
-)
+OAUTHCLIENT_AUTO_REDIRECT_TO_EXTERNAL_LOGIN = False  # autoredirect to external login
 # The signup form after an OAuth login asks for what the remote app did not
 # send: email marked required, username read-only. See
 # invenio_rdm_starter.oidc.signup_form.
@@ -1072,9 +1066,7 @@ _rdm_citation_styles_str = os.environ.get(
     "apa,harvard-cite-them-right,ieee,modern-language-association,vancouver,chicago-author-date",
 )
 _rdm_citation_style_codes = [
-    style.strip()
-    for style in _rdm_citation_styles_str.split(",")
-    if style.strip()
+    style.strip() for style in _rdm_citation_styles_str.split(",") if style.strip()
 ]
 
 RDM_CITATION_STYLES = [
