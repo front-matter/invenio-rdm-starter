@@ -47,9 +47,7 @@ USERNAME_ALPHABET = "0123456789abcdefghjkmnpqrstvwxyz"
 
 def generate_username() -> str:
     """Return a new username, usr_xxxxxxxx."""
-    return "usr_" + "".join(
-        secrets.choice(USERNAME_ALPHABET) for _ in range(8)
-    )
+    return "usr_" + "".join(secrets.choice(USERNAME_ALPHABET) for _ in range(8))
 
 
 # Provider names that are not just the remote app's name capitalized.
@@ -144,9 +142,7 @@ class OAuthClientRemoteApp(OIDCRemoteApp):
         self.orcid_claim = orcid_claim
         title = kwargs.pop("title", None)
         icon = kwargs.pop("icon", None)
-        super().__init__(
-            *args, server_metadata=server_metadata, scope=scope, **kwargs
-        )
+        super().__init__(*args, server_metadata=server_metadata, scope=scope, **kwargs)
         self.title = title or default_title(self.name)
         self.icon = icon or default_icon(self.name)
 
@@ -172,17 +168,13 @@ class OAuthClientRemoteApp(OIDCRemoteApp):
         if not endpoint:
             return None
         separator = "&" if "?" in endpoint else "?"
-        return (
-            f"{endpoint}{separator}{urlencode({'client_id': self.client_id})}"
-        )
+        return f"{endpoint}{separator}{urlencode({'client_id': self.client_id})}"
 
     @logout_url.setter
     def logout_url(self, value: str | None) -> None:
         self._logout_url = value
 
-    def parse_user_info(
-        self, id_token: dict, extra_user_info: dict
-    ) -> UserInfo:
+    def parse_user_info(self, id_token: dict, extra_user_info: dict) -> UserInfo:
         """Shape the user info as the signup form's fields."""
 
         def claim(name: str):
@@ -192,16 +184,12 @@ class OAuthClientRemoteApp(OIDCRemoteApp):
 
         verified = claim("email_verified") in (True, "true")
         username = claim("preferred_username")
-        if not (
-            isinstance(username, str) and USERNAME_SCHEME.fullmatch(username)
-        ):
+        if not (isinstance(username, str) and USERNAME_SCHEME.fullmatch(username)):
             username = generate_username()
         full_name = (
             claim("name")
             or claim("nickname")
-            or " ".join(
-                filter(None, (claim("given_name"), claim("family_name")))
-            )
+            or " ".join(filter(None, (claim("given_name"), claim("family_name"))))
         )
         orcid = normalize_orcid(claim(self.orcid_claim))
         external_id = orcid if self.orcid_claim == "sub" else str(claim("sub"))
@@ -219,9 +207,7 @@ class OAuthClientRemoteApp(OIDCRemoteApp):
             {"orcid": orcid} if orcid else {},
         )
 
-    def finalize_login(
-        self, user: User, user_info: UserInfo, *args, **kwargs
-    ) -> None:
+    def finalize_login(self, user: User, user_info: UserInfo, *args, **kwargs) -> None:
         """Fill in what the account is missing, then finish the login."""
         log = structlog.get_logger().bind(
             service="invenio-rdm-starter", user_id=user.id
@@ -298,9 +284,7 @@ class GitHubRemoteApp(BaseRemoteApp):
         emails.raise_for_status()
         return {"user": user.json(), "emails": emails.json()}
 
-    def parse_user_info(
-        self, id_token: dict, extra_user_info: dict
-    ) -> UserInfo:
+    def parse_user_info(self, id_token: dict, extra_user_info: dict) -> UserInfo:
         """Shape the user info as the signup form's fields."""
         user = extra_user_info["user"]
         email = next(
