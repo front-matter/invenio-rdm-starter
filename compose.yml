@@ -186,7 +186,7 @@ x-set-authentication:
   INVENIO_SECURITY_REGISTERABLE: ${INVENIO_SECURITY_REGISTERABLE:-True}
   INVENIO_SECURITY_TRACKABLE: ${INVENIO_SECURITY_TRACKABLE:-True}
 
-  # OAuth logins (invenio.cfg). Keycloak and Authentik are configured when
+  # OAuth logins (site/invenio_rdm_starter/config.py). Keycloak and Authentik are configured when
   # their issuer is set, the others when their client id is.
   INVENIO_KEYCLOAK_ISSUER: ${INVENIO_KEYCLOAK_ISSUER:-}
   INVENIO_KEYCLOAK_CLIENT_ID: ${INVENIO_KEYCLOAK_CLIENT_ID:-}

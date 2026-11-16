@@ -11,6 +11,28 @@ from prometheus_flask_exporter.multiprocess import (
     GunicornInternalPrometheusMetrics,
 )
 
+from .exceptions import ConfigNotLoadedError
+
+CONFIG_MODULE = "invenio_rdm_starter.config"
+
+
+def require_config(app) -> None:
+    """Refuse to start without the Starter's settings.
+
+    They are loaded through the invenio_config.module entry point
+    "invenio_rdm_starter". A package installed without it -- a venv not
+    synced since the entry point was added -- would otherwise run the app on
+    InvenioRDM's defaults without any error.
+    """
+    loaded = app.config.get("INVENIO_RDM_STARTER_CONFIG_MODULE")
+    if loaded != CONFIG_MODULE:
+        raise ConfigNotLoadedError(
+            f"The InvenioRDM Starter's settings were not loaded (expected "
+            f"{CONFIG_MODULE}, got {loaded!r}). Reinstall the package so its "
+            f'invenio_config.module entry point "invenio_rdm_starter" is '
+            f"registered, e.g. with `uv sync`."
+        )
+
 
 def _metrics_access(f):
     """Allow direct internal requests; require admin permission via proxy."""
@@ -51,6 +73,7 @@ def _version():
 
 def create_api_blueprint(app):
     """Register Prometheus metrics on the API Flask app."""
+    require_config(app)
     _init_metrics(
         app,
         path="/metrics",
@@ -74,6 +97,7 @@ def create_api_blueprint(app):
 #
 def create_blueprint(app):
     """Register blueprint routes on app."""
+    require_config(app)
     # Track UI app requests in the shared multiprocess registry without
     # exposing an endpoint on the UI app.
     _ensure_multiproc_dir()
