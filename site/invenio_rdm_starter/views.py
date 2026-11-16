@@ -86,7 +86,7 @@ def create_api_blueprint(app):
     if metrics_view is not None:
         metrics_view.talisman_view_options = {"force_https": False}
 
-    blueprint = Blueprint("rogue_scholar_api", __name__)
+    blueprint = Blueprint("invenio_rdm_starter_api", __name__)
     blueprint.add_url_rule("/version", endpoint="version", view_func=_version)
 
     return blueprint
@@ -104,7 +104,7 @@ def create_blueprint(app):
     GunicornPrometheusMetrics(app, group_by="endpoint", export_defaults=True)
 
     blueprint = Blueprint(
-        "rogue_scholar",
+        "invenio_rdm_starter",
         __name__,
         template_folder="./templates",
     )
