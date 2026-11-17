@@ -171,16 +171,27 @@ x-set-authentication:
   # Authentication
   # See: https://inveniordm.docs.cern.ch/operate/customize/authentication/
   &authentication
+  # Whether or not login with local account credentials should be enabled.
   INVENIO_ACCOUNTS_LOCAL_LOGIN_ENABLED: ${INVENIO_ACCOUNTS_LOCAL_LOGIN_ENABLED:-True}
+  # Default user visibility: restricted or public.
   INVENIO_ACCOUNTS_DEFAULT_USER_VISIBILITY: ${INVENIO_ACCOUNTS_DEFAULT_USER_VISIBILITY:-restricted}
+  # Allow users to log in without first confirming their email address.
   INVENIO_SECURITY_LOGIN_WITHOUT_CONFIRMATION: ${INVENIO_SECURITY_LOGIN_WITHOUT_CONFIRMATION:-True}
+  # Automatically redirect to the external login provider (with a single
+  # OAuth provider).
   INVENIO_OAUTHCLIENT_AUTO_REDIRECT_TO_EXTERNAL_LOGIN: ${INVENIO_OAUTHCLIENT_AUTO_REDIRECT_TO_EXTERNAL_LOGIN:-False}
+  # Make user profiles read-only, with the values from the OAuth login.
   INVENIO_USERPROFILES_READ_ONLY: ${INVENIO_USERPROFILES_READ_ONLY:-True}
 
+  # Allow password change by users.
   INVENIO_SECURITY_CHANGEABLE: ${INVENIO_SECURITY_CHANGEABLE:-True}
+  # Allow users to confirm their email address.
   INVENIO_SECURITY_CONFIRMABLE: ${INVENIO_SECURITY_CONFIRMABLE:-True}
+  # Allow password recovery by users.
   INVENIO_SECURITY_RECOVERABLE: ${INVENIO_SECURITY_RECOVERABLE:-True}
+  # Allow users to register.
   INVENIO_SECURITY_REGISTERABLE: ${INVENIO_SECURITY_REGISTERABLE:-True}
+  # Enable user tracking on login.
   INVENIO_SECURITY_TRACKABLE: ${INVENIO_SECURITY_TRACKABLE:-True}
 
   # OAuth logins (site/invenio_rdm_starter/config.py). Keycloak and Authentik are configured when

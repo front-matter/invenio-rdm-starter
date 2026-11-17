@@ -203,8 +203,9 @@ MAIL_SUPPRESS_SEND = False
 # Invenio-Accounts
 # ================
 # See https://inveniordm.docs.cern.ch/operate/customize/authentication/
-# Login is through OAuth (Invenio-OAuthClient below). The settings in comments
-# are set via the environment (INVENIO_<NAME>).
+# Login is through OAuth (Invenio-OAuthClient below). Local login, registration,
+# password and confirmation settings come from the environment, documented in
+# compose.yml (x-set-authentication).
 
 SECURITY_EMAIL_SUBJECT_REGISTER = _("Welcome to Invenio RDM Starter")
 """Email subject for account registration emails."""
@@ -218,33 +219,6 @@ too."""
 
 ACCOUNTS_SESSION_REDIS_URL = _redis_url
 """Where user sessions are kept: the Redis/Valkey URL itself."""
-
-# ACCOUNTS_LOCAL_LOGIN_ENABLED = True
-"""Whether or not login with local account credentials should be enabled."""
-
-# ACCOUNTS_DEFAULT_USER_VISIBILITY = "restricted"
-"""Default User visibility value can be set to either 'restricted' or 'public'."""
-
-# OAUTHCLIENT_AUTO_REDIRECT_TO_EXTERNAL_LOGIN = True
-"""Automatically redirect to external login provider."""
-
-# SECURITY_CHANGEABLE = True
-"""Allow password change by users."""
-
-# SECURITY_CONFIRMABLE = True
-"""Allow user to confirm their email address."""
-
-# SECURITY_RECOVERABLE = True
-"""Allow password recovery by users."""
-
-# SECURITY_REGISTERABLE = True
-"""Allow users to register."""
-
-# SECURITY_TRACKABLE = True
-"""Enable user tracking on login."""
-
-# SECURITY_LOGIN_WITHOUT_CONFIRMATION = True
-"""Allow users to login without first confirming their email address."""
 
 ACCOUNTS_LOGIN_VIEW_FUNCTION = (
     auto_redirect_login  # autoredirect to external login if enabled
