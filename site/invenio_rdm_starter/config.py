@@ -591,6 +591,23 @@ RDM_SORT_OPTIONS = {
         title=_("Most viewed"),
         fields=["-stats.all_versions.unique_views"],
     ),
+    # The remaining options are InvenioRDM v14's own. RDM_SORT_OPTIONS also
+    # serves the request searches (RDM_SEARCH_USER_REQUESTS), which sort by
+    # activity: without newestactivity the record landing page, whose sidebar
+    # builds the record's request search, fails with KeyError and shows
+    # "Page not found".
+    "mostdownloaded": dict(
+        title=_("Most downloaded"),
+        fields=["-stats.all_versions.unique_downloads"],
+    ),
+    "newestactivity": dict(
+        title=_("Newest activity"),
+        fields=["-last_activity_at"],
+    ),
+    "oldestactivity": dict(
+        title=_("Oldest activity"),
+        fields=["last_activity_at"],
+    ),
 }
 """Definitions of available record sort options."""
 
