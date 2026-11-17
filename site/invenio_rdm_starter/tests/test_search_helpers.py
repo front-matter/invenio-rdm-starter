@@ -38,6 +38,15 @@ def _year_facet() -> DateHistogramFacet:
         pytest.param(
             "2018--2020", datetime(2018, 1, 1), datetime(2021, 1, 1), id="a range"
         ),
+        pytest.param(
+            "2020--2018", datetime(2018, 1, 1), datetime(2021, 1, 1), id="reversed"
+        ),
+        pytest.param(
+            "2020--2020",
+            datetime(2020, 1, 1),
+            datetime(2021, 1, 1),
+            id="one-year range",
+        ),
     ],
 )
 def test_a_year_filter_covers_whole_years(value, start, end):

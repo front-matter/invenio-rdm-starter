@@ -34,23 +34,23 @@ class DateHistogramFacet(LabelledFacetMixin, dsl.DateHistogramFacet):
         else:
             interval_type = "interval"
 
-        # dealing with a range
+        # A year, or a range of years "first--last". A range given last year
+        # first is put in order before the end is extended to the end of its
+        # year: extending first and swapping after made "2020--2018" cover
+        # only 2019.
         try:
             if "--" in filter_value:
                 start, end = [
                     datetime.strptime(year, "%Y") for year in filter_value.split("--")
                 ]
-                end = self.DATE_INTERVALS[self._params[interval_type]](end)
+                if start > end:
+                    start, end = end, start
             else:
-                start = datetime.strptime(filter_value, "%Y")
-                end = self.DATE_INTERVALS[self._params[interval_type]](start)
+                start = end = datetime.strptime(filter_value, "%Y")
+            end = self.DATE_INTERVALS[self._params[interval_type]](end)
         except ValueError:
             start = 0
             end = 1
-
-        # swap them
-        if start > end:
-            start, end = end, start
 
         return dsl.query.Range(
             _expand__to_dot=False,
