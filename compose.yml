@@ -44,9 +44,13 @@ x-set-base:
 
   # Invenio-Search
   INVENIO_SEARCH_HOSTS: ${INVENIO_SEARCH_HOSTS:-['search:9200']}
+  # Prefix of the search indices, so that instances can share a cluster.
   INVENIO_SEARCH_INDEX_PREFIX: ${INVENIO_SEARCH_INDEX_PREFIX:-invenio-rdm-}
 
   # Invenio-App Caches and Workers
+  # User sessions. The config derives the other Redis/Valkey URLs from it:
+  # Celery broker (database + 1), results (+ 2), rate limits (+ 3) and
+  # cache (+ 4).
   INVENIO_ACCOUNTS_SESSION_REDIS_URL: ${INVENIO_ACCOUNTS_SESSION_REDIS_URL:-redis://cache:6379/0}
 
   # Flask-Babel
@@ -54,15 +58,19 @@ x-set-base:
   INVENIO_BABEL_DEFAULT_TIMEZONE: ${INVENIO_BABEL_DEFAULT_TIMEZONE:-UTC}
 
   # Flask core runtime tuning
+  # How long browsers cache public files, in seconds.
   INVENIO_SEND_FILE_MAX_AGE_DEFAULT: ${INVENIO_SEND_FILE_MAX_AGE_DEFAULT:-300}
 
   # Rate limiting
   INVENIO_RATELIMIT_ENABLED: ${INVENIO_RATELIMIT_ENABLED:-True}
+  # Request limits for signed-in users.
   INVENIO_RATELIMIT_AUTHENTICATED_USER: ${INVENIO_RATELIMIT_AUTHENTICATED_USER:-60000 per hour;1100 per minute}
+  # Request limits for anonymous users.
   INVENIO_RATELIMIT_GUEST_USER: ${INVENIO_RATELIMIT_GUEST_USER:-30000 per hour;500 per minute}
 
   # Logging
   INVENIO_DEBUG: ${INVENIO_DEBUG:-False}
+  # Level of the messages logged to the console and to files.
   INVENIO_LOGGING_CONSOLE_LEVEL: ${INVENIO_LOG_LEVEL:-WARNING}
   INVENIO_LOGGING_FS_LEVEL: ${INVENIO_LOG_LEVEL:-WARNING}
   INVENIO_CELERY_WORKER_REDIRECT_STDOUTS: ${INVENIO_CELERY_WORKER_REDIRECT_STDOUTS:-False}
@@ -70,7 +78,9 @@ x-set-base:
 
   # Invenio-RDM-Records
   INVENIO_RDM_ALLOW_METADATA_ONLY_RECORDS: ${INVENIO_RDM_ALLOW_METADATA_ONLY_RECORDS:-True}
+  # Records can be restricted, not only public.
   INVENIO_RDM_ALLOW_RESTRICTED_RECORDS: ${INVENIO_RDM_ALLOW_RESTRICTED_RECORDS:-True}
+  # Don't allow records with external DOIs to be versioned.
   INVENIO_RDM_ALLOW_EXTERNAL_DOI_VERSIONING: ${INVENIO_RDM_ALLOW_EXTERNAL_DOI_VERSIONING:-False}
 
   # Invenio-OAIServer: the worker publishes records too, so both need the
@@ -103,6 +113,7 @@ x-set-base:
   # writable HOME. Ephemeral by design.
   XDG_CACHE_HOME: ${XDG_CACHE_HOME:-/tmp/commonmeta-cache}
 
+  # Base URLs of the web pages and of the REST API.
   INVENIO_SITE_UI_URL: ${INVENIO_SITE_UI_URL:-https://localhost}
   INVENIO_SITE_API_URL: ${INVENIO_SITE_API_URL:-https://localhost/api}
 
@@ -114,6 +125,7 @@ x-set-base:
 x-set-mail:
   # Mail
   &mail
+  # Don't send emails; False turns sending on.
   INVENIO_MAIL_SUPPRESS_SEND: ${INVENIO_MAIL_SUPPRESS_SEND:-True}
   INVENIO_MAIL_SERVER: ${INVENIO_MAIL_SERVER:-127.0.0.1}
   INVENIO_MAIL_PORT: ${INVENIO_MAIL_PORT:-587}
@@ -130,6 +142,7 @@ x-set-doi:
   # See: https://inveniordm.docs.cern.ch/operate/customize/dois/
   &doi
   INVENIO_DATACITE_ENABLED: ${INVENIO_DATACITE_ENABLED:-False}
+  # Production mode rather than InvenioRDM's test mode, once DataCite is on.
   INVENIO_DATACITE_TEST_MODE: ${INVENIO_DATACITE_TEST_MODE:-False}
   INVENIO_DATACITE_USERNAME: ${INVENIO_DATACITE_USERNAME:-}
   INVENIO_DATACITE_PASSWORD: ${INVENIO_DATACITE_PASSWORD:-}
@@ -151,6 +164,8 @@ x-set-s3:
 x-set-web:
   # Flask
   &web
+  # The hosts the app answers for. In production, the site's host only, and
+  # route only that host to the app.
   INVENIO_TRUSTED_HOSTS: ${INVENIO_TRUSTED_HOSTS:-['0.0.0.0', 'localhost', '127.0.0.1']}
   # Number of proxies in front of web (Caddy locally) whose X-Forwarded-*
   # headers are trusted.
@@ -164,10 +179,14 @@ x-set-web:
 
   # Invenio-Theme
   # See: https://inveniordm.docs.cern.ch/operate/customize/look-and-feel/
+  # Header logo.
   INVENIO_THEME_LOGO: ${INVENIO_THEME_LOGO:-images/invenio-rdm.svg}
+  # The name of the site, in the header and as the title.
   INVENIO_THEME_SITENAME: ${INVENIO_THEME_SITENAME:-InvenioRDM Starter}
+  # Front page title and subtitle.
   INVENIO_THEME_FRONTPAGE_TITLE: ${INVENIO_THEME_FRONTPAGE_TITLE:-InvenioRDM Starter}
   INVENIO_THEME_FRONTPAGE_SUBTITLE: ${INVENIO_THEME_FRONTPAGE_SUBTITLE:-A starter project for the turn-key research data management repository.}
+  # Show the front page intro section.
   INVENIO_THEME_SHOW_FRONTPAGE_INTRO_SECTION: ${INVENIO_THEME_SHOW_FRONTPAGE_INTRO_SECTION:-False}
 
 # Authentication.

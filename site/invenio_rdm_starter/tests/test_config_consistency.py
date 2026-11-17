@@ -127,19 +127,22 @@ def _as_invenio_config_reads_it(value: str):
 
 @pytest.mark.parametrize(
     "setting",
-    sorted(k for k in _compose_defaults() if hasattr(starter_config, k)),
+    sorted(k for k in _compose_defaults() if k in _config()),
 )
-def test_compose_gives_a_setting_the_type_the_config_does(setting):
+def test_compose_gives_a_setting_the_type_invenio_rdm_does(setting):
     """invenio-config writes INVENIO_<NAME> over <NAME>, as a literal or a string.
 
-    A list the config builds from a comma-separated variable must not share its
-    name with that variable, or the setting ends up as the raw string, as
-    RDM_CITATION_STYLES did.
+    compose.yml sets many settings on its own, so its default has to have the
+    type InvenioRDM or the Starter gives the setting. A list the config builds
+    from a comma-separated variable must not share its name with that variable,
+    or the setting ends up as the raw string, as RDM_CITATION_STYLES did.
     """
-    configured = getattr(starter_config, setting)
+    configured = _config()[setting]
     from_compose = _as_invenio_config_reads_it(_compose_defaults()[setting])
 
-    assert isinstance(from_compose, type(configured)) or configured is None, (
+    if configured is None or configured == "":
+        pytest.skip(f"{setting} has no typed default to compare with")
+    assert isinstance(from_compose, type(configured)), (
         f"{setting}: compose.yml gives {type(from_compose).__name__}, "
-        f"the config {type(configured).__name__}"
+        f"InvenioRDM {type(configured).__name__}"
     )

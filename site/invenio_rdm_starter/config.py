@@ -51,7 +51,6 @@ from invenio_pidbox.facets import StoreAffiliationsLabels, StoreFundersLabels
 from invenio_vocabularies.services.facets import VocabularyLabels
 from invenio_s3 import s3fs_storage_factory
 
-
 INVENIO_RDM_STARTER_CONFIG_MODULE = __name__
 """Which module these settings came from. invenio_rdm_starter.views refuses to
 start without it: if the package is installed without its
@@ -86,46 +85,12 @@ else:
     _redis_db = 0
 
 
-# Flask
-# =====
-# See https://flask.palletsprojects.com/en/3.0.x/config/
-# SECRET_KEY is set via the environment (INVENIO_SECRET_KEY).
-
-SEND_FILE_MAX_AGE_DEFAULT = 300
-"""Define the value of the cache control header `max-age` returned by the server when serving
-public files. Files will be cached by the browser for the provided number of seconds.
-See flask documentation for more information:
-https://flask.palletsprojects.com/en/2.1.x/config/#SEND_FILE_MAX_AGE_DEFAULT."""
-
-TRUSTED_HOSTS = ["0.0.0.0", "localhost", "127.0.0.1"]
-"""The hosts the app answers for: local ones only. In production set
-INVENIO_TRUSTED_HOSTS to the site's host, and route only that host to the
-app."""
-
-
 # Flask-Limiter
 # =============
 # See https://flask-limiter.readthedocs.io/en/stable/configuration.html
 
-RATELIMIT_ENABLED = True
-"""Limit the request rate (Flask-Limiter)."""
-
-RATELIMIT_AUTHENTICATED_USER = "60000 per hour;1100 per minute"
-"""Request limits for signed-in users."""
-
-RATELIMIT_GUEST_USER = "30000 per hour;500 per minute"
-"""Request limits for anonymous users."""
-
 RATELIMIT_STORAGE_URL = f"{_redis_base}/{_redis_db + 3}"
 """Where the rate limit counters are kept: Redis/Valkey database + 3."""
-
-
-# Flask-Babel
-# ===========
-# See https://python-babel.github.io/flask-babel/#configuration
-
-BABEL_DEFAULT_TIMEZONE = "UTC"
-"""Default time zone."""
 
 
 # Invenio-I18N
@@ -159,28 +124,6 @@ I18N_LANGUAGES = [
 """Other supported languages (do not include BABEL_DEFAULT_LOCALE in list)."""
 
 
-# Invenio-Theme
-# =============
-# See https://invenio-theme.readthedocs.io/en/latest/configuration.html
-
-THEME_SITENAME = "InvenioRDM Starter"
-"""The name of the site to be used on the header and as a title."""
-
-THEME_FRONTPAGE_TITLE = "InvenioRDM Starter"
-"""Frontpage title."""
-
-THEME_FRONTPAGE_SUBTITLE = (
-    "A starter project for the turn-key research data management repository."
-)
-"""Frontpage subtitle."""
-
-THEME_LOGO = "images/invenio-rdm.svg"
-"""Header logo."""
-
-THEME_SHOW_FRONTPAGE_INTRO_SECTION = False
-"""Show the frontpage intro section."""
-
-
 # Invenio-Files-REST / Invenio-S3
 # ===============================
 # See https://inveniordm.docs.cern.ch/operate/customize/file-uploads/s3/
@@ -189,14 +132,6 @@ THEME_SHOW_FRONTPAGE_INTRO_SECTION = False
 # local disk (InvenioRDM's default files location).
 if os.environ.get("INVENIO_S3_ENDPOINT_URL"):
     FILES_REST_STORAGE_FACTORY = s3fs_storage_factory
-
-
-# Invenio-Mail
-# ============
-# See https://invenio-mail.readthedocs.io/en/latest/configuration.html
-
-MAIL_SUPPRESS_SEND = True
-"""Don't send emails; INVENIO_MAIL_SUPPRESS_SEND=False turns sending on."""
 
 
 # Invenio-Accounts
@@ -215,9 +150,6 @@ SECURITY_POST_LOGOUT_VIEW = "/oauth/logout"
 /oauth/logout redirects on to the remote app's logout_url, the provider's
 end_session_endpoint, so logging out here logs out of Keycloak or Authentik
 too."""
-
-ACCOUNTS_SESSION_REDIS_URL = _redis_url
-"""Where user sessions are kept: the Redis/Valkey URL itself."""
 
 ACCOUNTS_LOGIN_VIEW_FUNCTION = (
     auto_redirect_login  # autoredirect to external login if enabled
@@ -360,14 +292,6 @@ expires (default 3600). Should be higher than the validity the OIDC provider
 gives the authentication request (e.g. 900 seconds)."""
 
 
-# Invenio-UserProfiles
-# ====================
-
-USERPROFILES_READ_ONLY = True
-"""User profiles can't be edited: the OAuth login fills in the name
-and ORCID iD on every login."""
-
-
 # Invenio-Celery
 # ==============
 
@@ -381,43 +305,11 @@ CELERY_RESULT_BACKEND = f"{_redis_base}/{_redis_db + 2}"
 """Where Celery keeps task results: Redis/Valkey database + 2."""
 
 
-# Flask-SQLAlchemy
-# ================
-# See https://flask-sqlalchemy.palletsprojects.com/en/3.1.x/config/
-# SQLALCHEMY_DATABASE_URI is set via the environment
-# (INVENIO_SQLALCHEMY_DATABASE_URI).
-
-
-# Invenio-Logging
-# ===============
-
-LOGGING_CONSOLE_LEVEL = "WARNING"
-"""Level of the messages logged to the console."""
-
-LOGGING_FS_LEVEL = "WARNING"
-"""Level of the messages logged to files."""
-
-
-# OAI-PMH
-# =======
-# See https://github.com/inveniosoftware/invenio-oaiserver/blob/master/invenio_oaiserver/config.py
-
-OAISERVER_ID_PREFIX = "invenio-rdm"
-"""The prefix that will be applied to the generated OAI-PMH ids."""
-
-
 # Flask-Caching
 # =============
 
 CACHE_REDIS_URL = f"{_redis_base}/{_redis_db + 4}"
 """The application cache: Redis/Valkey database + 4."""
-
-
-# Invenio-Search
-# ==============
-
-SEARCH_INDEX_PREFIX = "invenio-rdm-"
-"""Prefix of the search indices, so that instances can share a cluster."""
 
 
 # Invenio-Assets
@@ -465,12 +357,6 @@ invenio-app's, as are HTTPS, HSTS, frame options and cookies."""
 # Invenio-App-RDM
 # ===============
 # See https://github.com/inveniosoftware/invenio-app-rdm/blob/master/invenio_app_rdm/config.py
-
-SITE_UI_URL = "https://localhost"
-"""Base URL of the web pages; set via INVENIO_SITE_UI_URL in production."""
-
-SITE_API_URL = "https://localhost/api"
-"""Base URL of the REST API; set via INVENIO_SITE_API_URL in production."""
 
 APP_RDM_DEPOSIT_FORM_DEFAULTS = {
     "publication_date": lambda: datetime.now().strftime("%Y-%m-%d"),
@@ -529,11 +415,6 @@ RDM_CITATION_STYLES = [
 ]
 """The list of enabled citation styles."""
 
-RDM_CITATION_STYLES_DEFAULT = (
-    _rdm_citation_style_codes[0] if _rdm_citation_style_codes else None
-)
-"""The default citation style."""
-
 REDIRECTOR_RULES = {
     # "redirect_name": {
     #     "source": "/old_about",
@@ -561,12 +442,6 @@ COMMUNITIES_PERMISSION_POLICY = StarterCommunityPermissionPolicy
 # ===================
 # See https://github.com/inveniosoftware/invenio-rdm-records/blob/master/invenio_rdm_records/config.py
 # DOI registration: https://inveniordm.docs.cern.ch/operate/customize/dois/
-
-RDM_ALLOW_RESTRICTED_RECORDS = True
-"""Records can be restricted, not only public."""
-
-RDM_ALLOW_EXTERNAL_DOI_VERSIONING = False
-"""Don't allow records with external DOIs to be versioned."""
 
 RDM_PERSISTENT_IDENTIFIER_PROVIDERS = [
     # DOI provider for externally managed DOIs
@@ -629,14 +504,6 @@ RDM_RECORDS_IDENTIFIERS_SCHEMES.update(
     }
 )
 """These are used for references, main, alternate and related identifiers."""
-
-DATACITE_TEST_MODE = False
-"""Production mode rather than InvenioRDM's test mode, once DataCite is on.
-
-DataCite stays off unless INVENIO_DATACITE_ENABLED is set; its username,
-password, prefix and data centre symbol come from the environment too.
-InvenioRDM's defaults are "", not None: invenio-rdm-records turns these
-settings into strings at startup, and None would become the text "None"."""
 
 RDM_NAMESPACES = {
     **journal.JOURNAL_NAMESPACE,
