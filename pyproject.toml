@@ -62,6 +62,9 @@ invenio_rdm_starter = "invenio_rdm_starter.views:create_api_blueprint"
 [project.entry-points."invenio_config.module"]
 invenio_rdm_starter = "invenio_rdm_starter.config"
 
+[project.entry-points."invenio_base.finalize_app"]
+invenio_rdm_starter = "invenio_rdm_starter.errors:finalize_app"
+
 [tool.ruff]
 line-length = 88
 include = ["pyproject.toml", "site/**/*.py"]
