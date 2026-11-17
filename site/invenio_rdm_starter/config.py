@@ -62,6 +62,7 @@ from invenio_rdm_starter.oidc import (
     client_credentials,
     signup_form,
 )
+from invenio_rdm_records import config as rdm_config
 from invenio_rdm_records.services import facets
 from invenio_pidbox.facets import StoreAffiliationsLabels, StoreFundersLabels
 from invenio_vocabularies.services.facets import VocabularyLabels
@@ -373,114 +374,33 @@ def always_valid(identifier):
     return True
 
 
+# InvenioRDM's schemes, extended rather than copied, so that the schemes a
+# release adds arrive with it: a copy from before v14 had left out CSTR, RRID
+# and Wikidata. The Starter adds UUID and GUID, and keeps "other" last.
 RDM_RECORDS_IDENTIFIERS_SCHEMES = {
-    "ark": {"label": _("ARK"), "validator": idutils.is_ark, "datacite": "ARK"},
-    "arxiv": {
-        "label": _("arXiv"),
-        "validator": idutils.is_arxiv,
-        "datacite": "arXiv",
-    },
-    "ads": {
-        "label": _("Bibcode"),
-        "validator": idutils.is_ads,
-        "datacite": "bibcode",
-    },
-    "crossreffunderid": {
-        "label": _("Crossref Funder ID"),
-        "validator": always_valid,
-        "datacite": "Crossref Funder ID",
-    },
-    "doi": {"label": _("DOI"), "validator": idutils.is_doi, "datacite": "DOI"},
-    "ean13": {
-        "label": _("EAN13"),
-        "validator": idutils.is_ean13,
-        "datacite": "EAN13",
-    },
-    "eissn": {
-        "label": _("EISSN"),
-        "validator": idutils.is_issn,
-        "datacite": "EISSN",
-    },
-    "grid": {
-        "label": _("GRID"),
-        "validator": always_valid,
-        "datacite": "GRID",
-    },
-    "handle": {
-        "label": _("Handle"),
-        "validator": idutils.is_handle,
-        "datacite": "Handle",
-    },
-    "igsn": {
-        "label": _("IGSN"),
-        "validator": always_valid,
-        "datacite": "IGSN",
-    },
-    "isbn": {
-        "label": _("ISBN"),
-        "validator": idutils.is_isbn,
-        "datacite": "ISBN",
-    },
-    "isni": {
-        "label": _("ISNI"),
-        "validator": idutils.is_isni,
-        "datacite": "ISNI",
-    },
-    "issn": {
-        "label": _("ISSN"),
-        "validator": idutils.is_issn,
-        "datacite": "ISSN",
-    },
-    "istc": {
-        "label": _("ISTC"),
-        "validator": idutils.is_istc,
-        "datacite": "ISTC",
-    },
-    "lissn": {
-        "label": _("LISSN"),
-        "validator": idutils.is_issn,
-        "datacite": "LISSN",
-    },
-    "lsid": {
-        "label": _("LSID"),
-        "validator": idutils.is_lsid,
-        "datacite": "LSID",
-    },
-    "pmid": {
-        "label": _("PMID"),
-        "validator": idutils.is_pmid,
-        "datacite": "PMID",
-    },
-    "purl": {
-        "label": _("PURL"),
-        "validator": idutils.is_purl,
-        "datacite": "PURL",
-    },
-    "upc": {"label": _("UPC"), "validator": always_valid, "datacite": "UPC"},
-    "url": {"label": _("URL"), "validator": idutils.is_url, "datacite": "URL"},
-    "urn": {"label": _("URN"), "validator": idutils.is_urn, "datacite": "URN"},
-    "w3id": {
-        "label": _("W3ID"),
-        "validator": always_valid,
-        "datacite": "w3id",
-    },
-    # Custom identifiers added for InvenioRDM Starter
-    "uuid": {
-        "label": _("UUID"),
-        "validator": always_valid,
-        "datacite": "UUID",
-    },
-    "guid": {
-        "label": _("GUID"),
-        "validator": always_valid,
-        "datacite": "GUID",
-    },
-    "other": {
-        "label": _("Other"),
-        "validator": always_valid,
-        "datacite": "Other",
-    },
+    scheme: definition
+    for scheme, definition in rdm_config.RDM_RECORDS_IDENTIFIERS_SCHEMES.items()
+    if scheme != "other"
 }
+RDM_RECORDS_IDENTIFIERS_SCHEMES.update(
+    {
+        "uuid": {
+            "label": _("UUID"),
+            "validator": always_valid,
+            "datacite": "UUID",
+        },
+        "guid": {
+            "label": _("GUID"),
+            "validator": always_valid,
+            "datacite": "GUID",
+        },
+        "other": {
+            "label": _("Other"),
+            "validator": always_valid,
+            "datacite": "Other",
+        },
+    }
+)
 """These are used for references, main, alternate and related identifiers."""
 
 # DOI Registration
@@ -554,11 +474,14 @@ RDM_CUSTOM_FIELDS_UI = [
     },
 ]
 
+# InvenioRDM's sort options, extended rather than copied. RDM_SORT_OPTIONS also
+# serves the request searches (RDM_SEARCH_USER_REQUESTS sorts by activity), and
+# a copy from before v14 without newestactivity made every record landing page
+# fail with KeyError, shown as "Page not found". The Starter sorts newest and
+# oldest by publication date rather than by when the record was created, and
+# adds sorting by creation date as options of its own.
 RDM_SORT_OPTIONS = {
-    "bestmatch": dict(
-        title=_("Best match"),
-        fields=["_score"],
-    ),
+    **rdm_config.RDM_SORT_OPTIONS,
     "newest": dict(
         title=_("Newest"),
         fields=["-metadata.publication_date", "-metadata.dates.date"],
@@ -567,18 +490,6 @@ RDM_SORT_OPTIONS = {
         title=_("Oldest"),
         fields=["metadata.publication_date", "metadata.dates.date"],
     ),
-    "version": dict(
-        title=_("Version"),
-        fields=["-versions.index"],
-    ),
-    "updated-desc": dict(
-        title=_("Recently updated"),
-        fields=["-updated"],
-    ),
-    "updated-asc": dict(
-        title=_("Least recently updated"),
-        fields=["updated"],
-    ),
     "created-desc": dict(
         title=_("Recently added"),
         fields=["-created"],
@@ -586,27 +497,6 @@ RDM_SORT_OPTIONS = {
     "created-asc": dict(
         title=_("Least recently added"),
         fields=["created"],
-    ),
-    "mostviewed": dict(
-        title=_("Most viewed"),
-        fields=["-stats.all_versions.unique_views"],
-    ),
-    # The remaining options are InvenioRDM v14's own. RDM_SORT_OPTIONS also
-    # serves the request searches (RDM_SEARCH_USER_REQUESTS), which sort by
-    # activity: without newestactivity the record landing page, whose sidebar
-    # builds the record's request search, fails with KeyError and shows
-    # "Page not found".
-    "mostdownloaded": dict(
-        title=_("Most downloaded"),
-        fields=["-stats.all_versions.unique_downloads"],
-    ),
-    "newestactivity": dict(
-        title=_("Newest activity"),
-        fields=["-last_activity_at"],
-    ),
-    "oldestactivity": dict(
-        title=_("Oldest activity"),
-        fields=["last_activity_at"],
     ),
 }
 """Definitions of available record sort options."""
@@ -667,46 +557,12 @@ class DateHistogramFacet(LabelledFacetMixin, dsl.DateHistogramFacet):
         )
 
 
+# InvenioRDM's facets, extended rather than copied, so that the facets a
+# release adds arrive with it. The Starter shows publication years as a
+# histogram and adds facets for affiliations, funders, author identifiers,
+# licenses, related works and references.
 RDM_FACETS = {
-    "access_status": {
-        "facet": facets.access_status,
-        "ui": {
-            "field": "access.status",
-        },
-    },
-    "is_published": {
-        "facet": facets.is_published,
-        "ui": {
-            "field": "is_published",
-        },
-    },
-    "file_type": {
-        "facet": facets.filetype,
-        "ui": {
-            "field": "files.types",
-        },
-    },
-    "language": {
-        "facet": facets.language,
-        "ui": {
-            "field": "languages",
-        },
-    },
-    "resource_type": {
-        "facet": facets.resource_type,
-        "ui": {
-            "field": "resource_type.type",
-            "childAgg": {
-                "field": "resource_type.subtype",
-            },
-        },
-    },
-    "subject": {
-        "facet": facets.subject,
-        "ui": {
-            "field": "subjects.subject",
-        },
-    },
+    **rdm_config.RDM_FACETS,
     "publication_date": {
         "facet": DateHistogramFacet(
             field="metadata.publication_date_range",
