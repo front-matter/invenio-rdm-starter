@@ -101,3 +101,45 @@ def test_no_helper_reaches_the_app_config():
     leaked = [k for k in dir(starter_config) if k.isupper() and k.startswith("_")]
 
     assert not leaked, leaked
+
+
+def _compose_defaults() -> dict[str, str]:
+    """The defaults of compose.yml's INVENIO_ variables, by setting name."""
+    import re
+    from pathlib import Path
+
+    compose = Path(__file__).resolve().parents[3] / "compose.yml"
+    pattern = re.compile(
+        r"^\s+INVENIO_([A-Z0-9_]+):\s*\$\{INVENIO_\1:-(.*)\}\s*$", re.MULTILINE
+    )
+    return {name: default for name, default in pattern.findall(compose.read_text())}
+
+
+def _as_invenio_config_reads_it(value: str):
+    """What invenio-config writes into a setting from an INVENIO_ variable."""
+    import ast
+
+    try:
+        return ast.literal_eval(value)
+    except SyntaxError, ValueError:
+        return value
+
+
+@pytest.mark.parametrize(
+    "setting",
+    sorted(k for k in _compose_defaults() if hasattr(starter_config, k)),
+)
+def test_compose_gives_a_setting_the_type_the_config_does(setting):
+    """invenio-config writes INVENIO_<NAME> over <NAME>, as a literal or a string.
+
+    A list the config builds from a comma-separated variable must not share its
+    name with that variable, or the setting ends up as the raw string, as
+    RDM_CITATION_STYLES did.
+    """
+    configured = getattr(starter_config, setting)
+    from_compose = _as_invenio_config_reads_it(_compose_defaults()[setting])
+
+    assert isinstance(from_compose, type(configured)) or configured is None, (
+        f"{setting}: compose.yml gives {type(from_compose).__name__}, "
+        f"the config {type(configured).__name__}"
+    )

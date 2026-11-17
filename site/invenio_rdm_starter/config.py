@@ -511,10 +511,13 @@ _citation_style_names = {
     "science": _("Science"),
 }
 
-# Read citation styles from environment or use default list
+# Read citation styles from the environment, as in compose.yml. Not from
+# INVENIO_RDM_CITATION_STYLES: invenio-config would write that variable's raw
+# string over RDM_CITATION_STYLES, and the landing page's citation box would get
+# a string instead of the list built here.
 _rdm_citation_styles_str = os.environ.get(
-    "INVENIO_RDM_CITATION_STYLES",
-    "apa,harvard-cite-them-right,ieee,modern-language-association,vancouver,chicago-author-date",
+    "INVENIO_RDM_CITATION_STYLES_LIST",
+    "apa,chicago-author-date,harvard-cite-them-right,ieee,vancouver",
 )
 
 _rdm_citation_style_codes = [

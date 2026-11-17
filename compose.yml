@@ -77,7 +77,11 @@ x-set-base:
   # prefix for the OAI identifiers they mint.
   INVENIO_OAISERVER_ID_PREFIX: ${INVENIO_OAISERVER_ID_PREFIX:-invenio-rdm}
 
-  INVENIO_RDM_CITATION_STYLES: ${INVENIO_RDM_CITATION_STYLES:-apa,chicago-author-date,harvard-cite-them-right,ieee,vancouver}
+  # The citation styles offered on the landing page, comma-separated; the
+  # config builds RDM_CITATION_STYLES from them. Not INVENIO_RDM_CITATION_STYLES:
+  # invenio-config would replace the list with this string.
+  INVENIO_RDM_CITATION_STYLES_LIST: ${INVENIO_RDM_CITATION_STYLES_LIST:-apa,chicago-author-date,harvard-cite-them-right,ieee,vancouver}
+  # The citation style selected by default.
   INVENIO_RDM_CITATION_STYLES_DEFAULT: ${INVENIO_RDM_CITATION_STYLES_DEFAULT:-apa}
 
   # Error reports to GlitchTip or Sentry (invenio-logging).
