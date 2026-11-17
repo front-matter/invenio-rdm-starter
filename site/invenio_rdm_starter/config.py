@@ -19,11 +19,7 @@ from importlib.metadata import PackageNotFoundError, version
 from typing import cast
 import idutils
 from invenio_rdm_records.services.pids import providers
-from invenio_rdm_records.contrib.journal import (
-    JOURNAL_CUSTOM_FIELDS,
-    JOURNAL_CUSTOM_FIELDS_UI,
-    JOURNAL_NAMESPACE,
-)
+from invenio_rdm_records.contrib import journal
 from invenio_records_resources.services.records.queryparser import (
     FieldValueMapper,
     QueryParser,
@@ -134,7 +130,7 @@ BABEL_DEFAULT_TIMEZONE = "UTC"
 # See https://invenio-i18n.readthedocs.io/en/latest/configuration.html
 
 # Language name mapping for I18N configuration
-_LANGUAGE_NAMES = {
+_language_names = {
     "de": _("German"),
     "es": _("Spanish"),
     "fr": _("French"),
@@ -156,7 +152,7 @@ _i18n_language_codes = [
 
 # Other supported languages (do not include BABEL_DEFAULT_LOCALE in list).
 I18N_LANGUAGES = [
-    (code, _LANGUAGE_NAMES.get(code, _(code.upper()))) for code in _i18n_language_codes
+    (code, _language_names.get(code, _(code.upper()))) for code in _i18n_language_codes
 ]
 
 
@@ -513,7 +509,7 @@ APP_RDM_DEPOSIT_FORM_DEFAULTS = {
 # (invenio-pidbox), not from the names, affiliations and funders vocabularies.
 APP_RDM_DEPOSIT_FORM_AUTOCOMPLETE_NAMES_PROVIDER = "pidbox"
 
-_CITATION_STYLE_NAMES = {
+_citation_style_names = {
     "apa": _("APA"),
     "harvard-cite-them-right": _("Harvard"),
     "ieee": _("IEEE"),
@@ -536,7 +532,7 @@ _rdm_citation_style_codes = [
 ]
 
 RDM_CITATION_STYLES = [
-    (code, _CITATION_STYLE_NAMES.get(code, _(code.replace("-", " ").title())))
+    (code, _citation_style_names.get(code, _(code.replace("-", " ").title())))
     for code in _rdm_citation_style_codes
 ]
 """The list of enabled citation styles."""
@@ -649,12 +645,12 @@ DATACITE_TEST_MODE = False
 
 # Enable optional custom fields
 RDM_NAMESPACES = {
-    **JOURNAL_NAMESPACE,
+    **journal.JOURNAL_NAMESPACE,
     "rs": None,
 }
 
 RDM_CUSTOM_FIELDS = [
-    *JOURNAL_CUSTOM_FIELDS,
+    *journal.JOURNAL_CUSTOM_FIELDS,
 ]
 
 RDM_CUSTOM_FIELDS_UI = [
@@ -663,7 +659,7 @@ RDM_CUSTOM_FIELDS_UI = [
         "hide_from_landing_page": True,
         "fields": [
             # journal
-            *JOURNAL_CUSTOM_FIELDS_UI["fields"],
+            *journal.JOURNAL_CUSTOM_FIELDS_UI["fields"],
         ],
     },
 ]

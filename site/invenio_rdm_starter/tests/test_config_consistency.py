@@ -90,3 +90,14 @@ def test_the_starter_keeps_every_entry_invenio_rdm_defines(setting):
 
 def test_other_is_the_last_identifier_scheme():
     assert list(starter_config.RDM_RECORDS_IDENTIFIERS_SCHEMES)[-1] == "other"
+
+
+def test_no_helper_reaches_the_app_config():
+    """Flask copies every name for which name.isupper() is true.
+
+    That includes names with a leading underscore ("_HELPER".isupper() is
+    True), so helpers of the config module are written in lower case.
+    """
+    leaked = [k for k in dir(starter_config) if k.isupper() and k.startswith("_")]
+
+    assert not leaked, leaked
