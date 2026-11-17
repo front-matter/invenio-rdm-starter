@@ -16,6 +16,7 @@ import os
 from copy import deepcopy
 from datetime import datetime
 from importlib.metadata import PackageNotFoundError, version
+from typing import cast
 import idutils
 from invenio_rdm_records.services.pids import providers
 from invenio_rdm_records.contrib.journal import (
@@ -454,12 +455,16 @@ try:
 except PackageNotFoundError:
     INVENIO_APP_RDM_VERSION = ""
 
-# invenio-app's secure headers, with a Content Security Policy of the Starter's
-# own. Its other settings (HTTPS, HSTS, frame options, cookies) are
-# invenio-app's.
+# invenio-app's secure headers. Its Content Security Policy is extended with the
+# sources the Starter needs; the rest, object-src 'none' among it, is
+# invenio-app's, as are HTTPS, HSTS, frame options and cookies.
 APP_DEFAULT_SECURE_HEADERS = {
     **invenio_app_config.APP_DEFAULT_SECURE_HEADERS,
     "content_security_policy": {
+        **cast(
+            dict[str, list[str]],
+            invenio_app_config.APP_DEFAULT_SECURE_HEADERS["content_security_policy"],
+        ),
         "default-src": [
             "'self'",
             "data:",  # for fonts
