@@ -19,14 +19,11 @@ dependencies = [
     "commonmeta-py[backend]>=0.314,<1",
     "commonmeta-rs>=0.12,<1",
     "invenio-pidbox>=0.2.25,<1",
-    "invenio-feeds>=0.3.23,<1",
     "invenio-logging",
     "structlog>=25.0",
     "prometheus-flask-exporter>=0.23.1",         # no [sentry] extra
     "sentry-sdk[flask]>=2.0,<3",
     "structlog-sentry>=2.1.0",
-    "nh3>=0.2",
-    "cachelib>=0.16.1",
 ]
 
 [tool.uv]
