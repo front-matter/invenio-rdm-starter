@@ -2134,16 +2134,16 @@ wheels = [
 
 [[package]]
 name = "invenio-pidbox"
-version = "0.2.25"
+version = "0.2.27"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "commonmeta-py", extra = ["backend"] },
     { name = "commonmeta-rs" },
     { name = "invenio-app-rdm" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/81/80/4185a4a8cdc51203318524c0deedd93e24ef02fa8747b84fa00ad92fd08d/invenio_pidbox-0.2.25.tar.gz", hash = "sha256:9421772daee6ab5448e54c53f2daed1a023b4cd55a33d772c53f80215ef6279f", size = 98559, upload-time = "2026-09-04T13:49:25.423Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/fb/a0/ab9699ab1af614f7c7bc997fdfd89100fce33e48abbcdf5541c0269f6445/invenio_pidbox-0.2.27.tar.gz", hash = "sha256:53b7924935fdcc56779d763823e0fea722f87cf141fc19c53e4cdc6434b681e8", size = 100906, upload-time = "2026-11-17T20:31:51.813Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/c4/87/f789b3faf07bb9b86e484e1fdd6b5c9602ec4f67c6f5f754ea477d239de4/invenio_pidbox-0.2.25-py3-none-any.whl", hash = "sha256:32a9e211be106aedead3044c2c6081b4c7017104a1a0f0992bd1f3539ad0e852", size = 84409, upload-time = "2026-09-04T13:49:22.988Z" },
+    { url = "https://files.pythonhosted.org/packages/cc/37/a50f97ad765531121cadf3022dc4940afc23afbeb5a7c1165bc4efcb718e/invenio_pidbox-0.2.27-py3-none-any.whl", hash = "sha256:0f8dc9fb7a860e64c6693844ab7b90921cd1702045e72746eb762dda21b3b9fa", size = 86977, upload-time = "2026-11-17T20:31:49.101Z" },
 ]
 
 [[package]]
@@ -2284,7 +2284,7 @@ requires-dist = [
     { name = "invenio-app-rdm", specifier = ">=14.0.7,<15.0" },
     { name = "invenio-logging" },
     { name = "invenio-oauthclient", git = "https://github.com/max-moser/invenio-oauthclient?branch=mm%2Fauthlib" },
-    { name = "invenio-pidbox", specifier = ">=0.2.25,<1" },
+    { name = "invenio-pidbox", specifier = ">=0.2.27,<1" },
     { name = "invenio-rdm-records", specifier = ">=32.3.3,<33" },
     { name = "invenio-s3", specifier = ">=3.0.2" },
     { name = "invenio-search", extras = ["opensearch2"], specifier = ">=3.1.2,<3.2.0" },
@@ -3670,11 +3670,11 @@ wheels = [
 
 [[package]]
 name = "platformdirs"
-version = "4.14.6"
+version = "4.14.7"
 source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/03/a9/8bd4abc337acc2f84729beb1061db06df6112bbf5c8ed16cfcd5cddcf9c2/platformdirs-4.14.6.tar.gz", hash = "sha256:2fabae4441a016e262d87ef88f677c0d76c1999227e068eba2e8a81cf6fb4b30", size = 75062, upload-time = "2026-11-17T18:25:09.715Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/a6/2c/ec57eede0db493e61443c76ac7b4d24e94a24050afb3d598bf3678487f75/platformdirs-4.14.7.tar.gz", hash = "sha256:5472257c1cf97a14658af52997011c7e59e4aebf3a24950b973c11b579e1b074", size = 75132, upload-time = "2026-11-17T20:03:32.656Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/c8/80/c4c5bcb7280579a021d71d35894230926202ce8f09aa051ced447189f652/platformdirs-4.14.6-py3-none-any.whl", hash = "sha256:57d7bbea7c41e86b2063409934372f3ea3a396ec5e4bad595c6cb50cbc5449bd", size = 89596, upload-time = "2026-11-17T18:25:08.441Z" },
+    { url = "https://files.pythonhosted.org/packages/f8/46/3737af9f971f3934794103256d7f1ed6200a62be0c7b7ff09ac4cf6b3422/platformdirs-4.14.7-py3-none-any.whl", hash = "sha256:391513b74707c42335fff3ea17eaac657a7ee9ffcadd809634d34ea594d0122c", size = 89658, upload-time = "2026-11-17T20:03:31.16Z" },
 ]
 
 [[package]]
