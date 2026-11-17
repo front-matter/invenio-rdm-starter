@@ -28,34 +28,20 @@ from invenio_records_resources.services.records.queryparser import (
     QueryParser,
     SearchFieldTransformer,
 )
-from invenio_search.engine import dsl
 from invenio_records_resources.services.records.facets.facets import (
-    LabelledFacetMixin,
     TermsFacet,
-)
-from invenio_communities.communities.records.models import CommunityMetadata
-from invenio_db import db
-from luqum.tree import Phrase
-from invenio_access import action_factory
-from invenio_records.dictutils import dict_lookup
-from invenio_records_permissions.generators import (
-    ConditionalGenerator,
-    Generator,
-)
-from invenio_communities.permissions import CommunityPermissionPolicy
-from invenio_rdm_records.services.generators import (
-    AccessGrant,
-    RecordOwners,
-)
-from invenio_rdm_records.services.permissions import RDMRecordPermissionPolicy
-from invenio_records_permissions.generators import (
-    SystemProcess,
 )
 
 # invenio-oauthclient comes from the max-moser/invenio-oauthclient mm/authlib
 # branch, a rewrite on authlib, as for Rogue Scholar. See the Authentication
 # section.
 from invenio_oauthclient.views.views import auto_redirect_login
+from invenio_rdm_starter.facets import DateHistogramFacet
+from invenio_rdm_starter.permissions import (
+    StarterCommunityPermissionPolicy,
+    StarterRecordPermissionPolicy,
+)
+from invenio_rdm_starter.queryparser import word_communities, word_doi
 from invenio_rdm_starter.oidc import (
     GitHubRemoteApp,
     OAuthClientRemoteApp,
@@ -64,7 +50,6 @@ from invenio_rdm_starter.oidc import (
 )
 from invenio_app import config as invenio_app_config
 from invenio_rdm_records import config as rdm_config
-from invenio_rdm_records.services import facets
 from invenio_pidbox.facets import StoreAffiliationsLabels, StoreFundersLabels
 from invenio_vocabularies.services.facets import VocabularyLabels
 from invenio_s3 import s3fs_storage_factory
@@ -462,65 +447,6 @@ RDM_SORT_OPTIONS = {
 """Definitions of available record sort options."""
 
 
-class DateHistogramFacet(LabelledFacetMixin, dsl.DateHistogramFacet):
-    """Date Range Facet
-
-    facets = {
-        'publication_date': DateRangeFacet(
-            field='dates',
-            interval='year',
-            format='yyyy'
-        )
-    }
-    """
-
-    def __init__(self, *args, **kwargs):
-        """Show only years with at least 1 document, and at most 10 values."""
-        kwargs.setdefault("min_doc_count", 1)
-        super().__init__(*args, **kwargs)
-
-    def get_value_filter(self, filter_value):
-        """Overriding this function to cast string dates to datetime"""
-
-        for interval_type in ("calendar_interval", "fixed_interval"):
-            if interval_type in self._params:
-                break
-        else:
-            interval_type = "interval"
-
-        # dealing with a range
-        try:
-            if "--" in filter_value:
-                start, end = [
-                    datetime.strptime(year, "%Y") for year in filter_value.split("--")
-                ]
-                end = self.DATE_INTERVALS[self._params[interval_type]](end)
-            else:
-                start = datetime.strptime(filter_value, "%Y")
-                end = self.DATE_INTERVALS[self._params[interval_type]](start)
-        except ValueError:
-            start = 0
-            end = 1
-
-        # swap them
-        if start > end:
-            start, end = end, start
-
-        return dsl.query.Range(
-            _expand__to_dot=False,
-            **{
-                self._params["field"]: {
-                    "gte": start,
-                    "lt": end,
-                }
-            },
-        )
-
-
-# InvenioRDM's facets, extended rather than copied, so that the facets a
-# release adds arrive with it. The Starter shows publication years as a
-# histogram and adds facets for affiliations, funders, author identifiers,
-# licenses, related works and references.
 RDM_FACETS = {
     **rdm_config.RDM_FACETS,
     "publication_date": {
@@ -597,25 +523,6 @@ RDM_FACETS = {
         },
     },
 }
-
-
-# from https://github.com/zenodo/zenodo-rdm/blob/master/site/zenodo_rdm/queryparser.py
-def word_doi(node):
-    """Quote DOIs."""
-    if not node.value.startswith("10."):
-        return node
-    return Phrase(f'"{node.value}"')
-
-
-def word_communities(node):
-    """Resolve community slugs to IDs."""
-    slug = node.value
-    uuid = (
-        db.session.query(CommunityMetadata.id)
-        .filter(CommunityMetadata.slug == slug)
-        .scalar()
-    )
-    return Phrase(f'"{uuid}"')
 
 
 RDM_SEARCH = {
@@ -926,157 +833,6 @@ REDIRECTOR_RULES = {
     #     "target": "/about",
     # },
 }
-
-
-"""InvenioRDM Starter permissions.
-These permissions are restrictive and only allow admin users to manage records."""
-
-# these are defined here as there is a circular dependency otherwise with the
-# permissions.py file
-media_files_management_action = action_factory("manage-media-files")
-
-
-class MediaFilesManager(Generator):
-    """Allows media files management."""
-
-    def __init__(self):
-        """Constructor."""
-        super(MediaFilesManager, self).__init__()
-
-    def needs(self, **kwargs):
-        """Enabling Needs."""
-        return [media_files_management_action]
-
-
-class IfRecordManagementAllowedForCommunity(ConditionalGenerator):
-    """Conditional generator for community access to record management."""
-
-    def _condition(self, record, **kwargs):
-        """Check if community can manage the migrated record."""
-        if record is None:
-            return False
-        try:
-            can_community_manage_record = dict_lookup(
-                record.parent, "permission_flags.can_community_manage_record"
-            )
-        except KeyError:
-            can_community_manage_record = True
-
-        return can_community_manage_record
-
-    def query_filter(self, **kwargs):
-        """Filters for current identity as super user."""
-        then_query = self._make_query(self.then_, **kwargs)
-        else_query = self._make_query(self.else_, **kwargs)
-
-        return then_query if then_query else else_query
-
-
-class StarterRecordPermissionPolicy(RDMRecordPermissionPolicy):
-    """Access control configuration for records."""
-
-    #
-    # High-level permissions (used by low-level)
-    #
-    can_manage = [
-        IfRecordManagementAllowedForCommunity(
-            then_=RDMRecordPermissionPolicy.can_manage,
-            else_=[
-                RecordOwners(),
-                AccessGrant("manage"),
-                SystemProcess(),
-            ],
-        )
-    ]
-    can_curate = can_manage + [SystemProcess()]
-    can_review = can_curate + [SystemProcess()]
-    can_preview = can_curate + [SystemProcess()]
-
-    #
-    #  Records
-    #
-
-    # Used for search filtering of deleted records
-    # cannot be implemented inside can_read - otherwise permission will
-    # kick in before tombstone renders
-    can_create = [SystemProcess()]
-    can_read_deleted = [SystemProcess()]
-    can_read_deleted_files = can_read_deleted
-    can_media_read_deleted_files = can_read_deleted_files
-
-    #
-    # Drafts
-    #
-    # Allow reading metadata of a draft
-    can_read_draft = can_preview
-    # Allow reading files of a draft
-    can_draft_read_files = can_preview + [SystemProcess()]
-    # Allow updating metadata of a draft
-    can_update_draft = can_review
-    # Allow uploading, updating and deleting files in drafts
-    can_draft_create_files = can_review
-    can_draft_set_content_files = [SystemProcess()]
-    can_draft_get_content_files = [SystemProcess()]
-    can_draft_commit_files = [SystemProcess()]
-    can_draft_update_files = can_review
-    can_draft_delete_files = can_review
-    can_manage_record_access = can_review
-
-    #
-    # PIDs
-    #
-    can_pid_create = can_review
-    can_pid_register = can_review
-    can_pid_update = can_review
-    can_pid_discard = can_review
-    can_pid_delete = can_review
-
-    #
-    # Actions
-    #
-    # Allow to put a record in edit mode (create a draft from record)
-    can_edit = [SystemProcess()]
-    # Allow deleting/discarding a draft and all associated files
-    can_delete_draft = [SystemProcess()]
-    # Allow creating a new version of an existing published record.
-    can_new_version = [SystemProcess()]
-    # Allow publishing a new record or changes to an existing record.
-    can_publish = [SystemProcess()]
-    # Allow lifting a record or draft.
-    can_lift_embargo = [SystemProcess()]
-
-    #
-    # Record communities
-    #
-    # Who can add record to a community
-    can_add_community = can_review
-
-    # Media files
-    can_draft_media_create_files = [MediaFilesManager(), SystemProcess()]
-    can_draft_media_read_files = can_draft_media_create_files
-    can_draft_media_set_content_files = [SystemProcess()]
-    can_draft_media_commit_files = [SystemProcess()]
-    can_draft_media_update_files = can_draft_media_create_files
-    can_draft_media_delete_files = can_draft_media_create_files
-    can_moderate = [SystemProcess()]
-    can_media_create_files = [SystemProcess()]
-    can_media_set_content_files = [SystemProcess()]
-    can_media_commit_files = [SystemProcess()]
-    can_media_update_files = [SystemProcess()]
-    can_media_delete_files = [SystemProcess()]
-    can_modify_locked_files = [SystemProcess()]
-
-
-class StarterCommunityPermissionPolicy(CommunityPermissionPolicy):
-    """Permissions for Community CRUD operations.
-    We start with limited permissions for community creation and moderation.
-    """
-
-    can_create = [SystemProcess()]
-    can_moderate = [SystemProcess()]
-    can_rename = [SystemProcess()]
-    can_submit_record = [SystemProcess()]
-    can_include_directly = [SystemProcess()]
 
 
 RDM_PERMISSION_POLICY = StarterRecordPermissionPolicy
