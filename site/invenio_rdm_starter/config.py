@@ -689,22 +689,22 @@ page doesn't show."""
 
 RDM_SORT_OPTIONS = {
     **rdm_config.RDM_SORT_OPTIONS,
-    "newest": dict(
-        title=_("Newest"),
-        fields=["-metadata.publication_date", "-metadata.dates.date"],
-    ),
-    "oldest": dict(
-        title=_("Oldest"),
-        fields=["metadata.publication_date", "metadata.dates.date"],
-    ),
-    "created-desc": dict(
-        title=_("Recently added"),
-        fields=["-created"],
-    ),
-    "created-asc": dict(
-        title=_("Least recently added"),
-        fields=["created"],
-    ),
+    "newest": {
+        "title": _("Newest"),
+        "fields": ["-metadata.publication_date", "-metadata.dates.date"],
+    },
+    "oldest": {
+        "title": _("Oldest"),
+        "fields": ["metadata.publication_date", "metadata.dates.date"],
+    },
+    "created-desc": {
+        "title": _("Recently added"),
+        "fields": ["-created"],
+    },
+    "created-asc": {
+        "title": _("Least recently added"),
+        "fields": ["created"],
+    },
 }
 """Definitions of available record sort options.
 
