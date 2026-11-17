@@ -178,9 +178,6 @@ else:
     _redis_base = _redis_url
     _redis_db = 0
 
-# The full class path, as for Rogue Scholar: flask-caching 2 no longer
-# resolves the short name "redis" (import of flask_caching.backends.redis).
-CACHE_TYPE = "flask_caching.backends.RedisCache"
 ACCOUNTS_SESSION_REDIS_URL = _redis_url
 CELERY_BROKER_URL = f"{_redis_base}/{_redis_db + 1}"
 BROKER_URL = f"{_redis_base}/{_redis_db + 1}"
@@ -194,8 +191,6 @@ COMMUNITIES_IDENTITIES_CACHE_REDIS_URL = f"{_redis_base}/{_redis_db + 4}"
 # ===========
 # See https://python-babel.github.io/flask-babel/#configuration
 
-# Default locale (language)
-BABEL_DEFAULT_LOCALE = "en"
 # Default time zone
 BABEL_DEFAULT_TIMEZONE = "UTC"
 
@@ -258,19 +253,6 @@ THEME_LOGO = "images/invenio-rdm-white.svg"
 THEME_SHOW_FRONTPAGE_INTRO_SECTION = False
 
 
-# Invenio-App-RDM
-# ===============
-# See https://invenio-app-rdm.readthedocs.io/en/latest/configuration.html
-
-# Instance's theme entrypoint file. Path relative to the ``assets/`` folder.
-INSTANCE_THEME_FILE = "./less/theme.less"
-
-# Invenio-Files-Rest
-# ==================
-
-DATADIR = "/opt/invenio/var/instance/data"
-"""The container directory where local files are stored."""
-
 # Invenio-Assets
 # ==============
 # Use rspack instead of webpack
@@ -304,8 +286,6 @@ APP_RDM_DEPOSIT_FORM_DEFAULTS = {
     },
 }
 
-# See https://github.com/inveniosoftware/invenio-app-rdm/blob/master/invenio_app_rdm/config.py
-APP_RDM_DEPOSIT_FORM_AUTOCOMPLETE_NAMES = "search"  # "search_only" or "off"
 # Creators, affiliations and funders are suggested from the commonmeta store
 # (invenio-pidbox), not from the names, affiliations and funders vocabularies.
 APP_RDM_DEPOSIT_FORM_AUTOCOMPLETE_NAMES_PROVIDER = "pidbox"
@@ -407,12 +387,12 @@ RDM_RECORDS_IDENTIFIERS_SCHEMES.update(
 # =========================================================
 # See https://inveniordm.docs.cern.ch/operate/customize/dois/
 
-DATACITE_ENABLED = False
+# DataCite stays off unless INVENIO_DATACITE_ENABLED is set; its username,
+# password, prefix and data centre symbol come from the environment too.
+# InvenioRDM's defaults are "", not None: invenio-rdm-records turns these
+# settings into strings at startup, and None would become the text "None".
+# Production mode rather than InvenioRDM's test mode, once DataCite is on.
 DATACITE_TEST_MODE = False
-DATACITE_USERNAME = None
-DATACITE_PASSWORD = None
-DATACITE_PREFIX = None
-DATACITE_DATACENTER_SYMBOL = None
 
 # Invenio-S3
 # ========================================================
@@ -738,12 +718,6 @@ RDM_SEARCH_DRAFTS = {
 }
 """User records search configuration (i.e. list of uploads)."""
 
-# Toggle to show or hide the 'Browse' menu entry for communities.
-COMMUNITIES_SHOW_BROWSE_MENU_ENTRY = True
-
-# Enable featured communities
-COMMUNITIES_ADMINISTRATION_DISABLED = False
-
 # Authentication
 # -------------------
 # See https://github.com/inveniosoftware/invenio-oauthclient/blob/master/invenio_oauthclient/config.py
@@ -903,7 +877,6 @@ if client_credentials("discord")[0]:
 ACCOUNTS_LOGIN_VIEW_FUNCTION = (
     auto_redirect_login  # autoredirect to external login if enabled
 )
-OAUTHCLIENT_AUTO_REDIRECT_TO_EXTERNAL_LOGIN = False  # autoredirect to external login
 # The signup form after an OAuth login asks for what the remote app did not
 # send: email marked required, username read-only. See
 # invenio_rdm_starter.oidc.signup_form.
