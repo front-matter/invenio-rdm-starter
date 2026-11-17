@@ -97,11 +97,10 @@ public files. Files will be cached by the browser for the provided number of sec
 See flask documentation for more information:
 https://flask.palletsprojects.com/en/2.1.x/config/#SEND_FILE_MAX_AGE_DEFAULT."""
 
-TRUSTED_HOSTS = ["localhost", "127.0.0.1"]
-"""Since HAProxy and Nginx route all requests no matter the host header
-provided, the allowed hosts variable is set to localhost. In production it
-should be set to the correct host and it is strongly recommended to only
-route correct hosts to the application."""
+TRUSTED_HOSTS = ["0.0.0.0", "localhost", "127.0.0.1"]
+"""The hosts the app answers for: local ones only. In production set
+INVENIO_TRUSTED_HOSTS to the site's host, and route only that host to the
+app."""
 
 
 # Flask-Limiter
@@ -175,7 +174,7 @@ THEME_FRONTPAGE_SUBTITLE = (
 )
 """Frontpage subtitle."""
 
-THEME_LOGO = "images/invenio-rdm-white.svg"
+THEME_LOGO = "images/invenio-rdm.svg"
 """Header logo."""
 
 THEME_SHOW_FRONTPAGE_INTRO_SECTION = False
@@ -196,8 +195,8 @@ if os.environ.get("INVENIO_S3_ENDPOINT_URL"):
 # ============
 # See https://invenio-mail.readthedocs.io/en/latest/configuration.html
 
-MAIL_SUPPRESS_SEND = False
-"""Set this to True to disable email sending."""
+MAIL_SUPPRESS_SEND = True
+"""Don't send emails; INVENIO_MAIL_SUPPRESS_SEND=False turns sending on."""
 
 
 # Invenio-Accounts
@@ -392,10 +391,10 @@ CELERY_RESULT_BACKEND = f"{_redis_base}/{_redis_db + 2}"
 # Invenio-Logging
 # ===============
 
-LOGGING_CONSOLE_LEVEL = "ERROR"
+LOGGING_CONSOLE_LEVEL = "WARNING"
 """Level of the messages logged to the console."""
 
-LOGGING_FS_LEVEL = "ERROR"
+LOGGING_FS_LEVEL = "WARNING"
 """Level of the messages logged to files."""
 
 
@@ -563,8 +562,8 @@ COMMUNITIES_PERMISSION_POLICY = StarterCommunityPermissionPolicy
 # See https://github.com/inveniosoftware/invenio-rdm-records/blob/master/invenio_rdm_records/config.py
 # DOI registration: https://inveniordm.docs.cern.ch/operate/customize/dois/
 
-RDM_ALLOW_RESTRICTED_RECORDS = False
-"""Every record is public: records can't be restricted."""
+RDM_ALLOW_RESTRICTED_RECORDS = True
+"""Records can be restricted, not only public."""
 
 RDM_ALLOW_EXTERNAL_DOI_VERSIONING = False
 """Don't allow records with external DOIs to be versioned."""
