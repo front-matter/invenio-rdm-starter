@@ -54,6 +54,7 @@ from invenio_pidbox.facets import StoreAffiliationsLabels, StoreFundersLabels
 from invenio_vocabularies.services.facets import VocabularyLabels
 from invenio_s3 import s3fs_storage_factory
 
+
 # Which module these settings came from. invenio_rdm_starter.views refuses to
 # start without it: if the package is installed without its
 # invenio_config.module entry point (e.g. a venv not synced since the entry
@@ -66,83 +67,15 @@ def _(x):  # needed to avoid start time failure with lazy strings
     return x
 
 
-RATELIMIT_ENABLED = True
-RATELIMIT_AUTHENTICATED_USER = "60000 per hour;1100 per minute"
-RATELIMIT_GUEST_USER = "30000 per hour;500 per minute"
+# Redis/Valkey
+# ============
+# Connection URLs for the cache, sessions, Celery and rate limits, which the
+# sections below use: one Redis/Valkey server, one database number each.
 
-# Flask
-# =====
-# See https://flask.palletsprojects.com/en/1.1.x/config/
-
-# Define the value of the cache control header `max-age` returned by the server when serving
-# public files. Files will be cached by the browser for the provided number of seconds.
-# See flask documentation for more information:
-# https://flask.palletsprojects.com/en/2.1.x/config/#SEND_FILE_MAX_AGE_DEFAULT
-SEND_FILE_MAX_AGE_DEFAULT = 300
-
-# Set via env variable
-# SECRET_KEY=
-
-# Since HAProxy and Nginx route all requests no matter the host header
-# provided, the allowed hosts variable is set to localhost. In production it
-# should be set to the correct host and it is strongly recommended to only
-# route correct hosts to the application.
-TRUSTED_HOSTS = ["localhost", "127.0.0.1"]
-
-
-# Flask-SQLAlchemy
-# ================
-# See https://flask-sqlalchemy.palletsprojects.com/en/2.x/config/
-
-# Set via env variable
-# SQLALCHEMY_DATABASE_URI=
-
-LOGGING_CONSOLE_LEVEL = "ERROR"
-LOGGING_FS_LEVEL = "ERROR"
-
-
-# Invenio-App
-# ===========
-# See https://invenio-app.readthedocs.io/en/latest/configuration.html
-
-try:
-    INVENIO_APP_RDM_VERSION = version("invenio-app-rdm")
-except PackageNotFoundError:
-    INVENIO_APP_RDM_VERSION = ""
-
-# invenio-app's secure headers, with a Content Security Policy of the Starter's
-# own. Its other settings (HTTPS, HSTS, frame options, cookies) are
-# invenio-app's.
-APP_DEFAULT_SECURE_HEADERS = {
-    **invenio_app_config.APP_DEFAULT_SECURE_HEADERS,
-    "content_security_policy": {
-        "default-src": [
-            "'self'",
-            "data:",  # for fonts
-            "'unsafe-inline'",  # for inline scripts and styles
-            "blob:",  # for pdf preview
-            "s3.us-east-1.amazonaws.com",  # for S3 object storage
-            "s3.eu-central-1.amazonaws.com",  # for S3 object storage
-            # Add your own policies here (e.g. analytics)
-        ],
-        "img-src": [
-            "*",
-        ],
-    },
-}
-
-SECURITY_POST_LOGOUT_VIEW = "/oauth/logout"
-"""Redirect to this view after logout to properly clear the session.
-
-/oauth/logout redirects on to the remote app's logout_url, the provider's
-end_session_endpoint, so logging out here logs out of Keycloak or Authentik
-too.
-"""
-
-# Redis/Valkey configuration
 _redis_url = os.environ.get(
     "INVENIO_ACCOUNTS_SESSION_REDIS_URL", "redis://cache:6379/0"
 )
+
 # Extract base URL and database number
 if "/" in _redis_url:
     _redis_base, _redis_db_str = _redis_url.rsplit("/", 1)
@@ -155,13 +88,36 @@ else:
     _redis_base = _redis_url
     _redis_db = 0
 
-ACCOUNTS_SESSION_REDIS_URL = _redis_url
-CELERY_BROKER_URL = f"{_redis_base}/{_redis_db + 1}"
-BROKER_URL = f"{_redis_base}/{_redis_db + 1}"
-CELERY_RESULT_BACKEND = f"{_redis_base}/{_redis_db + 2}"
+
+# Flask
+# =====
+# See https://flask.palletsprojects.com/en/3.0.x/config/
+# SECRET_KEY is set via the environment (INVENIO_SECRET_KEY).
+
+# Define the value of the cache control header `max-age` returned by the server when serving
+# public files. Files will be cached by the browser for the provided number of seconds.
+# See flask documentation for more information:
+# https://flask.palletsprojects.com/en/2.1.x/config/#SEND_FILE_MAX_AGE_DEFAULT
+SEND_FILE_MAX_AGE_DEFAULT = 300
+
+# Since HAProxy and Nginx route all requests no matter the host header
+# provided, the allowed hosts variable is set to localhost. In production it
+# should be set to the correct host and it is strongly recommended to only
+# route correct hosts to the application.
+TRUSTED_HOSTS = ["localhost", "127.0.0.1"]
+
+
+# Flask-Limiter
+# =============
+# See https://flask-limiter.readthedocs.io/en/stable/configuration.html
+
+RATELIMIT_ENABLED = True
+
+RATELIMIT_AUTHENTICATED_USER = "60000 per hour;1100 per minute"
+
+RATELIMIT_GUEST_USER = "30000 per hour;500 per minute"
+
 RATELIMIT_STORAGE_URL = f"{_redis_base}/{_redis_db + 3}"
-CACHE_REDIS_URL = f"{_redis_base}/{_redis_db + 4}"
-COMMUNITIES_IDENTITIES_CACHE_REDIS_URL = f"{_redis_base}/{_redis_db + 4}"
 
 
 # Flask-Babel
@@ -192,6 +148,7 @@ _LANGUAGE_NAMES = {
 
 # Read languages from environment or use default list
 _i18n_languages_str = os.environ.get("INVENIO_ISO639_LANGUAGES", "de,es,fr,pt")
+
 _i18n_language_codes = [
     lang.strip() for lang in _i18n_languages_str.split(",") if lang.strip()
 ]
@@ -201,15 +158,6 @@ I18N_LANGUAGES = [
     (code, _LANGUAGE_NAMES.get(code, _(code.upper()))) for code in _i18n_language_codes
 ]
 
-# Invenio-Mail
-# ===========
-# See https://invenio-mail.readthedocs.io/en/latest/configuration.html
-
-# Set this to True to disable email sending.
-MAIL_SUPPRESS_SEND = False
-
-SECURITY_EMAIL_SUBJECT_REGISTER = _("Welcome to Invenio RDM Starter")
-"""Email subject for account registration emails."""
 
 # Invenio-Theme
 # =============
@@ -217,12 +165,15 @@ SECURITY_EMAIL_SUBJECT_REGISTER = _("Welcome to Invenio RDM Starter")
 
 # The name of the site to be used on the header and as a title.
 THEME_SITENAME = "InvenioRDM Starter"
+
 # Frontpage title
 THEME_FRONTPAGE_TITLE = "InvenioRDM Starter"
+
 # Frontpage subtitle
 THEME_FRONTPAGE_SUBTITLE = (
     "A starter project for the turn-key research data management repository."
 )
+
 # Header logo
 THEME_LOGO = "images/invenio-rdm-white.svg"
 
@@ -230,388 +181,42 @@ THEME_LOGO = "images/invenio-rdm-white.svg"
 THEME_SHOW_FRONTPAGE_INTRO_SECTION = False
 
 
-# Invenio-Assets
-# ==============
-# Use rspack instead of webpack
-WEBPACKEXT_PROJECT = "invenio_assets.webpack:rspack_project"
-
-# Invenio-Records-Resources
-# =========================
-# See https://github.com/inveniosoftware/invenio-records-resources/blob/master/invenio_records_resources/config.py
-
-SITE_UI_URL = "https://localhost"
-
-SITE_API_URL = "https://localhost/api"
-
-APP_RDM_DEPOSIT_FORM_DEFAULTS = {
-    "publication_date": lambda: datetime.now().strftime("%Y-%m-%d"),
-    "rights": [
-        {
-            "id": "cc-by-4.0",
-            "title": "Creative Commons Attribution 4.0 International",
-            "description": (
-                "The Creative Commons Attribution license allows "
-                "re-distribution and re-use of a licensed work "
-                "on the condition that the creator is "
-                "appropriately credited."
-            ),
-            "link": "https://creativecommons.org/licenses/by/4.0/legalcode",
-        }
-    ],
-    "resource_type": {
-        "id": "publication-preprint",
-    },
-}
-
-# Creators, affiliations and funders are suggested from the commonmeta store
-# (invenio-pidbox), not from the names, affiliations and funders vocabularies.
-APP_RDM_DEPOSIT_FORM_AUTOCOMPLETE_NAMES_PROVIDER = "pidbox"
-
-# Invenio-Pidbox
-# ==============
-# The store (PIDBOX_SQLITE_PATH, default /var/lib/commonmeta/commonmeta.sqlite3,
-# mounted from the host) answers for the vocabularies the Starter doesn't
-# import: a record commit accepts any affiliation the store's ROR holds, and
-# any funder ROR types as funder. The vocabularies still count where they have
-# entries, so the accepted set is the union of the two.
-PIDBOX_RECORD_RELATIONS = True
-
-# Invenio-RDM-Records
-# ===================
-
-RDM_ALLOW_RESTRICTED_RECORDS = False
-RDM_ALLOW_EXTERNAL_DOI_VERSIONING = False
-"""Don't allow records with external DOIs to be versioned."""
-
-#
-# Persistent identifiers configuration
-#
-RDM_PERSISTENT_IDENTIFIER_PROVIDERS = [
-    # DOI provider for externally managed DOIs
-    providers.ExternalPIDProvider(
-        "external",
-        "doi",
-        validators=[providers.BlockedPrefixes(config_names=["DATACITE_PREFIX"])],
-        label=_("DOI"),
-    ),
-    # OAI identifier
-    providers.OAIPIDProvider(
-        "oai",
-        label=_("OAI ID"),
-    ),
-]
-"""A list of configured persistent identifier providers."""
-
-# InvenioRDM's persistent identifiers, with a DOI of the Starter's own: an
-# existing DOI the depositor brings (external), never one minted here, and not
-# required. OAI identifiers are InvenioRDM's.
-RDM_PERSISTENT_IDENTIFIERS = {
-    **rdm_config.RDM_PERSISTENT_IDENTIFIERS,
-    "doi": {
-        "providers": ["external"],
-        "required": False,
-        "label": _("DOI"),
-        "validator": idutils.is_doi,
-        "normalizer": idutils.normalize_doi,
-        "is_enabled": providers.ExternalPIDProvider.is_enabled,
-        "ui": {"default_selected": "yes"},  # "yes", "no" or "not_needed"
-    },
-}
-"""The configured persistent identifiers for records."""
-
-RDM_PARENT_PERSISTENT_IDENTIFIERS = {}
-"""The configured persistent identifiers for parent records."""
-
-
-# InvenioRDM's schemes, extended rather than copied, so that the schemes a
-# release adds arrive with it: a copy from before v14 had left out CSTR, RRID
-# and Wikidata. The Starter adds UUID and GUID, and keeps "other" last.
-RDM_RECORDS_IDENTIFIERS_SCHEMES = {
-    scheme: definition
-    for scheme, definition in rdm_config.RDM_RECORDS_IDENTIFIERS_SCHEMES.items()
-    if scheme != "other"
-}
-RDM_RECORDS_IDENTIFIERS_SCHEMES.update(
-    {
-        "uuid": {
-            "label": _("UUID"),
-            "validator": rdm_config.always_valid,
-            "datacite": "UUID",
-        },
-        "guid": {
-            "label": _("GUID"),
-            "validator": rdm_config.always_valid,
-            "datacite": "GUID",
-        },
-        "other": rdm_config.RDM_RECORDS_IDENTIFIERS_SCHEMES["other"],
-    }
-)
-"""These are used for references, main, alternate and related identifiers."""
-
-# DOI Registration
-# =========================================================
-# See https://inveniordm.docs.cern.ch/operate/customize/dois/
-
-# DataCite stays off unless INVENIO_DATACITE_ENABLED is set; its username,
-# password, prefix and data centre symbol come from the environment too.
-# InvenioRDM's defaults are "", not None: invenio-rdm-records turns these
-# settings into strings at startup, and None would become the text "None".
-# Production mode rather than InvenioRDM's test mode, once DataCite is on.
-DATACITE_TEST_MODE = False
-
-# Invenio-S3
-# ========================================================
+# Invenio-Files-REST / Invenio-S3
+# ===============================
 # See https://inveniordm.docs.cern.ch/operate/customize/file-uploads/s3/
+
 # Files are stored in S3 when an endpoint is configured, otherwise on the
-# local disk (DATADIR).
+# local disk (InvenioRDM's default files location).
 if os.environ.get("INVENIO_S3_ENDPOINT_URL"):
     FILES_REST_STORAGE_FACTORY = s3fs_storage_factory
 
 
-# Authentication
-# =========================================================
+# Invenio-Mail
+# ============
+# See https://invenio-mail.readthedocs.io/en/latest/configuration.html
+
+# Set this to True to disable email sending.
+MAIL_SUPPRESS_SEND = False
+
+
+# Invenio-Accounts
+# ================
 # See https://inveniordm.docs.cern.ch/operate/customize/authentication/
+# Login is through OAuth (Invenio-OAuthClient below). The settings in comments
+# are set via the environment (INVENIO_<NAME>).
 
-# ACCOUNTS_LOCAL_LOGIN_ENABLED = True
-"""Whether or not login with local account credentials should be enabled."""
+SECURITY_EMAIL_SUBJECT_REGISTER = _("Welcome to Invenio RDM Starter")
+"""Email subject for account registration emails."""
 
-# ACCOUNTS_DEFAULT_USER_VISIBILITY = "restricted"
-"""Default User visibility value can be set to either 'restricted' or 'public'."""
+SECURITY_POST_LOGOUT_VIEW = "/oauth/logout"
+"""Redirect to this view after logout to properly clear the session.
 
-# SECURITY_CHANGEABLE = True
-"""Allow password change by users."""
+/oauth/logout redirects on to the remote app's logout_url, the provider's
+end_session_endpoint, so logging out here logs out of Keycloak or Authentik
+too.
+"""
 
-# SECURITY_CONFIRMABLE = True
-"""Allow user to confirm their email address."""
-
-# SECURITY_RECOVERABLE = True
-"""Allow password recovery by users."""
-
-# SECURITY_REGISTERABLE = True
-"""Allow users to register."""
-
-# SECURITY_TRACKABLE = True
-"""Enable user tracking on login."""
-
-# SECURITY_LOGIN_WITHOUT_CONFIRMATION = True
-"""Allow users to login without first confirming their email address."""
-
-
-# Enable optional custom fields
-RDM_NAMESPACES = {
-    **JOURNAL_NAMESPACE,
-    "rs": None,
-}
-
-RDM_CUSTOM_FIELDS = [
-    *JOURNAL_CUSTOM_FIELDS,
-]
-
-
-RDM_CUSTOM_FIELDS_UI = [
-    {
-        "section": _("Publishing information"),
-        "hide_from_landing_page": True,
-        "fields": [
-            # journal
-            *JOURNAL_CUSTOM_FIELDS_UI["fields"],
-        ],
-    },
-]
-
-# InvenioRDM's sort options, extended rather than copied. RDM_SORT_OPTIONS also
-# serves the request searches (RDM_SEARCH_USER_REQUESTS sorts by activity), and
-# a copy from before v14 without newestactivity made every record landing page
-# fail with KeyError, shown as "Page not found". The Starter sorts newest and
-# oldest by publication date rather than by when the record was created, and
-# adds sorting by creation date as options of its own.
-RDM_SORT_OPTIONS = {
-    **rdm_config.RDM_SORT_OPTIONS,
-    "newest": dict(
-        title=_("Newest"),
-        fields=["-metadata.publication_date", "-metadata.dates.date"],
-    ),
-    "oldest": dict(
-        title=_("Oldest"),
-        fields=["metadata.publication_date", "metadata.dates.date"],
-    ),
-    "created-desc": dict(
-        title=_("Recently added"),
-        fields=["-created"],
-    ),
-    "created-asc": dict(
-        title=_("Least recently added"),
-        fields=["created"],
-    ),
-}
-"""Definitions of available record sort options."""
-
-
-# InvenioRDM's facets, extended rather than copied, so that the facets a
-# release adds arrive with it. The Starter shows publication years as a
-# histogram and adds facets for affiliations, funders, author identifiers,
-# licenses, related works and references.
-RDM_FACETS = {
-    **rdm_config.RDM_FACETS,
-    "publication_date": {
-        "facet": DateHistogramFacet(
-            field="metadata.publication_date_range",
-            label=_("Publication year"),
-            interval="year",
-            format="yyyy",
-        ),
-        "ui": {"field": "publication_date"},
-    },
-    "affiliations": {
-        "facet": TermsFacet(
-            field="metadata.creators.affiliations.id",
-            label=_("Author affiliations"),
-            value_labels=StoreAffiliationsLabels("affiliations"),
-        ),
-        "ui": {
-            "field": "metadata.creators.affiliations",
-        },
-    },
-    "funders": {
-        "facet": TermsFacet(
-            field="metadata.funding.funder.id",
-            label=_("Funders"),
-            value_labels=StoreFundersLabels("funders"),
-        ),
-        "ui": {
-            "field": "metadata.funding.funder",
-        },
-    },
-    "author_identifiers": {
-        "facet": TermsFacet(
-            field="metadata.creators.person_or_org.identifiers.scheme",
-            label=_("Author identifiers"),
-            value_labels={"orcid": _("ORCID")},
-        ),
-        "ui": {
-            "field": "metadata.creators.person_or_org.identifiers.scheme",
-        },
-    },
-    "rights": {
-        "facet": TermsFacet(
-            field="metadata.rights.id",
-            label=_("Licenses"),
-            value_labels=VocabularyLabels("licenses"),
-        ),
-        "ui": {
-            "field": "rights",
-        },
-    },
-    "relations": {
-        "facet": TermsFacet(
-            field="metadata.related_identifiers.relation_type.id",
-            label=_("Related works"),
-            value_labels=VocabularyLabels("relationtypes"),
-        ),
-        "ui": {
-            "field": "related_identifiers.relation_type",
-        },
-    },
-    "references": {
-        "facet": TermsFacet(
-            field="metadata.references.scheme",
-            label=_("References"),
-            value_labels={
-                "doi": _("DOI"),
-                "url": _("URL"),
-                "": _("No identifier"),
-            },
-        ),
-        "ui": {
-            "field": "metadata.references.scheme",
-        },
-    },
-}
-
-
-RDM_SEARCH = {
-    # Supported values from RDM_FACETS
-    "facets": [
-        "language",
-        "resource_type",
-        "publication_date",
-        "subject",
-        "funders",
-        "affiliations",
-        "author_identifiers",
-        "rights",
-        "relations",
-        "references",
-    ],
-    # Supported values from RDM_SORT_OPTIONS
-    "sort": [
-        "bestmatch",
-        "newest",
-        "oldest",
-        "updated-desc",
-        "updated-asc",
-        "created-desc",
-        "created-asc",
-        "mostviewed",
-    ],
-    "query_parser_cls": QueryParser.factory(
-        mapping={
-            # shortcuts
-            "title": "metadata.title",
-            "subject": "metadata.subjects.subject",
-            "contributor": "metadata.creators.person_or_org.name",
-            "affiliation": "metadata.creators.affiliations.name",
-            "funder": "metadata.funding.funder.name",
-            "references": FieldValueMapper(
-                "metadata.references.identifier", word=word_doi
-            ),
-            # taken from Zenodo
-            "doi": FieldValueMapper("pids.doi.identifier", word=word_doi),
-            "communities": FieldValueMapper(
-                "parent.communities.ids", word=word_communities
-            ),
-            # Persistent identifiers
-            "orcid": "metadata.creators.person_or_org.identifiers.identifier",
-            "ror": "metadata.creators.affiliations.id",
-            "issn": "custom_fields.journal:journal.issn",
-        },
-        tree_transformer_cls=SearchFieldTransformer,
-    ),
-}
-
-COMMUNITIES_RECORDS_SEARCH = deepcopy(RDM_SEARCH)
-"""Communities record search config is the same as the main record search."""
-
-RDM_SEARCH_DRAFTS = {
-    "facets": [
-        "is_published",
-        "language",
-        "resource_type",
-        "publication_date",
-        "subject",
-        "funders",
-        "affiliations",
-        "author_identifiers",
-        "rights",
-        "relations",
-        "references",
-    ],
-    "sort": [
-        "bestmatch",
-        "newest",
-        "oldest",
-        "updated-desc",
-        "updated-asc",
-        "created-desc",
-        "created-asc",
-        "mostviewed",
-    ],
-}
-"""User records search configuration (i.e. list of uploads)."""
-
-# Authentication
-# -------------------
-# See https://github.com/inveniosoftware/invenio-oauthclient/blob/master/invenio_oauthclient/config.py
+ACCOUNTS_SESSION_REDIS_URL = _redis_url
 
 # ACCOUNTS_LOCAL_LOGIN_ENABLED = True
 """Whether or not login with local account credentials should be enabled."""
@@ -640,8 +245,14 @@ RDM_SEARCH_DRAFTS = {
 # SECURITY_LOGIN_WITHOUT_CONFIRMATION = True
 """Allow users to login without first confirming their email address."""
 
-# USERPROFILES_READ_ONLY = True
-"""Make user profiles read-only, use values from OIDC."""
+ACCOUNTS_LOGIN_VIEW_FUNCTION = (
+    auto_redirect_login  # autoredirect to external login if enabled
+)
+
+
+# Invenio-OAuthClient
+# ===================
+# See https://github.com/inveniosoftware/invenio-oauthclient/blob/master/invenio_oauthclient/config.py
 
 # OAUTHCLIENT_REMOTE_APPS is a *list* of RemoteApp objects, each carrying its
 # own credentials; ext.py asserts isinstance(RemoteApp), so a dict fails at
@@ -765,9 +376,6 @@ if client_credentials("discord")[0]:
         )
     )
 
-ACCOUNTS_LOGIN_VIEW_FUNCTION = (
-    auto_redirect_login  # autoredirect to external login if enabled
-)
 # The signup form after an OAuth login asks for what the remote app did not
 # send: email marked required, username read-only. See
 # invenio_rdm_starter.oidc.signup_form.
@@ -778,7 +386,37 @@ OAUTHCLIENT_STATE_EXPIRES = 1800
 expires (default 3600). Should be higher than the validity the OIDC provider
 gives the authentication request (e.g. 900 seconds)."""
 
+
+# Invenio-UserProfiles
+# ====================
+
 USERPROFILES_READ_ONLY = True
+
+
+# Invenio-Celery
+# ==============
+
+CELERY_BROKER_URL = f"{_redis_base}/{_redis_db + 1}"
+
+BROKER_URL = f"{_redis_base}/{_redis_db + 1}"
+
+CELERY_RESULT_BACKEND = f"{_redis_base}/{_redis_db + 2}"
+
+
+# Flask-SQLAlchemy
+# ================
+# See https://flask-sqlalchemy.palletsprojects.com/en/3.1.x/config/
+# SQLALCHEMY_DATABASE_URI is set via the environment
+# (INVENIO_SQLALCHEMY_DATABASE_URI).
+
+
+# Invenio-Logging
+# ===============
+
+LOGGING_CONSOLE_LEVEL = "ERROR"
+
+LOGGING_FS_LEVEL = "ERROR"
+
 
 # OAI-PMH
 # =======
@@ -787,14 +425,88 @@ USERPROFILES_READ_ONLY = True
 OAISERVER_ID_PREFIX = "invenio-rdm"
 """The prefix that will be applied to the generated OAI-PMH ids."""
 
+
+# Flask-Caching
+# =============
+
+CACHE_REDIS_URL = f"{_redis_base}/{_redis_db + 4}"
+
+
 # Invenio-Search
-# --------------
+# ==============
 
 SEARCH_INDEX_PREFIX = "invenio-rdm-"
 
-# Citation style name mapping
-# ------------------------------------------
-# See https://inveniordm.docs.cern.ch/operate/customize/configuration/#citation-styles
+
+# Invenio-Assets
+# ==============
+
+# Use rspack instead of webpack
+WEBPACKEXT_PROJECT = "invenio_assets.webpack:rspack_project"
+
+
+# Invenio-App
+# ===========
+# See https://invenio-app.readthedocs.io/en/latest/configuration.html
+
+try:
+    INVENIO_APP_RDM_VERSION = version("invenio-app-rdm")
+except PackageNotFoundError:
+    INVENIO_APP_RDM_VERSION = ""
+
+# invenio-app's secure headers, with a Content Security Policy of the Starter's
+# own. Its other settings (HTTPS, HSTS, frame options, cookies) are
+# invenio-app's.
+APP_DEFAULT_SECURE_HEADERS = {
+    **invenio_app_config.APP_DEFAULT_SECURE_HEADERS,
+    "content_security_policy": {
+        "default-src": [
+            "'self'",
+            "data:",  # for fonts
+            "'unsafe-inline'",  # for inline scripts and styles
+            "blob:",  # for pdf preview
+            "s3.us-east-1.amazonaws.com",  # for S3 object storage
+            "s3.eu-central-1.amazonaws.com",  # for S3 object storage
+            # Add your own policies here (e.g. analytics)
+        ],
+        "img-src": [
+            "*",
+        ],
+    },
+}
+
+
+# Invenio-App-RDM
+# ===============
+# See https://github.com/inveniosoftware/invenio-app-rdm/blob/master/invenio_app_rdm/config.py
+
+SITE_UI_URL = "https://localhost"
+
+SITE_API_URL = "https://localhost/api"
+
+APP_RDM_DEPOSIT_FORM_DEFAULTS = {
+    "publication_date": lambda: datetime.now().strftime("%Y-%m-%d"),
+    "rights": [
+        {
+            "id": "cc-by-4.0",
+            "title": "Creative Commons Attribution 4.0 International",
+            "description": (
+                "The Creative Commons Attribution license allows "
+                "re-distribution and re-use of a licensed work "
+                "on the condition that the creator is "
+                "appropriately credited."
+            ),
+            "link": "https://creativecommons.org/licenses/by/4.0/legalcode",
+        }
+    ],
+    "resource_type": {
+        "id": "publication-preprint",
+    },
+}
+
+# Creators, affiliations and funders are suggested from the commonmeta store
+# (invenio-pidbox), not from the names, affiliations and funders vocabularies.
+APP_RDM_DEPOSIT_FORM_AUTOCOMPLETE_NAMES_PROVIDER = "pidbox"
 
 _CITATION_STYLE_NAMES = {
     "apa": _("APA"),
@@ -813,6 +525,7 @@ _rdm_citation_styles_str = os.environ.get(
     "INVENIO_RDM_CITATION_STYLES",
     "apa,harvard-cite-them-right,ieee,modern-language-association,vancouver,chicago-author-date",
 )
+
 _rdm_citation_style_codes = [
     style.strip() for style in _rdm_citation_styles_str.split(",") if style.strip()
 ]
@@ -828,9 +541,6 @@ RDM_CITATION_STYLES_DEFAULT = (
 )
 """The default citation style."""
 
-# Redirection of legacy URLs
-# --------------------------
-
 REDIRECTOR_RULES = {
     # "redirect_name": {
     #     "source": "/old_about",
@@ -839,11 +549,318 @@ REDIRECTOR_RULES = {
 }
 
 
-RDM_PERMISSION_POLICY = StarterRecordPermissionPolicy
-"""InvenioRDM Starter record permission policy."""
+# Invenio-Communities
+# ===================
+
+COMMUNITIES_IDENTITIES_CACHE_REDIS_URL = f"{_redis_base}/{_redis_db + 4}"
 
 COMMUNITIES_ALLOW_RESTRICTED = False
 """Don't allow restricted records in communities."""
 
 COMMUNITIES_PERMISSION_POLICY = StarterCommunityPermissionPolicy
 """InvenioRDM Starter community permission policy."""
+
+
+# Invenio-RDM-Records
+# ===================
+# See https://github.com/inveniosoftware/invenio-rdm-records/blob/master/invenio_rdm_records/config.py
+# DOI registration: https://inveniordm.docs.cern.ch/operate/customize/dois/
+
+RDM_ALLOW_RESTRICTED_RECORDS = False
+
+RDM_ALLOW_EXTERNAL_DOI_VERSIONING = False
+"""Don't allow records with external DOIs to be versioned."""
+
+#
+# Persistent identifiers configuration
+#
+RDM_PERSISTENT_IDENTIFIER_PROVIDERS = [
+    # DOI provider for externally managed DOIs
+    providers.ExternalPIDProvider(
+        "external",
+        "doi",
+        validators=[providers.BlockedPrefixes(config_names=["DATACITE_PREFIX"])],
+        label=_("DOI"),
+    ),
+    # OAI identifier
+    providers.OAIPIDProvider(
+        "oai",
+        label=_("OAI ID"),
+    ),
+]
+"""A list of configured persistent identifier providers."""
+
+# InvenioRDM's persistent identifiers, with a DOI of the Starter's own: an
+# existing DOI the depositor brings (external), never one minted here, and not
+# required. OAI identifiers are InvenioRDM's.
+RDM_PERSISTENT_IDENTIFIERS = {
+    **rdm_config.RDM_PERSISTENT_IDENTIFIERS,
+    "doi": {
+        "providers": ["external"],
+        "required": False,
+        "label": _("DOI"),
+        "validator": idutils.is_doi,
+        "normalizer": idutils.normalize_doi,
+        "is_enabled": providers.ExternalPIDProvider.is_enabled,
+        "ui": {"default_selected": "yes"},  # "yes", "no" or "not_needed"
+    },
+}
+"""The configured persistent identifiers for records."""
+
+RDM_PARENT_PERSISTENT_IDENTIFIERS = {}
+"""The configured persistent identifiers for parent records."""
+
+# InvenioRDM's schemes, extended rather than copied, so that the schemes a
+# release adds arrive with it: a copy from before v14 had left out CSTR, RRID
+# and Wikidata. The Starter adds UUID and GUID, and keeps "other" last.
+RDM_RECORDS_IDENTIFIERS_SCHEMES = {
+    scheme: definition
+    for scheme, definition in rdm_config.RDM_RECORDS_IDENTIFIERS_SCHEMES.items()
+    if scheme != "other"
+}
+RDM_RECORDS_IDENTIFIERS_SCHEMES.update(
+    {
+        "uuid": {
+            "label": _("UUID"),
+            "validator": rdm_config.always_valid,
+            "datacite": "UUID",
+        },
+        "guid": {
+            "label": _("GUID"),
+            "validator": rdm_config.always_valid,
+            "datacite": "GUID",
+        },
+        "other": rdm_config.RDM_RECORDS_IDENTIFIERS_SCHEMES["other"],
+    }
+)
+"""These are used for references, main, alternate and related identifiers."""
+
+# DataCite stays off unless INVENIO_DATACITE_ENABLED is set; its username,
+# password, prefix and data centre symbol come from the environment too.
+# InvenioRDM's defaults are "", not None: invenio-rdm-records turns these
+# settings into strings at startup, and None would become the text "None".
+# Production mode rather than InvenioRDM's test mode, once DataCite is on.
+DATACITE_TEST_MODE = False
+
+# Enable optional custom fields
+RDM_NAMESPACES = {
+    **JOURNAL_NAMESPACE,
+    "rs": None,
+}
+
+RDM_CUSTOM_FIELDS = [
+    *JOURNAL_CUSTOM_FIELDS,
+]
+
+RDM_CUSTOM_FIELDS_UI = [
+    {
+        "section": _("Publishing information"),
+        "hide_from_landing_page": True,
+        "fields": [
+            # journal
+            *JOURNAL_CUSTOM_FIELDS_UI["fields"],
+        ],
+    },
+]
+
+# InvenioRDM's sort options, extended rather than copied. RDM_SORT_OPTIONS also
+# serves the request searches (RDM_SEARCH_USER_REQUESTS sorts by activity), and
+# a copy from before v14 without newestactivity made every record landing page
+# fail with KeyError, shown as "Page not found". The Starter sorts newest and
+# oldest by publication date rather than by when the record was created, and
+# adds sorting by creation date as options of its own.
+RDM_SORT_OPTIONS = {
+    **rdm_config.RDM_SORT_OPTIONS,
+    "newest": dict(
+        title=_("Newest"),
+        fields=["-metadata.publication_date", "-metadata.dates.date"],
+    ),
+    "oldest": dict(
+        title=_("Oldest"),
+        fields=["metadata.publication_date", "metadata.dates.date"],
+    ),
+    "created-desc": dict(
+        title=_("Recently added"),
+        fields=["-created"],
+    ),
+    "created-asc": dict(
+        title=_("Least recently added"),
+        fields=["created"],
+    ),
+}
+"""Definitions of available record sort options."""
+
+# InvenioRDM's facets, extended rather than copied, so that the facets a
+# release adds arrive with it. The Starter shows publication years as a
+# histogram and adds facets for affiliations, funders, author identifiers,
+# licenses, related works and references.
+RDM_FACETS = {
+    **rdm_config.RDM_FACETS,
+    "publication_date": {
+        "facet": DateHistogramFacet(
+            field="metadata.publication_date_range",
+            label=_("Publication year"),
+            interval="year",
+            format="yyyy",
+        ),
+        "ui": {"field": "publication_date"},
+    },
+    "affiliations": {
+        "facet": TermsFacet(
+            field="metadata.creators.affiliations.id",
+            label=_("Author affiliations"),
+            value_labels=StoreAffiliationsLabels("affiliations"),
+        ),
+        "ui": {
+            "field": "metadata.creators.affiliations",
+        },
+    },
+    "funders": {
+        "facet": TermsFacet(
+            field="metadata.funding.funder.id",
+            label=_("Funders"),
+            value_labels=StoreFundersLabels("funders"),
+        ),
+        "ui": {
+            "field": "metadata.funding.funder",
+        },
+    },
+    "author_identifiers": {
+        "facet": TermsFacet(
+            field="metadata.creators.person_or_org.identifiers.scheme",
+            label=_("Author identifiers"),
+            value_labels={"orcid": _("ORCID")},
+        ),
+        "ui": {
+            "field": "metadata.creators.person_or_org.identifiers.scheme",
+        },
+    },
+    "rights": {
+        "facet": TermsFacet(
+            field="metadata.rights.id",
+            label=_("Licenses"),
+            value_labels=VocabularyLabels("licenses"),
+        ),
+        "ui": {
+            "field": "rights",
+        },
+    },
+    "relations": {
+        "facet": TermsFacet(
+            field="metadata.related_identifiers.relation_type.id",
+            label=_("Related works"),
+            value_labels=VocabularyLabels("relationtypes"),
+        ),
+        "ui": {
+            "field": "related_identifiers.relation_type",
+        },
+    },
+    "references": {
+        "facet": TermsFacet(
+            field="metadata.references.scheme",
+            label=_("References"),
+            value_labels={
+                "doi": _("DOI"),
+                "url": _("URL"),
+                "": _("No identifier"),
+            },
+        ),
+        "ui": {
+            "field": "metadata.references.scheme",
+        },
+    },
+}
+
+RDM_SEARCH = {
+    # Supported values from RDM_FACETS
+    "facets": [
+        "language",
+        "resource_type",
+        "publication_date",
+        "subject",
+        "funders",
+        "affiliations",
+        "author_identifiers",
+        "rights",
+        "relations",
+        "references",
+    ],
+    # Supported values from RDM_SORT_OPTIONS
+    "sort": [
+        "bestmatch",
+        "newest",
+        "oldest",
+        "updated-desc",
+        "updated-asc",
+        "created-desc",
+        "created-asc",
+        "mostviewed",
+    ],
+    "query_parser_cls": QueryParser.factory(
+        mapping={
+            # shortcuts
+            "title": "metadata.title",
+            "subject": "metadata.subjects.subject",
+            "contributor": "metadata.creators.person_or_org.name",
+            "affiliation": "metadata.creators.affiliations.name",
+            "funder": "metadata.funding.funder.name",
+            "references": FieldValueMapper(
+                "metadata.references.identifier", word=word_doi
+            ),
+            # taken from Zenodo
+            "doi": FieldValueMapper("pids.doi.identifier", word=word_doi),
+            "communities": FieldValueMapper(
+                "parent.communities.ids", word=word_communities
+            ),
+            # Persistent identifiers
+            "orcid": "metadata.creators.person_or_org.identifiers.identifier",
+            "ror": "metadata.creators.affiliations.id",
+            "issn": "custom_fields.journal:journal.issn",
+        },
+        tree_transformer_cls=SearchFieldTransformer,
+    ),
+}
+
+COMMUNITIES_RECORDS_SEARCH = deepcopy(RDM_SEARCH)
+"""Communities record search config is the same as the main record search."""
+
+RDM_SEARCH_DRAFTS = {
+    "facets": [
+        "is_published",
+        "language",
+        "resource_type",
+        "publication_date",
+        "subject",
+        "funders",
+        "affiliations",
+        "author_identifiers",
+        "rights",
+        "relations",
+        "references",
+    ],
+    "sort": [
+        "bestmatch",
+        "newest",
+        "oldest",
+        "updated-desc",
+        "updated-asc",
+        "created-desc",
+        "created-asc",
+        "mostviewed",
+    ],
+}
+"""User records search configuration (i.e. list of uploads)."""
+
+RDM_PERMISSION_POLICY = StarterRecordPermissionPolicy
+"""InvenioRDM Starter record permission policy."""
+
+
+# Invenio-Pidbox
+# ==============
+
+# The store (PIDBOX_SQLITE_PATH, default /var/lib/commonmeta/commonmeta.sqlite3,
+# mounted from the host) answers for the vocabularies the Starter doesn't
+# import: a record commit accepts any affiliation the store's ROR holds, and
+# any funder ROR types as funder. The vocabularies still count where they have
+# entries, so the accepted set is the union of the two.
+PIDBOX_RECORD_RELATIONS = True
