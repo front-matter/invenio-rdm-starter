@@ -170,3 +170,6 @@ public/
 
 # Node modules
 node_modules
+
+# Local notes
+notes.md
