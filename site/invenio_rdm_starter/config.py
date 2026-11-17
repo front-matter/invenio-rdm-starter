@@ -62,6 +62,7 @@ from invenio_rdm_starter.oidc import (
     client_credentials,
     signup_form,
 )
+from invenio_app import config as invenio_app_config
 from invenio_rdm_records import config as rdm_config
 from invenio_rdm_records.services import facets
 from invenio_pidbox.facets import StoreAffiliationsLabels, StoreFundersLabels
@@ -124,7 +125,11 @@ try:
 except PackageNotFoundError:
     INVENIO_APP_RDM_VERSION = ""
 
+# invenio-app's secure headers, with a Content Security Policy of the Starter's
+# own. Its other settings (HTTPS, HSTS, frame options, cookies) are
+# invenio-app's.
 APP_DEFAULT_SECURE_HEADERS = {
+    **invenio_app_config.APP_DEFAULT_SECURE_HEADERS,
     "content_security_policy": {
         "default-src": [
             "'self'",
@@ -139,19 +144,6 @@ APP_DEFAULT_SECURE_HEADERS = {
             "*",
         ],
     },
-    "force_https": True,
-    "force_https_permanent": False,
-    "force_file_save": False,
-    "frame_options": "sameorigin",
-    "frame_options_allow_from": None,
-    "strict_transport_security": True,
-    "strict_transport_security_preload": False,
-    "strict_transport_security_max_age": 31556926,  # One year in seconds
-    "strict_transport_security_include_subdomains": True,
-    "content_security_policy_report_uri": None,
-    "content_security_policy_report_only": False,
-    "session_cookie_secure": True,
-    "session_cookie_http_only": True,
 }
 
 SECURITY_POST_LOGOUT_VIEW = "/oauth/logout"
@@ -325,8 +317,11 @@ RDM_PERSISTENT_IDENTIFIER_PROVIDERS = [
 ]
 """A list of configured persistent identifier providers."""
 
+# InvenioRDM's persistent identifiers, with a DOI of the Starter's own: an
+# existing DOI the depositor brings (external), never one minted here, and not
+# required. OAI identifiers are InvenioRDM's.
 RDM_PERSISTENT_IDENTIFIERS = {
-    # DOI automatically removed if DATACITE_ENABLED is False.
+    **rdm_config.RDM_PERSISTENT_IDENTIFIERS,
     "doi": {
         "providers": ["external"],
         "required": False,
@@ -336,22 +331,11 @@ RDM_PERSISTENT_IDENTIFIERS = {
         "is_enabled": providers.ExternalPIDProvider.is_enabled,
         "ui": {"default_selected": "yes"},  # "yes", "no" or "not_needed"
     },
-    "oai": {
-        "providers": ["oai"],
-        "required": True,
-        "label": _("OAI"),
-        "is_enabled": providers.OAIPIDProvider.is_enabled,
-    },
 }
 """The configured persistent identifiers for records."""
 
 RDM_PARENT_PERSISTENT_IDENTIFIERS = {}
 """The configured persistent identifiers for parent records."""
-
-
-def always_valid(identifier):
-    """Gives every identifier as valid."""
-    return True
 
 
 # InvenioRDM's schemes, extended rather than copied, so that the schemes a
@@ -366,19 +350,15 @@ RDM_RECORDS_IDENTIFIERS_SCHEMES.update(
     {
         "uuid": {
             "label": _("UUID"),
-            "validator": always_valid,
+            "validator": rdm_config.always_valid,
             "datacite": "UUID",
         },
         "guid": {
             "label": _("GUID"),
-            "validator": always_valid,
+            "validator": rdm_config.always_valid,
             "datacite": "GUID",
         },
-        "other": {
-            "label": _("Other"),
-            "validator": always_valid,
-            "datacite": "Other",
-        },
+        "other": rdm_config.RDM_RECORDS_IDENTIFIERS_SCHEMES["other"],
     }
 )
 """These are used for references, main, alternate and related identifiers."""
