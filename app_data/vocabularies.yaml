@@ -42,19 +42,7 @@ resourcetypes:
 communitytypes:
   pid-type: comtyp
   data-file: vocabularies/community_types.yaml
-affiliations:
-  pid-type: aff
-  data-file: vocabularies/affiliations_ror.yaml
-funders:
-  pid-type: fun
-  data-file: vocabularies/funders.yaml
-# 'awards' contain a reference to a funder so the fixtures need to be run
-# after 'funders'
-awards:
-  pid-type: awa
-  data-file: vocabularies/awards.yaml
-# 'names' contain a reference to a affiliations so the fixtures need to be run
-# after 'affiliations'
-names:
-  pid-type: names
-  data-file: vocabularies/names.yaml
+# No affiliations, funders, names or awards: organizations and people come from
+# the commonmeta store through invenio-pidbox (PIDBOX_RECORD_RELATIONS in
+# invenio_rdm_starter.config). Awards would name their funder through the
+# funders vocabulary, so there are no award fixtures either.

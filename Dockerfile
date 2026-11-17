@@ -109,10 +109,11 @@ ENV LANG=en_US.UTF-8 \
 # create non-root invenio user
 RUN adduser invenio --uid 1000 --gid 0 --no-create-home --disabled-password
 
-# Install OS package dependencies. All of these are WeasyPrint's shared
-# libraries, loaded through cffi at import time: commonmeta-py renders post PDFs
-# with it, which invenio-feeds' importer does in the worker. Without them
-# `import weasyprint` raises
+# Install OS package dependencies: the shared libraries of WeasyPrint and
+# cairosvg, loaded through cffi at import time. cairosvg comes with
+# invenio-app-rdm and needs libcairo2; WeasyPrint comes with commonmeta-py
+# (through invenio-rdm-records and invenio-pidbox), which renders PDFs with it.
+# Without them `import weasyprint` raises
 #
 #     OSError: cannot load library 'libgobject-2.0-0'
 #

@@ -63,9 +63,8 @@ from invenio_rdm_starter.oidc import (
     signup_form,
 )
 from invenio_rdm_records.services import facets
+from invenio_pidbox.facets import StoreAffiliationsLabels, StoreFundersLabels
 from invenio_vocabularies.services.facets import VocabularyLabels
-from invenio_vocabularies.contrib.funders.facets import FundersLabels
-from invenio_vocabularies.contrib.affiliations.facets import AffiliationsLabels
 from invenio_s3 import s3fs_storage_factory
 
 # Which module these settings came from. invenio_rdm_starter.views refuses to
@@ -306,6 +305,18 @@ APP_RDM_DEPOSIT_FORM_DEFAULTS = {
 
 # See https://github.com/inveniosoftware/invenio-app-rdm/blob/master/invenio_app_rdm/config.py
 APP_RDM_DEPOSIT_FORM_AUTOCOMPLETE_NAMES = "search"  # "search_only" or "off"
+# Creators, affiliations and funders are suggested from the commonmeta store
+# (invenio-pidbox), not from the names, affiliations and funders vocabularies.
+APP_RDM_DEPOSIT_FORM_AUTOCOMPLETE_NAMES_PROVIDER = "pidbox"
+
+# Invenio-Pidbox
+# ==============
+# The store (PIDBOX_SQLITE_PATH, default /var/lib/commonmeta/commonmeta.sqlite3,
+# mounted from the host) answers for the vocabularies the Starter doesn't
+# import: a record commit accepts any affiliation the store's ROR holds, and
+# any funder ROR types as funder. The vocabularies still count where they have
+# entries, so the accepted set is the union of the two.
+PIDBOX_RECORD_RELATIONS = True
 
 # Invenio-RDM-Records
 # ===================
@@ -692,7 +703,7 @@ RDM_FACETS = {
         "facet": TermsFacet(
             field="metadata.creators.affiliations.id",
             label=_("Author affiliations"),
-            value_labels=AffiliationsLabels("affiliations"),
+            value_labels=StoreAffiliationsLabels("affiliations"),
         ),
         "ui": {
             "field": "metadata.creators.affiliations",
@@ -702,7 +713,7 @@ RDM_FACETS = {
         "facet": TermsFacet(
             field="metadata.funding.funder.id",
             label=_("Funders"),
-            value_labels=FundersLabels("funders"),
+            value_labels=StoreFundersLabels("funders"),
         ),
         "ui": {
             "field": "metadata.funding.funder",
