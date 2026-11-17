@@ -61,9 +61,3 @@ class DateHistogramFacet(LabelledFacetMixin, dsl.DateHistogramFacet):
                 }
             },
         )
-
-
-# InvenioRDM's facets, extended rather than copied, so that the facets a
-# release adds arrive with it. The Starter shows publication years as a
-# histogram and adds facets for affiliations, funders, author identifiers,
-# licenses, related works and references.
