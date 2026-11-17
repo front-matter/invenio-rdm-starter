@@ -306,18 +306,6 @@ show_alternate_identifiers, show_related_identifiers, show_funding, show_dates %
     </div>
     <div class="ui divider"></div>
   {% endif %}
-
-  {% if record_ui["ui"]["custom_fields"].get('rs:citations', None) %}
-    <div class="ui grid">
-      <div class="sixteen wide mobile four wide tablet three wide computer column">
-        <h3 class="ui header">{{ _('Citations') }}</h3>
-      </div>
-      <div class="sixteen wide mobile twelve wide tablet thirteen wide computer column">
-        {{ show_references(record_ui["ui"]["custom_fields"].get('rs:citations')) }}
-      </div>
-    </div>
-    <div class="ui divider"></div>
-  {% endif %}
 {% endif %}
 
 {% block extras %}{% endblock %}

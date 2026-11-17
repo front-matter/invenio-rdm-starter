@@ -664,10 +664,8 @@ settings into strings at startup, and None would become the text "None"."""
 
 RDM_NAMESPACES = {
     **journal.JOURNAL_NAMESPACE,
-    "rs": None,
 }
-"""Namespaces of the custom fields: the journal fields, and rs, Rogue
-Scholar's, whose rs:citations the landing page template reads."""
+"""Namespaces of the custom fields: the journal fields."""
 
 RDM_CUSTOM_FIELDS = [
     *journal.JOURNAL_CUSTOM_FIELDS,
