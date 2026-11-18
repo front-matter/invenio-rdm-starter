@@ -11,6 +11,8 @@ from functools import cache
 
 import pytest
 from invenio_app_rdm import config as app_rdm_config
+from invenio_pidbox.components import CitationsComponent
+from invenio_pidbox.custom_fields import CITATIONS_FIELD
 from invenio_rdm_records import config as rdm_config
 from invenio_rdm_starter import config as starter_config
 
@@ -90,6 +92,20 @@ def test_the_starter_keeps_every_entry_invenio_rdm_defines(setting):
 
 def test_other_is_the_last_identifier_scheme():
     assert list(starter_config.RDM_RECORDS_IDENTIFIERS_SCHEMES)[-1] == "other"
+
+
+def test_citations_are_a_record_custom_field():
+    """invenio-pidbox writes pidbox:citations, the landing page lists them."""
+    assert "pidbox" in starter_config.RDM_NAMESPACES
+    assert CITATIONS_FIELD in [cf.name for cf in starter_config.RDM_CUSTOM_FIELDS]
+
+
+def test_an_update_keeps_the_citations():
+    """The stock CustomFieldsComponent would drop them on every edit."""
+    components = starter_config.RDM_RECORDS_SERVICE_COMPONENTS
+
+    assert CitationsComponent in components
+    assert not [c for c in components if c.__name__ == "CustomFieldsComponent"]
 
 
 def test_no_helper_reaches_the_app_config():

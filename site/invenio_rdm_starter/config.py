@@ -47,6 +47,8 @@ from invenio_rdm_starter.oidc import (
 )
 from invenio_app import config as invenio_app_config
 from invenio_rdm_records import config as rdm_config
+from invenio_pidbox import custom_fields as pidbox_fields
+from invenio_pidbox.components import citations_components
 from invenio_pidbox.facets import StoreAffiliationsLabels, StoreFundersLabels
 from invenio_vocabularies.services.facets import VocabularyLabels
 from invenio_s3 import s3fs_storage_factory
@@ -507,13 +509,20 @@ RDM_RECORDS_IDENTIFIERS_SCHEMES.update(
 
 RDM_NAMESPACES = {
     **journal.JOURNAL_NAMESPACE,
+    **pidbox_fields.PIDBOX_NAMESPACE,
 }
-"""Namespaces of the custom fields: the journal fields."""
+"""Namespaces of the custom fields: the journal fields, and invenio-pidbox's
+citations."""
 
 RDM_CUSTOM_FIELDS = [
     *journal.JOURNAL_CUSTOM_FIELDS,
+    *pidbox_fields.CITATIONS_CUSTOM_FIELDS,
 ]
-"""Custom fields of records: the journal fields."""
+"""Custom fields of records: the journal fields, and `pidbox:citations`, the
+works citing a record. invenio-pidbox fills it in from the commonmeta store
+with the "Refresh citations" job (Administration → Jobs); nobody edits it, so
+the deposit form doesn't show it. The landing page lists the citations, and
+the person and organization pages count the cited works."""
 
 RDM_CUSTOM_FIELDS_UI = [
     {
@@ -631,11 +640,12 @@ RDM_FACETS = {
             "field": "metadata.references.scheme",
         },
     },
+    "citations": pidbox_fields.CITATIONS_FACET,
 }
 """InvenioRDM's facets, extended rather than copied, so that the facets a
 release adds arrive with it. The Starter shows publication years as a
 histogram and adds facets for affiliations, funders, author identifiers,
-licenses, related works and references."""
+licenses, related works, references and citations."""
 
 RDM_SEARCH = {
     # Supported values from RDM_FACETS
@@ -650,6 +660,7 @@ RDM_SEARCH = {
         "rights",
         "relations",
         "references",
+        "citations",
     ],
     # Supported values from RDM_SORT_OPTIONS
     "sort": [
@@ -673,6 +684,7 @@ RDM_SEARCH = {
             "references": FieldValueMapper(
                 "metadata.references.identifier", word=word_doi
             ),
+            "citations": pidbox_fields.CITATIONS_QUERY_FIELD,
             # taken from Zenodo
             "doi": FieldValueMapper("pids.doi.identifier", word=word_doi),
             "communities": FieldValueMapper(
@@ -705,6 +717,7 @@ RDM_SEARCH_DRAFTS = {
         "rights",
         "relations",
         "references",
+        "citations",
     ],
     "sort": [
         "bestmatch",
@@ -721,6 +734,13 @@ RDM_SEARCH_DRAFTS = {
 
 RDM_PERMISSION_POLICY = StarterRecordPermissionPolicy
 """InvenioRDM Starter record permission policy."""
+
+RDM_RECORDS_SERVICE_COMPONENTS = citations_components()
+"""InvenioRDM's record service components, with the one that writes custom
+fields replaced by invenio-pidbox's CitationsComponent. The stock component
+replaces all custom fields with what an update sends, and the deposit form
+never sends `pidbox:citations`, so every edit of a record would delete its
+citations until the next "Refresh citations" run."""
 
 
 # Invenio-Pidbox

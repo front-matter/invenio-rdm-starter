@@ -17,7 +17,8 @@ show_alternate_identifiers, show_related_identifiers, show_funding, show_dates %
                     record_ui["ui"]["related_identifiers"] or
                     metadata.funding or
                     record_ui["ui"]["dates"] or
-                    metadata.references
+                    metadata.references or
+                    record_ui["ui"]["custom_fields"].get("pidbox:citations")
 %}
 
 {# Check if custom field has values if no other content #}
@@ -302,6 +303,20 @@ show_alternate_identifiers, show_related_identifiers, show_funding, show_dates %
       </div>
       <div class="sixteen wide mobile twelve wide tablet thirteen wide computer column">
         {{ show_references(metadata.references) }}
+      </div>
+    </div>
+    <div class="ui divider"></div>
+  {% endif %}
+
+  {# The works citing this one, which invenio-pidbox's "Refresh citations"
+     job keeps current from the commonmeta store. #}
+  {% if record_ui["ui"]["custom_fields"].get("pidbox:citations") %}
+    <div class="ui grid">
+      <div class="sixteen wide mobile four wide tablet three wide computer column">
+        <h3 class="ui header">{{ _('Citations') }}</h3>
+      </div>
+      <div class="sixteen wide mobile twelve wide tablet thirteen wide computer column">
+        {{ show_references(record_ui["ui"]["custom_fields"].get("pidbox:citations")) }}
       </div>
     </div>
     <div class="ui divider"></div>
