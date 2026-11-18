@@ -8,14 +8,15 @@
 
 // invenio-app-rdm v14's RecordsResultsListItem, with the title shown with its
 // inline HTML (italics, sub- and superscripts) instead of as escaped text; see
-// titleHtml.js. It renders the search page, the community and collection
+// titleHtml.js, and creators linking to their person pages; see
+// ProfileItemCreators.js. It renders the search page, the community and collection
 // searches, and the front page's recent uploads.
 
 import { i18next } from "@translations/invenio_app_rdm/i18next";
 import _get from "lodash/get";
 import React, { Component } from "react";
 import Overridable from "react-overridable";
-import { SearchItemCreators } from "@js/invenio_app_rdm/utils";
+import { ProfileItemCreators } from "./ProfileItemCreators";
 import PropTypes from "prop-types";
 import { Item, Label, Icon } from "semantic-ui-react";
 import { buildUID } from "react-searchkit";
@@ -128,7 +129,7 @@ class RecordsResultsListItem extends Component {
               <a href={viewLink}>{titleElements(title, 100)}</a>
             </Item.Header>
             <Item className="creatibutors">
-              <SearchItemCreators creators={creators} othersLink={viewLink} />
+              <ProfileItemCreators creators={creators} othersLink={viewLink} />
             </Item>
             <Overridable
               id={buildUID("RecordsResultsListItem.description", "", appName)}
