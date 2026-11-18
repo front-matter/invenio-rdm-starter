@@ -2240,7 +2240,7 @@ wheels = [
 
 [[package]]
 name = "invenio-rdm-starter"
-version = "14.0.7.0"
+version = "14.0.7.1"
 source = { editable = "." }
 dependencies = [
     { name = "commonmeta-py", extra = ["backend"] },
