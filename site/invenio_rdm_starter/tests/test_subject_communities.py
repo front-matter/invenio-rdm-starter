@@ -3,11 +3,16 @@
 from importlib.metadata import entry_points
 
 import pytest
-from invenio_rdm_starter.jobs import SubjectCommunitiesJob
+from invenio_rdm_starter.jobs import (
+    AddRecordsToSubjectCommunitiesJob,
+    CreateSubjectCommunitiesJob,
+)
 from invenio_rdm_starter.subject_communities import (
+    add_records_to_subject_communities,
     community_data,
+    create_subject_communities,
     record_subfields,
-    sync_subject_communities,
+    subfield_slug,
 )
 
 SUBFIELD = "https://openalex.org/subfields/"
@@ -56,9 +61,31 @@ def test_a_subject_community_is_named_and_typed_like_rogue_scholars():
     assert data["access"]["visibility"] == "public"
 
 
-def test_the_job_runs_the_sweep_over_every_record():
-    assert SubjectCommunitiesJob.task is sync_subject_communities
-    assert SubjectCommunitiesJob.build_task_arguments(None, since="2026-01-01") == {}
+@pytest.mark.parametrize(
+    ("subject_id", "slug"),
+    [
+        (f"{SUBFIELD}3309", "3309"),
+        (f"{SUBFIELD}3309/", "3309"),
+        ("https://openalex.org/fields/33", None),
+        ("https://openalex.org/T10017", None),
+        (f"{SUBFIELD}abc", None),
+        ("", None),
+    ],
+)
+def test_subfield_slug(subject_id, slug):
+    assert subfield_slug(subject_id) == slug
+
+
+@pytest.mark.parametrize(
+    ("job", "task"),
+    [
+        (CreateSubjectCommunitiesJob, create_subject_communities),
+        (AddRecordsToSubjectCommunitiesJob, add_records_to_subject_communities),
+    ],
+)
+def test_each_job_runs_its_task_over_everything(job, task):
+    assert job.task is task
+    assert job.build_task_arguments(None, since="2026-01-01") == {}
 
 
 @pytest.mark.parametrize(
@@ -66,8 +93,13 @@ def test_the_job_runs_the_sweep_over_every_record():
     [
         (
             "invenio_jobs.jobs",
-            "starter_subject_communities",
-            "invenio_rdm_starter.jobs:SubjectCommunitiesJob",
+            "starter_create_subject_communities",
+            "invenio_rdm_starter.jobs:CreateSubjectCommunitiesJob",
+        ),
+        (
+            "invenio_jobs.jobs",
+            "starter_add_records_to_subject_communities",
+            "invenio_rdm_starter.jobs:AddRecordsToSubjectCommunitiesJob",
         ),
         (
             "invenio_celery.tasks",
@@ -77,7 +109,7 @@ def test_the_job_runs_the_sweep_over_every_record():
     ],
 )
 def test_the_job_and_its_task_are_registered(group, name, value):
-    """Without them the dashboard doesn't list the job, or Celery can't run it."""
+    """Without them the dashboard doesn't list a job, or Celery can't run it."""
     registered = {ep.name: ep.value for ep in entry_points(group=group)}
 
     assert registered.get(name) == value

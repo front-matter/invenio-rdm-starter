@@ -1,17 +1,22 @@
-"""Communities for the OpenAlex subfields of the records.
+"""Communities for the OpenAlex subfields.
 
-As on Rogue Scholar, every OpenAlex subfield the records name has a community
-of type ``subject``: slug the subfield number (``3309``), title the subfield
-name, website the subfield's OpenAlex page. A record belongs to the community
-of each subfield among its subjects.
+As on Rogue Scholar, every OpenAlex subfield has a community of type
+``subject``: slug the subfield number (``3309``), title the subfield name,
+website the subfield's OpenAlex page. A record belongs to the community of
+each subfield among its subjects.
 
-commonmeta-rs adds the subfields to a record as subjects from the
-``Subfields`` scheme of the subjects vocabulary, when it enriches the record
-with OpenAlex. Nothing in InvenioRDM acts on them, so a sweep does: it
-creates a community the first time a subfield turns up, and adds a record to
-the communities of its subfields that it is not in yet. A record in all of
-them costs a comparison and nothing else, so the sweep runs over every record
-with a subfield on each run.
+Two jobs, so that the communities exist before any record names them:
+
+* :func:`create_subject_communities` creates the community of every subfield
+  in the subjects vocabulary's ``Subfields`` scheme that doesn't have one.
+* :func:`add_records_to_subject_communities` adds each record to the
+  communities of its subfields. commonmeta-rs adds the subfields to a record
+  as subjects when it enriches the record with OpenAlex; nothing in
+  InvenioRDM acts on them. A subfield without a community is left alone, so
+  the first job decides which communities there are.
+
+A record already in all its communities costs a comparison, a subfield with a
+community a lookup, so both jobs go over everything on each run.
 
 A stopgap until invenio-vocabularies carries the OpenAlex vocabularies and
 creates these communities itself.
@@ -28,12 +33,15 @@ from invenio_pidstore.errors import PIDDoesNotExistError
 
 SUBFIELD_PREFIX = "https://openalex.org/subfields/"
 
+#: The subfields in the subjects vocabulary.
+VOCABULARY_QUERY = "scheme:Subfields"
+
 #: Records with a subject from the vocabulary's OpenAlex subfields scheme.
 #: The index keeps a subject's scheme, which the vocabulary fills in.
-SUBFIELD_QUERY = "metadata.subjects.scheme:Subfields"
+RECORD_QUERY = "metadata.subjects.scheme:Subfields"
 
 #: Who can see, join and submit to a subject community: anyone, as on Rogue
-#: Scholar. Records are added by this sweep, not submitted by depositors.
+#: Scholar. Records are added by the second job, not submitted by depositors.
 COMMUNITY_ACCESS = {
     "visibility": "public",
     "members_visibility": "public",
@@ -54,11 +62,8 @@ def record_subfields(record: dict[str, Any]) -> dict[str, str]:
     """
     subfields: dict[str, str] = {}
     for subject in (record.get("metadata") or {}).get("subjects") or []:
-        subject_id = subject.get("id") or ""
-        if not subject_id.startswith(SUBFIELD_PREFIX):
-            continue
-        slug = subject_id.removeprefix(SUBFIELD_PREFIX).strip("/")
-        if slug.isdigit():
+        slug = subfield_slug(subject.get("id") or "")
+        if slug is not None:
             subfields[slug] = subject.get("subject") or slug
     return subfields
 
@@ -76,57 +81,100 @@ def community_data(slug: str, name: str) -> dict[str, Any]:
     }
 
 
-def _community_id(slug: str, name: str, counts: dict[str, int]) -> str:
-    """Return the id of a subfield's community, creating it if needed."""
+def subfield_slug(subject_id: str) -> str | None:
+    """Return a subfield's community slug, its number, or ``None``."""
+    if not subject_id.startswith(SUBFIELD_PREFIX):
+        return None
+    slug = subject_id.removeprefix(SUBFIELD_PREFIX).strip("/")
+    return slug if slug.isdigit() else None
+
+
+def _community_id(slug: str) -> str | None:
+    """Return the id of a subfield's community, or ``None`` if there is none."""
     from invenio_communities.proxies import current_communities
 
-    service = current_communities.service
     try:
-        return service.read(system_identity, slug).id
+        return current_communities.service.read(system_identity, slug).id
     except PIDDoesNotExistError:
-        community = service.create(system_identity, community_data(slug, name))
-        counts["communities_created"] += 1
-        log.info("community_created", slug=slug, title=name)
-        return community.id
+        return None
 
 
 @shared_task(ignore_result=True)
-def sync_subject_communities(max_records: int | None = None) -> dict[str, int]:
-    """Put every record with OpenAlex subfields into their communities.
+def create_subject_communities() -> dict[str, int]:
+    """Create the community of every OpenAlex subfield that has none.
 
     Returns counts of what it did, which is what a manual run shows:
-    ``{"scanned", "communities_created", "records_added", "failed"}``.
+    ``{"subfields", "existing", "created", "failed"}``.
+    """
+    from invenio_communities.proxies import current_communities
+    from invenio_records_resources.proxies import current_service_registry
+
+    subjects = current_service_registry.get("subjects")
+    communities = current_communities.service
+    counts = {"subfields": 0, "existing": 0, "created": 0, "failed": 0}
+
+    for hit in subjects.scan(system_identity, params={"q": VOCABULARY_QUERY}).hits:
+        slug = subfield_slug(hit.get("id") or "")
+        if slug is None:
+            continue
+        counts["subfields"] += 1
+        if _community_id(slug) is not None:
+            counts["existing"] += 1
+            continue
+
+        name = hit.get("subject") or slug
+        try:
+            communities.create(system_identity, community_data(slug, name))
+        except Exception:
+            # One subfield failing must not stop the others; it is tried
+            # again on the next run.
+            counts["failed"] += 1
+            log.exception("community_not_created", slug=slug, title=name)
+            continue
+        counts["created"] += 1
+        log.info("community_created", slug=slug, title=name)
+
+    log.info("subject_communities_created", **counts)
+    return counts
+
+
+@shared_task(ignore_result=True)
+def add_records_to_subject_communities(
+    max_records: int | None = None,
+) -> dict[str, int]:
+    """Add every record with OpenAlex subfields to their communities.
+
+    Only to communities that exist: a subfield without one is counted under
+    ``"no_community"`` and left for :func:`create_subject_communities`.
+    Returns ``{"scanned", "added", "no_community", "failed"}``.
     """
     from invenio_rdm_records.proxies import current_rdm_records
 
     records = current_rdm_records.records_service
     record_communities = current_rdm_records.record_communities_service
-    counts = {"scanned": 0, "communities_created": 0, "records_added": 0, "failed": 0}
-    community_ids: dict[str, str] = {}
+    counts = {"scanned": 0, "added": 0, "no_community": 0, "failed": 0}
+    community_ids: dict[str, str | None] = {}
 
-    for hit in records.scan(system_identity, params={"q": SUBFIELD_QUERY}).hits:
+    for hit in records.scan(system_identity, params={"q": RECORD_QUERY}).hits:
         if max_records is not None and counts["scanned"] >= max_records:
             break
         counts["scanned"] += 1
 
-        subfields = record_subfields(hit)
         try:
-            for slug, name in subfields.items():
+            for slug in record_subfields(hit):
                 if slug not in community_ids:
-                    community_ids[slug] = _community_id(slug, name, counts)
+                    community_ids[slug] = _community_id(slug)
         except Exception:
-            # The community of one subfield failing to be created must not
-            # stop the sweep; the record is tried again on the next run.
             counts["failed"] += 1
-            log.exception("community_creation_failed", record_id=hit["id"])
+            log.exception("community_lookup_failed", record_id=hit["id"])
             continue
 
+        wanted = [community_ids[slug] for slug in record_subfields(hit)]
+        counts["no_community"] += sum(1 for cid in wanted if cid is None)
         current = set(
             ((hit.get("parent") or {}).get("communities") or {}).get("ids") or []
         )
-        missing = [
-            community_ids[s] for s in subfields if community_ids[s] not in current
-        ]
+        missing = [cid for cid in wanted if cid is not None and cid not in current]
         if not missing:
             continue
 
@@ -141,10 +189,10 @@ def sync_subject_communities(max_records: int | None = None) -> dict[str, int]:
             log.exception("record_not_added", record_id=hit["id"])
             continue
 
-        counts["records_added"] += 1 if processed else 0
+        counts["added"] += 1 if processed else 0
         if errors:
             counts["failed"] += 1
             log.warning("record_partly_added", record_id=hit["id"], errors=errors)
 
-    log.info("subject_communities_synced", **counts)
+    log.info("records_added_to_subject_communities", **counts)
     return counts

@@ -5,31 +5,48 @@ from __future__ import annotations
 from invenio_i18n import lazy_gettext as _
 from invenio_jobs.jobs import JobType
 
-from .subject_communities import sync_subject_communities
+from .subject_communities import (
+    add_records_to_subject_communities,
+    create_subject_communities,
+)
 
 
-class SubjectCommunitiesJob(JobType):
-    """Create the OpenAlex subfield communities and fill them."""
-
-    id = "starter_subject_communities"
-    title = _("Subject communities")
-    description = _(
-        "Create a community for every OpenAlex subfield the records name, and "
-        "add each record to the communities of its subfields."
-    )
-
-    task = sync_subject_communities
+class _EverythingEachRun(JobType):
+    """A job that goes over everything on each run, whatever ``since`` says."""
 
     @classmethod
     def build_task_arguments(cls, job_obj, since=None, **kwargs):
         """Return no arguments, deliberately ignoring ``since``.
 
-        A record gains a subfield when it is enriched, which happens to the
-        record's metadata but may predate the last run's start, and a record
-        already in its communities costs only a comparison. So each run goes
-        over every record with a subfield.
-
-        The dashboard's custom arguments still take precedence:
-        ``{"max_records": 100}`` bounds a first run.
+        A record gains a subfield when it is enriched, which says nothing about
+        when the job last ran, and what is already done costs a comparison. The
+        dashboard's custom arguments still take precedence.
         """
         return {}
+
+
+class CreateSubjectCommunitiesJob(_EverythingEachRun):
+    """Create the communities of the OpenAlex subfields."""
+
+    id = "starter_create_subject_communities"
+    title = _("Create subject communities")
+    description = _(
+        "Create a community for every OpenAlex subfield in the subjects "
+        "vocabulary that doesn't have one."
+    )
+
+    task = create_subject_communities
+
+
+class AddRecordsToSubjectCommunitiesJob(_EverythingEachRun):
+    """Add the records to the communities of their OpenAlex subfields."""
+
+    id = "starter_add_records_to_subject_communities"
+    title = _("Add records to subject communities")
+    description = _(
+        "Add each record with OpenAlex subfields to the communities of its "
+        'subfields. Run "Create subject communities" first; a subfield '
+        "without a community is skipped."
+    )
+
+    task = add_records_to_subject_communities
