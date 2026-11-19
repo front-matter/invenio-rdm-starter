@@ -6,10 +6,11 @@
 @neutralBorderLabelColor @teal;
 
 /* The DOI of a work in the record lists, where the access status used to
-   be, in the blue of the metrics' "Works with References" card. */
+   be, in InvenioRDM's slate, the colour of the creators' names: white text
+   on it reads at 4.7:1. */
 .ui.label.doi,
 a.ui.label.doi:hover,
 a.ui.label.doi:focus {
-  background-color: #4f86ff;
+  background-color: #677489;
   color: #fff;
 }
