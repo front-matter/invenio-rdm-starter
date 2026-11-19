@@ -12,6 +12,7 @@ from prometheus_flask_exporter.multiprocess import (
 )
 
 from .exceptions import ConfigNotLoadedError
+from .filters import format_edtf_date
 
 CONFIG_MODULE = "invenio_rdm_starter.config"
 
@@ -108,5 +109,6 @@ def create_blueprint(app):
         __name__,
         template_folder="./templates",
     )
+    blueprint.add_app_template_filter(format_edtf_date, "format_edtf")
 
     return blueprint

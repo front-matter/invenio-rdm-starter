@@ -90,7 +90,8 @@
     {% set date_type_title = date.get('type', {}).get('title_l10n', _('Unknown date type')) %}
     <dt class="ui tiny header">{{ date_type_title }}</dt>
     <dd>
-      <div>{{ date.date|default('') }}</div>
+      {# Formatted like the publication date at the top of the page. #}
+      <div>{{ date.date|default('')|format_edtf }}</div>
       <div class="text-muted">{{ date.description|default('') }}</div>
     </dd>
   {% endfor %}
