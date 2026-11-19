@@ -65,6 +65,13 @@ invenio_rdm_starter = "invenio_rdm_starter.config"
 [project.entry-points."invenio_base.finalize_app"]
 invenio_rdm_starter = "invenio_rdm_starter.errors:finalize_app"
 
+# The subject communities job: the Jobs dashboard lists it, Celery runs its task.
+[project.entry-points."invenio_jobs.jobs"]
+starter_subject_communities = "invenio_rdm_starter.jobs:SubjectCommunitiesJob"
+
+[project.entry-points."invenio_celery.tasks"]
+invenio_rdm_starter = "invenio_rdm_starter.subject_communities"
+
 [tool.ruff]
 line-length = 88
 include = ["pyproject.toml", "site/**/*.py"]
