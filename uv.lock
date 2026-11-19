@@ -4080,7 +4080,7 @@ wheels = [
 
 [[package]]
 name = "pytest-invenio"
-version = "4.0.3"
+version = "4.1.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "check-manifest" },
@@ -4096,9 +4096,9 @@ dependencies = [
     { name = "selenium" },
     { name = "snowballstemmer" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/37/ee/dc0936abafc0fc29b4d1646a59053034a21e5cf3943d66c3f6fb43b4e97f/pytest_invenio-4.0.3.tar.gz", hash = "sha256:2544370d8ba5d938f50715c9326aa6ea869ac9aea801d71fa4373e80283f4e1d", size = 20001, upload-time = "2026-10-08T07:10:53.414Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/51/d4/57da51122299f375538f4c07d8d4c6cc13d2f7f771938b9a6d4a2eaf92db/pytest_invenio-4.1.0.tar.gz", hash = "sha256:92d866218bf9412e4d67314540243cd366214086422bc7ecf6f7a10d94c243da", size = 20332, upload-time = "2026-11-19T07:36:56.71Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/fb/b6/115f593d52cecdf1354aae5ce69aa0f10e4090cc01c110faf8d1ac627c4c/pytest_invenio-4.0.3-py3-none-any.whl", hash = "sha256:685555693f8115447e28146cdd53ac7406bd83d6c28cc1b33bef1d36b5140488", size = 22482, upload-time = "2026-10-08T07:10:52.254Z" },
+    { url = "https://files.pythonhosted.org/packages/76/ab/11d73588be2b9f8daec1cc3335fca7f6858f744665a9c95ee5d2004cbaf5/pytest_invenio-4.1.0-py3-none-any.whl", hash = "sha256:c4cd9227b1c7d5b27720f965bb9e63ccf531a8fb902e912ea0aad5ec509cadb5", size = 22849, upload-time = "2026-11-19T07:36:55.573Z" },
 ]
 
 [[package]]
