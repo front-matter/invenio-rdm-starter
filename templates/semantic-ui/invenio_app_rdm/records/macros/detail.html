@@ -166,9 +166,15 @@
 {% endmacro %}
 
 {% macro show_references(references) %}
+  {#- A reference or citation as HTML, but only its inline formatting, as the
+      record title: a formatted citation sets a journal or a species name in
+      italics. References come from publishers and citations from citeproc,
+      neither sanitized, so anything else is stripped to its text, and no tag
+      keeps an attribute. #}
+  {%- set reference_tags = ["b", "strong", "i", "em", "u", "sub", "sup"] %}
   <ol class="ui ordered list details-list">
     {% for reference in references %}
-      {% set reference_string = reference.reference|default('') %}
+      {% set reference_string = reference.reference|default('')|sanitize_html(tags=reference_tags, attributes={"*": []})|safe %}
       {% if reference.identifier %}
         {% if reference.scheme %}
           {% set id = reference.identifier %}
