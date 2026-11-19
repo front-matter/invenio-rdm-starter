@@ -244,8 +244,13 @@
             {%- block record_title -%}
               <section id="record-title-section"
                        aria-label="{{ _('Record title and creators') }}">
+                {#- The title as HTML, but only its inline formatting: italics for
+                    species names, sub- and superscripts for formulas, as in the
+                    record lists. InvenioRDM doesn't sanitize titles, so anything
+                    else is stripped to its text, and no tag keeps an attribute. #}
+                {%- set title_tags = ["b", "strong", "i", "em", "u", "sub", "sup"] %}
                 <h1 id="record-title"
-                    class="wrap-overflowing-text">{{ metadata.title | safe }}</h1>
+                    class="wrap-overflowing-text">{{ metadata.title | sanitize_html(tags=title_tags, attributes={"*": []}) | safe }}</h1>
 
                 {% if record_ui["ui"]["creators"] or record_ui["ui"]["contributors"] %}
                   <section id="creatibutors"
