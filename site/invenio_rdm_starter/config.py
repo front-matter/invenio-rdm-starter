@@ -306,6 +306,21 @@ CELERY_RESULT_BACKEND = f"{_redis_base}/{_redis_db + 2}"
 """Where Celery keeps task results: Redis/Valkey database + 2."""
 
 
+# Invenio-Jobs
+# ============
+
+JOBS_DEFAULT_QUEUE = "low"
+"""The queue a job created in the Jobs dashboard runs on, unless changed there.
+
+Jobs are long runs (imports, citation refreshes, community updates), so they
+go to the low priority queue, which the ``worker-low`` service of compose.yml
+takes with a few processes of its own. The ``worker`` service keeps the
+default queue, ``celery``, free for the short tasks a request starts. Jobs
+created with ``invenio jobs create`` still get ``celery``: invenio-jobs's
+command line sets it.
+"""
+
+
 # Flask-Caching
 # =============
 

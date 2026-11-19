@@ -10,6 +10,8 @@
 # The following services are included:
 # - Reverse proxy: Caddy (exposed ports: 80, 443)
 # - Web application: Gunicorn (exposed port: none)
+# - Background tasks: Celery workers, one for the default queue and the beat
+#   schedule, one for the low priority queue the jobs run on
 # - DB: (PostgresSQL) (exposed port: 5432)
 # - Cache and message queue: Redis (exposed port: 6379)
 # - Search platform: (OpenSearch) (exposed ports: 9200, 9300)
@@ -297,6 +299,35 @@ services:
       - uploaded_data:/opt/invenio/var/instance/data
       # Shared: one store for every instance on this host. Read-write so
       # SQLite can create the store's -shm; see COMMONMETA_DB above.
+      - ${COMMONMETA_HOST_DIR:-/var/lib/commonmeta}:/var/lib/commonmeta
+    environment:
+      <<: [*base, *mail, *doi, *s3]
+    ulimits:
+      nofile:
+        soft: 65536
+        hard: 65536
+    depends_on:
+      search:
+        condition: service_healthy
+        required: false
+      cache:
+        condition: service_healthy
+        required: false
+      db:
+        condition: service_healthy
+        required: false
+  # The low priority queue: the jobs of the Jobs dashboard, which run there by
+  # default (JOBS_DEFAULT_QUEUE), and the batches of a works import. A worker
+  # of its own, so a long job doesn't hold up the default queue, with a few
+  # processes, since every record an import saves reads the commonmeta store.
+  # No --beat: only one worker may run the schedule.
+  worker-low:
+    image: ${INVENIO_RDM_STARTER_IMAGE:-ghcr.io/front-matter/invenio-rdm-starter}:${INVENIO_RDM_STARTER_TAG:-latest}
+    pull_policy: ${INVENIO_RDM_STARTER_PULL_POLICY:-missing}
+    platform: linux/amd64
+    command: [ "celery", "-A", "invenio_app.celery", "worker", "--queues=low", "--hostname=low@%h", "--concurrency=${CELERY_LOW_CONCURRENCY:-2}", "--events", "--loglevel=WARNING" ]
+    volumes:
+      - uploaded_data:/opt/invenio/var/instance/data
       - ${COMMONMETA_HOST_DIR:-/var/lib/commonmeta}:/var/lib/commonmeta
     environment:
       <<: [*base, *mail, *doi, *s3]
