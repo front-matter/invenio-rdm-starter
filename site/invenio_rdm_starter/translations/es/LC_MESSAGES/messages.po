@@ -1,0 +1,18 @@
+# Spanish translations for InvenioRDM Starter.
+# Copyright (C) 2026 Front Matter
+# This file is distributed under the same license as InvenioRDM Starter.
+#
+# Strings of the Starter's own templates and code that InvenioRDM's packages
+# don't translate. Compile with:
+#   uv run pybabel compile -d site/invenio_rdm_starter/translations
+msgid ""
+msgstr ""
+"Project-Id-Version: invenio-rdm-starter\n"
+"Language: es\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: templates/semantic-ui/invenio_app_rdm/frontpage.html
+msgid "Recently published works"
+msgstr "Obras publicadas recientemente"

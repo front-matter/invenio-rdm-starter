@@ -53,6 +53,8 @@ cover/
 
 # Translations
 *.mo
+# The Starter's own catalogs are compiled once and shipped in the wheel.
+!site/invenio_rdm_starter/translations/**/*.mo
 *.pot
 
 # Django stuff:
