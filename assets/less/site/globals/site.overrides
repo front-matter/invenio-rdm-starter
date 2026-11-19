@@ -28,3 +28,11 @@ html.cover-page {
     padding-left: .1rem;
   }
 }
+
+/* The funding section of the record page. Each funder is two headings, its
+   name and its award, and InvenioRDM puts 1rem above every heading of a
+   details list after the first, which spreads a funder over two loose
+   lines. */
+dl.details-list.funding-list dt.ui.tiny.header:not(:first-child) {
+  margin-top: 0.4rem;
+}
