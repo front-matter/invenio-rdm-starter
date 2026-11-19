@@ -112,3 +112,18 @@
     border-radius: 0 0 0.8rem 0.8rem;
   }
 }
+
+/* The Rights box: the license entry on the box's own grey, rather than on a
+   lighter one of its own (#f9f9f9, #f1f1f1 on hover). The pointer still says
+   it opens the license's details. */
+/* InvenioRDM's own selectors, so that these, loaded later, win. */
+#licenses ul.details-list li.has-popup,
+#licenses dl.details-list li.has-popup,
+#licenses ul.details-list dd.has-popup,
+#licenses dl.details-list dd.has-popup,
+#licenses ul.details-list li.has-popup:hover,
+#licenses dl.details-list li.has-popup:hover,
+#licenses ul.details-list dd.has-popup:hover,
+#licenses dl.details-list dd.has-popup:hover {
+  background-color: transparent;
+}
