@@ -2134,16 +2134,16 @@ wheels = [
 
 [[package]]
 name = "invenio-pidbox"
-version = "0.5.2"
+version = "0.5.3"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "commonmeta-py", extra = ["backend"] },
     { name = "commonmeta-rs" },
     { name = "invenio-app-rdm" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/e2/e2/d5803224cc28da0301ea7003eb385a7ad554684b88b78268e0afc4eeb087/invenio_pidbox-0.5.2.tar.gz", hash = "sha256:4626573a5d2eb66d56cf384de0c9ee96167bfa62c5f0d85849a07b4e599522a5", size = 147330, upload-time = "2026-11-19T21:29:23.641Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/62/38/650e5ddfc40a6de52f74346f946267a499aea2126f3d0a6ba4cefd0ad383/invenio_pidbox-0.5.3.tar.gz", hash = "sha256:8e69bcaa1e35df8517d3483424991b6bbcfb46465f070a444c2868a77165da27", size = 147778, upload-time = "2026-11-19T21:44:55.305Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/5a/52/52f9268b41b6db90a364ab9d569ac1751ae17feb924f1e50291ae7778b13/invenio_pidbox-0.5.2-py3-none-any.whl", hash = "sha256:488f18b7ff91dcc46e0b80d973902422c384b4f892567517df569cf793a417a0", size = 133896, upload-time = "2026-11-19T21:29:18.742Z" },
+    { url = "https://files.pythonhosted.org/packages/41/c6/a72be5341a3f2410f7ab4db63e43866b40b0d6537d70d1bf3565f72fe6ed/invenio_pidbox-0.5.3-py3-none-any.whl", hash = "sha256:075ae68778de4c72f29719b1da7acd69aba29c5a84c9bf80981b9801ebb9e413", size = 134042, upload-time = "2026-11-19T21:44:49.543Z" },
 ]
 
 [[package]]
@@ -2284,7 +2284,7 @@ requires-dist = [
     { name = "invenio-app-rdm", specifier = ">=14.0.7,<15.0" },
     { name = "invenio-logging" },
     { name = "invenio-oauthclient", git = "https://github.com/max-moser/invenio-oauthclient?branch=mm%2Fauthlib" },
-    { name = "invenio-pidbox", specifier = ">=0.5.2,<1" },
+    { name = "invenio-pidbox", specifier = ">=0.5.3,<1" },
     { name = "invenio-rdm-records", specifier = ">=32.3.3,<33" },
     { name = "invenio-s3", specifier = ">=3.0.2" },
     { name = "invenio-search", extras = ["opensearch2"], specifier = ">=3.1.2,<3.2.0" },
