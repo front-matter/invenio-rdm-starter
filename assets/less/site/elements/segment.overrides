@@ -1,0 +1,114 @@
+/***********************************************
+         Invenio RDM Starter Segment Overrides
+***********************************************/
+
+#record-manage-menu {
+  background-color: transparent;
+  border: 0;
+
+  #recordManagement {
+    padding: 0;
+
+    .ui.grid.record-management .column {
+      &:not(:last-child) {
+        padding-bottom: .1rem !important;
+      }
+
+      &:only-child {
+        padding-bottom: 1rem !important;
+      }
+    }
+  }
+}
+
+.sidebar-container,
+.segment-container,
+.ui.segment.sidebar-container {
+  background-color: @rdmSidebarSegmentColor;
+  border: 1px solid @rdmSidebarSegmentBorderColor;
+  border-radius: @borderRadius;
+}
+
+.sidebar-container {
+  &:not(:last-child) {
+    margin-bottom: 1rem;
+  }
+  
+  &#metrics {
+    padding: @sidebarVerticalPadding @sidebarHorizontalPadding;
+
+    .ui.container {
+      @media screen and (max-width: @largestMobileScreen) {
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+      }
+    }
+    .ui.tiny.two.statistics.rel-mt-1 {
+      margin-top: .5rem !important;
+    }
+    
+    .ui.definition.table thead:not(.full-width) th:first-child {
+      box-shadow: -1px -1px 0px 1px @rdmSidebarSegmentColor;
+      background-color: @rdmSidebarSegmentColor;
+    }
+  }
+
+  .ui.top.attached.header {
+    background-color: transparent;
+    font-size: @big;
+    border: none;
+    font-weight: 500;
+    padding: @sidebarVerticalPadding @sidebarHorizontalPadding (.75 * @sidebarHorizontalPadding);
+  }
+
+  .ui.bottom.attached.segment.rdm-sidebar {
+    background-color: transparent;
+    border: none;
+    padding: 0 @sidebarHorizontalPadding @sidebarVerticalPadding;
+    margin-bottom: 0 !important;
+
+    &#record-manage-menu {
+      padding: 0;
+      margin: 0;
+      border: none;
+      box-shadow: none;
+      background-color: transparent;
+
+      #recordManagement {
+        padding: 0;
+      }
+    }
+
+    .versions {
+      .ui.divided.list .item {
+        padding: (.5 * @sidebarHorizontalPadding) @sidebarHorizontalPadding;
+      }
+    }    
+
+    .ui.placeholder {
+      &,
+      & .line,
+      & > :before {
+        background-color: @rdmSidebarSegmentColor;
+      }
+    }
+  }
+
+  #keywords-and-subjects {
+    .ui.tiny.header {
+      margin-bottom: 0;
+    }
+  }
+}
+
+.ui.segments.very.rounded {
+  border-radius: 0.8rem;
+
+  &:not(.horizontal) > .segment:first-child {
+    border-radius: 0.8rem 0.8rem 0 0;
+  }
+
+  &:not(.horizontal) > .segment:last-child {
+    border-radius: 0 0 0.8rem 0.8rem;
+  }
+}
