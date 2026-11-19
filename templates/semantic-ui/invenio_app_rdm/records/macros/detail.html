@@ -105,7 +105,19 @@
 
 
 {% macro _show_funding_item(item, index) %}
-  <dt class="ui tiny header">{{ item.funder.name if item.funder }}</dt>
+  {#
+    A funder's name links to its organization page, which invenio-pidbox
+    serves from the commonmeta store and which lists the works it funded. The
+    id is the funder's bare ROR ID. url_for fails for an endpoint that isn't
+    registered, so the link is only built while the organization pages are on.
+  #}
+  <dt class="ui tiny header">
+    {%- if item.funder and item.funder.id and config.PIDBOX_ORGANIZATION_PROFILES -%}
+      <a href="{{ url_for('invenio_pidbox.organization_profile', ror=item.funder.id) }}">{{ item.funder.name }}</a>
+    {%- else -%}
+      {{ item.funder.name if item.funder }}
+    {%- endif -%}
+  </dt>
   {%- if item.award -%}
   <dt class="ui tiny header">
     <span class="mr-0 text-muted">
