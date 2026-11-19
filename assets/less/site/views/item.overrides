@@ -8,3 +8,9 @@ article > section#record-info {
 article > .ui.divider.hidden {
   display: none;
 }
+
+/* The first row of a record list item: date, resource type and DOI. Closer
+   to the title below it than InvenioRDM's .75em. */
+.ui.items > .item .extra.labels-actions {
+  margin-bottom: 0.25em;
+}
