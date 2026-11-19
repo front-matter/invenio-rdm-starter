@@ -112,11 +112,13 @@
     id is the funder's bare ROR ID. url_for fails for an endpoint that isn't
     registered, so the link is only built while the organization pages are on.
     Before the name, as for affiliations, the ROR icon links to ror.org.
+    Both links are display-inline: the details list makes every link a block
+    (dl.details-list a), which would put the icon on a line of its own.
   #}
   <dt class="ui tiny header">
     {%- set ror_ui = config.APP_RDM_IDENTIFIER_SCHEMES_UI.get("ror") -%}
     {%- if item.funder and item.funder.id and ror_ui -%}
-      <a class="no-text-decoration"
+      <a class="no-text-decoration display-inline"
          href="{{ ror_ui.url_prefix + item.funder.id }}"
          aria-label="{{ item.funder.name }}'s {{ ror_ui.label }} {{ _('profile') }}"
          title="{{ item.funder.name }}'s {{ ror_ui.label }} {{ _('profile') }}"
@@ -128,7 +130,7 @@
       </a>
     {% endif -%}
     {%- if item.funder and item.funder.id and config.PIDBOX_ORGANIZATION_PROFILES -%}
-      <a href="{{ url_for('invenio_pidbox.organization_profile', ror=item.funder.id) }}">{{ item.funder.name }}</a>
+      <a class="display-inline" href="{{ url_for('invenio_pidbox.organization_profile', ror=item.funder.id) }}">{{ item.funder.name }}</a>
     {%- else -%}
       {{ item.funder.name if item.funder }}
     {%- endif -%}
