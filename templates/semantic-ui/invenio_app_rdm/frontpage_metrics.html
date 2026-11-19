@@ -1,0 +1,259 @@
+{#
+  Copyright (C) 2026 Front Matter.
+
+  InvenioRDM Starter is free software; you can redistribute it and/or modify
+  it under the terms of the MIT License; see LICENSE file for more details.
+
+  Metrics for all records on the front page, the same cards invenio-pidbox
+  shows for one person or organization: absolute counts in the first row,
+  shares of all works in the second. Each card links to the search it
+  counts. The numbers come from the records API in the browser, so the page
+  renders without waiting for them.
+#}
+<style>
+  #frontpage-metrics {
+    padding: 0;
+  }
+  #frontpage-metrics .metrics-grid.ui.cards {
+    margin: 1rem 0 !important;
+    padding: 0 !important;
+  }
+  #frontpage-metrics .metrics-grid.ui.cards > .card {
+    margin: 0.5em;
+  }
+  #frontpage-metrics .metrics-card.card {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    overflow: hidden;
+    color: inherit;
+    text-decoration: none;
+  }
+  #frontpage-metrics .metrics-card .content {
+    display: flex !important;
+    flex-direction: column;
+    align-items: flex-start !important;
+    justify-content: space-between;
+    min-height: 8rem;
+    padding: 0 !important;
+    position: relative;
+  }
+  #frontpage-metrics .metrics-card .metrics-icon {
+    display: flex;
+    align-self: flex-start;
+    margin-bottom: 0.5rem;
+    color: var(--metrics-accent);
+  }
+  #frontpage-metrics .metrics-card .metrics-icon::before {
+    content: "";
+    width: 2.5rem;
+    height: 2.5rem;
+    background-color: var(--metrics-accent);
+    -webkit-mask-image: var(--metrics-icon);
+    -webkit-mask-repeat: no-repeat;
+    -webkit-mask-position: center;
+    -webkit-mask-size: contain;
+    mask-image: var(--metrics-icon);
+    mask-repeat: no-repeat;
+    mask-position: center;
+    mask-size: contain;
+    filter: drop-shadow(0 10px 14px color-mix(in srgb, var(--metrics-accent) 25%, transparent));
+  }
+  {# Logos keep their own colours rather than taking the accent colour. #}
+  #frontpage-metrics .metrics-card--orcid .metrics-icon::before,
+  #frontpage-metrics .metrics-card--ror .metrics-icon::before {
+    background-color: transparent;
+    background-image: var(--metrics-icon);
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+    -webkit-mask-image: none;
+    mask-image: none;
+  }
+  #frontpage-metrics .metrics-card .metrics-copy {
+    width: 100%;
+  }
+  #frontpage-metrics .metrics-card .metrics-value {
+    color: var(--metrics-accent);
+    font-size: clamp(2rem, 3vw, 3.35rem);
+    font-weight: 700;
+    line-height: 1;
+    letter-spacing: -0.04em;
+  }
+  #frontpage-metrics a.metrics-card.card:hover .metrics-value,
+  #frontpage-metrics a.metrics-card.card:focus-visible .metrics-value {
+    opacity: 0.82;
+  }
+  #frontpage-metrics .metrics-card .meta {
+    color: #7c8798 !important;
+    font-size: 14px !important;
+    font-weight: 500;
+    line-height: 1.35;
+    margin-bottom: 0.25rem;
+  }
+  #frontpage-metrics .metrics-placeholder.ui.placeholder {
+    background: transparent !important;
+    margin-bottom: 0.25rem;
+  }
+  #frontpage-metrics .metrics-card .ui.placeholder .line {
+    background: rgba(148, 163, 184, 0.26);
+    border-radius: 999px;
+    height: 1.15rem;
+  }
+  #frontpage-metrics .metrics-card--first {
+    --metrics-accent: #3c6df0;
+    --metrics-icon: url("/static/images/clock-outline.svg");
+  }
+  #frontpage-metrics .metrics-card--works {
+    --metrics-accent: #ff5b1a;
+    --metrics-icon: url("/static/images/article.svg");
+  }
+  #frontpage-metrics .metrics-card--recent {
+    --metrics-accent: #f2a900;
+    --metrics-icon: url("/static/images/date-range.svg");
+  }
+  #frontpage-metrics .metrics-card--citations {
+    --metrics-accent: #8b5cf6;
+    --metrics-icon: url("/static/images/citation.svg");
+  }
+  #frontpage-metrics .metrics-card--orcid {
+    --metrics-accent: #A6CE39;
+    --metrics-icon: url("/static/images/orcid.svg");
+  }
+  #frontpage-metrics .metrics-card--ror {
+    --metrics-accent: #53BAA1;
+    --metrics-icon: url("/static/images/ror.svg");
+  }
+  #frontpage-metrics .metrics-card--references {
+    --metrics-accent: #4f86ff;
+    --metrics-icon: url("/static/images/list-ordered.svg");
+  }
+  #frontpage-metrics .metrics-card--funding {
+    --metrics-accent: #d946c5;
+    --metrics-icon: url("/static/images/sponsor-tiers.svg");
+  }
+  @media only screen and (max-width: 991px) {
+    #frontpage-metrics .metrics-grid.ui.cards {
+      margin: 0 !important;
+    }
+    #frontpage-metrics .metrics-card.card {
+      margin: 0 0 1rem !important;
+    }
+  }
+  @media only screen and (min-width: 768px) and (max-width: 1199px) {
+    #frontpage-metrics .metrics-card .metrics-value {
+      font-size: 2.55rem;
+    }
+  }
+</style>
+
+{%- macro metrics_card(id, label, icon_label) %}
+<a class="card metrics-card metrics-card--{{ id }}" id="metrics-{{ id }}-link">
+  <div class="content">
+    <div class="metrics-icon" role="img" aria-label="{{ icon_label }}"></div>
+    <div class="metrics-copy">
+      <div class="ui placeholder metrics-placeholder" id="metrics-{{ id }}-placeholder">
+        <div class="line"></div>
+      </div>
+      <div class="meta">{{ label }}</div>
+      <div class="metrics-value" id="metrics-{{ id }}" style="display:none;"></div>
+    </div>
+  </div>
+</a>
+{%- endmacro %}
+
+<div id="frontpage-metrics" class="ui container" style="display:none;">
+  <div class="ui four stackable cards metrics-grid">
+    {{ metrics_card("first", _("First Work"), _("Clock")) }}
+    {{ metrics_card("works", _("All Works"), _("Article")) }}
+    {{ metrics_card("recent", _("Works last 30 Days"), _("Date range")) }}
+    {{ metrics_card("citations", _("Cited Works"), _("Citations")) }}
+  </div>
+  <div class="ui four stackable cards metrics-grid">
+    {{ metrics_card("orcid", _("Works with ORCID"), "ORCID") }}
+    {{ metrics_card("ror", _("Works with ROR ID"), "ROR") }}
+    {{ metrics_card("references", _("Works with References"), _("References")) }}
+    {{ metrics_card("funding", _("Works with Funding"), _("Funding")) }}
+  </div>
+</div>
+
+<script>
+(function() {
+  var headers = { "Accept": "application/vnd.inveniordm.v1+json" };
+
+  var since = new Date();
+  since.setDate(since.getDate() - 30);
+  // Each metric is a search: its count is the card's value, and the card
+  // links to the same search.
+  var searches = {
+    works: "",
+    recent: "metadata.publication_date:[" + since.toISOString().slice(0, 10) + " TO *]",
+    citations: "citations:*",
+    // orcid:* would match a creator identifier of any scheme.
+    orcid: "metadata.creators.person_or_org.identifiers.scheme:orcid",
+    ror: "ror:*",
+    references: "references:*",
+    funding: "funder:*",
+  };
+
+  function fmt(n) {
+    if (n >= 1000) {
+      var k = n / 1000;
+      return (k % 1 === 0 ? k : k.toFixed(1)) + "K";
+    }
+    return n.toLocaleString();
+  }
+
+  function pct(n, total) {
+    return total ? (n / total * 100).toFixed(1) + "%" : "0.0%";
+  }
+
+  function total(result) {
+    var t = result && result.hits ? result.hits.total : 0;
+    return typeof t === "number" ? t : (t && t.value) || 0;
+  }
+
+  function searchUrl(q, sort) {
+    return "/search?q=" + encodeURIComponent(q) + "&l=list&p=1&s=10&sort=" + (sort || "newest");
+  }
+
+  function fetchRecords(q, sort) {
+    var url = "/api/records?size=1&q=" + encodeURIComponent(q) + (sort ? "&sort=" + sort : "");
+    return fetch(url, { headers: headers }).then(function(r) {
+      if (!r.ok) { throw new Error("Request failed: " + r.status); }
+      return r.json();
+    });
+  }
+
+  function show(id, text, href) {
+    var el = document.getElementById("metrics-" + id);
+    el.textContent = text;
+    document.getElementById("metrics-" + id + "-placeholder").style.display = "none";
+    el.style.display = "";
+    document.getElementById("metrics-" + id + "-link").href = href;
+  }
+
+  var ids = Object.keys(searches);
+  Promise.all(
+    [fetchRecords("", "oldest")].concat(ids.map(function(id) { return fetchRecords(searches[id]); }))
+  ).then(function(results) {
+    var counts = {};
+    ids.forEach(function(id, i) { counts[id] = total(results[i + 1]); });
+    // An instance without records shows no metrics rather than a row of zeros.
+    if (!counts.works) { return; }
+    document.getElementById("frontpage-metrics").style.display = "";
+
+    var oldest = results[0].hits.hits[0];
+    var date = oldest && oldest.metadata ? oldest.metadata.publication_date : "";
+    show("first", date ? date.slice(0, 4) : "-", searchUrl("", "oldest"));
+    ["works", "recent", "citations"].forEach(function(id) {
+      show(id, fmt(counts[id]), searchUrl(searches[id]));
+    });
+    ["orcid", "ror", "references", "funding"].forEach(function(id) {
+      show(id, pct(counts[id], counts.works), searchUrl(searches[id]));
+    });
+  }).catch(function(err) {
+    console.error("Failed to load the front page metrics:", err);
+  });
+})();
+</script>
