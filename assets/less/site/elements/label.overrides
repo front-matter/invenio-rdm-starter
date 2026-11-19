@@ -6,11 +6,10 @@
 @neutralBorderLabelColor @teal;
 
 /* The DOI of a work in the record lists, where the access status used to
-   be. A darker green than the access status' metadata-only label (#84cc16),
-   so that white text on it is readable: about 7:1 rather than 2:1. */
+   be, in the blue of the metrics' "Works with References" card. */
 .ui.label.doi,
 a.ui.label.doi:hover,
 a.ui.label.doi:focus {
-  background-color: #3f6212;
+  background-color: #4f86ff;
   color: #fff;
 }
