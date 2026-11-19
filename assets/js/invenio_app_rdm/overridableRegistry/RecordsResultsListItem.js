@@ -8,8 +8,8 @@
 
 // invenio-app-rdm v14's RecordsResultsListItem, with the title shown with its
 // inline HTML (italics, sub- and superscripts) instead of as escaped text; see
-// titleHtml.js, and creators linking to their person pages; see
-// ProfileItemCreators.js. It renders the search page, the community and collection
+// titleHtml.js, creators linking to their person pages; see
+// ProfileItemCreators.js, and the DOI in place of the access status. It renders the search page, the community and collection
 // searches, and the front page's recent uploads.
 
 import { i18next } from "@translations/invenio_app_rdm/i18next";
@@ -31,6 +31,7 @@ class RecordsResultsListItem extends Component {
     const accessStatusId = _get(result, "ui.access_status.id", "open");
     const accessStatus = _get(result, "ui.access_status.title_l10n", "Open");
     const accessStatusIcon = _get(result, "ui.access_status.icon", "unlock");
+    const doi = _get(result, "pids.doi.identifier", null);
     const createdDate = _get(
       result,
       "ui.created_date_l10n_long",
@@ -116,14 +117,31 @@ class RecordsResultsListItem extends Component {
               >
                 {resourceType}
               </Label>
-              <Label
-                horizontal
-                size="small"
-                className={`access-status ${accessStatusId}`}
-              >
-                {accessStatusIcon && <Icon name={accessStatusIcon} />}
-                {accessStatus}
-              </Label>
+              {/* The DOI in place of the access status, as on Rogue Scholar:
+                  the works here are metadata records, so the access label
+                  said the same on every one. A work without a DOI keeps it. */}
+              {doi ? (
+                <Label
+                  horizontal
+                  size="small"
+                  className="doi"
+                  as="a"
+                  href={`https://doi.org/${doi}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  {`https://doi.org/${doi}`}
+                </Label>
+              ) : (
+                <Label
+                  horizontal
+                  size="small"
+                  className={`access-status ${accessStatusId}`}
+                >
+                  {accessStatusIcon && <Icon name={accessStatusIcon} />}
+                  {accessStatus}
+                </Label>
+              )}
             </Item.Extra>
             <Item.Header as="h2" className="theme-primary-text">
               <a href={viewLink}>{titleElements(title, 100)}</a>

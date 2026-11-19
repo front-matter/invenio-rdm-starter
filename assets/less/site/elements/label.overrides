@@ -4,3 +4,12 @@
 
 @neutralLabelColor: @teal;
 @neutralBorderLabelColor @teal;
+
+/* The DOI of a work in the record lists, where the access status used to
+   be, in the access status' metadata-only colours. */
+.ui.label.doi,
+a.ui.label.doi:hover,
+a.ui.label.doi:focus {
+  background-color: #84cc16;
+  color: #fff;
+}
