@@ -33,7 +33,6 @@ from invenio_records_resources.services.records.facets.facets import (
 # branch, a rewrite on authlib, as for Rogue Scholar. See the Authentication
 # section.
 from invenio_oauthclient.views.views import auto_redirect_login
-from invenio_rdm_starter.facets import DateHistogramFacet
 from invenio_rdm_starter.permissions import (
     StarterCommunityPermissionPolicy,
     StarterRecordPermissionPolicy,
@@ -567,15 +566,6 @@ adds sorting by creation date as options of its own."""
 
 RDM_FACETS = {
     **rdm_config.RDM_FACETS,
-    "publication_date": {
-        "facet": DateHistogramFacet(
-            field="metadata.publication_date_range",
-            label=_("Publication year"),
-            interval="year",
-            format="yyyy",
-        ),
-        "ui": {"field": "publication_date"},
-    },
     "affiliations": {
         "facet": TermsFacet(
             field="metadata.creators.affiliations.id",
@@ -643,8 +633,8 @@ RDM_FACETS = {
     "citations": pidbox_fields.CITATIONS_FACET,
 }
 """InvenioRDM's facets, extended rather than copied, so that the facets a
-release adds arrive with it. The Starter shows publication years as a
-histogram and adds facets for affiliations, funders, author identifiers,
+release adds arrive with it, InvenioRDM v14's publication date facet among
+them. The Starter adds facets for affiliations, funders, author identifiers,
 licenses, related works, references and citations."""
 
 RDM_SEARCH = {
