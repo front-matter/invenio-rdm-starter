@@ -220,6 +220,10 @@
                 <span class="ui" title="{{ _('Publication date') }}">
                   {{ _('Published') }} {{ record_ui["ui"]["publication_date_l10n_long"] }}
                 </span>
+                {%- set resource_type = record_ui["ui"].get("resource_type", {}).get("title_l10n") %}
+                {% if resource_type %}
+                  <span class="label text-muted" title="{{ _('Resource type') }}"> | {{ resource_type }}</span>
+                {% endif %}
                 <span
                   class="label text-muted"> | {{ _('Version {version_number}').format(version_number=record_ui["ui"]["version"]) }}</span>
                 
