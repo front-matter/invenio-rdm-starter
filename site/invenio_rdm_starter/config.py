@@ -513,8 +513,30 @@ InvenioRDM's persistent identifiers, with a DOI of the Starter's own: an
 existing DOI the depositor brings (external), never one minted here, and not
 required. OAI identifiers are InvenioRDM's."""
 
-RDM_PARENT_PERSISTENT_IDENTIFIERS = {}
-"""The configured persistent identifiers for parent records."""
+RDM_PARENT_PERSISTENT_IDENTIFIER_PROVIDERS = [
+    providers.ExternalPIDProvider("external", "doi", label=_("Concept DOI")),
+]
+"""The parent records' DOI: a concept DOI from elsewhere, never one minted
+here."""
+
+RDM_PARENT_PERSISTENT_IDENTIFIERS = {
+    "doi": {
+        "providers": ["external"],
+        "required": False,
+        # Never minted on publishing: invenio-pidbox's import sets it.
+        "condition": lambda record: False,
+        "label": _("Concept DOI"),
+        "validator": idutils.is_doi,
+        "normalizer": idutils.normalize_doi,
+        "is_enabled": providers.ExternalPIDProvider.is_enabled,
+    },
+}
+"""The configured persistent identifiers for parent records.
+
+The concept DOI of a work's versions, as on Zenodo: invenio-pidbox's import
+puts a version's IsVersionOf DOI on its parent, which "Cite all versions"
+shows. Never minted on publishing, and set only by the import; but a parent
+with one needs the provider, or publishing its next version fails."""
 
 RDM_RECORDS_IDENTIFIERS_SCHEMES = {
     scheme: definition
