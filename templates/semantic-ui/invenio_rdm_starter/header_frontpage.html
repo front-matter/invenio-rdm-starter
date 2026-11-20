@@ -2,27 +2,23 @@
   SPDX-FileCopyrightText: 2026 Front Matter.
   SPDX-License-Identifier: MIT
 
-  invenio-pidbox's front page header, with the site's title and subtitle
-  (THEME_FRONTPAGE_TITLE, THEME_FRONTPAGE_SUBTITLE) back above the metrics:
-  pidbox leaves them out while it shows the metrics. On the metrics' light
-  band the title is set in dark ink; without the metrics it stays white on
-  the theme's band, as pidbox shows it.
+  invenio-pidbox's front page header, with the site's subtitle
+  (THEME_FRONTPAGE_SUBTITLE) back above the metrics: pidbox leaves it out
+  while it shows the metrics. The title (THEME_FRONTPAGE_TITLE) isn't shown,
+  as the menubar's logo already names the site. On the metrics' light band
+  the subtitle is set in dark ink; without the metrics it stays white on the
+  theme's band.
 #}
 {%- extends "invenio_app_rdm/header_frontpage.html" %}
 
 {%- block frontpage_title %}
-{%- if config.THEME_FRONTPAGE_TITLE or config.THEME_FRONTPAGE_SUBTITLE %}
+{%- if config.THEME_FRONTPAGE_SUBTITLE %}
 {%- set on_light_band = config.PIDBOX_FRONTPAGE_METRICS and config.PIDBOX_FRONTPAGE_METRICS_BACKGROUND %}
 <div class="row starter-frontpage-title">
   <div class="sixteen wide column">
-    <h1 class="ui center aligned header{% if not on_light_band %} inverted{% endif %}">
-      {%- if config.THEME_FRONTPAGE_TITLE %}
-      {{ _(config.THEME_FRONTPAGE_TITLE) }}
-      {%- endif %}
-      {%- if config.THEME_FRONTPAGE_SUBTITLE %}
-      <div class="sub header">{{ _(config.THEME_FRONTPAGE_SUBTITLE) }}</div>
-      {%- endif %}
-    </h1>
+    <p class="ui center aligned large header{% if not on_light_band %} inverted{% endif %}">
+      {{- _(config.THEME_FRONTPAGE_SUBTITLE) -}}
+    </p>
   </div>
 </div>
 {%- endif %}

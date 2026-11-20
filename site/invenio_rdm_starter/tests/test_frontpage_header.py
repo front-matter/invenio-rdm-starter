@@ -1,4 +1,4 @@
-"""The front page header: the site's title and subtitle above pidbox's metrics."""
+"""The front page header: the site's subtitle above pidbox's metrics."""
 
 from __future__ import annotations
 
@@ -40,11 +40,12 @@ def _render(**config: object) -> str:
     return template.render(config=settings)
 
 
-def test_title_and_subtitle_sit_above_the_metrics() -> None:
+def test_the_subtitle_sits_above_the_metrics_without_the_title() -> None:
     html = _render()
 
-    assert html.index("InvenioRDM Starter") < html.index("<div id=metrics>")
-    assert '<div class="sub header">A starter project.</div>' in html
+    assert html.index("A starter project.") < html.index("<div id=metrics>")
+    # The menubar's logo already names the site.
+    assert "InvenioRDM Starter" not in html
     assert "inverted" not in html  # dark ink on the light band
 
 
@@ -55,15 +56,15 @@ def test_title_and_subtitle_sit_above_the_metrics() -> None:
         {"PIDBOX_FRONTPAGE_METRICS_BACKGROUND": None},
     ],
 )
-def test_title_stays_white_on_the_theme_band(config: dict) -> None:
+def test_the_subtitle_stays_white_on_the_theme_band(config: dict) -> None:
     html = _render(**config)
 
-    assert "InvenioRDM Starter" in html
+    assert "A starter project." in html
     assert "header inverted" in html
 
 
-def test_no_title_row_without_a_title() -> None:
-    html = _render(THEME_FRONTPAGE_TITLE="", THEME_FRONTPAGE_SUBTITLE="")
+def test_no_row_without_a_subtitle() -> None:
+    html = _render(THEME_FRONTPAGE_SUBTITLE="")
 
     assert "starter-frontpage-title" not in html
     assert "<div id=metrics>" in html

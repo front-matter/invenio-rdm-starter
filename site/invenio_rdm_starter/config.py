@@ -771,7 +771,7 @@ count where they have entries, so the accepted set is the union of the two."""
 
 PIDBOX_FRONTPAGE_METRICS_BACKGROUND = "#cbd5e1"
 """invenio-pidbox (0.5.5+) shows the metrics for all records in the front
-page's header band, below THEME_FRONTPAGE_TITLE and THEME_FRONTPAGE_SUBTITLE
-(the Starter's invenio_rdm_starter/header_frontpage.html). The band takes
+page's header band, below THEME_FRONTPAGE_SUBTITLE (the Starter's
+invenio_rdm_starter/header_frontpage.html). The band takes
 the navbar's grey, on which the cards' grey labels can't be read, so the
 metrics get a light slate band of their own, as on Rogue Scholar."""
