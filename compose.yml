@@ -182,7 +182,7 @@ x-set-web:
   # Invenio-Theme
   # See: https://inveniordm.docs.cern.ch/operate/customize/look-and-feel/
   # Header logo.
-  INVENIO_THEME_LOGO: ${INVENIO_THEME_LOGO:-images/invenio-rdm.svg}
+  INVENIO_THEME_LOGO: ${INVENIO_THEME_LOGO:-images/starter-white.svg}
   # The name of the site, in the header and as the title.
   INVENIO_THEME_SITENAME: ${INVENIO_THEME_SITENAME:-InvenioRDM Starter}
   # Front page title and subtitle.
