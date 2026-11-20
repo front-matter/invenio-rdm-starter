@@ -1,14 +1,19 @@
 """Tests for the Starter's menubar."""
 
 from importlib.metadata import entry_points
+from types import SimpleNamespace
 
+import pytest
 from flask import Flask
 from flask_babel import Babel
+from flask_login import LoginManager, UserMixin, login_user
 from flask_menu import Menu, current_menu
 from invenio_rdm_starter.menus import (
     add_dashboard_to_user_menu,
+    add_person_page_to_user_menu,
     finalize_app,
     remove_menu_items,
+    user_orcid,
 )
 
 
@@ -165,3 +170,92 @@ def test_the_first_request_moves_my_dashboard_into_the_user_menu():
 
     assert _menu(app, "actions") == []
     assert "dashboard" in _menu(app, "settings")
+
+
+ORCID = "0000-0003-1419-2405"
+
+
+class User(UserMixin):
+    """A user with the identities invenio-accounts loads with it."""
+
+    id = "1"
+
+    def __init__(self, *identities: tuple[str, str]) -> None:
+        self.external_identifiers = [
+            SimpleNamespace(method=method, id=value) for method, value in identities
+        ]
+
+
+def _app_with_person_pages(person_profiles: bool = True) -> Flask:
+    """An app with invenio-pidbox's person page, the user menu and a login."""
+    app = _app_with_user_menu()
+    app.secret_key = "test"
+    app.config["PIDBOX_PERSON_PROFILES"] = person_profiles
+    LoginManager(app).user_loader(lambda user_id: None)
+
+    @app.route("/people/<path:orcid>", endpoint="invenio_pidbox.person_profile")
+    def person_profile(orcid):
+        return orcid
+
+    return app
+
+
+def _person_item(app: Flask, user: User | None):
+    with app.test_request_context("/"):
+        if user is not None:
+            login_user(user)
+        assert add_person_page_to_user_menu() == "settings.person"
+        item = current_menu.submenu("settings.person")
+        return item.visible, (item.url if item.visible else None), str(item.text)
+
+
+def test_my_profile_links_to_the_users_person_page():
+    app = _app_with_person_pages()
+
+    visible, url, text = _person_item(app, User(("github", "42"), ("orcid", ORCID)))
+
+    assert visible
+    assert url == f"/people/{ORCID}"
+    assert text == '<i class="user circle icon"></i> My profile'
+
+
+@pytest.mark.parametrize(
+    ("person_profiles", "user"),
+    [
+        (True, User(("github", "42"))),  # no ORCID iD
+        (True, None),  # not logged in
+        (False, User(("orcid", ORCID))),  # person pages off
+    ],
+)
+def test_no_profile_without_an_orcid_id_or_person_pages(person_profiles, user):
+    app = _app_with_person_pages(person_profiles)
+
+    visible, _url, _text = _person_item(app, user)
+
+    assert not visible
+
+
+def test_my_profile_follows_my_dashboard():
+    app = _app_with_person_pages()
+
+    with app.test_request_context("/"):
+        add_dashboard_to_user_menu()
+        add_person_page_to_user_menu()
+        names = [child.name for child in current_menu.submenu("settings").children]
+
+    assert names[:3] == ["profile", "dashboard", "person"]
+
+
+def test_no_profile_without_pidbox():
+    app = _app_with_user_menu()
+
+    with app.test_request_context("/"):
+        assert add_person_page_to_user_menu() is None
+
+
+def test_the_orcid_of_a_user_without_identities():
+    app = _app_with_person_pages()
+
+    with app.test_request_context("/"):
+        login_user(User())
+        assert user_orcid() is None

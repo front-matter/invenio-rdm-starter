@@ -16,3 +16,7 @@ msgstr ""
 #: templates/semantic-ui/invenio_app_rdm/frontpage.html
 msgid "Recently published works"
 msgstr "Kürzlich veröffentlichte Werke"
+
+#: site/invenio_rdm_starter/menus.py
+msgid "My profile"
+msgstr "Mein Profil"
