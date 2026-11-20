@@ -757,3 +757,10 @@ mounted from the host) answers for the vocabularies the Starter doesn't
 import: a record commit accepts any affiliation the store's ROR holds, and
 any funder ROR types as funder. The vocabularies still count where they have
 entries, so the accepted set is the union of the two."""
+
+PIDBOX_FRONTPAGE_METRICS_BACKGROUND = "#cbd5e1"
+"""invenio-pidbox (0.5.5+) shows the metrics for all records in the front
+page's header band, in place of THEME_FRONTPAGE_TITLE and
+THEME_FRONTPAGE_SUBTITLE. The band takes the navbar's grey, on which the
+cards' grey labels can't be read, so the metrics get a light slate band of
+their own, as on Rogue Scholar."""
