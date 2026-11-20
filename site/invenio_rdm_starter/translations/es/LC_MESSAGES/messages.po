@@ -20,3 +20,7 @@ msgstr "Obras publicadas recientemente"
 #: site/invenio_rdm_starter/menus.py
 msgid "My profile"
 msgstr "Mi perfil"
+
+#: templates/semantic-ui/invenio_rdm_starter/header_frontpage.html
+msgid "About this repository"
+msgstr "Acerca de este repositorio"

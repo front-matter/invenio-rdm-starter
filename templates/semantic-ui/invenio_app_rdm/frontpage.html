@@ -9,7 +9,8 @@
   shows: the Starter's "newest" sorts by publication date, so these are the
   most recently published works rather than the latest uploads. The header
   is invenio-pidbox's, with the site's subtitle above the metrics
-  (invenio_rdm_starter/header_frontpage.html).
+  (invenio_rdm_starter/header_frontpage.html), and the sidebar shows the
+  pages of STARTER_FRONTPAGE_SIDEBAR_PAGES (invenio_rdm_starter.pages).
 #}
 {% from "invenio_app_rdm/macros/records_list.html" import records_list %}
 {% from "invenio_communities/macros/communities_carousel.html" import communities_carousel %}
@@ -48,7 +49,21 @@
       {% block side_column %}
         <aside class="five wide computer sixteen wide tablet column">
 
-          {% block side_column_content %}{% endblock side_column_content %}
+          {% block side_column_content %}
+            {#- One box per page of STARTER_FRONTPAGE_SIDEBAR_PAGES, which
+                admins edit under Site management > Pages. #}
+            {%- for url in (config.STARTER_FRONTPAGE_SIDEBAR_PAGES or []) if starter_page is defined %}
+              {%- set page = starter_page(url) %}
+              {%- if page and page.content %}
+              <section class="sidebar-container starter-frontpage-page">
+                <h2 class="ui medium top attached header mt-0">{{ page.title }}</h2>
+                <div class="ui segment bottom attached rdm-sidebar">
+                  {{ page.content | safe }}
+                </div>
+              </section>
+              {%- endif %}
+            {%- endfor %}
+          {% endblock side_column_content %}
 
         </aside>
       {% endblock side_column %}

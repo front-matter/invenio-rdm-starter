@@ -1,0 +1,22 @@
+# Static pages, created by `invenio rdm pages create` (entrypoint.py and
+# entrypoint.sh), one per language, from the files in app_data/pages: a file
+# with the language as its extension (about.html.de) is used for that
+# language, else the plain one. Existing pages are kept, so what an admin has
+# edited under Administration > Site management > Pages survives a rerun;
+# `invenio rdm pages create --force` replaces them all.
+#
+# Besides being pages of their own, they fill the front page
+# (invenio_rdm_starter.pages):
+#
+# - /about: its description is the subtitle above the metrics, with a link to
+#   the page (STARTER_FRONTPAGE_ABOUT_PAGE).
+# - /about/why: a box of the front page's sidebar, its title the box's header
+#   and its content the box (STARTER_FRONTPAGE_SIDEBAR_PAGES).
+- url: /about
+  title: About InvenioRDM Starter
+  description: A starter project for the turn-key research data management repository.
+  template: about.html
+- url: /about/why
+  title: Why InvenioRDM Starter?
+  description: Why run InvenioRDM with the Starter.
+  template: why.html

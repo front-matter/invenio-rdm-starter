@@ -32,6 +32,9 @@ invenio communities custom-fields init
 # Creating rdm fixtures...
 invenio rdm-records fixtures
 
+# Creating static pages, among them the front page's subtitle and sidebar...
+invenio rdm pages create
+
 # rebuilding all indices...
 invenio rdm rebuild-all-indices
 

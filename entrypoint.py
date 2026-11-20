@@ -144,6 +144,11 @@ def main():
             print("Creating rdm fixtures...")
             run_command(["invenio", "rdm-records", "fixtures"])
 
+            # The static pages of app_data/pages.yaml, among them the front
+            # page's subtitle and sidebar (invenio_rdm_starter.pages).
+            print("Creating static pages...")
+            run_command(["invenio", "rdm", "pages", "create"])
+
             print("Rebuilding all indices...")
             run_command(["invenio", "rdm", "rebuild-all-indices"])
 
