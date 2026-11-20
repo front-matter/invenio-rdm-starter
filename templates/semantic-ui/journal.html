@@ -1,0 +1,40 @@
+{#
+  SPDX-FileCopyrightText: 2023 CERN.
+  SPDX-FileCopyrightText: 2026 Front Matter.
+  SPDX-License-Identifier: MIT
+
+  invenio-rdm-records' journal fields on the record page, with the ISSN
+  linked to the journal's container page while invenio-pidbox's container
+  pages are on (PIDBOX_CONTAINER_PROFILES).
+#}
+
+{% if field_value.get('title') %}
+  <dt class="ui tiny header">{{ _("Title")}}</dt>
+  <dd>{{field_value.get('title')}}</dd>
+{% endif %}
+
+{% if field_value.get('volume') %}
+<dt class="ui tiny header">{{ _("Volume")}}</dt>
+<dd>{{field_value.get('volume')}}</dd>
+{% endif %}
+
+{% if field_value.get('issue') %}
+  <dt class="ui tiny header">{{ _("Issue")}}</dt>
+  <dd>{{field_value.get('issue')}}</dd>
+{% endif %}
+
+{% if field_value.get('pages') %}
+  <dt class="ui tiny header">{{ _("Pages")}}</dt>
+  <dd>{{field_value.get('pages')}}</dd>
+{% endif %}
+
+{% if field_value.get('issn') %}
+  <dt class="ui tiny header">{{ _("ISSN")}}</dt>
+  <dd>
+    {%- if config.PIDBOX_CONTAINER_PROFILES -%}
+      <a href="{{ url_for('invenio_pidbox.container_profile', issn=field_value.get('issn')) }}">{{ field_value.get('issn') }}</a>
+    {%- else -%}
+      {{ field_value.get('issn') }}
+    {%- endif -%}
+  </dd>
+{% endif %}

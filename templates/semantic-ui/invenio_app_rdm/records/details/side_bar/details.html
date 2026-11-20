@@ -6,6 +6,9 @@
 
   Invenio RDM Records is free software; you can redistribute it and/or modify
   it under the terms of the MIT License; see LICENSE file for more details.
+
+  The Starter's: "Published in" links the journal's ISSN to its container
+  page, while invenio-pidbox's container pages are on.
 #}
 
 {%- from "invenio_app_rdm/records/macros/detail.html" import
@@ -19,7 +22,14 @@
       {{ show_detail(_('Resource type'), record_ui["ui"]["resource_type"]["title_l10n"]) if record_ui["ui"]["resource_type"] }}
       {{ show_detail(_('Publication date'), record_ui["ui"]["publication_date_l10n"]) if record_ui["ui"]["publication_date_l10n"] }}
       {{ show_detail(_('Publisher'), metadata.publisher) if metadata.publisher }}
-      {{ show_detail(_('Published in'), record_ui["ui"]["publishing_information"]["journal"]) if record_ui["ui"].get('publishing_information', {}).get('journal') }}
+      {#- The journal's ISSN links to its container page (invenio-pidbox). #}
+      {%- set journal = record_ui["ui"].get('publishing_information', {}).get('journal') %}
+      {%- set issn = ((record_ui.get("custom_fields") or {}).get("journal:journal") or {}).get("issn") %}
+      {%- if journal and issn and config.PIDBOX_CONTAINER_PROFILES %}
+        {%- set issn_link %}<a href="{{ url_for('invenio_pidbox.container_profile', issn=issn) }}">{{ issn }}</a>{% endset %}
+        {%- set journal = (journal | e) | replace(issn | e, issn_link) %}
+      {%- endif %}
+      {{ show_detail(_('Published in'), journal) if journal }}
       {{ show_detail(_('Imprint'), record_ui["ui"]["publishing_information"]["imprint"]) if record_ui["ui"].get('publishing_information', {}).get('imprint') }}
       {{ show_detail_thesis(_('Thesis'), record_ui["ui"]["publishing_information"]["thesis"]) if record_ui["ui"].get('publishing_information', {}).get('thesis', {}) }}
       {{ show_detail(_('Conference'), show_detail_conference(record_ui["ui"]["conference"])) if record_ui["ui"]["conference"] }}
