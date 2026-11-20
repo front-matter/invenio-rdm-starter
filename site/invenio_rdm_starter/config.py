@@ -763,9 +763,10 @@ citations until the next "Refresh citations" run."""
 PIDBOX_RECORD_RELATIONS = True
 """The store (PIDBOX_SQLITE_PATH, default /var/lib/commonmeta/commonmeta.sqlite3,
 mounted from the host) answers for the vocabularies the Starter doesn't
-import: a record commit accepts any affiliation the store's ROR holds, and
-any funder ROR types as funder. The vocabularies still count where they have
-entries, so the accepted set is the union of the two."""
+import: a record commit accepts any organization the store's ROR holds, as
+an affiliation or a funder, and any grant the store holds (Crossref grants,
+DataCite Awards) as an award (invenio-pidbox 0.6.1+). The vocabularies still
+count where they have entries, so the accepted set is the union of the two."""
 
 PIDBOX_FRONTPAGE_METRICS_BACKGROUND = "#cbd5e1"
 """invenio-pidbox (0.5.5+) shows the metrics for all records in the front

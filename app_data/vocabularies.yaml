@@ -44,5 +44,5 @@ communitytypes:
   data-file: vocabularies/community_types.yaml
 # No affiliations, funders, names or awards: organizations and people come from
 # the commonmeta store through invenio-pidbox (PIDBOX_RECORD_RELATIONS in
-# invenio_rdm_starter.config). Awards would name their funder through the
-# funders vocabulary, so there are no award fixtures either.
+# invenio_rdm_starter.config), and so do awards: the store's grants, offered
+# in the deposit form by invenio-pidbox 0.6.1+.
