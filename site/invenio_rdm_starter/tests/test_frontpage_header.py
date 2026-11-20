@@ -24,12 +24,6 @@ STUBS = {
     "invenio_theme/frontpage.html": "{% block page_body %}{% endblock %}",
 }
 
-ABOUT = {
-    "url": "/about",
-    "title": "About InvenioRDM Starter",
-    "description": "A repository of open source software papers.",
-    "content": "<p>About.</p>",
-}
 WHY = {
     "url": "/about/why",
     "title": "Why InvenioRDM Starter?",
@@ -61,7 +55,6 @@ def _settings(**config: object) -> dict:
         "THEME_FRONTPAGE_SUBTITLE": "A starter project.",
         "PIDBOX_FRONTPAGE_METRICS": True,
         "PIDBOX_FRONTPAGE_METRICS_BACKGROUND": "#cbd5e1",
-        "STARTER_FRONTPAGE_ABOUT_PAGE": "/about",
         "STARTER_FRONTPAGE_SIDEBAR_PAGES": ["/about/why", "/missing"],
         **config,
     }
@@ -110,19 +103,11 @@ def test_no_row_without_a_subtitle() -> None:
     assert "<div id=metrics>" in html
 
 
-def test_the_about_page_gives_the_subtitle_and_a_link() -> None:
-    html = _render({"/about": ABOUT})
-
-    assert "A repository of open source software papers." in html
-    assert "A starter project." not in html
-    assert 'href="/about">About this repository</a>' in html
-
-
-def test_without_the_about_page_the_subtitle_is_the_setting() -> None:
-    html = _render({}, STARTER_FRONTPAGE_ABOUT_PAGE="/about")
+def test_the_subtitle_is_the_setting_even_with_pages() -> None:
+    html = _render({"/about/why": WHY})
 
     assert "A starter project." in html
-    assert "About this repository" not in html
+    assert "/about" not in html
 
 
 def test_the_sidebar_shows_a_box_per_page_that_exists() -> None:

@@ -1,15 +1,11 @@
-"""The front page's text, from pages an admin edits like any other.
+"""The front page's sidebar, from pages an admin edits like any other.
 
-The subtitle above the front page's metrics, and the boxes of its sidebar,
-are invenio-pages pages (Administration > Site management > Pages), so that
-they're changed without a deploy, in every language the site has. The
-Starter ships them as fixtures (``app_data/pages.yaml``):
-
-- ``STARTER_FRONTPAGE_ABOUT_PAGE`` (``/about``): its description is the
-  subtitle, linked to the page. Without the page the subtitle is
-  ``THEME_FRONTPAGE_SUBTITLE``.
-- ``STARTER_FRONTPAGE_SIDEBAR_PAGES`` (``/about/why``): one box each, the
-  page's title as its header and its content as the box.
+The boxes of the front page's sidebar are invenio-pages pages
+(Administration > Site management > Pages), so that they're changed without
+a deploy, in every language the site has. ``STARTER_FRONTPAGE_SIDEBAR_PAGES``
+lists them (``/about/why``), one box each, the page's title as its header
+and its content as the box. The Starter ships them as fixtures
+(``app_data/pages.yaml``).
 
 Templates read them with ``starter_page(url)``, which a finalize hook makes
 a template global.

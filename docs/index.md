@@ -87,13 +87,12 @@ The `docker-compose.yml` configuration can be modified to suit your needs using 
 * `INVENIO_THEME_LOGO` - The logo of the menubar, defaults to `images/starter-white.svg`: InvenioRDM's logo with "Starter" below it.
 * `INVENIO_THEME_FRONTPAGE_TITLE` - The frontpage title used by InvenioRDM, defaults to `InvenioRDM Starter`. The front page doesn't show it, as the menubar's logo already names the site.
 * `INVENIO_THEME_SHOW_FRONTPAGE_INTRO_SECTION` - Set to `True` to show the frontpage intro section, defaults to `False`.
-* `INVENIO_THEME_FRONTPAGE_SUBTITLE` - The subtitle above invenio-pidbox's metrics on the front page, used only until the About page exists (see below).
+* `INVENIO_THEME_FRONTPAGE_SUBTITLE` - The subtitle above invenio-pidbox's metrics on the front page.
 
 ### Front page text
 
-The front page's subtitle and the boxes of its sidebar are pages, which admins edit under **Administration > Site management > Pages**, in each language the site has, without a deploy. The setup script creates them from `app_data/pages.yaml`; on an existing site run `invenio rdm pages create` once. Pages that already exist are kept, so edits survive.
+The boxes of the front page's sidebar are pages, which admins edit under **Administration > Site management > Pages**, in each language the site has, without a deploy. The setup script creates them from `app_data/pages.yaml`; on an existing site run `invenio rdm pages create` once. Pages that already exist are kept, so edits survive.
 
-* `/about` - its **Description** is the front page's subtitle, linked to the page itself. Set by `STARTER_FRONTPAGE_ABOUT_PAGE`.
 * `/about/why` - "Why InvenioRDM Starter?", a box of the front page's sidebar: the page's **Title** is the box's header, its **Content** the box. `STARTER_FRONTPAGE_SIDEBAR_PAGES` lists the pages shown as boxes, in order.
 
 ### Invenio-Records-Resources

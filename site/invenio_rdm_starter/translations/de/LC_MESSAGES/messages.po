@@ -21,6 +21,3 @@ msgstr "Kürzlich veröffentlichte Werke"
 msgid "My profile"
 msgstr "Mein Profil"
 
-#: templates/semantic-ui/invenio_rdm_starter/header_frontpage.html
-msgid "About this repository"
-msgstr "Über dieses Repository"

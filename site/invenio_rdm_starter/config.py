@@ -383,15 +383,10 @@ replaces it."""
 # Front page
 # ==========
 
-STARTER_FRONTPAGE_ABOUT_PAGE = "/about"
-"""The page whose description is the front page's subtitle, linked to the
-page (invenio_rdm_starter.pages). Admins edit it under Site management >
-Pages. Without the page, or with this None, the subtitle is
-THEME_FRONTPAGE_SUBTITLE."""
-
 STARTER_FRONTPAGE_SIDEBAR_PAGES = ["/about/why"]
 """The pages shown as boxes of the front page's sidebar, in this order: the
-page's title as the header, its content as the box. A page that doesn't
+page's title as the header, its content as the box (invenio_rdm_starter.
+pages). Admins edit them under Site management > Pages. A page that doesn't
 exist is left out. The Starter's pages are app_data/pages.yaml."""
 
 

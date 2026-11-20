@@ -2,29 +2,22 @@
   SPDX-FileCopyrightText: 2026 Front Matter.
   SPDX-License-Identifier: MIT
 
-  invenio-pidbox's front page header, with a subtitle back above the
-  metrics: pidbox leaves it out while it shows the metrics. The subtitle is
-  the description of the About page (STARTER_FRONTPAGE_ABOUT_PAGE), which
-  admins edit under Site management > Pages, linked to the page; without
-  the page, THEME_FRONTPAGE_SUBTITLE. The title (THEME_FRONTPAGE_TITLE)
-  isn't shown, as the menubar's logo already names the site. On the
-  metrics' light band the subtitle is set in dark ink; without the metrics
-  it stays white on the theme's band.
+  invenio-pidbox's front page header, with the site's subtitle
+  (THEME_FRONTPAGE_SUBTITLE) back above the metrics: pidbox leaves it out
+  while it shows the metrics. The title (THEME_FRONTPAGE_TITLE) isn't shown,
+  as the menubar's logo already names the site. On the metrics' light band
+  the subtitle is set in dark ink; without the metrics it stays white on the
+  theme's band.
 #}
 {%- extends "invenio_app_rdm/header_frontpage.html" %}
 
 {%- block frontpage_title %}
-{%- set about = starter_page(config.STARTER_FRONTPAGE_ABOUT_PAGE) if starter_page is defined %}
-{%- set subtitle = (about.description if about) or config.THEME_FRONTPAGE_SUBTITLE %}
-{%- if subtitle %}
+{%- if config.THEME_FRONTPAGE_SUBTITLE %}
 {%- set on_light_band = config.PIDBOX_FRONTPAGE_METRICS and config.PIDBOX_FRONTPAGE_METRICS_BACKGROUND %}
 <div class="row starter-frontpage-title">
   <div class="sixteen wide column">
     <p class="ui center aligned large header{% if not on_light_band %} inverted{% endif %}">
-      {%- if about %}{{ subtitle }}{% else %}{{ _(subtitle) }}{% endif -%}
-      {%- if about %}
-      <span class="sub header"><a class="starter-frontpage-about" href="{{ about.url }}">{{ _("About this repository") }}</a></span>
-      {%- endif %}
+      {{- _(config.THEME_FRONTPAGE_SUBTITLE) -}}
     </p>
   </div>
 </div>
