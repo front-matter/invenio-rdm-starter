@@ -83,9 +83,12 @@ invenio_rdm_starter_pages = "invenio_rdm_starter.pages:finalize_app"
 [project.entry-points."invenio_jobs.jobs"]
 starter_create_subject_communities = "invenio_rdm_starter.jobs:CreateSubjectCommunitiesJob"
 starter_add_records_to_subject_communities = "invenio_rdm_starter.jobs:AddRecordsToSubjectCommunitiesJob"
+starter_delete_all_records = "invenio_rdm_starter.jobs:DeleteAllRecordsJob"
 
 [project.entry-points."invenio_celery.tasks"]
 invenio_rdm_starter = "invenio_rdm_starter.subject_communities"
+# Deleting all records (Administration → Jobs → Delete all records).
+invenio_rdm_starter_reset = "invenio_rdm_starter.reset"
 
 [tool.ruff]
 line-length = 88

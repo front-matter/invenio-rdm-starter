@@ -191,6 +191,10 @@ x-set-web:
   # Show the front page intro section.
   INVENIO_THEME_SHOW_FRONTPAGE_INTRO_SECTION: ${INVENIO_THEME_SHOW_FRONTPAGE_INTRO_SECTION:-False}
 
+  # Allow the "Delete all records" job, for a demo whose records are imported
+  # and can be imported again. Never on an instance with data of its own.
+  INVENIO_STARTER_DELETE_ALL_RECORDS_ENABLED: ${INVENIO_STARTER_DELETE_ALL_RECORDS_ENABLED:-False}
+
 # Authentication.
 x-set-authentication:
   # Authentication

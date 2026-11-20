@@ -390,6 +390,19 @@ pages). Admins edit them under Site management > Pages. A page that doesn't
 exist is left out. The Starter's pages are app_data/pages.yaml."""
 
 
+# Starting afresh
+# ===============
+
+STARTER_DELETE_ALL_RECORDS_ENABLED = False
+"""Whether the "Delete all records" job may run (invenio_rdm_starter.reset).
+
+It deletes every record, with its drafts, versions, requests and PIDs, for a
+demo instance whose records are imported and imported again at will. Off, so
+that an instance with data of its own never loses it; a demo sets
+INVENIO_STARTER_DELETE_ALL_RECORDS_ENABLED=True. Refused all the same where a
+DOI was minted here."""
+
+
 # Invenio-App-RDM
 # ===============
 # See https://github.com/inveniosoftware/invenio-app-rdm/blob/master/invenio_app_rdm/config.py
