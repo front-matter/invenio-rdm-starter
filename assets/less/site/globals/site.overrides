@@ -36,3 +36,22 @@ html.cover-page {
 dl.details-list.funding-list dt.ui.tiny.header:not(:first-child) {
   margin-top: 0.4rem;
 }
+
+/* invenio-pidbox's menubar search: a red border while the field (or its
+   select) has focus, as the Starter's form inputs have
+   (@focusedFormBorderColor), and a red search button. "form" outranks
+   pidbox's own rules, which come later in the page. */
+form.pidbox-search:focus-within {
+  border-color: @focusedFormBorderColor;
+}
+
+form.pidbox-search .ui.icon.button {
+  background-color: @red;
+  color: @white;
+
+  &:hover,
+  &:focus {
+    background-color: @darkRed;
+    color: @white;
+  }
+}
