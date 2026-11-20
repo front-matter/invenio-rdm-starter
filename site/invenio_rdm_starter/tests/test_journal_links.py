@@ -11,6 +11,7 @@ from jinja2 import Environment, FileSystemLoader, select_autoescape
 TEMPLATES = Path(__file__).resolve().parents[3] / "templates" / "semantic-ui"
 JOURNAL = {"title": "mBio", "issue": "11", "volume": "17", "issn": "2150-7511"}
 LINK = '<a href="/containers/2150-7511">2150-7511</a>'
+INLINE_LINK = '<a class="display-inline" href="/containers/2150-7511">2150-7511</a>'
 
 
 def _environment() -> Environment:
@@ -53,13 +54,13 @@ def _sidebar(containers: bool, journal: str, issn: str | None) -> str:
 def test_published_in_links_the_issn():
     html = _sidebar(True, "mBio, 17(11), ISSN: 2150-7511, 2026.", "2150-7511")
 
-    assert f"mBio, 17(11), ISSN: {LINK}, 2026." in html
+    assert f"mBio, 17(11), ISSN: {INLINE_LINK}, 2026." in html
 
 
 def test_published_in_escapes_the_rest_of_the_text():
     html = _sidebar(True, "<b>A & B</b>, ISSN: 2150-7511.", "2150-7511")
 
-    assert f"&lt;b&gt;A &amp; B&lt;/b&gt;, ISSN: {LINK}." in html
+    assert f"&lt;b&gt;A &amp; B&lt;/b&gt;, ISSN: {INLINE_LINK}." in html
 
 
 @pytest.mark.parametrize(("containers", "issn"), [(False, "2150-7511"), (True, None)])

@@ -26,7 +26,8 @@
       {%- set journal = record_ui["ui"].get('publishing_information', {}).get('journal') %}
       {%- set issn = ((record_ui.get("custom_fields") or {}).get("journal:journal") or {}).get("issn") %}
       {%- if journal and issn and config.PIDBOX_CONTAINER_PROFILES %}
-        {%- set issn_link %}<a href="{{ url_for('invenio_pidbox.container_profile', issn=issn) }}">{{ issn }}</a>{% endset %}
+        {#- display-inline: InvenioRDM sets every link of a details list on a line of its own. #}
+        {%- set issn_link %}<a class="display-inline" href="{{ url_for('invenio_pidbox.container_profile', issn=issn) }}">{{ issn }}</a>{% endset %}
         {%- set journal = (journal | e) | replace(issn | e, issn_link) %}
       {%- endif %}
       {{ show_detail(_('Published in'), journal) if journal }}
