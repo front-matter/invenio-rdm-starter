@@ -48,23 +48,25 @@
     }
     
     .ui.definition.table thead:not(.full-width) th:first-child {
-      box-shadow: -1px -1px 0px 1px @rdmSidebarSegmentColor;
-      background-color: @rdmSidebarSegmentColor;
+      box-shadow: -1px -1px 0px 1px @rdmSidebarSegmentFillColor;
+      background-color: @rdmSidebarSegmentFillColor;
     }
   }
 
   .ui.top.attached.header {
-    background-color: transparent;
+    background-color: @rdmSidebarHeaderColor;
     font-size: @big;
     border: none;
+    border-bottom: 1px solid @rdmSidebarSegmentBorderColor;
+    border-radius: @borderRadius @borderRadius 0 0;
     font-weight: 500;
-    padding: @sidebarVerticalPadding @sidebarHorizontalPadding (.75 * @sidebarHorizontalPadding);
+    padding: (.75 * @sidebarHorizontalPadding) @sidebarHorizontalPadding;
   }
 
   .ui.bottom.attached.segment.rdm-sidebar {
     background-color: transparent;
     border: none;
-    padding: 0 @sidebarHorizontalPadding @sidebarVerticalPadding;
+    padding: @sidebarHorizontalPadding;
     margin-bottom: 0 !important;
 
     &#record-manage-menu {
@@ -89,7 +91,7 @@
       &,
       & .line,
       & > :before {
-        background-color: @rdmSidebarSegmentColor;
+        background-color: @rdmSidebarSegmentFillColor;
       }
     }
   }

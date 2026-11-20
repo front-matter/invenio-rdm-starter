@@ -2,7 +2,13 @@
          Invenio RDM Starter Segment Variables
 ***********************************************/
 
-@rdmSidebarSegmentColor: #f5f5f5;
-@rdmSidebarSegmentBorderColor: #e3e3e3;
+/* The sidebar's boxes as commonmeta.org's cards: no fill of their own, a
+   light grey border, and a light grey header band above a line. */
+@rdmSidebarSegmentColor: transparent;
+@rdmSidebarSegmentBorderColor: #e5e5e5;
+@rdmSidebarHeaderColor: #f5f5f5;
+/* What shows through a box: placeholders and table corners are painted in
+   it, which a transparent colour can't do. */
+@rdmSidebarSegmentFillColor: @white;
 @sidebarVerticalPadding: 1.75rem;
 @sidebarHorizontalPadding: 1.5rem;
