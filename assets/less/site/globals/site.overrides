@@ -55,3 +55,34 @@ form.pidbox-search .ui.icon.button {
     color: @white;
   }
 }
+
+/* The Starter's mark: a ribbon across the menubar's top-left corner, as a
+   staging site marks its own; the logo is InvenioRDM's. The menubar starts
+   at the page's top-left corner, so the ribbon's ends run off the page and
+   nothing has to clip it (which would clip the user menu's dropdown too).
+   The menubar's left margin keeps it clear of the logo, except on a phone,
+   where it may touch the logo's first letter. pointer-events: what is under
+   the ribbon stays clickable. */
+.outer-navbar {
+  position: relative;
+
+  &::before {
+    content: "STARTER";
+    position: absolute;
+    top: 18px;
+    left: -34px;
+    z-index: 10;
+    width: 120px;
+    padding: 3px 0;
+    transform: rotate(-45deg);
+    background-color: @brown; // amber
+    color: @darkGrey;
+    font-weight: 900;
+    font-size: 10px;
+    letter-spacing: 1px;
+    line-height: 1.2;
+    text-align: center;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.25);
+    pointer-events: none;
+  }
+}

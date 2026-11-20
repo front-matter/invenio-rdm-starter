@@ -374,10 +374,11 @@ invenio-app's, as are HTTPS, HSTS, frame options and cookies."""
 # =============
 
 THEME_LOGO = "images/starter-white.svg"
-"""The menubar's logo: InvenioRDM's, with "Starter" in amber across "RDM",
-rising at 45°, outlined in the menubar's slate. The menubar of invenio-app-rdm
-and of the administration panel shows THEME_LOGO; INVENIO_THEME_LOGO
-replaces it."""
+"""The menubar's logo: InvenioRDM's own, under the name deployments already
+set (INVENIO_THEME_LOGO replaces it). The Starter marks itself with an amber
+"STARTER" ribbon across the menubar's top-left corner instead, in the
+theme's site.overrides. The menubar of invenio-app-rdm and of the
+administration panel shows THEME_LOGO."""
 
 
 # Front page
