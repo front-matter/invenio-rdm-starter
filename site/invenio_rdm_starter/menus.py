@@ -1,4 +1,5 @@
-"""The Starter's menubar: without the inbox and the "+" menu.
+"""The Starter's menubar: without the inbox and the "+" menu, and "My
+dashboard" only for a logged-in user.
 
 InvenioRDM registers both as menu items when the app is finalized: the
 inbox as ``notifications.requests`` (invenio-app-rdm), the "+" menu as the
@@ -6,6 +7,10 @@ items of ``plus``, a new upload (invenio-app-rdm) and a new community
 (invenio-communities). The Starter's records are imported, not deposited,
 and nobody reviews them, so neither leads anywhere a reader of the Starter
 goes. Uploads stay reachable from "My dashboard".
+
+"My dashboard" (``actions.deposit``, invenio-app-rdm) is shown to everyone,
+and sends a visitor who isn't logged in to the login page. The Starter shows
+it only once a user is logged in.
 
 The items are removed rather than hidden: the header shows the "+" button
 whenever ``plus`` has items at all, visible or not. And they are removed on
@@ -18,6 +23,7 @@ from __future__ import annotations
 
 import structlog
 from flask import Flask
+from flask_login import current_user
 from flask_menu import current_menu
 
 #: The menu items the Starter's menubar leaves out.
@@ -26,6 +32,34 @@ REMOVED_MENU_ITEMS = (
     "plus.deposit",
     "plus.community",
 )
+
+
+#: The menu items the Starter's menubar shows only to a logged-in user.
+LOGGED_IN_MENU_ITEMS = ("actions.deposit",)
+
+
+def _logged_in() -> bool:
+    """Whether the current user is logged in."""
+    return bool(current_user and current_user.is_authenticated)
+
+
+def show_only_when_logged_in(
+    paths: tuple[str, ...] = LOGGED_IN_MENU_ITEMS,
+) -> list[str]:
+    """Show menu items only to a logged-in user, and return their paths.
+
+    Flask-Menu sets an item's condition only when it's registered, and
+    re-registering would restate its endpoint and text, so this replaces
+    the condition itself. A path that isn't there is left alone.
+    """
+    restricted = []
+    for path in paths:
+        node = current_menu.submenu(path, auto_create=False)
+        if node is None:
+            continue
+        node._visible_when = _logged_in
+        restricted.append(path)
+    return restricted
 
 
 def remove_menu_items(paths: tuple[str, ...] = REMOVED_MENU_ITEMS) -> list[str]:
@@ -46,7 +80,10 @@ def remove_menu_items(paths: tuple[str, ...] = REMOVED_MENU_ITEMS) -> list[str]:
 
 
 def finalize_app(app: Flask) -> None:
-    """Remove the inbox and the "+" menu before the first request is served.
+    """Adjust the menubar before the first request is served.
+
+    Removes the inbox and the "+" menu, and shows "My dashboard" only to a
+    logged-in user.
 
     Loaded through the ``invenio_base.finalize_app`` entry point
     ``invenio_rdm_starter_menus``.
@@ -63,3 +100,4 @@ def finalize_app(app: Flask) -> None:
             return
         state["done"] = True
         log.info("menu_items_removed", paths=remove_menu_items())
+        log.info("menu_items_logged_in_only", paths=show_only_when_logged_in())

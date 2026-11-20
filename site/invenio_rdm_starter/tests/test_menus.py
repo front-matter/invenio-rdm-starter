@@ -4,7 +4,11 @@ from importlib.metadata import entry_points
 
 from flask import Flask
 from flask_menu import Menu, current_menu
-from invenio_rdm_starter.menus import finalize_app, remove_menu_items
+from invenio_rdm_starter.menus import (
+    finalize_app,
+    remove_menu_items,
+    show_only_when_logged_in,
+)
 
 
 def _app_with_invenio_menus() -> Flask:
@@ -90,3 +94,48 @@ def test_the_hook_is_registered():
     assert registered.get("invenio_rdm_starter_menus") == (
         "invenio_rdm_starter.menus:finalize_app"
     )
+
+
+def _app_with_login() -> Flask:
+    """An app with "My dashboard", and a user to log in."""
+    from flask_login import LoginManager, UserMixin
+
+    class User(UserMixin):
+        id = "1"
+
+    app = Flask(__name__)
+    app.secret_key = "test"
+    Menu(app)
+    login = LoginManager(app)
+    login.user_loader(lambda user_id: User())
+    app.config["LOGIN_USER"] = User()
+
+    @app.route("/")
+    def index():
+        return "ok"
+
+    with app.app_context():
+        current_menu.submenu("actions.deposit").register("index", "My dashboard")
+    return app
+
+
+def test_my_dashboard_shows_only_when_logged_in():
+    from flask_login import login_user
+
+    app = _app_with_login()
+
+    with app.test_request_context("/"):
+        assert show_only_when_logged_in() == ["actions.deposit"]
+        dashboard = current_menu.submenu("actions.deposit")
+        assert not dashboard.visible
+
+        login_user(app.config["LOGIN_USER"])
+        assert dashboard.visible
+
+
+def test_a_missing_logged_in_item_is_left_alone():
+    app = Flask(__name__)
+    Menu(app)
+
+    with app.app_context():
+        assert show_only_when_logged_in() == []
