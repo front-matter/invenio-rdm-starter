@@ -370,6 +370,15 @@ sources the Starter needs; the rest, object-src 'none' among it, is
 invenio-app's, as are HTTPS, HSTS, frame options and cookies."""
 
 
+# Invenio-Theme
+# =============
+
+THEME_HEADER_LOGO = "images/starter-white.svg"
+"""The menubar's logo: InvenioRDM's, with "Starter" below it in amber, as
+Rogue Scholar's staging site marks its own. INVENIO_THEME_HEADER_LOGO
+replaces it."""
+
+
 # Invenio-App-RDM
 # ===============
 # See https://github.com/inveniosoftware/invenio-app-rdm/blob/master/invenio_app_rdm/config.py
