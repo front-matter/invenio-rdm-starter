@@ -374,8 +374,8 @@ invenio-app's, as are HTTPS, HSTS, frame options and cookies."""
 # =============
 
 THEME_LOGO = "images/starter-white.svg"
-"""The menubar's logo: InvenioRDM's, with "Starter" below it in amber, as
-Rogue Scholar's staging site marks its own. The menubar of invenio-app-rdm
+"""The menubar's logo: InvenioRDM's, with "Starter" in amber across "RDM",
+rising at 45°, outlined in the menubar's slate. The menubar of invenio-app-rdm
 and of the administration panel shows THEME_LOGO; INVENIO_THEME_LOGO
 replaces it."""
 

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-<svg width="100%" height="100%" viewBox="0 0 72 27" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;">
+<svg width="100%" height="100%" viewBox="0 0 72 18" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;">
     <g id="g5138" transform="matrix(1,0,0,1,-38.6808,-51.6757)">
         <g id="text5106" transform="matrix(1.04291,0,0,0.958857,0,0)">
             <path id="path154" d="M83.86,57.784L83.86,61.802L84.909,61.802C85.235,61.802 85.495,61.76 85.688,61.675C85.881,61.579 86.032,61.446 86.14,61.277C86.237,61.108 86.303,60.903 86.339,60.662C86.375,60.408 86.394,60.119 86.394,59.793C86.394,59.467 86.375,59.184 86.339,58.942C86.303,58.689 86.231,58.472 86.122,58.291C85.893,57.953 85.458,57.784 84.819,57.784L83.86,57.784ZM82.013,68.934L82.013,56.046L84.982,56.046C87.154,56.046 88.24,57.307 88.24,59.829C88.24,60.589 88.119,61.235 87.878,61.766C87.649,62.297 87.238,62.725 86.647,63.051L88.638,68.934L86.683,68.934L84.964,63.431L83.86,63.431L83.86,68.934L82.013,68.934Z" style="fill:white;fill-rule:nonzero;"/>
@@ -34,5 +34,5 @@
         <path id="rect126" d="M49.04,62.641L50.24,61.259L108.849,63.06L107.048,57.839L49.04,62.641Z" style="fill:none;fill-rule:nonzero;"/>
         <path id="rect130" d="M48.903,60.997L101.707,56.195L103.508,62.511L50.103,60.71L48.903,60.997Z" style="fill:none;fill-rule:nonzero;"/>
     </g>
-    <text x="0.6" y="25.6" style="font-family:'Lato-Bold', 'Lato', sans-serif;font-weight:700;font-size:7.6px;fill:rgb(245,158,11);">Starter</text>
+    <text x="63.5" y="9" text-anchor="middle" dominant-baseline="central" transform="rotate(-45 63.5 9)" style="font-family:'Lato-Bold', 'Lato', sans-serif;font-weight:700;fill:rgb(245,158,11);stroke:rgb(51,65,85);stroke-width:0.9px;paint-order:stroke;stroke-linejoin:round;font-size:6.6px;">Starter</text>
 </svg>
