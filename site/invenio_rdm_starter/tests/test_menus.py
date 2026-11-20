@@ -3,11 +3,12 @@
 from importlib.metadata import entry_points
 
 from flask import Flask
+from flask_babel import Babel
 from flask_menu import Menu, current_menu
 from invenio_rdm_starter.menus import (
+    add_dashboard_to_user_menu,
     finalize_app,
     remove_menu_items,
-    show_only_when_logged_in,
 )
 
 
@@ -39,11 +40,16 @@ def test_the_inbox_and_the_plus_menu_are_removed():
     with app.app_context():
         removed = remove_menu_items()
 
-    assert removed == ["notifications.requests", "plus.deposit", "plus.community"]
+    assert removed == [
+        "notifications.requests",
+        "plus.deposit",
+        "plus.community",
+        "actions.deposit",
+    ]
     assert _menu(app, "notifications") == []
     # Removed, not hidden: the header shows "+" while plus has any items.
     assert _menu(app, "plus") == []
-    assert _menu(app, "actions") == ["deposit"]
+    assert _menu(app, "actions") == []
 
 
 def test_a_missing_item_is_left_alone():
@@ -96,46 +102,66 @@ def test_the_hook_is_registered():
     )
 
 
-def _app_with_login() -> Flask:
-    """An app with "My dashboard", and a user to log in."""
-    from flask_login import LoginManager, UserMixin
-
-    class User(UserMixin):
-        id = "1"
-
+def _app_with_user_menu() -> Flask:
+    """An app with invenio-app-rdm's dashboard and the user menu's items."""
     app = Flask(__name__)
-    app.secret_key = "test"
+    Babel(app)
     Menu(app)
-    login = LoginManager(app)
-    login.user_loader(lambda user_id: User())
-    app.config["LOGIN_USER"] = User()
 
     @app.route("/")
     def index():
         return "ok"
 
+    @app.route("/me/uploads", endpoint="invenio_app_rdm_users.uploads")
+    def uploads():
+        return "ok"
+
     with app.app_context():
-        current_menu.submenu("actions.deposit").register("index", "My dashboard")
+        current_menu.submenu("settings.profile").register("index", "Profile", order=0)
+        current_menu.submenu("settings.change_password").register(
+            "index", "Change password", order=1
+        )
+        current_menu.submenu("settings.notifications").register(
+            "index", "Notifications", order=2
+        )
     return app
 
 
-def test_my_dashboard_shows_only_when_logged_in():
-    from flask_login import login_user
-
-    app = _app_with_login()
+def test_my_dashboard_is_second_in_the_user_menu():
+    app = _app_with_user_menu()
 
     with app.test_request_context("/"):
-        assert show_only_when_logged_in() == ["actions.deposit"]
-        dashboard = current_menu.submenu("actions.deposit")
-        assert not dashboard.visible
+        assert add_dashboard_to_user_menu() == "settings.dashboard"
+        children = current_menu.submenu("settings").children
+        assert [child.name for child in children] == [
+            "profile",
+            "dashboard",
+            "change_password",
+            "notifications",
+        ]
+        dashboard = children[1]
+        assert dashboard.url == "/me/uploads"
+        assert str(dashboard.text) == (
+            '<i class="tachometer alternate icon"></i> My dashboard'
+        )
 
-        login_user(app.config["LOGIN_USER"])
-        assert dashboard.visible
 
-
-def test_a_missing_logged_in_item_is_left_alone():
+def test_no_dashboard_in_the_user_menu_without_its_route():
     app = Flask(__name__)
     Menu(app)
 
     with app.app_context():
-        assert show_only_when_logged_in() == []
+        assert add_dashboard_to_user_menu() is None
+        assert _menu(app, "settings") == []
+
+
+def test_the_first_request_moves_my_dashboard_into_the_user_menu():
+    app = _app_with_user_menu()
+    with app.app_context():
+        current_menu.submenu("actions.deposit").register("index", "My dashboard")
+        finalize_app(app)
+
+    app.test_client().get("/")
+
+    assert _menu(app, "actions") == []
+    assert "dashboard" in _menu(app, "settings")
