@@ -115,7 +115,9 @@
 @restricted-components-border-color: #e0b4b4;
 @embargoed-components-background-color: #fbf8ee;
 @embargoed-components-border-color: #c9ba9b;
-@versionActiveColor: @darkWhite;
+/* The current version in the Versions box, on the box's own white like the
+   other boxes' content, not on a grey of its own. */
+@versionActiveColor: transparent;
 
 @orcidColor: #A6CE39;
 @orcidActiveColor: saturate(darken(@orcidColor, 5), 15, relative);
