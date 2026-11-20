@@ -85,9 +85,9 @@ The `docker-compose.yml` configuration can be modified to suit your needs using 
 ### Invenio-Theme
 
 * `INVENIO_THEME_LOGO` - The logo of the menubar, defaults to `images/starter-white.svg`: InvenioRDM's logo with "Starter" below it.
-* `INVENIO_THEME_FRONTPAGE_TITLE` - The frontpage title used by InvenioRDM, defaults to `InvenioRDM Starter`. The front page doesn't show it, as the menubar's logo already names the site.
+* `INVENIO_THEME_FRONTPAGE_TITLE` - The frontpage title used by InvenioRDM, defaults to `InvenioRDM Starter`. The front page shows invenio-pidbox's metrics in its place, so it shows only with `INVENIO_PIDBOX_FRONTPAGE_METRICS=False`.
 * `INVENIO_THEME_SHOW_FRONTPAGE_INTRO_SECTION` - Set to `True` to show the frontpage intro section, defaults to `False`.
-* `INVENIO_THEME_FRONTPAGE_SUBTITLE` - The subtitle above invenio-pidbox's metrics on the front page.
+* `INVENIO_THEME_FRONTPAGE_SUBTITLE` - The frontpage subtitle, shown below the title, so also only with `INVENIO_PIDBOX_FRONTPAGE_METRICS=False`.
 
 ### Front page text
 

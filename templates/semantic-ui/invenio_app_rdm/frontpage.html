@@ -8,9 +8,8 @@
   invenio-app-rdm's front page, with the list of records titled for what it
   shows: the Starter's "newest" sorts by publication date, so these are the
   most recently published works rather than the latest uploads. The header
-  is invenio-pidbox's, with the site's subtitle above the metrics
-  (invenio_rdm_starter/header_frontpage.html), and the sidebar shows the
-  pages of STARTER_FRONTPAGE_SIDEBAR_PAGES (invenio_rdm_starter.pages).
+  is invenio-pidbox's, with its metrics, and the sidebar shows the pages of
+  STARTER_FRONTPAGE_SIDEBAR_PAGES (invenio_rdm_starter.pages).
 #}
 {% from "invenio_app_rdm/macros/records_list.html" import records_list %}
 {% from "invenio_communities/macros/communities_carousel.html" import communities_carousel %}
@@ -18,7 +17,7 @@
 {%- extends "invenio_theme/frontpage.html" %}
 
 {%- block page_header %}
-  {%- include "invenio_rdm_starter/header_frontpage.html" %}
+  {%- include "invenio_app_rdm/header_frontpage.html" %}
 {%- endblock page_header %}
 
 {%- block page_body %}

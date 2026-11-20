@@ -1,11 +1,10 @@
-"""The front page: the subtitle above pidbox's metrics, and the sidebar's pages."""
+"""The front page: pidbox's metrics in the header, and the sidebar's pages."""
 
 from __future__ import annotations
 
 from pathlib import Path
 
 import invenio_pidbox
-import pytest
 from jinja2 import ChoiceLoader, DictLoader, Environment, FileSystemLoader
 
 STARTER_TEMPLATES = Path(__file__).resolve().parents[3] / "templates" / "semantic-ui"
@@ -21,7 +20,9 @@ STUBS = {
     "invenio_communities/macros/communities_carousel.html": (
         "{% macro communities_carousel() %}{% endmacro %}"
     ),
-    "invenio_theme/frontpage.html": "{% block page_body %}{% endblock %}",
+    "invenio_theme/frontpage.html": (
+        "{% block page_header %}{% endblock %}{% block page_body %}{% endblock %}"
+    ),
 }
 
 WHY = {
@@ -60,54 +61,17 @@ def _settings(**config: object) -> dict:
     }
 
 
-def _render(pages: dict | None = None, **config: object) -> str:
-    """The header, without pages unless given (url -> page)."""
-    template = _environment(pages).get_template(
-        "invenio_rdm_starter/header_frontpage.html"
-    )
-    return template.render(config=_settings(**config))
-
-
 def _render_frontpage(pages: dict | None, **config: object) -> str:
     template = _environment(pages).get_template("invenio_app_rdm/frontpage.html")
     return template.render(config=_settings(**config), show_intro_section=False)
 
 
-def test_the_subtitle_sits_above_the_metrics_without_the_title() -> None:
-    html = _render()
+def test_the_header_shows_the_metrics_without_title_or_subtitle() -> None:
+    html = _render_frontpage({"/about/why": WHY})
 
-    assert html.index("A starter project.") < html.index("<div id=metrics>")
-    # The menubar's logo already names the site.
-    assert "InvenioRDM Starter" not in html
-    assert "inverted" not in html  # dark ink on the light band
-
-
-@pytest.mark.parametrize(
-    "config",
-    [
-        {"PIDBOX_FRONTPAGE_METRICS": False},
-        {"PIDBOX_FRONTPAGE_METRICS_BACKGROUND": None},
-    ],
-)
-def test_the_subtitle_stays_white_on_the_theme_band(config: dict) -> None:
-    html = _render(**config)
-
-    assert "A starter project." in html
-    assert "header inverted" in html
-
-
-def test_no_row_without_a_subtitle() -> None:
-    html = _render(THEME_FRONTPAGE_SUBTITLE="")
-
-    assert "starter-frontpage-title" not in html
     assert "<div id=metrics>" in html
-
-
-def test_the_subtitle_is_the_setting_even_with_pages() -> None:
-    html = _render({"/about/why": WHY})
-
-    assert "A starter project." in html
-    assert "/about" not in html
+    assert "InvenioRDM Starter</h1>" not in html
+    assert "A starter project." not in html
 
 
 def test_the_sidebar_shows_a_box_per_page_that_exists() -> None:
