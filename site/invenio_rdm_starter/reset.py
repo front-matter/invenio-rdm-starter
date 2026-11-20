@@ -152,12 +152,18 @@ def empty_indices(client: Any, aliases: list[str]) -> dict[str, int]:
 
 
 def _record_aliases() -> list[str]:
+    """The records' and drafts' index aliases, with the instance's prefix.
+
+    The record classes name them without SEARCH_INDEX_PREFIX, as the search
+    client's own calls add it; delete_by_query on the client doesn't.
+    """
     from invenio_rdm_records.proxies import current_rdm_records
+    from invenio_search.utils import build_alias_name
 
     service = current_rdm_records.records_service
     return [
-        service.record_cls.index.search_alias,
-        service.draft_cls.index.search_alias,
+        build_alias_name(service.record_cls.index.search_alias),
+        build_alias_name(service.draft_cls.index.search_alias),
     ]
 
 

@@ -146,3 +146,33 @@ def test_the_job_and_its_task_are_registered():
         "invenio_rdm_starter.jobs:DeleteAllRecordsJob"
     )
     assert tasks["invenio_rdm_starter_reset"] == "invenio_rdm_starter.reset"
+
+
+def test_the_aliases_carry_the_index_prefix(monkeypatch):
+    """The error of the first run on demo: no such index [rdmrecords-records]."""
+    from flask import Flask
+
+    app = Flask(__name__)
+    app.config["SEARCH_INDEX_PREFIX"] = "invenio-rdm-"
+    index = type("Index", (), {"search_alias": "rdmrecords-records"})
+    drafts = type("Index", (), {"search_alias": "rdmrecords-drafts"})
+    service = type(
+        "Service",
+        (),
+        {
+            "record_cls": type("R", (), {"index": index}),
+            "draft_cls": type("D", (), {"index": drafts}),
+        },
+    )
+    proxy = type("Proxy", (), {"records_service": service})
+    monkeypatch.setattr(
+        "invenio_rdm_records.proxies.current_rdm_records", proxy, raising=False
+    )
+
+    with app.app_context():
+        aliases = reset._record_aliases()
+
+    assert aliases == [
+        "invenio-rdm-rdmrecords-records",
+        "invenio-rdm-rdmrecords-drafts",
+    ]
