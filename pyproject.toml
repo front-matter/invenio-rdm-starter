@@ -77,6 +77,8 @@ invenio_rdm_starter = "invenio_rdm_starter.errors:finalize_app"
 invenio_rdm_starter_menus = "invenio_rdm_starter.menus:finalize_app"
 # The front page's subtitle and sidebar from pages (invenio_rdm_starter.pages).
 invenio_rdm_starter_pages = "invenio_rdm_starter.pages:finalize_app"
+# Whether there are records, for the front page (invenio_rdm_starter.frontpage).
+invenio_rdm_starter_frontpage = "invenio_rdm_starter.frontpage:finalize_app"
 
 # The subject communities jobs: the Jobs dashboard lists them, Celery runs
 # their tasks.

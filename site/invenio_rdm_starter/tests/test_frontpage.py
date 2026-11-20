@@ -5,6 +5,7 @@ from __future__ import annotations
 from pathlib import Path
 
 import invenio_pidbox
+import pytest
 from jinja2 import ChoiceLoader, DictLoader, Environment, FileSystemLoader
 
 STARTER_TEMPLATES = Path(__file__).resolve().parents[3] / "templates" / "semantic-ui"
@@ -61,8 +62,13 @@ def _settings(**config: object) -> dict:
     }
 
 
-def _render_frontpage(pages: dict | None, **config: object) -> str:
-    template = _environment(pages).get_template("invenio_app_rdm/frontpage.html")
+def _render_frontpage(
+    pages: dict | None, total: int | None = 3, **config: object
+) -> str:
+    """The front page, with ``total`` records (``None``: the count is unknown)."""
+    environment = _environment(pages)
+    environment.globals["starter_records_total"] = lambda: total
+    template = environment.get_template("invenio_app_rdm/frontpage.html")
     return template.render(config=_settings(**config), show_intro_section=False)
 
 
@@ -85,3 +91,24 @@ def test_the_sidebar_shows_a_box_per_page_that_exists() -> None:
 def test_the_sidebar_is_empty_without_pages() -> None:
     assert "starter-frontpage-page" not in _render_frontpage({})
     assert "starter-frontpage-page" not in _render_frontpage(None)
+
+
+@pytest.mark.parametrize("total", [3, None])
+def test_with_records_or_an_unknown_count_the_page_is_as_always(total) -> None:
+    html = _render_frontpage({}, total=total)
+
+    assert "<div id=metrics>" in html
+    assert "<div id=records>" in html
+    assert "starter-no-records" not in html
+
+
+def test_without_records_no_metrics_band_and_a_message() -> None:
+    html = _render_frontpage({"/about/why": WHY}, total=0)
+
+    assert "<nav></nav>" in html  # the plain header
+    assert "frontpage-search-bar" not in html
+    assert "<div id=metrics>" not in html
+    assert "<div id=records>" not in html
+    assert "No works have been published yet." in html
+    # The sidebar stays.
+    assert ">Why InvenioRDM Starter?</h2>" in html

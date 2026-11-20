@@ -10,6 +10,11 @@
   most recently published works rather than the latest uploads. The header
   is invenio-pidbox's, with its metrics, and the sidebar shows the pages of
   STARTER_FRONTPAGE_SIDEBAR_PAGES (invenio_rdm_starter.pages).
+
+  With no records (a demo started afresh, before its imports), the header is
+  the plain one, without the metrics band, and the list of works a message
+  (starter_records_total, invenio_rdm_starter.frontpage). Should the count be
+  unknown, the page is as always.
 #}
 {% from "invenio_app_rdm/macros/records_list.html" import records_list %}
 {% from "invenio_communities/macros/communities_carousel.html" import communities_carousel %}
@@ -17,7 +22,12 @@
 {%- extends "invenio_theme/frontpage.html" %}
 
 {%- block page_header %}
-  {%- include "invenio_app_rdm/header_frontpage.html" %}
+  {%- set no_records = starter_records_total is defined and starter_records_total() == 0 %}
+  {%- if no_records %}
+    {%- include config.THEME_HEADER_TEMPLATE %}
+  {%- else %}
+    {%- include "invenio_app_rdm/header_frontpage.html" %}
+  {%- endif %}
 {%- endblock page_header %}
 
 {%- block page_body %}
@@ -39,7 +49,17 @@
         <div class="eleven wide computer sixteen wide tablet column">
 
           {% block main_column_content %}
-            {{ records_list(title=_("Recently published works")) }}
+            {%- set no_records = starter_records_total is defined and starter_records_total() == 0 %}
+            {%- if no_records %}
+              <div id="records-list" class="starter-no-records">
+                <h2 class="ui header">{{ _("Recently published works") }}</h2>
+                <div class="ui info message">
+                  <p>{{ _("No works have been published yet.") }}</p>
+                </div>
+              </div>
+            {%- else %}
+              {{ records_list(title=_("Recently published works")) }}
+            {%- endif %}
           {% endblock main_column_content %}
 
         </div>

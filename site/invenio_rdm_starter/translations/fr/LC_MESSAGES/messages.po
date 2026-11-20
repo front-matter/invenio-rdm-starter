@@ -21,3 +21,7 @@ msgstr "Travaux récemment publiés"
 msgid "My profile"
 msgstr "Mon profil"
 
+
+#: templates/semantic-ui/invenio_app_rdm/frontpage.html
+msgid "No works have been published yet."
+msgstr "Aucun travail n'a encore été publié."
