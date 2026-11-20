@@ -12,3 +12,12 @@
     }
   }
 }
+
+/* The administration panel's header in the menubar's slate, as the rest of
+   the site, rather than in @brandColor, the theme's sky blue: its two menus
+   and the grid column the logo's menu sits in. */
+#invenio-admin-home-nav.ui.inverted.menu,
+#invenio-admin-top-nav.ui.inverted.menu,
+header.ui.grid > .inverted.column:has(#invenio-admin-home-nav) {
+  background-color: @navbarBackgroundColor;
+}
