@@ -13,7 +13,9 @@ Two jobs, so that the communities exist before any record names them:
   communities of its subfields. commonmeta-rs adds the subfields to a record
   as subjects when it enriches the record with OpenAlex; nothing in
   InvenioRDM acts on them. A subfield without a community is left alone, so
-  the first job decides which communities there are.
+  the first job decides which communities there are. It then features the
+  largest ones, for the front page's carousel of featured communities, while
+  none is featured (:func:`feature_subject_communities`).
 
 A record already in all its communities costs a comparison, a subfield with a
 community a lookup, so both jobs go over everything on each run.
@@ -24,10 +26,13 @@ creates these communities itself.
 
 from __future__ import annotations
 
+from collections import Counter
+from datetime import UTC, datetime
 from typing import Any
 
 import structlog
 from celery import shared_task
+from flask import current_app
 from invenio_access.permissions import system_identity
 from invenio_pidstore.errors import PIDDoesNotExistError
 
@@ -49,6 +54,10 @@ COMMUNITY_ACCESS = {
     "record_submission_policy": "open",
     "review_policy": "open",
 }
+
+#: How many communities are featured, unless STARTER_FEATURED_COMMUNITIES says
+#: otherwise.
+DEFAULT_FEATURED_COMMUNITIES = 5
 
 log = structlog.get_logger().bind(service="subject_communities")
 
@@ -148,12 +157,14 @@ def add_records_to_subject_communities(
     ``"no_community"`` and left for :func:`create_subject_communities`.
     Returns ``{"scanned", "added", "no_community", "failed"}``.
     """
+    from invenio_communities.proxies import current_communities
     from invenio_rdm_records.proxies import current_rdm_records
 
     records = current_rdm_records.records_service
     record_communities = current_rdm_records.record_communities_service
     counts = {"scanned": 0, "added": 0, "no_community": 0, "failed": 0}
     community_ids: dict[str, str | None] = {}
+    members: Counter[str] = Counter()
 
     for hit in records.scan(system_identity, params={"q": RECORD_QUERY}).hits:
         if max_records is not None and counts["scanned"] >= max_records:
@@ -171,6 +182,7 @@ def add_records_to_subject_communities(
 
         wanted = [community_ids[slug] for slug in record_subfields(hit)]
         counts["no_community"] += sum(1 for cid in wanted if cid is None)
+        members.update(cid for cid in wanted if cid is not None)
         current = set(
             ((hit.get("parent") or {}).get("communities") or {}).get("ids") or []
         )
@@ -194,5 +206,45 @@ def add_records_to_subject_communities(
             counts["failed"] += 1
             log.warning("record_partly_added", record_id=hit["id"], errors=errors)
 
+    counts["featured"] = feature_subject_communities(
+        current_communities.service,
+        members,
+        int(
+            current_app.config.get(
+                "STARTER_FEATURED_COMMUNITIES", DEFAULT_FEATURED_COMMUNITIES
+            )
+            or 0
+        ),
+    )
     log.info("records_added_to_subject_communities", **counts)
     return counts
+
+
+def feature_subject_communities(
+    communities: Any, members: Counter[str], count: int
+) -> int:
+    """Feature the ``count`` communities with the most records, from now.
+
+    For the front page's carousel of featured communities, which shows nothing
+    while none is featured. Only then: communities an admin features, under
+    Administration > Communities, are theirs to choose, and stay as they are.
+    ``members`` counts each community's records. Returns how many it featured.
+    """
+    if count <= 0 or not members:
+        return 0
+    if communities.featured_search(system_identity, params={"size": 1}).total:
+        return 0
+    start = datetime.now(UTC).isoformat()
+    featured = 0
+    for community_id, records in members.most_common(count):
+        try:
+            communities.featured_create(
+                system_identity, community_id, {"start_date": start}
+            )
+        except Exception:
+            # One community failing leaves the others featured.
+            log.exception("community_not_featured", community_id=community_id)
+            continue
+        featured += 1
+        log.info("community_featured", community_id=community_id, records=records)
+    return featured
