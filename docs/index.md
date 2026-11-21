@@ -96,6 +96,16 @@ The box above the front page's metrics and the boxes of its sidebar are pages, w
 * `/about` - its **Content** is the box above the metrics, saying what the repository holds ("Metadata and content from the Journal of Open Source Software (JOSS) archived in InvenioRDM Starter. This is a demo site and content and metadata are regularly cleared.", in English, German, French and Spanish). Set by `STARTER_FRONTPAGE_ABOUT_PAGE`.
 * `/about/why` - "Why InvenioRDM Starter?", a box of the front page's sidebar: the page's **Title** is the box's header, its **Content** the box. `STARTER_FRONTPAGE_SIDEBAR_PAGES` lists the pages shown as boxes, in order.
 
+### Starter Packs
+
+A Starter Pack is the content an InvenioRDM Starter instance can start with, defined as an InvenioRDM community of type **Starter Pack** (`starterpack` in `app_data/vocabularies/community_types.yaml`). The packs are listed in `app_data/starter_packs.yaml`, each with a slug, title, description and website; the **Create starter pack communities** job (Administration > Jobs) creates the community of each pack that doesn't have one, and adds the Starter Pack community type on an instance set up before it. The first three:
+
+* `rogue-scholar` - the German-language posts of the science blogs archived by [Rogue Scholar](https://rogue-scholar.org).
+* `joss` - the [Journal of Open Source Software](https://joss.theoj.org), with PDFs and software archives: the content of demo.front-matter.de.
+* `arxiv-cs-dl` - the [arXiv cs.DL](https://arxiv.org/list/cs.DL/recent) preprints, with COMET enhancements.
+
+A Starter Pack's community is curated: public, its records added by its curators rather than submitted. `INVENIO_STARTER_PACKS_FILE` names another definitions file.
+
 ### Invenio-Records-Resources
 
 * `INVENIO_SITE_UI_URL` - The site UI URL used by InvenioRDM, defaults to `https://localhost`.

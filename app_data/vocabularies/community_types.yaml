@@ -28,3 +28,10 @@
     en: "Subject Area"
     sv: "Ämnesområde"
     de: "Fachgebiet"
+- id: "starterpack"
+  title:
+    en: "Starter Pack"
+    sv: "Startpaket"
+    de: "Starterpaket"
+    fr: "Pack de démarrage"
+    es: "Paquete de inicio"

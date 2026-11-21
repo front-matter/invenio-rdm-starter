@@ -1,0 +1,28 @@
+# Starter Packs: the content an InvenioRDM Starter instance can start with,
+# each a community of type "starterpack" (app_data/vocabularies/
+# community_types.yaml). The "Create starter pack communities" job
+# (invenio_rdm_starter.starter_packs) creates the community of each pack that
+# doesn't have one; a pack's community is found again by its slug.
+#
+# Each pack: slug, title, description, website. More fields will follow as
+# community custom fields, for what selects a pack's works.
+- slug: rogue-scholar
+  title: Rogue Scholar
+  description: >-
+    German-language posts from the science blogs archived by Rogue Scholar.
+  website: https://rogue-scholar.org
+
+- slug: joss
+  title: Journal of Open Source Software
+  description: >-
+    Metadata and content from the Journal of Open Source Software (JOSS):
+    papers about research software, with their PDFs and software archives.
+    The content of demo.front-matter.de.
+  website: https://joss.theoj.org
+
+- slug: arxiv-cs-dl
+  title: arXiv cs.DL
+  description: >-
+    Preprints in Digital Libraries (cs.DL) from arXiv, with COMET
+    enhancements of their metadata.
+  website: https://arxiv.org/list/cs.DL/recent

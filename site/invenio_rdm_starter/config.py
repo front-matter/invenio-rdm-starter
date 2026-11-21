@@ -418,6 +418,12 @@ STARTER_FEATURED_COMMUNITIES = 5
 features for the front page's carousel, the ones with the most records, while
 no community is featured; 0 features none."""
 
+STARTER_PACKS_FILE = None
+"""The file the Starter Packs are defined in, each a community of type Starter
+Pack that the "Create starter pack communities" job creates
+(invenio_rdm_starter.starter_packs); app_data/starter_packs.yaml of the
+instance unless set."""
+
 
 # Starting afresh
 # ===============

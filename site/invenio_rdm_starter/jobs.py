@@ -7,6 +7,7 @@ from invenio_jobs.jobs import JobType, PredefinedArgsSchema
 from marshmallow import fields
 
 from .reset import delete_all_records
+from .starter_packs import create_starter_pack_communities
 from .subject_communities import (
     add_records_to_subject_communities,
     create_subject_communities,
@@ -52,6 +53,19 @@ class AddRecordsToSubjectCommunitiesJob(_EverythingEachRun):
     )
 
     task = add_records_to_subject_communities
+
+
+class CreateStarterPackCommunitiesJob(_EverythingEachRun):
+    """Create the communities of the Starter Packs."""
+
+    id = "starter_create_starter_pack_communities"
+    title = _("Create starter pack communities")
+    description = _(
+        "Create a community of type Starter Pack for every Starter Pack in "
+        "app_data/starter_packs.yaml that doesn't have one."
+    )
+
+    task = create_starter_pack_communities
 
 
 class DeleteAllRecordsArgsSchema(PredefinedArgsSchema):
