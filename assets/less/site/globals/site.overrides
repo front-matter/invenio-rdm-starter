@@ -88,14 +88,40 @@ form.pidbox-search .ui.icon.button {
   }
 }
 
-/* The About box above the front page's metrics (the page /about) sits in
-   the page's header, whose links are white: on the box's white they take
-   the page's link colour. */
-.outer-navbar .starter-frontpage-about .ui.segment a {
-  color: @linkColor;
+/* The About box above the front page's metrics (the page /about): text on
+   the band itself, without a box of its own, left-aligned and larger, in
+   the dark slate the band's light ground needs (white would be about 1.4:1
+   on it), its links in the page's link colour (the header's are white). */
+.outer-navbar .starter-frontpage-about .starter-frontpage-about-text {
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  padding: 0;
+  color: @darkGrey;
+  font-size: 1.43rem;
+  line-height: 1.4;
+  text-align: left;
 
-  &:hover {
-    color: @linkHoverColor;
-    text-decoration: underline;
+  p {
+    margin: 0;
+  }
+
+  a {
+    color: @linkColor;
+
+    &:hover {
+      color: @linkHoverColor;
+      text-decoration: underline;
+    }
+  }
+}
+
+/* The metrics follow the About text closely: the padding between them, the
+   text's row's and the metrics', only where the text is there. */
+.outer-navbar .ui.grid > .row.starter-frontpage-about {
+  padding-bottom: 0;
+
+  & + #frontpage-metrics {
+    padding-top: 0;
   }
 }
