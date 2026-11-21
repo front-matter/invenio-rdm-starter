@@ -680,12 +680,12 @@ backend = [
 
 [[package]]
 name = "commonmeta-rs"
-version = "0.12.18"
+version = "0.12.19"
 source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/50/a6/6135b4733af28c0c925d073ad1f4db478d5bb419b8d0650779187743e589/commonmeta_rs-0.12.18.tar.gz", hash = "sha256:dca3f997cba37cd4442d27e78dff2441f40833b7762b1902862dddb05dc1b5af", size = 1312088, upload-time = "2026-11-21T14:20:32.146Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/0e/65/7ce4ca66de50b327b6149352ac48ff763738b8f0d24bea3a526b8e35198d/commonmeta_rs-0.12.19.tar.gz", hash = "sha256:14ffe4b4a0fdf8b44f0a56759bc5b54b783ad360d7a3a12e919fcbc26567db3c", size = 1316457, upload-time = "2026-11-21T23:28:58.421Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/8f/3a/d812d7f7f24a068e0f34bcc20f163f03b513ea941f055289a9e92da0440d/commonmeta_rs-0.12.18-cp314-abi3-macosx_11_0_arm64.whl", hash = "sha256:825a53a379f83b0929ddeabdd0d7a36dc86f12217e25ec80bd0f6b61a309a6f6", size = 16878136, upload-time = "2026-11-21T14:20:23.832Z" },
-    { url = "https://files.pythonhosted.org/packages/66/0e/ba22961a6aa4df7ac657d5cc16029d02001b088508d07f4fd46261bd4d61/commonmeta_rs-0.12.18-cp314-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:1dfe9ec76e7221c7ce3fdfb0b8e7333cc1f420d3a6fb234a01611ec8e7986d35", size = 16960420, upload-time = "2026-11-21T14:20:29.88Z" },
+    { url = "https://files.pythonhosted.org/packages/26/4a/945e693960d6aea4ae4acc789a8f68f1ee89132b531901f39dcb43670bff/commonmeta_rs-0.12.19-cp314-abi3-macosx_11_0_arm64.whl", hash = "sha256:2e099ef46182e00dfcdfdd9b4ba858c4806b6c33a74372615daffecd8c4025ab", size = 16857547, upload-time = "2026-11-21T23:28:50.568Z" },
+    { url = "https://files.pythonhosted.org/packages/7c/d5/8b3e3bcdeb670e2e6064a49d0d46d921e11879a9b88f29286d4ab95a25d8/commonmeta_rs-0.12.19-cp314-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:d5da2ec78e19d12c8dc7c4d4adb6e6a303cc197b100a6310d4e1334fa499e7be", size = 16968975, upload-time = "2026-11-21T23:28:56.487Z" },
 ]
 
 [[package]]
@@ -2280,7 +2280,7 @@ dev = [
 requires-dist = [
     { name = "commonmeta-py", extras = ["backend"], specifier = ">=0.318,<1" },
     { name = "commonmeta-py", extras = ["backend"], marker = "extra == 'actions'", specifier = ">=0.309,<1" },
-    { name = "commonmeta-rs", specifier = ">=0.12.18,<1" },
+    { name = "commonmeta-rs", specifier = ">=0.12.19,<1" },
     { name = "gunicorn", specifier = "~=23.0.0" },
     { name = "invenio-app-rdm", specifier = ">=14.0.7,<15.0" },
     { name = "invenio-logging" },
