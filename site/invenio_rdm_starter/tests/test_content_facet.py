@@ -15,6 +15,6 @@ def test_the_content_facet_offers_pdf_only():
     assert config.RDM_FACETS["content"]["ui"] == {"field": "files.types"}
 
 
-def test_record_and_community_searches_offer_it():
-    assert "content" in config.RDM_SEARCH["facets"]
-    assert "content" in config.COMMUNITIES_RECORDS_SEARCH["facets"]
+def test_record_and_community_searches_offer_it_last():
+    assert config.RDM_SEARCH["facets"][-1] == "content"
+    assert config.COMMUNITIES_RECORDS_SEARCH["facets"][-1] == "content"

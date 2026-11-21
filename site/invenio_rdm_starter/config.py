@@ -749,7 +749,6 @@ RDM_SEARCH = {
     "facets": [
         "language",
         "resource_type",
-        "content",
         "publication_date",
         "subject",
         "funders",
@@ -759,6 +758,7 @@ RDM_SEARCH = {
         "relations",
         "references",
         "citations",
+        "content",
     ],
     # Supported values from RDM_SORT_OPTIONS
     "sort": [

@@ -25,3 +25,7 @@ msgstr "Mon profil"
 #: templates/semantic-ui/invenio_app_rdm/frontpage.html
 msgid "No works have been published yet."
 msgstr "Aucun travail n'a encore été publié."
+
+#: site/invenio_rdm_starter/config.py
+msgid "Content"
+msgstr "Contenu"
