@@ -35,6 +35,7 @@ from invenio_records_resources.services.records.facets.facets import (
 # branch, a rewrite on authlib, as for Rogue Scholar. See the Authentication
 # section.
 from invenio_oauthclient.views.views import auto_redirect_login
+from invenio_rdm_starter import custom_fields
 from invenio_rdm_starter.permissions import (
     StarterCommunityPermissionPolicy,
     StarterRecordPermissionPolicy,
@@ -639,6 +640,18 @@ works citing a record. invenio-pidbox fills it in from the commonmeta store
 with the "Refresh citations" job (Administration → Jobs); nobody edits it, so
 the deposit form doesn't show it. The landing page lists the citations, and
 the person and organization pages count the cited works."""
+
+COMMUNITIES_NAMESPACES = custom_fields.RS_NAMESPACE
+"""The namespace of the communities' custom fields: rs, as Rogue Scholar's."""
+
+COMMUNITIES_CUSTOM_FIELDS = custom_fields.STARTER_PACK_CUSTOM_FIELDS
+"""Custom fields of communities: what a Starter Pack holds, by ISSN, DOI
+prefix, language and license (invenio_rdm_starter.custom_fields). Their
+mappings are created by `invenio communities custom-fields init`, which the
+setup runs; an instance set up before them needs it run once."""
+
+COMMUNITIES_CUSTOM_FIELDS_UI = [custom_fields.STARTER_PACK_CUSTOM_FIELDS_UI]
+"""The Starter Pack section of a community's settings."""
 
 RDM_CUSTOM_FIELDS_UI = [
     {

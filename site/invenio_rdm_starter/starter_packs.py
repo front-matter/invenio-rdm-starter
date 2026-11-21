@@ -5,7 +5,8 @@ Rogue Scholar's German-language posts, the Journal of Open Source Software
 (the content of demo.front-matter.de), arXiv's cs.DL preprints with COMET
 enhancements. The packs are defined in ``app_data/starter_packs.yaml`` (or
 the file ``STARTER_PACKS_FILE`` names); the community of each pack is where
-it lives in InvenioRDM, found again by its slug.
+it lives in InvenioRDM, found again by its slug. Its ``rs:`` custom fields
+(:mod:`invenio_rdm_starter.custom_fields`) say which works it holds.
 
 :func:`create_starter_pack_communities` creates the community of every pack
 that doesn't have one, as :mod:`invenio_rdm_starter.subject_communities` does
@@ -84,11 +85,37 @@ def community_data(pack: dict[str, Any]) -> dict[str, Any]:
         metadata["description"] = str(pack["description"]).strip()
     if pack.get("website"):
         metadata["website"] = pack["website"]
-    return {
+    data: dict[str, Any] = {
         "slug": pack["slug"],
         "access": dict(COMMUNITY_ACCESS),
         "metadata": metadata,
     }
+    fields = custom_fields(pack)
+    if fields:
+        data["custom_fields"] = fields
+    return data
+
+
+#: The rs: fields whose value is a vocabulary entry, given by its id.
+VOCABULARY_FIELDS = ("rs:language", "rs:license")
+
+
+def custom_fields(pack: dict[str, Any]) -> dict[str, Any]:
+    """A pack's rs: custom fields, as a community holds them.
+
+    The definitions give a vocabulary field by its id (``deu``), which the
+    community holds as ``{"id": "deu"}``; text fields stay as they are.
+    """
+    fields = {}
+    for name, value in (pack.get("custom_fields") or {}).items():
+        if value in (None, ""):
+            continue
+        if name in VOCABULARY_FIELDS and not isinstance(value, dict):
+            value = {"id": str(value)}
+        elif not isinstance(value, dict):
+            value = str(value)
+        fields[name] = value
+    return fields
 
 
 def ensure_community_type(vocabularies: Any) -> bool:

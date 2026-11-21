@@ -106,6 +106,17 @@ A Starter Pack is the content an InvenioRDM Starter instance can start with, def
 
 A Starter Pack's community is curated: public, its records added by its curators rather than submitted. `INVENIO_STARTER_PACKS_FILE` names another definitions file.
 
+Its custom fields, in the `rs` namespace as on Rogue Scholar, say which works a pack holds. They are set from `starter_packs.yaml` when the job creates the community, and admins edit them in the community's settings (section **Starter Pack**):
+
+| Field | | `rogue-scholar` | `joss` | `arxiv-cs-dl` |
+| --- | --- | --- | --- | --- |
+| `rs:issn` | the journal's ISSN | | 2475-9066 | |
+| `rs:prefix` | the DOI prefix | 10.59350 | 10.21105 | 10.48550 |
+| `rs:language` | the language (`languages` vocabulary) | deu | eng | eng |
+| `rs:license` | the license (`licenses` vocabulary) | cc-by-4.0 | cc-by-4.0 | |
+
+The setup creates the fields' search mappings (`invenio communities custom-fields init`); an instance set up before them needs that run once.
+
 ### Invenio-Records-Resources
 
 * `INVENIO_SITE_UI_URL` - The site UI URL used by InvenioRDM, defaults to `https://localhost`.
