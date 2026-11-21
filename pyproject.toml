@@ -16,9 +16,9 @@ dependencies = [
     "invenio-rdm-records>=32.3.3,<33",
     "setuptools>=70,<81",
     "gunicorn~=23.0.0",
-    "commonmeta-py[backend]>=0.317,<1",
-    "commonmeta-rs>=0.12.17,<1",
-    "invenio-pidbox>=0.7.3,<1",
+    "commonmeta-py[backend]>=0.318,<1",
+    "commonmeta-rs>=0.12.18,<1",
+    "invenio-pidbox>=0.7.4,<1",
     "invenio-logging",
     "structlog>=25.0",
     "prometheus-flask-exporter>=0.23.1",         # no [sentry] extra

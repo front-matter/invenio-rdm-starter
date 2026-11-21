@@ -629,7 +629,7 @@ wheels = [
 
 [[package]]
 name = "commonmeta-py"
-version = "0.317"
+version = "0.318"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "babel" },
@@ -668,9 +668,9 @@ dependencies = [
     { name = "xmltodict" },
     { name = "zstandard" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/a6/60/fed4e300f3836004009bf5d4ae8cad3af649060264984a4fa4460f9f1c73/commonmeta_py-0.317.tar.gz", hash = "sha256:a3162227b730c1bd894a1770b6e9312f0c7aedbf438aaddd05b58919bf3b9784", size = 1808248, upload-time = "2026-11-20T16:24:45.351Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/61/a2/fb10a3e99c8c61761a4869571b7f5a46e44480f161a2ecc72dd849d69c41/commonmeta_py-0.318.tar.gz", hash = "sha256:4c04ca2a6c7ce65ad3d7c5776e78d88362d7fbbfee4aa4a540e78f61f5fbcbea", size = 1808338, upload-time = "2026-11-21T14:29:35.319Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/e7/92/d49617c9c8f37f55b4a993b45b8204f0d41480269d7fb4560d2ac40130f9/commonmeta_py-0.317-py3-none-any.whl", hash = "sha256:8c0157b94cab449f7274e52e4ccb7964335c657e753c8733bc7501972cb13d51", size = 1877122, upload-time = "2026-11-20T16:24:41.736Z" },
+    { url = "https://files.pythonhosted.org/packages/76/99/a5637349fd5cba5e59984899805500a16eeb7941644d865ebe5ef26d3ecb/commonmeta_py-0.318-py3-none-any.whl", hash = "sha256:c05b02c35700dbc2e064aa22f403aa1c3e744fc65e5bbcb36c402d1f1e9d1ee1", size = 1877222, upload-time = "2026-11-21T14:29:33.073Z" },
 ]
 
 [package.optional-dependencies]
@@ -680,12 +680,12 @@ backend = [
 
 [[package]]
 name = "commonmeta-rs"
-version = "0.12.17"
+version = "0.12.18"
 source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/83/83/96ff5d1f81b27d5f976a508663bfa92546b320859bcda239531248e84aaf/commonmeta_rs-0.12.17.tar.gz", hash = "sha256:dd16f826d2825b946fc492c37db2541452ff714c97956c12d1a0e101c98ee63b", size = 1311179, upload-time = "2026-11-21T11:30:36.465Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/50/a6/6135b4733af28c0c925d073ad1f4db478d5bb419b8d0650779187743e589/commonmeta_rs-0.12.18.tar.gz", hash = "sha256:dca3f997cba37cd4442d27e78dff2441f40833b7762b1902862dddb05dc1b5af", size = 1312088, upload-time = "2026-11-21T14:20:32.146Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/d8/5b/8e277716d4a8e660fd9ca2af30b81de86f7a2b4e4f0052723dbd42770c21/commonmeta_rs-0.12.17-cp314-abi3-macosx_11_0_arm64.whl", hash = "sha256:5f7e65e6d40b3628d58f78e2e8b53b0e0278e8e58403fd28e92ffa046bed4d9e", size = 16976441, upload-time = "2026-11-21T11:30:28.573Z" },
-    { url = "https://files.pythonhosted.org/packages/0e/24/c03921d809e75f3a88adf7e56635fae2285836c5ca8c9162d5fe13bca2b0/commonmeta_rs-0.12.17-cp314-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:321bc2d9c0f957e479d79c6c8e2e2a5f6e8ef9da4f209666cf68644885258077", size = 16949840, upload-time = "2026-11-21T11:30:34.236Z" },
+    { url = "https://files.pythonhosted.org/packages/8f/3a/d812d7f7f24a068e0f34bcc20f163f03b513ea941f055289a9e92da0440d/commonmeta_rs-0.12.18-cp314-abi3-macosx_11_0_arm64.whl", hash = "sha256:825a53a379f83b0929ddeabdd0d7a36dc86f12217e25ec80bd0f6b61a309a6f6", size = 16878136, upload-time = "2026-11-21T14:20:23.832Z" },
+    { url = "https://files.pythonhosted.org/packages/66/0e/ba22961a6aa4df7ac657d5cc16029d02001b088508d07f4fd46261bd4d61/commonmeta_rs-0.12.18-cp314-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:1dfe9ec76e7221c7ce3fdfb0b8e7333cc1f420d3a6fb234a01611ec8e7986d35", size = 16960420, upload-time = "2026-11-21T14:20:29.88Z" },
 ]
 
 [[package]]
@@ -2134,7 +2134,7 @@ wheels = [
 
 [[package]]
 name = "invenio-pidbox"
-version = "0.7.3"
+version = "0.7.4"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "commonmeta-py", extra = ["backend"] },
@@ -2142,9 +2142,9 @@ dependencies = [
     { name = "invenio-app-rdm" },
     { name = "requests" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/ea/04/f0cd537b622e13ab543c91977d234e70cdc9ca5f843f6013c0134ea59287/invenio_pidbox-0.7.3.tar.gz", hash = "sha256:8e46e8a22eab6bbe178523875172034b1d8c2fa8d542071c2d41e3a3c6733999", size = 226612, upload-time = "2026-11-21T12:08:24.473Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/18/9a/6c99af857f9c44263dd227927f2e3e01cab0573cd8988eaf22714a7c9a4e/invenio_pidbox-0.7.4.tar.gz", hash = "sha256:73bce5ea6c138b1e6edc0b1ff38ad8ccc99e1a5a22b32dad1f1eb09751580cab", size = 234596, upload-time = "2026-11-21T14:34:12.749Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/04/a6/855dd70eb25e1bed48e4690783c7b564b56c3b867b94e84dbc7c4a7c421b/invenio_pidbox-0.7.3-py3-none-any.whl", hash = "sha256:0898ee12e8aeb41395b897b0ed0d2fdb39c4ace0630185239e731b5ef31d7d03", size = 205201, upload-time = "2026-11-21T12:08:21.275Z" },
+    { url = "https://files.pythonhosted.org/packages/b4/e2/6310e45d42b67b9ed252a92ddd036385ac68832cc163b0097e506f449e41/invenio_pidbox-0.7.4-py3-none-any.whl", hash = "sha256:b39a7c60547da5c47c0c18e8935487b5cbb43fe5a7402d89d74c15d4e55b442b", size = 212204, upload-time = "2026-11-21T14:34:08.533Z" },
 ]
 
 [[package]]
@@ -2278,14 +2278,14 @@ dev = [
 
 [package.metadata]
 requires-dist = [
-    { name = "commonmeta-py", extras = ["backend"], specifier = ">=0.317,<1" },
+    { name = "commonmeta-py", extras = ["backend"], specifier = ">=0.318,<1" },
     { name = "commonmeta-py", extras = ["backend"], marker = "extra == 'actions'", specifier = ">=0.309,<1" },
-    { name = "commonmeta-rs", specifier = ">=0.12.17,<1" },
+    { name = "commonmeta-rs", specifier = ">=0.12.18,<1" },
     { name = "gunicorn", specifier = "~=23.0.0" },
     { name = "invenio-app-rdm", specifier = ">=14.0.7,<15.0" },
     { name = "invenio-logging" },
     { name = "invenio-oauthclient", git = "https://github.com/max-moser/invenio-oauthclient?branch=mm%2Fauthlib" },
-    { name = "invenio-pidbox", specifier = ">=0.7.3,<1" },
+    { name = "invenio-pidbox", specifier = ">=0.7.4,<1" },
     { name = "invenio-rdm-records", specifier = ">=32.3.3,<33" },
     { name = "invenio-s3", specifier = ">=3.0.2" },
     { name = "invenio-search", extras = ["opensearch2"], specifier = ">=3.1.2,<3.2.0" },
