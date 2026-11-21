@@ -1,11 +1,14 @@
-"""The front page's sidebar, from pages an admin edits like any other.
+"""The front page's boxes, from pages an admin edits like any other.
 
-The boxes of the front page's sidebar are invenio-pages pages
-(Administration > Site management > Pages), so that they're changed without
-a deploy, in every language the site has. ``STARTER_FRONTPAGE_SIDEBAR_PAGES``
-lists them (``/about/why``), one box each, the page's title as its header
-and its content as the box. The Starter ships them as fixtures
-(``app_data/pages.yaml``).
+The front page's text is invenio-pages pages (Administration > Site
+management > Pages), so that it's changed without a deploy, in every
+language the site has. The Starter ships them as fixtures
+(``app_data/pages.yaml``):
+
+- ``STARTER_FRONTPAGE_ABOUT_PAGE`` (``/about``): its content is a box above
+  the metrics, saying what the repository holds.
+- ``STARTER_FRONTPAGE_SIDEBAR_PAGES`` (``/about/why``): one box each in the
+  sidebar, the page's title as its header and its content as the box.
 
 Templates read them with ``starter_page(url)``, which a finalize hook makes
 a template global.

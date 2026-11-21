@@ -1,4 +1,4 @@
-"""The front page: pidbox's metrics in the header, and the sidebar's pages."""
+"""The front page: the About box above pidbox's metrics, and the sidebar's pages."""
 
 from __future__ import annotations
 
@@ -23,6 +23,16 @@ STUBS = {
     ),
     "invenio_theme/frontpage.html": (
         "{% block page_header %}{% endblock %}{% block page_body %}{% endblock %}"
+    ),
+}
+
+ABOUT = {
+    "url": "/about",
+    "title": "About InvenioRDM Starter",
+    "description": "What InvenioRDM Starter archives.",
+    "content": (
+        "<p>Metadata and PDF content from the Journal of Open Source Software "
+        '(<a href="http://joss.theoj.org/">JOSS</a>) archived in InvenioRDM Starter</p>'
     ),
 }
 
@@ -57,6 +67,7 @@ def _settings(**config: object) -> dict:
         "THEME_FRONTPAGE_SUBTITLE": "A starter project.",
         "PIDBOX_FRONTPAGE_METRICS": True,
         "PIDBOX_FRONTPAGE_METRICS_BACKGROUND": "#cbd5e1",
+        "STARTER_FRONTPAGE_ABOUT_PAGE": "/about",
         "STARTER_FRONTPAGE_SIDEBAR_PAGES": ["/about/why", "/missing"],
         **config,
     }
@@ -112,3 +123,55 @@ def test_without_records_no_metrics_band_and_a_message() -> None:
     assert "No works have been published yet." in html
     # The sidebar stays.
     assert ">Why InvenioRDM Starter?</h2>" in html
+
+
+def test_the_about_page_is_a_box_above_the_metrics() -> None:
+    html = _render_frontpage({"/about": ABOUT, "/about/why": WHY})
+
+    box = html.index("starter-frontpage-about")
+    assert box < html.index("<div id=metrics>")
+    assert '(<a href="http://joss.theoj.org/">JOSS</a>) archived in' in html
+    # The page's content, not its title or description.
+    assert "About InvenioRDM Starter" not in html
+    assert "What InvenioRDM Starter archives." not in html
+
+
+@pytest.mark.parametrize(
+    ("pages", "config"),
+    [
+        ({"/about/why": WHY}, {}),  # no About page yet
+        ({"/about": {**ABOUT, "content": ""}}, {}),  # an About page left empty
+        ({"/about": ABOUT}, {"STARTER_FRONTPAGE_ABOUT_PAGE": None}),  # switched off
+        (None, {}),  # no pages at all
+    ],
+)
+def test_no_about_box_without_its_content(pages, config) -> None:
+    html = _render_frontpage(pages, **config)
+
+    assert "starter-frontpage-about" not in html
+    assert "<div id=metrics>" in html
+
+
+def test_without_records_no_about_box_either() -> None:
+    html = _render_frontpage({"/about": ABOUT}, total=0)
+
+    assert "starter-frontpage-about" not in html
+
+
+@pytest.mark.parametrize(
+    ("language", "text"),
+    [
+        ("", "archived in InvenioRDM Starter"),
+        (".de", "archiviert in InvenioRDM Starter"),
+        (".fr", "archivés dans InvenioRDM Starter"),
+        (".es", "archivados en InvenioRDM Starter"),
+    ],
+)
+def test_the_about_page_fixture_is_translated(language, text) -> None:
+    fixture = (
+        STARTER_TEMPLATES.parents[1] / "app_data" / "pages" / f"about.html{language}"
+    )
+
+    content = fixture.read_text()
+    assert text in content
+    assert '(<a href="http://joss.theoj.org/">JOSS</a>)' in content

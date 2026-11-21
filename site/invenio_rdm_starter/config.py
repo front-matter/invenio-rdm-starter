@@ -400,6 +400,12 @@ administration panel shows THEME_LOGO."""
 # Front page
 # ==========
 
+STARTER_FRONTPAGE_ABOUT_PAGE = "/about"
+"""The page whose content is a box above the front page's metrics
+(invenio_rdm_starter/header_frontpage.html): what the repository holds.
+Admins edit it under Site management > Pages, in each language. Without the
+page, or with this None, there is no box."""
+
 STARTER_FRONTPAGE_SIDEBAR_PAGES = ["/about/why"]
 """The pages shown as boxes of the front page's sidebar, in this order: the
 page's title as the header, its content as the box (invenio_rdm_starter.

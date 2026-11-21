@@ -1,0 +1,23 @@
+{#
+  SPDX-FileCopyrightText: 2026 Front Matter.
+  SPDX-License-Identifier: MIT
+
+  invenio-pidbox's front page header, with a box above the metrics: the
+  content of the About page (STARTER_FRONTPAGE_ABOUT_PAGE, by default
+  /about), which admins edit under Site management > Pages, in each language
+  (invenio_rdm_starter.pages). Without the page there is no box.
+#}
+{%- extends "invenio_app_rdm/header_frontpage.html" %}
+
+{%- block frontpage_title %}
+{%- set about = starter_page(config.STARTER_FRONTPAGE_ABOUT_PAGE) if starter_page is defined %}
+{%- if about and about.content %}
+<div class="row starter-frontpage-about">
+  <div class="sixteen wide column">
+    <div class="ui segment center aligned">
+      {{ about.content | safe }}
+    </div>
+  </div>
+</div>
+{%- endif %}
+{%- endblock frontpage_title %}

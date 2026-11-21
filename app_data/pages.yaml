@@ -5,9 +5,17 @@
 # edited under Administration > Site management > Pages survives a rerun;
 # `invenio rdm pages create --force` replaces them all.
 #
-# Besides being pages of their own, they fill the front page's sidebar
-# (invenio_rdm_starter.pages, STARTER_FRONTPAGE_SIDEBAR_PAGES): a box each,
-# the page's title its header and its content the box.
+# Besides being pages of their own, they fill the front page
+# (invenio_rdm_starter.pages):
+#
+# - /about: its content is a box above the metrics
+#   (STARTER_FRONTPAGE_ABOUT_PAGE).
+# - /about/why: a box of the sidebar, its title the box's header and its
+#   content the box (STARTER_FRONTPAGE_SIDEBAR_PAGES).
+- url: /about
+  title: About InvenioRDM Starter
+  description: What InvenioRDM Starter archives.
+  template: about.html
 - url: /about/why
   title: Why InvenioRDM Starter?
   description: Why run InvenioRDM with the Starter.

@@ -1,0 +1,1 @@
+<p>Métadonnées et contenus PDF du Journal of Open Source Software (<a href="http://joss.theoj.org/">JOSS</a>), archivés dans InvenioRDM Starter</p>

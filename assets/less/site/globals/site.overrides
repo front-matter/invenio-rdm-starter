@@ -87,3 +87,15 @@ form.pidbox-search .ui.icon.button {
     pointer-events: none;
   }
 }
+
+/* The About box above the front page's metrics (the page /about) sits in
+   the page's header, whose links are white: on the box's white they take
+   the page's link colour. */
+.outer-navbar .starter-frontpage-about .ui.segment a {
+  color: @linkColor;
+
+  &:hover {
+    color: @linkHoverColor;
+    text-decoration: underline;
+  }
+}

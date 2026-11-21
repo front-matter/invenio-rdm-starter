@@ -8,8 +8,9 @@
   invenio-app-rdm's front page, with the list of records titled for what it
   shows: the Starter's "newest" sorts by publication date, so these are the
   most recently published works rather than the latest uploads. The header
-  is invenio-pidbox's, with its metrics, and the sidebar shows the pages of
-  STARTER_FRONTPAGE_SIDEBAR_PAGES (invenio_rdm_starter.pages).
+  is invenio-pidbox's, with its metrics below a box with the About page's
+  content (invenio_rdm_starter/header_frontpage.html), and the sidebar shows
+  the pages of STARTER_FRONTPAGE_SIDEBAR_PAGES (invenio_rdm_starter.pages).
 
   With no records (a demo started afresh, before its imports), the header is
   the plain one, without the metrics band, and the list of works a message
@@ -26,7 +27,7 @@
   {%- if no_records %}
     {%- include config.THEME_HEADER_TEMPLATE %}
   {%- else %}
-    {%- include "invenio_app_rdm/header_frontpage.html" %}
+    {%- include "invenio_rdm_starter/header_frontpage.html" %}
   {%- endif %}
 {%- endblock page_header %}
 
