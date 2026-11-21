@@ -1,1 +1,1 @@
-<p>Metadatos y contenido PDF del Journal of Open Source Software (<a href="http://joss.theoj.org/">JOSS</a>), archivados en InvenioRDM Starter</p>
+<p>Metadatos y contenido del Journal of Open Source Software (<a href="http://joss.theoj.org/">JOSS</a>), archivados en InvenioRDM Starter. Este es un sitio de demostración y el contenido y los metadatos se borran periódicamente.</p>

@@ -93,7 +93,7 @@ The `docker-compose.yml` configuration can be modified to suit your needs using 
 
 The box above the front page's metrics and the boxes of its sidebar are pages, which admins edit under **Administration > Site management > Pages**, in each language the site has, without a deploy. The setup script creates them from `app_data/pages.yaml`; on an existing site run `invenio rdm pages create` once. Pages that already exist are kept, so edits survive.
 
-* `/about` - its **Content** is the box above the metrics, saying what the repository holds ("Metadata and PDF content from the Journal of Open Source Software (JOSS) archived in InvenioRDM Starter", in English, German, French and Spanish). Set by `STARTER_FRONTPAGE_ABOUT_PAGE`.
+* `/about` - its **Content** is the box above the metrics, saying what the repository holds ("Metadata and content from the Journal of Open Source Software (JOSS) archived in InvenioRDM Starter. This is a demo site and content and metadata are regularly cleared.", in English, German, French and Spanish). Set by `STARTER_FRONTPAGE_ABOUT_PAGE`.
 * `/about/why` - "Why InvenioRDM Starter?", a box of the front page's sidebar: the page's **Title** is the box's header, its **Content** the box. `STARTER_FRONTPAGE_SIDEBAR_PAGES` lists the pages shown as boxes, in order.
 
 ### Invenio-Records-Resources

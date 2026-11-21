@@ -31,7 +31,7 @@ ABOUT = {
     "title": "About InvenioRDM Starter",
     "description": "What InvenioRDM Starter archives.",
     "content": (
-        "<p>Metadata and PDF content from the Journal of Open Source Software "
+        "<p>Metadata and content from the Journal of Open Source Software "
         '(<a href="http://joss.theoj.org/">JOSS</a>) archived in InvenioRDM Starter</p>'
     ),
 }
@@ -161,10 +161,13 @@ def test_without_records_no_about_box_either() -> None:
 @pytest.mark.parametrize(
     ("language", "text"),
     [
-        ("", "archived in InvenioRDM Starter"),
-        (".de", "archiviert in InvenioRDM Starter"),
-        (".fr", "archivés dans InvenioRDM Starter"),
-        (".es", "archivados en InvenioRDM Starter"),
+        ("", "This is a demo site and content and metadata are regularly cleared."),
+        (
+            ".de",
+            "Dies ist eine Demo-Seite, Inhalte und Metadaten werden regelmäßig gelöscht.",
+        ),
+        (".fr", "les contenus et les métadonnées sont régulièrement effacés."),
+        (".es", "el contenido y los metadatos se borran periódicamente."),
     ],
 )
 def test_the_about_page_fixture_is_translated(language, text) -> None:
