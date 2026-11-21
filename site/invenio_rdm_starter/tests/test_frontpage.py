@@ -214,3 +214,16 @@ def test_without_metrics_the_band_keeps_its_background() -> None:
 
     assert "background-color: #cbd5e1 !important;" in html
     assert "frontpage-metrics" not in html
+
+
+def test_without_about_page_or_metrics_the_header_is_plain() -> None:
+    """Nothing for the band to hold: the Starter Packs follow the menubar."""
+    html = _render_frontpage(
+        {"/about": ABOUT},
+        PIDBOX_FRONTPAGE_METRICS=False,
+        STARTER_FRONTPAGE_ABOUT_PAGE=None,
+    )
+
+    assert "frontpage-search-bar" not in html
+    assert "starter-frontpage-about" not in html
+    assert "starter-featured-communities" in html

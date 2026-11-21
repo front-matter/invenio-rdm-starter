@@ -24,7 +24,11 @@
 
 {%- block page_header %}
   {%- set no_records = starter_records_total is defined and starter_records_total() == 0 %}
-  {%- if no_records %}
+  {#- The header band holds the metrics, or the About page's text: with
+      neither, there is no band. #}
+  {%- set about = starter_page(config.STARTER_FRONTPAGE_ABOUT_PAGE) if (config.STARTER_FRONTPAGE_ABOUT_PAGE and starter_page is defined) %}
+  {%- set band = config.PIDBOX_FRONTPAGE_METRICS or (about and about.content) %}
+  {%- if no_records or not band %}
     {%- include config.THEME_HEADER_TEMPLATE %}
   {%- else %}
     {%- include "invenio_rdm_starter/header_frontpage.html" %}

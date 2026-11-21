@@ -93,8 +93,10 @@ The `docker-compose.yml` configuration can be modified to suit your needs using 
 
 The box above the front page's metrics and the boxes of its sidebar are pages, which admins edit under **Administration > Site management > Pages**, in each language the site has, without a deploy. The setup script creates them from `app_data/pages.yaml`; on an existing site run `invenio rdm pages create` once. Pages that already exist are kept, so edits survive.
 
-* `/about` - its **Content** is the box above the metrics, saying what the repository holds ("Metadata and content from the Journal of Open Source Software (JOSS) archived in InvenioRDM Starter. This is a demo site and content and metadata are regularly cleared.", in English, German, French and Spanish). Set by `STARTER_FRONTPAGE_ABOUT_PAGE`.
+* `/about` - its **Content** can be a box at the top of the front page, saying what the repository holds ("Metadata and content from the Journal of Open Source Software (JOSS) archived in InvenioRDM Starter. This is a demo site and content and metadata are regularly cleared.", in English, German, French and Spanish), with `STARTER_FRONTPAGE_ABOUT_PAGE` set to `/about`. It is unset: the front page starts with the Starter Packs, and the page is shown at `/about` only.
 * `/about/why` - "Why InvenioRDM Starter?", a box of the front page's sidebar: the page's **Title** is the box's header, its **Content** the box. `STARTER_FRONTPAGE_SIDEBAR_PAGES` lists the pages shown as boxes, in order.
+
+The front page shows no metrics (`INVENIO_PIDBOX_FRONTPAGE_METRICS=False`). The menubar's **Starter Packs**, in place of InvenioRDM's **Communities**, leads to the communities search for the Starter Packs (`/communities-search?q=&f=type:starterpack`).
 
 The front page's carousel shows the featured communities, the Starter Packs, under the heading `INVENIO_STARTER_FRONTPAGE_FEATURED_TITLE`, defaults to `Starter Packs` (translated into German, French and Spanish); InvenioRDM's is `Featured communities`.
 
