@@ -100,22 +100,21 @@ The front page's carousel shows the featured communities, the Starter Packs, und
 
 ### Starter Packs
 
-A Starter Pack is the content an InvenioRDM Starter instance can start with, defined as an InvenioRDM community of type **Starter Pack** (`starterpack` in `app_data/vocabularies/community_types.yaml`). The packs are listed in `app_data/starter_packs.yaml`, each with a slug, title, description, website and logo (an image in `app_data/starter_packs`, at most 1 MB, set while the community has none); the **Create starter pack communities** job (Administration > Jobs) creates the community of each pack that doesn't have one, and adds the Starter Pack community type on an instance set up before it. It also features every pack's community, so that the front page's carousel of featured communities shows the Starter Packs, all of them. The first three:
+A Starter Pack is the content an InvenioRDM Starter instance can start with, defined as an InvenioRDM community of type **Starter Pack** (`starterpack` in `app_data/vocabularies/community_types.yaml`). The packs are listed in `app_data/starter_packs.yaml`, each with a slug, title, description, website and logo (an image in `app_data/starter_packs`, at most 1 MB, set while the community has none); the **Create starter pack communities** job (Administration > Jobs) creates the community of each pack that doesn't have one, and adds the Starter Pack community type on an instance set up before it. It also features every pack's community, so that the front page's carousel of featured communities shows the Starter Packs, all of them. The first two:
 
 * `rogue-scholar` - the German-language posts of the science blogs archived by [Rogue Scholar](https://rogue-scholar.org).
 * `joss` - the [Journal of Open Source Software](https://joss.theoj.org), with PDFs and software archives: the content of demo.front-matter.de.
-* `arxiv` - the [arXiv cs.DL](https://arxiv.org/list/cs.DL/recent) preprints, with COMET enhancements.
 
 A Starter Pack's community is curated: public, its records added by its curators rather than submitted. `INVENIO_STARTER_PACKS_FILE` names another definitions file.
 
 Its custom fields, in the `rs` namespace as on Rogue Scholar, say which works a pack holds. They are set from `starter_packs.yaml` when the job creates the community, and admins edit them in the community's settings (section **Starter Pack**):
 
-| Field | | `rogue-scholar` | `joss` | `arxiv` |
-| --- | --- | --- | --- | --- |
-| `rs:issn` | the journal's ISSN | | 2475-9066 | |
-| `rs:prefix` | the DOI prefix | 10.59350 | 10.21105 | 10.48550 |
-| `rs:language` | the language (`languages` vocabulary) | deu | eng | eng |
-| `rs:license` | the license (`licenses` vocabulary) | cc-by-4.0 | cc-by-4.0 | |
+| Field | | `rogue-scholar` | `joss` |
+| --- | --- | --- | --- |
+| `rs:issn` | the journal's ISSN | | 2475-9066 |
+| `rs:prefix` | the DOI prefix | 10.59350 | 10.21105 |
+| `rs:language` | the language (`languages` vocabulary) | deu | eng |
+| `rs:license` | the license (`licenses` vocabulary) | cc-by-4.0 | cc-by-4.0 |
 
 The setup creates the fields' search mappings (`invenio communities custom-fields init`); an instance set up before them needs that run once.
 

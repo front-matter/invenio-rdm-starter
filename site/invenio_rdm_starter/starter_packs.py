@@ -1,9 +1,8 @@
 """Starter Packs, each an InvenioRDM community of type ``starterpack``.
 
 A Starter Pack is the content an InvenioRDM Starter instance can start with:
-Rogue Scholar's German-language posts, the Journal of Open Source Software
-(the content of demo.front-matter.de), arXiv's cs.DL preprints with COMET
-enhancements. The packs are defined in ``app_data/starter_packs.yaml`` (or
+Rogue Scholar's German-language posts, and the Journal of Open Source
+Software (the content of demo.front-matter.de). The packs are defined in ``app_data/starter_packs.yaml`` (or
 the file ``STARTER_PACKS_FILE`` names); the community of each pack is where
 it lives in InvenioRDM, found again by its slug. Its ``rs:`` custom fields
 (:mod:`invenio_rdm_starter.custom_fields`) say which works it holds.

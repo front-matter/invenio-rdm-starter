@@ -33,14 +33,3 @@
     rs:prefix: "10.21105"
     rs:language: eng
     rs:license: cc-by-4.0
-
-- slug: arxiv
-  title: arXiv cs.DL
-  logo: starter_packs/arxiv.png
-  description: >-
-    Preprints in Digital Libraries (cs.DL) from arXiv, with COMET
-    enhancements of their metadata.
-  website: https://arxiv.org/list/cs.DL/recent
-  custom_fields:
-    rs:prefix: "10.48550"
-    rs:language: eng
