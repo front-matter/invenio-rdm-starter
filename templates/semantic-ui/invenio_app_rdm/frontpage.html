@@ -40,7 +40,9 @@
   {%- endblock intro_section %}
 
   {%- block top_banner %}
-    {{ communities_carousel() }}
+    {#- The featured communities, under STARTER_FRONTPAGE_FEATURED_TITLE:
+        "Starter Packs", the communities the Starter features. #}
+    {{ communities_carousel(title=_(config.STARTER_FRONTPAGE_FEATURED_TITLE or "Featured communities")) }}
   {%- endblock top_banner %}
 
   {%- block grid_section %}

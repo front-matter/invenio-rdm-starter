@@ -31,3 +31,20 @@ def test_the_front_page_list_title_is_translated(locale, text):
     catalog = Translations.load(str(TRANSLATIONS), [locale])
 
     assert catalog.gettext("Recently published works") == text
+
+
+@pytest.mark.parametrize(
+    ("locale", "text"),
+    [
+        ("de", "Starterpakete"),
+        ("fr", "Packs de démarrage"),
+        ("es", "Paquetes de inicio"),
+    ],
+)
+def test_the_featured_communities_heading_is_translated(locale, text):
+    """The front page's carousel heading, STARTER_FRONTPAGE_FEATURED_TITLE."""
+    from invenio_rdm_starter import config
+
+    catalog = Translations.load(str(TRANSLATIONS), [locale])
+
+    assert catalog.gettext(config.STARTER_FRONTPAGE_FEATURED_TITLE) == text

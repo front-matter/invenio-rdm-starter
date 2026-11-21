@@ -29,3 +29,7 @@ msgstr "Es wurden noch keine Werke veröffentlicht."
 #: site/invenio_rdm_starter/config.py
 msgid "Content"
 msgstr "Inhalt"
+
+#: templates/semantic-ui/invenio_app_rdm/frontpage.html
+msgid "Starter Packs"
+msgstr "Starterpakete"

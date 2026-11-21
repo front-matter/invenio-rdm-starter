@@ -96,6 +96,8 @@ The box above the front page's metrics and the boxes of its sidebar are pages, w
 * `/about` - its **Content** is the box above the metrics, saying what the repository holds ("Metadata and content from the Journal of Open Source Software (JOSS) archived in InvenioRDM Starter. This is a demo site and content and metadata are regularly cleared.", in English, German, French and Spanish). Set by `STARTER_FRONTPAGE_ABOUT_PAGE`.
 * `/about/why` - "Why InvenioRDM Starter?", a box of the front page's sidebar: the page's **Title** is the box's header, its **Content** the box. `STARTER_FRONTPAGE_SIDEBAR_PAGES` lists the pages shown as boxes, in order.
 
+The front page's carousel shows the featured communities, the Starter Packs, under the heading `INVENIO_STARTER_FRONTPAGE_FEATURED_TITLE`, defaults to `Starter Packs` (translated into German, French and Spanish); InvenioRDM's is `Featured communities`.
+
 ### Starter Packs
 
 A Starter Pack is the content an InvenioRDM Starter instance can start with, defined as an InvenioRDM community of type **Starter Pack** (`starterpack` in `app_data/vocabularies/community_types.yaml`). The packs are listed in `app_data/starter_packs.yaml`, each with a slug, title, description, website and logo (an image in `app_data/starter_packs`, at most 1 MB, set while the community has none); the **Create starter pack communities** job (Administration > Jobs) creates the community of each pack that doesn't have one, and adds the Starter Pack community type on an instance set up before it. It also features every pack's community, so that the front page's carousel of featured communities shows the Starter Packs, all of them. The first three:

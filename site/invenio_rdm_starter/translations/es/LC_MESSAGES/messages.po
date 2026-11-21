@@ -29,3 +29,7 @@ msgstr "Todavía no se han publicado obras."
 #: site/invenio_rdm_starter/config.py
 msgid "Content"
 msgstr "Contenido"
+
+#: templates/semantic-ui/invenio_app_rdm/frontpage.html
+msgid "Starter Packs"
+msgstr "Paquetes de inicio"

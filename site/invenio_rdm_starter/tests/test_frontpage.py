@@ -19,7 +19,9 @@ STUBS = {
         "{% macro records_list(title) %}<div id=records></div>{% endmacro %}"
     ),
     "invenio_communities/macros/communities_carousel.html": (
-        "{% macro communities_carousel() %}{% endmacro %}"
+        "{% macro communities_carousel(title='Featured communities') %}"
+        '<div id="communities-carousel" data-title="{{ title }}"></div>'
+        "{% endmacro %}"
     ),
     "invenio_theme/frontpage.html": (
         "{% block page_header %}{% endblock %}{% block page_body %}{% endblock %}"
@@ -69,6 +71,7 @@ def _settings(**config: object) -> dict:
         "PIDBOX_FRONTPAGE_METRICS_BACKGROUND": "#cbd5e1",
         "STARTER_FRONTPAGE_ABOUT_PAGE": "/about",
         "STARTER_FRONTPAGE_SIDEBAR_PAGES": ["/about/why", "/missing"],
+        "STARTER_FRONTPAGE_FEATURED_TITLE": "Starter Packs",
         **config,
     }
 
@@ -178,3 +181,17 @@ def test_the_about_page_fixture_is_translated(language, text) -> None:
     content = fixture.read_text()
     assert text in content
     assert '(<a href="http://joss.theoj.org/">JOSS</a>)' in content
+
+
+@pytest.mark.parametrize(
+    ("config", "title"),
+    [
+        ({}, "Starter Packs"),
+        ({"STARTER_FRONTPAGE_FEATURED_TITLE": "Collections"}, "Collections"),
+        ({"STARTER_FRONTPAGE_FEATURED_TITLE": ""}, "Featured communities"),
+    ],
+)
+def test_the_featured_communities_are_headed_by_the_setting(config, title) -> None:
+    html = _render_frontpage({}, **config)
+
+    assert f'data-title="{title}"' in html
