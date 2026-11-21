@@ -891,9 +891,14 @@ an affiliation or a funder, and any grant the store holds (Crossref grants,
 DataCite Awards) as an award (invenio-pidbox 0.6.1+). The vocabularies still
 count where they have entries, so the accepted set is the union of the two."""
 
+PIDBOX_FRONTPAGE_METRICS = False
+"""No metrics on the front page: its header band holds the About page's text,
+and the Starter Packs follow (templates/semantic-ui/invenio_app_rdm/
+frontpage.html)."""
+
 PIDBOX_FRONTPAGE_METRICS_BACKGROUND = "#cbd5e1"
-"""invenio-pidbox (0.5.5+) shows the metrics for all records in the front
-page's header band, in place of THEME_FRONTPAGE_TITLE and
-THEME_FRONTPAGE_SUBTITLE. The band takes the navbar's grey, on which the
-cards' grey labels can't be read, so the metrics get a light slate band of
-their own, as on Rogue Scholar."""
+"""The light slate of the front page's header band and of the Starter Packs
+below it, one band under the menubar: the navbar's grey, which the band
+would take otherwise, is too dark for the About text's dark slate. It is
+invenio-pidbox's setting for the metrics' band, which the Starter keeps
+without the metrics (invenio_rdm_starter/header_frontpage.html)."""

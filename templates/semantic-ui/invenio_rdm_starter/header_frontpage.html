@@ -2,14 +2,29 @@
   SPDX-FileCopyrightText: 2026 Front Matter.
   SPDX-License-Identifier: MIT
 
-  invenio-pidbox's front page header, with a box above the metrics: the
-  content of the About page (STARTER_FRONTPAGE_ABOUT_PAGE, by default
-  /about), which admins edit under Site management > Pages, in each language
-  (invenio_rdm_starter.pages). Without the page there is no box.
+  invenio-pidbox's front page header, with a box above the metrics, or in
+  their place where PIDBOX_FRONTPAGE_METRICS is off: the content of the About
+  page (STARTER_FRONTPAGE_ABOUT_PAGE, by default /about), which admins edit
+  under Site management > Pages, in each language (invenio_rdm_starter.pages).
+  Without the page there is no box. The band keeps the metrics' background,
+  PIDBOX_FRONTPAGE_METRICS_BACKGROUND, without them.
 #}
 {%- extends "invenio_app_rdm/header_frontpage.html" %}
 
 {%- block frontpage_title %}
+{%- if config.PIDBOX_FRONTPAGE_METRICS_BACKGROUND and not config.PIDBOX_FRONTPAGE_METRICS %}
+{#- Without the metrics, invenio-pidbox leaves the band in the navbar's grey,
+    at invenio-app-rdm's fixed height: the Starter keeps it in the metrics'
+    light slate, as high as its text. #}
+<style>
+  #frontpage-search-bar {
+    background-color: {{ config.PIDBOX_FRONTPAGE_METRICS_BACKGROUND }} !important;
+    height: auto !important;
+    min-height: 0 !important;
+    padding: 1rem 0;
+  }
+</style>
+{%- endif %}
 {%- set about = starter_page(config.STARTER_FRONTPAGE_ABOUT_PAGE) if starter_page is defined %}
 {%- if about and about.content %}
 <div class="row starter-frontpage-about">

@@ -41,8 +41,13 @@
 
   {%- block top_banner %}
     {#- The featured communities, under STARTER_FRONTPAGE_FEATURED_TITLE:
-        "Starter Packs", the communities the Starter features. #}
-    {{ communities_carousel(title=_(config.STARTER_FRONTPAGE_FEATURED_TITLE or "Featured communities")) }}
+        "Starter Packs", the communities the Starter features, on the header
+        band's light slate (PIDBOX_FRONTPAGE_METRICS_BACKGROUND), as one band
+        with it. #}
+    <div class="starter-featured-communities"
+      {%- if config.PIDBOX_FRONTPAGE_METRICS_BACKGROUND %} style="background-color: {{ config.PIDBOX_FRONTPAGE_METRICS_BACKGROUND }};"{% endif %}>
+      {{ communities_carousel(title=_(config.STARTER_FRONTPAGE_FEATURED_TITLE or "Featured communities")) }}
+    </div>
   {%- endblock top_banner %}
 
   {%- block grid_section %}

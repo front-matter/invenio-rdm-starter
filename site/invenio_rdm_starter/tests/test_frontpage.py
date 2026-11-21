@@ -195,3 +195,22 @@ def test_the_featured_communities_are_headed_by_the_setting(config, title) -> No
     html = _render_frontpage({}, **config)
 
     assert f'data-title="{title}"' in html
+
+
+def test_the_starter_packs_take_the_bands_background() -> None:
+    html = _render_frontpage({})
+
+    assert (
+        '<div class="starter-featured-communities" '
+        'style="background-color: #cbd5e1;">'
+    ) in html
+    assert html.index("starter-featured-communities") < html.index(
+        'id="communities-carousel"'
+    )
+
+
+def test_without_metrics_the_band_keeps_its_background() -> None:
+    html = _render_frontpage({"/about": ABOUT}, PIDBOX_FRONTPAGE_METRICS=False)
+
+    assert "background-color: #cbd5e1 !important;" in html
+    assert "frontpage-metrics" not in html
