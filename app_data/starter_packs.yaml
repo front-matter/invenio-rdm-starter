@@ -36,7 +36,7 @@
 
 - slug: arxiv-cs-dl
   title: arXiv cs.DL
-  logo: starter_packs/arxiv-logo.png
+  logo: starter_packs/arxiv.png
   description: >-
     Preprints in Digital Libraries (cs.DL) from arXiv, with COMET
     enhancements of their metadata.
