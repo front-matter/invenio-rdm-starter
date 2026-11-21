@@ -155,7 +155,11 @@ def add_records_to_subject_communities(
     counts = {"scanned": 0, "added": 0, "no_community": 0, "failed": 0}
     community_ids: dict[str, str | None] = {}
 
-    for hit in records.scan(system_identity, params={"q": RECORD_QUERY}).hits:
+    # Read whole before any record is added: the scan keeps its search
+    # context only minutes between pages, and adding records as it reads
+    # outlives it ("No search context found").
+    hits = list(records.scan(system_identity, params={"q": RECORD_QUERY}).hits)
+    for hit in hits:
         if max_records is not None and counts["scanned"] >= max_records:
             break
         counts["scanned"] += 1

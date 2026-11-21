@@ -216,3 +216,29 @@ def test_the_job_is_registered():
         jobs["starter_move_records_to_starter_pack"]
         == "invenio_rdm_starter.jobs:MoveRecordsToStarterPackJob"
     )
+
+
+def test_the_records_are_read_before_any_is_moved():
+    """The scan's search context lasts minutes between pages."""
+    events = []
+
+    class ReadRecords:
+        def scan(self, identity, params):
+            def hits():
+                for record_id in "ab":
+                    events.append(("read", record_id))
+                    yield _hit(record_id)
+                events.append(("scan done",))
+
+            return SimpleNamespace(hits=hits())
+
+    class Communities(RecordCommunities):
+        def bulk_add(self, identity, community_id, record_ids):
+            events.append(("add",))
+            return []
+
+    starter_packs.move_records(
+        ReadRecords(), Communities(), PACKS, None, "joss", dry_run=False, batch_size=1
+    )
+
+    assert events.index(("scan done",)) < events.index(("add",))

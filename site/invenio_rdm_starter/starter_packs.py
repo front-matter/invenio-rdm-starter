@@ -361,18 +361,17 @@ def move_records(
                     continue
             counts["moved"] += 1
 
-    batch: list[str] = []
+    # Read whole before any record is moved: the scan keeps its search
+    # context only minutes between pages, and moving records as it reads
+    # outlives it ("No search context found").
     query = selection_query(packs, source)
-    for hit in records.scan(system_identity, params={"q": query}).hits:
-        counts["records"] += 1
-        if dry_run:
-            continue
-        batch.append(hit["id"])
-        if len(batch) >= batch_size:
-            move(batch)
-            batch = []
-    if batch:
-        move(batch)
+    record_ids = [
+        hit["id"] for hit in records.scan(system_identity, params={"q": query}).hits
+    ]
+    counts["records"] = len(record_ids)
+    if not dry_run:
+        for start in range(0, len(record_ids), batch_size):
+            move(record_ids[start : start + batch_size])
     log.info("records_moved_to_starter_pack", **counts)
     return counts
 
