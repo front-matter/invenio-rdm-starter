@@ -98,7 +98,8 @@ form.pidbox-search .ui.icon.button {
   box-shadow: none;
   padding: 0;
   color: @darkGrey;
-  font-size: 1.43rem;
+  // The size of the sidebar boxes' headers (.ui.medium.header, 18px).
+  font-size: 1.28571rem;
   line-height: 1.4;
   text-align: left;
 
