@@ -17,7 +17,7 @@ APP_DATA = Path(__file__).parents[3] / "app_data"
 def test_the_three_starter_packs_are_defined():
     packs = starter_packs.load_packs(APP_DATA / "starter_packs.yaml")
 
-    assert [pack["slug"] for pack in packs] == ["rogue-scholar", "joss", "arxiv-cs-dl"]
+    assert [pack["slug"] for pack in packs] == ["rogue-scholar", "joss", "arxiv"]
     assert all(pack["website"].startswith("https://") for pack in packs)
     fields = {pack["slug"]: starter_packs.custom_fields(pack) for pack in packs}
     assert fields == {
@@ -32,7 +32,7 @@ def test_the_three_starter_packs_are_defined():
             "rs:language": {"id": "eng"},
             "rs:license": {"id": "cc-by-4.0"},
         },
-        "arxiv-cs-dl": {"rs:prefix": "10.48550", "rs:language": {"id": "eng"}},
+        "arxiv": {"rs:prefix": "10.48550", "rs:language": {"id": "eng"}},
     }
 
 

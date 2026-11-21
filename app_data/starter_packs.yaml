@@ -34,7 +34,7 @@
     rs:language: eng
     rs:license: cc-by-4.0
 
-- slug: arxiv-cs-dl
+- slug: arxiv
   title: arXiv cs.DL
   logo: starter_packs/arxiv.png
   description: >-

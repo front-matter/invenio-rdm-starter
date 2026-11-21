@@ -104,13 +104,13 @@ A Starter Pack is the content an InvenioRDM Starter instance can start with, def
 
 * `rogue-scholar` - the German-language posts of the science blogs archived by [Rogue Scholar](https://rogue-scholar.org).
 * `joss` - the [Journal of Open Source Software](https://joss.theoj.org), with PDFs and software archives: the content of demo.front-matter.de.
-* `arxiv-cs-dl` - the [arXiv cs.DL](https://arxiv.org/list/cs.DL/recent) preprints, with COMET enhancements.
+* `arxiv` - the [arXiv cs.DL](https://arxiv.org/list/cs.DL/recent) preprints, with COMET enhancements.
 
 A Starter Pack's community is curated: public, its records added by its curators rather than submitted. `INVENIO_STARTER_PACKS_FILE` names another definitions file.
 
 Its custom fields, in the `rs` namespace as on Rogue Scholar, say which works a pack holds. They are set from `starter_packs.yaml` when the job creates the community, and admins edit them in the community's settings (section **Starter Pack**):
 
-| Field | | `rogue-scholar` | `joss` | `arxiv-cs-dl` |
+| Field | | `rogue-scholar` | `joss` | `arxiv` |
 | --- | --- | --- | --- | --- |
 | `rs:issn` | the journal's ISSN | | 2475-9066 | |
 | `rs:prefix` | the DOI prefix | 10.59350 | 10.21105 | 10.48550 |
