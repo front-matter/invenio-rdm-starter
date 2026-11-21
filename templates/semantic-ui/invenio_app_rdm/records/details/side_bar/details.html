@@ -7,7 +7,7 @@
   Invenio RDM Records is free software; you can redistribute it and/or modify
   it under the terms of the MIT License; see LICENSE file for more details.
 
-  The Starter's: "Published in" links the journal's ISSN to its container
+  The Starter's: "Published in" links the journal's title to its container
   page, while invenio-pidbox's container pages are on.
 #}
 
@@ -22,13 +22,17 @@
       {{ show_detail(_('Resource type'), record_ui["ui"]["resource_type"]["title_l10n"]) if record_ui["ui"]["resource_type"] }}
       {{ show_detail(_('Publication date'), record_ui["ui"]["publication_date_l10n"]) if record_ui["ui"]["publication_date_l10n"] }}
       {{ show_detail(_('Publisher'), metadata.publisher) if metadata.publisher }}
-      {#- The journal's ISSN links to its container page (invenio-pidbox). #}
+      {#- The journal's title links to its container page (invenio-pidbox), by
+          its ISSN; the ISSN stays text. InvenioRDM writes "Published in" as
+          one sentence, title first: "mBio, 17(11), ISSN: 2150-7511, 2026." #}
       {%- set journal = record_ui["ui"].get('publishing_information', {}).get('journal') %}
-      {%- set issn = ((record_ui.get("custom_fields") or {}).get("journal:journal") or {}).get("issn") %}
-      {%- if journal and issn and config.PIDBOX_CONTAINER_PROFILES %}
+      {%- set journal_field = (record_ui.get("custom_fields") or {}).get("journal:journal") or {} %}
+      {%- set issn = journal_field.get("issn") %}
+      {%- set journal_title = journal_field.get("title") %}
+      {%- if journal and issn and journal_title and journal_title in journal and config.PIDBOX_CONTAINER_PROFILES %}
         {#- display-inline: InvenioRDM sets every link of a details list on a line of its own. #}
-        {%- set issn_link %}<a class="display-inline" href="{{ url_for('invenio_pidbox.container_profile', issn=issn) }}">{{ issn }}</a>{% endset %}
-        {%- set journal = (journal | e) | replace(issn | e, issn_link) %}
+        {%- set title_link %}<a class="display-inline" href="{{ url_for('invenio_pidbox.container_profile', issn=issn) }}">{{ journal_title }}</a>{% endset %}
+        {%- set journal = (journal | e) | replace(journal_title | e, title_link, 1) %}
       {%- endif %}
       {{ show_detail(_('Published in'), journal) if journal }}
       {{ show_detail(_('Imprint'), record_ui["ui"]["publishing_information"]["imprint"]) if record_ui["ui"].get('publishing_information', {}).get('imprint') }}
