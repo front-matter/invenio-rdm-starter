@@ -126,3 +126,20 @@ form.pidbox-search .ui.icon.button {
     padding-top: 0;
   }
 }
+
+/* The Starter Packs on the front page take the header band's light slate
+   (PIDBOX_FRONTPAGE_METRICS_BACKGROUND, the wrapper's background): the
+   carousel's own sky-blue tint would turn it blue-grey. */
+.starter-featured-communities .ui.container.carousel {
+  background-color: transparent;
+}
+
+/* Without permission to submit to a community, no "New upload" button,
+   rather than a greyed-out one with a question mark explaining it: in the
+   carousel of featured communities, and on a community's page. A user who
+   may submit sees the button as always. */
+.ui.button.disabled[href^="/uploads/new"],
+.ui.button.disabled[href^="/uploads/new"] + i.question.circle.icon,
+.inline-block[data-tooltip]:has(+ .ui.button.disabled[href^="/uploads/new"]) {
+  display: none !important;
+}
