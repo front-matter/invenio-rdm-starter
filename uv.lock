@@ -680,12 +680,12 @@ backend = [
 
 [[package]]
 name = "commonmeta-rs"
-version = "0.12.15"
+version = "0.12.16"
 source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/e7/5b/fa902ef2930b1870e339d5f99bd11be1beb2cd49f0a47e8842b27120c87a/commonmeta_rs-0.12.15.tar.gz", hash = "sha256:9d87921c90692c8f183bfedc71d94ad816a5c348d3ea26e6adf3a9030d55111c", size = 1279009, upload-time = "2026-11-20T16:03:54.446Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/2e/5f/7f62bac8882cbdfe48e67bae59b4b14aee1502d27758caac1a66d538f1bf/commonmeta_rs-0.12.16.tar.gz", hash = "sha256:9b15a9956c6fa9c9287abb42344c27f3ec4e7ac31f5ed791f8afc650d270d483", size = 1283540, upload-time = "2026-11-21T00:54:58.946Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/c4/51/1d71412c11536dd87ad13267d7079067d38e1325d58b8c1e8b4e08353cc3/commonmeta_rs-0.12.15-cp314-abi3-macosx_11_0_arm64.whl", hash = "sha256:2f6177b53a2189e672d67bff98ed5453cd1984545388fdc2931c08e3640358f5", size = 16845720, upload-time = "2026-11-20T16:03:46.398Z" },
-    { url = "https://files.pythonhosted.org/packages/2a/04/0bc5334db378eb6e92b707ee1ff69ca776872f537f3c512672a3123f53c1/commonmeta_rs-0.12.15-cp314-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:db96d3b4419866b06214717da26505f2ad389d847cd0642750060abe80408ec0", size = 16848588, upload-time = "2026-11-20T16:03:52.147Z" },
+    { url = "https://files.pythonhosted.org/packages/08/59/a7cc14d8e967ffc63ddaf638e302a7781197b6063f2c289742158c11a073/commonmeta_rs-0.12.16-cp314-abi3-macosx_11_0_arm64.whl", hash = "sha256:fba658738203561c4d47b3fc51edaceb6e9e5acc8de4c8761ccfcd67d7b574c2", size = 16852067, upload-time = "2026-11-21T00:54:49.971Z" },
+    { url = "https://files.pythonhosted.org/packages/55/55/25860fa6c4993e082d830c67b5623ddeb2058d43cf39167215650b30b9cf/commonmeta_rs-0.12.16-cp314-abi3-manylinux2014_x86_64.manylinux_2_17_x86_64.whl", hash = "sha256:4eaf5ff07835704833b1073ae9a9da8ddb3ad3eea859d6a4f07435dfe8b35549", size = 16862817, upload-time = "2026-11-21T00:54:56.664Z" },
 ]
 
 [[package]]
@@ -2134,16 +2134,16 @@ wheels = [
 
 [[package]]
 name = "invenio-pidbox"
-version = "0.6.5"
+version = "0.6.6"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "commonmeta-py", extra = ["backend"] },
     { name = "commonmeta-rs" },
     { name = "invenio-app-rdm" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/be/7f/0bd63d4e08dedb5bbc2bf928f50bd83ece4eb4f3dc7817e7d62a16645376/invenio_pidbox-0.6.5.tar.gz", hash = "sha256:191ca44ed910e6cabd9780c980d75f7a5db6dec369acf3242c99b6347a22ec48", size = 206371, upload-time = "2026-11-20T21:38:18.448Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/e2/6c/c83181806fc69c086cbef3ea1c7d9961a285d2163170e8558d4fe5084f76/invenio_pidbox-0.6.6.tar.gz", hash = "sha256:1bdbc86b9f1d22483cc017cc09faaf56dab8e9eae5866ec1270ff639bb46251e", size = 208851, upload-time = "2026-11-21T01:07:57.106Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/1e/9e/19ed577ee25a6147ddf0442ac368845f523428c1f2512b76a9c6414001f3/invenio_pidbox-0.6.5-py3-none-any.whl", hash = "sha256:9e17303924cb9c3a374966fd84a14f0b9cd054fd8184a6fecb95a97fd28d46df", size = 180516, upload-time = "2026-11-20T21:38:16.899Z" },
+    { url = "https://files.pythonhosted.org/packages/d0/ca/41dec5d2ecdc0b8f978265aa97f363cb2044edd327a7ed917e75647d88f8/invenio_pidbox-0.6.6-py3-none-any.whl", hash = "sha256:6531400c95165d017084b8d141c5c435d345f08bed302762c07689e7f704b3c1", size = 181858, upload-time = "2026-11-21T01:07:55.068Z" },
 ]
 
 [[package]]
@@ -2279,12 +2279,12 @@ dev = [
 requires-dist = [
     { name = "commonmeta-py", extras = ["backend"], specifier = ">=0.317,<1" },
     { name = "commonmeta-py", extras = ["backend"], marker = "extra == 'actions'", specifier = ">=0.309,<1" },
-    { name = "commonmeta-rs", specifier = ">=0.12.15,<1" },
+    { name = "commonmeta-rs", specifier = ">=0.12.16,<1" },
     { name = "gunicorn", specifier = "~=23.0.0" },
     { name = "invenio-app-rdm", specifier = ">=14.0.7,<15.0" },
     { name = "invenio-logging" },
     { name = "invenio-oauthclient", git = "https://github.com/max-moser/invenio-oauthclient?branch=mm%2Fauthlib" },
-    { name = "invenio-pidbox", specifier = ">=0.6.5,<1" },
+    { name = "invenio-pidbox", specifier = ">=0.6.6,<1" },
     { name = "invenio-rdm-records", specifier = ">=32.3.3,<33" },
     { name = "invenio-s3", specifier = ">=3.0.2" },
     { name = "invenio-search", extras = ["opensearch2"], specifier = ">=3.1.2,<3.2.0" },
