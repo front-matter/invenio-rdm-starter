@@ -76,7 +76,8 @@ form.pidbox-search .ui.icon.button {
     padding: 3px 0;
     transform: rotate(-45deg);
     background-color: @brown; // amber
-    color: @darkGrey;
+    // Black: about 9.5:1 on the amber, where white would be about 2.2:1.
+    color: #000000;
     font-weight: 900;
     font-size: 10px;
     letter-spacing: 1px;
