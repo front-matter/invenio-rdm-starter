@@ -724,17 +724,32 @@ RDM_FACETS = {
         },
     },
     "citations": pidbox_fields.CITATIONS_FACET,
+    "content": {
+        # The records with a PDF among their files, which invenio-pidbox's
+        # Attach PDFs job adds; other file types aren't offered.
+        "facet": TermsFacet(
+            field="files.types",
+            label=_("Content"),
+            value_labels={"pdf": "PDF"},
+            include=["pdf"],
+        ),
+        "ui": {
+            "field": "files.types",
+        },
+    },
 }
 """InvenioRDM's facets, extended rather than copied, so that the facets a
 release adds arrive with it, InvenioRDM v14's publication date facet among
 them. The Starter adds facets for affiliations, funders, author identifiers,
-licenses, related works, references and citations."""
+licenses, related works, references, citations and content (records with a
+PDF)."""
 
 RDM_SEARCH = {
     # Supported values from RDM_FACETS
     "facets": [
         "language",
         "resource_type",
+        "content",
         "publication_date",
         "subject",
         "funders",
