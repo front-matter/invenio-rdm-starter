@@ -158,19 +158,47 @@ def feature(communities: Any, community_id: str) -> bool:
     return True
 
 
+def set_logo(communities: Any, community_id: str, path: Path) -> bool:
+    """Give a community the logo in ``path``, unless it has one.
+
+    A logo an admin uploads in the community's settings stays. Returns whether
+    the logo was set.
+    """
+    from invenio_communities.errors import LogoNotFoundError
+
+    try:
+        communities.read_logo(system_identity, community_id)
+        return False
+    except LogoNotFoundError:
+        pass
+    with path.open("rb") as stream:
+        communities.update_logo(
+            system_identity,
+            community_id,
+            stream,
+            content_length=path.stat().st_size,
+        )
+    return True
+
+
 def create_packs(
-    communities: Any, vocabularies: Any, packs: list[dict[str, Any]]
+    communities: Any,
+    vocabularies: Any,
+    packs: list[dict[str, Any]],
+    base: Path | None = None,
 ) -> dict[str, int]:
     """Create the community of every pack that has none, and feature them all.
 
     The front page's carousel shows the featured communities: every Starter
-    Pack, and only those.
+    Pack, and only those. A pack's ``logo``, a path relative to ``base`` (the
+    folder of the definitions), becomes its community's logo while it has none.
     """
     counts = {
         "packs": len(packs),
         "existing": 0,
         "created": 0,
         "featured": 0,
+        "logos": 0,
         "failed": 0,
     }
     counts["type_created"] = int(ensure_community_type(vocabularies))
@@ -186,6 +214,11 @@ def create_packs(
             if feature(communities, community.id):
                 counts["featured"] += 1
                 log.info("starter_pack_featured", slug=pack["slug"])
+            if pack.get("logo") and set_logo(
+                communities, community.id, (base or Path()) / pack["logo"]
+            ):
+                counts["logos"] += 1
+                log.info("starter_pack_logo_set", slug=pack["slug"])
         except Exception:
             # One pack failing must not stop the others; it is tried again on
             # the next run.
@@ -198,14 +231,15 @@ def create_packs(
 def create_starter_pack_communities() -> dict[str, int]:
     """Create the community of every Starter Pack that has none.
 
-    Returns ``{"packs", "existing", "created", "featured", "failed",
+    Returns ``{"packs", "existing", "created", "featured", "logos", "failed",
     "type_created"}``.
     """
     from invenio_communities.proxies import current_communities
     from invenio_vocabularies.proxies import current_service as vocabularies
 
+    path = packs_file()
     counts = create_packs(
-        current_communities.service, vocabularies, load_packs(packs_file())
+        current_communities.service, vocabularies, load_packs(path), path.parent
     )
     log.info("starter_pack_communities_created", **counts)
     return counts

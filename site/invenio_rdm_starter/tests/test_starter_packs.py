@@ -127,6 +127,19 @@ class Service:
         self.created.append(data)
         return SimpleNamespace(id=f"id-{key}")
 
+    logos: dict = None
+
+    def read_logo(self, identity, community_id):
+        from invenio_communities.errors import LogoNotFoundError
+
+        if community_id not in (self.logos or {}):
+            raise LogoNotFoundError()
+        return self.logos[community_id]
+
+    def update_logo(self, identity, community_id, stream, content_length=None):
+        self.logos = self.logos or {}
+        self.logos[community_id] = (stream.read(), content_length)
+
     def featured_list(self, identity, community_id):
         return SimpleNamespace(total=len(self.featured.get(community_id, [])))
 
@@ -152,6 +165,7 @@ def test_the_missing_packs_and_their_type_are_created():
         "existing": 1,
         "created": 1,
         "featured": 2,
+        "logos": 0,
         "failed": 1,
         "type_created": 1,
     }
@@ -208,3 +222,31 @@ def test_a_pack_is_featured_from_now():
 
     (start,) = communities.featured["id-rogue-scholar"]
     assert abs((datetime.now(UTC) - datetime.fromisoformat(start)).total_seconds()) < 60
+
+
+def test_the_packs_logos_are_in_app_data_and_small_enough():
+    """InvenioRDM refuses a community logo over 1 MB."""
+    for pack in starter_packs.load_packs(APP_DATA / "starter_packs.yaml"):
+        logo = APP_DATA / pack["logo"]
+
+        assert logo.is_file(), logo
+        assert logo.stat().st_size <= 10**6, logo
+
+
+def test_a_pack_gets_its_logo_while_it_has_none(tmp_path):
+    (tmp_path / "joss.png").write_bytes(b"PNG")
+    communities = Service()
+    pack = {"slug": "joss", "title": "JOSS", "logo": "joss.png"}
+
+    counts = starter_packs.create_packs(communities, Service(), [pack], tmp_path)
+
+    assert counts["logos"] == 1
+    assert communities.logos == {"id-joss": (b"PNG", 3)}
+
+    # An admin's logo stays.
+    communities.logos["id-joss"] = (b"ADMIN", 5)
+    communities.existing.add("joss")
+    counts = starter_packs.create_packs(communities, Service(), [pack], tmp_path)
+
+    assert counts["logos"] == 0
+    assert communities.logos == {"id-joss": (b"ADMIN", 5)}

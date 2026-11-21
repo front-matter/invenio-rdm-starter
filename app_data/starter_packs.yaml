@@ -4,12 +4,15 @@
 # (invenio_rdm_starter.starter_packs) creates the community of each pack that
 # doesn't have one; a pack's community is found again by its slug.
 #
-# Each pack: slug, title, description, website, and custom_fields, the
+# Each pack: slug, title, logo (an image in app_data/starter_packs, at most
+# 1 MB, set while the community has none), description, website, and
+# custom_fields, the
 # community's rs: fields that select its works (invenio_rdm_starter.
 # custom_fields): rs:issn, rs:prefix (a DOI prefix), rs:language (a languages
 # vocabulary id) and rs:license (a licenses vocabulary id).
 - slug: rogue-scholar
   title: Rogue Scholar
+  logo: starter_packs/rogue-scholar.png
   description: >-
     German-language posts from the science blogs archived by Rogue Scholar.
   website: https://rogue-scholar.org
@@ -20,10 +23,10 @@
 
 - slug: joss
   title: Journal of Open Source Software
+  logo: starter_packs/joss.png
   description: >-
-    Metadata and content from the Journal of Open Source Software (JOSS):
-    papers about research software, with their PDFs and software archives.
-    The content of demo.front-matter.de.
+    Archive of the Journal of Open Source Software (JOSS):
+    papers describing Open Source research software, with their PDFs and software archives.
   website: https://joss.theoj.org
   custom_fields:
     rs:issn: 2475-9066
@@ -33,6 +36,7 @@
 
 - slug: arxiv-cs-dl
   title: arXiv cs.DL
+  logo: starter_packs/arxiv-logo.png
   description: >-
     Preprints in Digital Libraries (cs.DL) from arXiv, with COMET
     enhancements of their metadata.
