@@ -744,12 +744,14 @@ RDM_FACETS = {
     "citations": pidbox_fields.CITATIONS_FACET,
     "content": {
         # The records with a PDF among their files, which invenio-pidbox's
-        # Attach PDFs job adds; other file types aren't offered.
+        # Attach PDFs job adds, and those with a ZIP, the software archives
+        # its Attach software archives job adds; other file types aren't
+        # offered.
         "facet": TermsFacet(
             field="files.types",
             label=_("Content"),
-            value_labels={"pdf": "PDF"},
-            include=["pdf"],
+            value_labels={"pdf": "PDF", "zip": "ZIP"},
+            include=["pdf", "zip"],
         ),
         "ui": {
             "field": "files.types",
@@ -760,7 +762,7 @@ RDM_FACETS = {
 release adds arrive with it, InvenioRDM v14's publication date facet among
 them. The Starter adds facets for affiliations, funders, author identifiers,
 licenses, related works, references, citations and content (records with a
-PDF)."""
+PDF or a ZIP)."""
 
 RDM_SEARCH = {
     # Supported values from RDM_FACETS

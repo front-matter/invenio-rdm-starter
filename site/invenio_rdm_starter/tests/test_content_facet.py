@@ -5,13 +5,14 @@ from __future__ import annotations
 from invenio_rdm_starter import config
 
 
-def test_the_content_facet_offers_pdf_only():
+def test_the_content_facet_offers_pdf_and_zip():
     facet = config.RDM_FACETS["content"]["facet"]
 
     assert facet.get_aggregation().to_dict() == {
-        "terms": {"field": "files.types", "include": ["pdf"]}
+        "terms": {"field": "files.types", "include": ["pdf", "zip"]}
     }
-    assert facet.add_filter(["pdf"]).to_dict() == {"terms": {"files.types": ["pdf"]}}
+    assert facet.add_filter(["zip"]).to_dict() == {"terms": {"files.types": ["zip"]}}
+    assert facet._value_labels == {"pdf": "PDF", "zip": "ZIP"}
     assert config.RDM_FACETS["content"]["ui"] == {"field": "files.types"}
 
 
