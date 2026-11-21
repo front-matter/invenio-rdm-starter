@@ -30,13 +30,24 @@ class Records:
 
 
 class RecordCommunities:
-    def __init__(self, failing=()):
+    def __init__(self, failing=(), present=()):
         self.calls = []
         self.failing = set(failing)
+        self.present = set(present)
 
-    def add(self, identity, id_, data):
-        self.calls.append(("add", id_, data["communities"][0]["id"]))
-        return [], [{"message": "refused"}] if id_ in self.failing else []
+    def bulk_add(self, identity, community_id, record_ids):
+        self.calls.append(("bulk_add", tuple(record_ids), community_id))
+        errors = [
+            {"record_id": id_, "message": "Community already included."}
+            for id_ in record_ids
+            if id_ in self.present
+        ]
+        errors += [
+            {"record_id": id_, "message": "refused"}
+            for id_ in record_ids
+            if id_ in self.failing
+        ]
+        return errors
 
     def remove(self, identity, id_, data):
         self.calls.append(("remove", id_, data["communities"][0]["id"]))
@@ -103,7 +114,36 @@ def test_records_in_no_pack_join_the_target():
     )
 
     assert counts["moved"] == 2
-    assert communities.calls == [("add", "a", "c-joss"), ("add", "b", "c-joss")]
+    # In bulk, without inclusion requests and so without notifications.
+    assert communities.calls == [("bulk_add", ("a", "b"), "c-joss")]
+
+
+def test_the_records_are_added_in_batches():
+    records = Records([_hit(id_) for id_ in "abcde"])
+    communities = RecordCommunities()
+
+    counts = starter_packs.move_records(
+        records, communities, PACKS, None, "joss", dry_run=False, batch_size=2
+    )
+
+    assert counts["moved"] == 5
+    assert [call[1] for call in communities.calls] == [
+        ("a", "b"),
+        ("c", "d"),
+        ("e",),
+    ]
+
+
+def test_a_record_in_the_target_already_is_moved_still():
+    records = Records([_hit("a", "c-joss")])
+    communities = RecordCommunities(present={"a"})
+
+    counts = starter_packs.move_records(
+        records, communities, PACKS, "joss", "rogue-scholar", dry_run=False
+    )
+
+    assert (counts["moved"], counts["failed"]) == (1, 0)
+    assert communities.calls[-1] == ("remove", "a", "c-joss")
 
 
 def test_a_record_joins_the_target_before_it_leaves_the_source():
@@ -115,7 +155,7 @@ def test_a_record_joins_the_target_before_it_leaves_the_source():
     )
 
     assert communities.calls == [
-        ("add", "a", "c-rogue"),
+        ("bulk_add", ("a",), "c-rogue"),
         ("remove", "a", "c-joss"),
     ]
 

@@ -277,6 +277,29 @@ def check_move(packs: dict[str, str], source: str | None, target: str | None) ->
             raise MoveError(f"{slug} is not a Starter Pack")
 
 
+#: Records added to the target in one bulk add.
+MOVE_BATCH_SIZE = 100
+
+
+def _added(
+    record_communities: Any, community_id: str, record_ids: list[str]
+) -> set[str]:
+    """Add records to a community in bulk, and return those now in it.
+
+    A bulk add includes records without a request, so without the request's
+    notification, which can't name its creator, the system, as a user. A
+    record already in the community is in it.
+    """
+    errors = record_communities.bulk_add(system_identity, community_id, record_ids)
+    refused = set()
+    for error in errors or []:
+        if "already included" in str(error.get("message", "")).lower():
+            continue
+        refused.add(error.get("record_id"))
+        log.warning("record_not_added", record_id=error.get("record_id"), error=error)
+    return {record_id for record_id in record_ids if record_id not in refused}
+
+
 def move_records(
     records: Any,
     record_communities: Any,
@@ -284,14 +307,16 @@ def move_records(
     source: str | None = None,
     target: str | None = None,
     dry_run: bool = True,
+    batch_size: int = MOVE_BATCH_SIZE,
 ) -> dict[str, Any]:
     """Move records from one Starter Pack's community to another's.
 
     The records are those in ``source``'s community, or, without a source,
-    those in no Starter Pack's. Each joins ``target``'s community, then leaves
-    ``source``'s, so that it is never in neither; without a target it just
-    leaves ``source``'s. Communities that aren't Starter Packs are left as
-    they are. ``dry_run`` only counts the records.
+    those in no Starter Pack's. They join ``target``'s community, in bulk and
+    without inclusion requests, and then leave ``source``'s, so that a record
+    is never in neither; without a target they just leave ``source``'s.
+    Communities that aren't Starter Packs are left as they are. ``dry_run``
+    only counts the records.
     """
     source, target = source or None, target or None
     check_move(packs, source, target)
@@ -303,32 +328,51 @@ def move_records(
         "moved": 0,
         "failed": 0,
     }
+
+    def move(batch: list[str]) -> None:
+        try:
+            moving = (
+                _added(record_communities, packs[target], batch)
+                if target
+                else set(batch)
+            )
+        except Exception:
+            # The batch failing must not stop the others; a rerun takes its
+            # records again, as they are still where they were.
+            counts["failed"] += len(batch)
+            log.exception("records_not_added", records=len(batch))
+            return
+        counts["failed"] += len(batch) - len(moving)
+        for record_id in batch:
+            if record_id not in moving:
+                continue
+            if source:
+                try:
+                    _done, errors = record_communities.remove(
+                        system_identity,
+                        record_id,
+                        {"communities": [{"id": packs[source]}]},
+                    )
+                    if errors:
+                        raise MoveError(f"not removed from {source}: {errors}")
+                except Exception:
+                    counts["failed"] += 1
+                    log.exception("record_not_moved", record_id=record_id)
+                    continue
+            counts["moved"] += 1
+
+    batch: list[str] = []
     query = selection_query(packs, source)
     for hit in records.scan(system_identity, params={"q": query}).hits:
         counts["records"] += 1
         if dry_run:
             continue
-        current = ((hit.get("parent") or {}).get("communities") or {}).get("ids") or []
-        try:
-            if target and packs[target] not in current:
-                _done, errors = record_communities.add(
-                    system_identity, hit["id"], {"communities": [{"id": packs[target]}]}
-                )
-                if errors:
-                    raise MoveError(f"not added to {target}: {errors}")
-            if source:
-                _done, errors = record_communities.remove(
-                    system_identity, hit["id"], {"communities": [{"id": packs[source]}]}
-                )
-                if errors:
-                    raise MoveError(f"not removed from {source}: {errors}")
-        except Exception:
-            # One record failing must not stop the others; a rerun takes it
-            # again, as it is still where it was.
-            counts["failed"] += 1
-            log.exception("record_not_moved", record_id=hit["id"])
-            continue
-        counts["moved"] += 1
+        batch.append(hit["id"])
+        if len(batch) >= batch_size:
+            move(batch)
+            batch = []
+    if batch:
+        move(batch)
     log.info("records_moved_to_starter_pack", **counts)
     return counts
 
