@@ -1,5 +1,6 @@
 """Tests for the Starter Packs, communities of type starterpack."""
 
+from datetime import UTC, datetime
 from importlib.metadata import entry_points
 from pathlib import Path
 from types import SimpleNamespace
@@ -108,21 +109,29 @@ def test_a_pack_becomes_a_curated_starterpack_community():
 class Service:
     """A service that holds some ids, and records what it creates."""
 
-    def __init__(self, existing=(), failing=()):
+    def __init__(self, existing=(), failing=(), featured=()):
         self.existing = set(existing)
         self.failing = set(failing)
         self.created = []
+        self.featured = {id_: ["earlier"] for id_ in featured}
 
     def read(self, identity, id_):
         if id_ not in self.existing:
             raise PIDDoesNotExistError("x", id_)
-        return SimpleNamespace(id=id_)
+        return SimpleNamespace(id=f"id-{id_}")
 
     def create(self, identity, data):
         key = data.get("slug") or data["id"]
         if key in self.failing:
             raise ValueError("refused")
         self.created.append(data)
+        return SimpleNamespace(id=f"id-{key}")
+
+    def featured_list(self, identity, community_id):
+        return SimpleNamespace(total=len(self.featured.get(community_id, [])))
+
+    def featured_create(self, identity, community_id, data):
+        self.featured.setdefault(community_id, []).append(data["start_date"])
 
 
 PACKS = [
@@ -142,10 +151,13 @@ def test_the_missing_packs_and_their_type_are_created():
         "packs": 3,
         "existing": 1,
         "created": 1,
+        "featured": 2,
         "failed": 1,
         "type_created": 1,
     }
     assert [c["slug"] for c in communities.created] == ["rogue-scholar"]
+    # Created or there already, each pack is featured.
+    assert set(communities.featured) == {"id-rogue-scholar", "id-joss"}
     assert vocabularies.created == [
         {
             "id": "starterpack",
@@ -178,3 +190,21 @@ def test_the_job_runs_its_task_and_is_registered():
         == "invenio_rdm_starter.jobs:CreateStarterPackCommunitiesJob"
     )
     assert tasks["invenio_rdm_starter_packs"] == "invenio_rdm_starter.starter_packs"
+
+
+def test_a_featured_pack_is_not_featured_again():
+    communities = Service(existing={"joss"}, featured={"id-joss"})
+
+    counts = starter_packs.create_packs(communities, Service(), PACKS[1:2])
+
+    assert counts["featured"] == 0
+    assert communities.featured["id-joss"] == ["earlier"]
+
+
+def test_a_pack_is_featured_from_now():
+    communities = Service()
+
+    starter_packs.create_packs(communities, Service(), PACKS[:1])
+
+    (start,) = communities.featured["id-rogue-scholar"]
+    assert abs((datetime.now(UTC) - datetime.fromisoformat(start)).total_seconds()) < 60

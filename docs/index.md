@@ -98,7 +98,7 @@ The box above the front page's metrics and the boxes of its sidebar are pages, w
 
 ### Starter Packs
 
-A Starter Pack is the content an InvenioRDM Starter instance can start with, defined as an InvenioRDM community of type **Starter Pack** (`starterpack` in `app_data/vocabularies/community_types.yaml`). The packs are listed in `app_data/starter_packs.yaml`, each with a slug, title, description and website; the **Create starter pack communities** job (Administration > Jobs) creates the community of each pack that doesn't have one, and adds the Starter Pack community type on an instance set up before it. The first three:
+A Starter Pack is the content an InvenioRDM Starter instance can start with, defined as an InvenioRDM community of type **Starter Pack** (`starterpack` in `app_data/vocabularies/community_types.yaml`). The packs are listed in `app_data/starter_packs.yaml`, each with a slug, title, description and website; the **Create starter pack communities** job (Administration > Jobs) creates the community of each pack that doesn't have one, and adds the Starter Pack community type on an instance set up before it. It also features every pack's community, so that the front page's carousel of featured communities shows the Starter Packs, all of them. The first three:
 
 * `rogue-scholar` - the German-language posts of the science blogs archived by [Rogue Scholar](https://rogue-scholar.org).
 * `joss` - the [Journal of Open Source Software](https://joss.theoj.org), with PDFs and software archives: the content of demo.front-matter.de.

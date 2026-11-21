@@ -62,7 +62,8 @@ class CreateStarterPackCommunitiesJob(_EverythingEachRun):
     title = _("Create starter pack communities")
     description = _(
         "Create a community of type Starter Pack for every Starter Pack in "
-        "app_data/starter_packs.yaml that doesn't have one."
+        "app_data/starter_packs.yaml that doesn't have one, and feature them "
+        "all on the front page."
     )
 
     task = create_starter_pack_communities

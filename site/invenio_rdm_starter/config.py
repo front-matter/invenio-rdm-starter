@@ -414,11 +414,6 @@ page's title as the header, its content as the box (invenio_rdm_starter.
 pages). Admins edit them under Site management > Pages. A page that doesn't
 exist is left out. The Starter's pages are app_data/pages.yaml."""
 
-STARTER_FEATURED_COMMUNITIES = 5
-"""How many subject communities the "Add records to subject communities" job
-features for the front page's carousel, the ones with the most records, while
-no community is featured; 0 features none."""
-
 STARTER_PACKS_FILE = None
 """The file the Starter Packs are defined in, each a community of type Starter
 Pack that the "Create starter pack communities" job creates

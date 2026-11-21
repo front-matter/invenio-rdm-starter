@@ -10,13 +10,15 @@ it lives in InvenioRDM, found again by its slug. Its ``rs:`` custom fields
 
 :func:`create_starter_pack_communities` creates the community of every pack
 that doesn't have one, as :mod:`invenio_rdm_starter.subject_communities` does
-for the OpenAlex subfields. The community type comes with the vocabulary
+for the OpenAlex subfields, and features each, for the front page's carousel
+of featured communities: the Starter Packs, all of them. The community type comes with the vocabulary
 fixtures of a new instance; an instance set up before it gets it from the job,
 since the fixtures don't add to a vocabulary that is loaded already.
 """
 
 from __future__ import annotations
 
+from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
 
@@ -136,34 +138,59 @@ def ensure_community_type(vocabularies: Any) -> bool:
     return True
 
 
-def _exists(communities: Any, slug: str) -> bool:
+def _read(communities: Any, slug: str) -> Any | None:
+    """A pack's community, or ``None`` while it has none."""
     try:
-        communities.read(system_identity, slug)
-        return True
+        return communities.read(system_identity, slug)
     except PIDDoesNotExistError:
+        return None
+
+
+def feature(communities: Any, community_id: str) -> bool:
+    """Feature a community from now, unless it is featured. Returns whether."""
+    if communities.featured_list(system_identity, community_id).total:
         return False
+    communities.featured_create(
+        system_identity,
+        community_id,
+        {"start_date": datetime.now(UTC).isoformat()},
+    )
+    return True
 
 
 def create_packs(
     communities: Any, vocabularies: Any, packs: list[dict[str, Any]]
 ) -> dict[str, int]:
-    """Create the community of every pack that doesn't have one."""
-    counts = {"packs": len(packs), "existing": 0, "created": 0, "failed": 0}
+    """Create the community of every pack that has none, and feature them all.
+
+    The front page's carousel shows the featured communities: every Starter
+    Pack, and only those.
+    """
+    counts = {
+        "packs": len(packs),
+        "existing": 0,
+        "created": 0,
+        "featured": 0,
+        "failed": 0,
+    }
     counts["type_created"] = int(ensure_community_type(vocabularies))
     for pack in packs:
-        if _exists(communities, pack["slug"]):
-            counts["existing"] += 1
-            continue
+        community = _read(communities, pack["slug"])
         try:
-            communities.create(system_identity, community_data(pack))
+            if community is None:
+                community = communities.create(system_identity, community_data(pack))
+                counts["created"] += 1
+                log.info("starter_pack_created", slug=pack["slug"], title=pack["title"])
+            else:
+                counts["existing"] += 1
+            if feature(communities, community.id):
+                counts["featured"] += 1
+                log.info("starter_pack_featured", slug=pack["slug"])
         except Exception:
             # One pack failing must not stop the others; it is tried again on
             # the next run.
             counts["failed"] += 1
             log.exception("starter_pack_not_created", slug=pack["slug"])
-            continue
-        counts["created"] += 1
-        log.info("starter_pack_created", slug=pack["slug"], title=pack["title"])
     return counts
 
 
@@ -171,7 +198,8 @@ def create_packs(
 def create_starter_pack_communities() -> dict[str, int]:
     """Create the community of every Starter Pack that has none.
 
-    Returns ``{"packs", "existing", "created", "failed", "type_created"}``.
+    Returns ``{"packs", "existing", "created", "featured", "failed",
+    "type_created"}``.
     """
     from invenio_communities.proxies import current_communities
     from invenio_vocabularies.proxies import current_service as vocabularies
