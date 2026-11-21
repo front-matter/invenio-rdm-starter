@@ -13,6 +13,7 @@ https://inveniordm.docs.cern.ch/reference/.
 """
 
 import os
+from urllib.parse import urlparse
 from copy import deepcopy
 from datetime import datetime
 from importlib.metadata import PackageNotFoundError, version
@@ -344,6 +345,19 @@ try:
 except PackageNotFoundError:
     INVENIO_APP_RDM_VERSION = ""
 
+
+def s3_endpoint_sources(endpoint_url: str | None) -> list[str]:
+    """The host of the S3 endpoint the files are served from, for the CSP.
+
+    InvenioRDM answers a file download with a link signed for the bucket's
+    endpoint, which the browser fetches (the PDF preview among them): with
+    Hetzner's https://fsn1.your-objectstorage.com, fsn1.your-objectstorage.com.
+    Nothing without an endpoint, as with files on disk.
+    """
+    host = urlparse(endpoint_url or "").netloc
+    return [host] if host else []
+
+
 APP_DEFAULT_SECURE_HEADERS = {
     **invenio_app_config.APP_DEFAULT_SECURE_HEADERS,
     "content_security_policy": {
@@ -358,6 +372,8 @@ APP_DEFAULT_SECURE_HEADERS = {
             "blob:",  # for pdf preview
             "s3.us-east-1.amazonaws.com",  # for S3 object storage
             "s3.eu-central-1.amazonaws.com",  # for S3 object storage
+            # The configured S3 endpoint's signed file links.
+            *s3_endpoint_sources(os.environ.get("INVENIO_S3_ENDPOINT_URL")),
             # Add your own policies here (e.g. analytics)
         ],
         "img-src": [
