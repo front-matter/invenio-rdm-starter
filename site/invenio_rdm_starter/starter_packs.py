@@ -243,3 +243,116 @@ def create_starter_pack_communities() -> dict[str, int]:
     )
     log.info("starter_pack_communities_created", **counts)
     return counts
+
+
+#: The communities of the Starter Packs, by their type.
+PACKS_QUERY = f"metadata.type.id:{COMMUNITY_TYPE}"
+
+
+def pack_ids(communities: Any) -> dict[str, str]:
+    """The Starter Packs' communities, as slug → community id."""
+    result = communities.search(system_identity, params={"q": PACKS_QUERY, "size": 100})
+    return {hit["slug"]: hit["id"] for hit in result.hits}
+
+
+def selection_query(packs: dict[str, str], source: str | None) -> str:
+    """The records in ``source``'s community, or, without one, in no pack's."""
+    if source:
+        return f'parent.communities.ids:"{packs[source]}"'
+    if not packs:
+        return "*"
+    ids = " OR ".join(f'"{community_id}"' for community_id in packs.values())
+    return f"NOT parent.communities.ids:({ids})"
+
+
+class MoveError(ValueError):
+    """A move the job can't make: no source or target, or the same one."""
+
+
+def check_move(packs: dict[str, str], source: str | None, target: str | None) -> None:
+    """Refuse a move from a pack to itself, or from or to a pack that isn't."""
+    if (source or "") == (target or ""):
+        raise MoveError("the source and the target are the same")
+    for slug in (source, target):
+        if slug and slug not in packs:
+            raise MoveError(f"{slug} is not a Starter Pack")
+
+
+def move_records(
+    records: Any,
+    record_communities: Any,
+    packs: dict[str, str],
+    source: str | None = None,
+    target: str | None = None,
+    dry_run: bool = True,
+) -> dict[str, Any]:
+    """Move records from one Starter Pack's community to another's.
+
+    The records are those in ``source``'s community, or, without a source,
+    those in no Starter Pack's. Each joins ``target``'s community, then leaves
+    ``source``'s, so that it is never in neither; without a target it just
+    leaves ``source``'s. Communities that aren't Starter Packs are left as
+    they are. ``dry_run`` only counts the records.
+    """
+    source, target = source or None, target or None
+    check_move(packs, source, target)
+    counts: dict[str, Any] = {
+        "source": source or "",
+        "target": target or "",
+        "dry_run": dry_run,
+        "records": 0,
+        "moved": 0,
+        "failed": 0,
+    }
+    query = selection_query(packs, source)
+    for hit in records.scan(system_identity, params={"q": query}).hits:
+        counts["records"] += 1
+        if dry_run:
+            continue
+        current = ((hit.get("parent") or {}).get("communities") or {}).get("ids") or []
+        try:
+            if target and packs[target] not in current:
+                _done, errors = record_communities.add(
+                    system_identity, hit["id"], {"communities": [{"id": packs[target]}]}
+                )
+                if errors:
+                    raise MoveError(f"not added to {target}: {errors}")
+            if source:
+                _done, errors = record_communities.remove(
+                    system_identity, hit["id"], {"communities": [{"id": packs[source]}]}
+                )
+                if errors:
+                    raise MoveError(f"not removed from {source}: {errors}")
+        except Exception:
+            # One record failing must not stop the others; a rerun takes it
+            # again, as it is still where it was.
+            counts["failed"] += 1
+            log.exception("record_not_moved", record_id=hit["id"])
+            continue
+        counts["moved"] += 1
+    log.info("records_moved_to_starter_pack", **counts)
+    return counts
+
+
+@shared_task(ignore_result=False)
+def move_records_to_starter_pack(
+    source_slug: str | None = None,
+    target_slug: str | None = None,
+    dry_run: bool = True,
+) -> dict[str, Any]:
+    """Move records from one Starter Pack's community to another's.
+
+    See :func:`move_records`; ``source_slug`` and ``target_slug`` are the
+    packs' slugs, either empty for no pack.
+    """
+    from invenio_communities.proxies import current_communities
+    from invenio_rdm_records.proxies import current_rdm_records
+
+    return move_records(
+        current_rdm_records.records_service,
+        current_rdm_records.record_communities_service,
+        pack_ids(current_communities.service),
+        source_slug,
+        target_slug,
+        dry_run,
+    )

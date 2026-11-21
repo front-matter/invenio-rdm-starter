@@ -87,6 +87,7 @@ starter_create_subject_communities = "invenio_rdm_starter.jobs:CreateSubjectComm
 starter_add_records_to_subject_communities = "invenio_rdm_starter.jobs:AddRecordsToSubjectCommunitiesJob"
 starter_delete_all_records = "invenio_rdm_starter.jobs:DeleteAllRecordsJob"
 starter_create_starter_pack_communities = "invenio_rdm_starter.jobs:CreateStarterPackCommunitiesJob"
+starter_move_records_to_starter_pack = "invenio_rdm_starter.jobs:MoveRecordsToStarterPackJob"
 
 [project.entry-points."invenio_celery.tasks"]
 invenio_rdm_starter = "invenio_rdm_starter.subject_communities"
