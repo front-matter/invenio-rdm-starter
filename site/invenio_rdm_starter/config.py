@@ -13,6 +13,7 @@ https://inveniordm.docs.cern.ch/reference/.
 """
 
 import os
+import re
 from urllib.parse import urlparse
 from copy import deepcopy
 from datetime import datetime
@@ -574,6 +575,12 @@ puts a version's IsVersionOf DOI on its parent, which "Cite all versions"
 shows. Never minted on publishing, and set only by the import; but a parent
 with one needs the provider, or publishing its next version fails."""
 
+
+def is_openalex_work(value: str) -> bool:
+    """Whether ``value`` is an OpenAlex work ID, as a URL or bare (W123)."""
+    return re.fullmatch(r"(?:https://openalex\.org/)?W\d+", value or "") is not None
+
+
 RDM_RECORDS_IDENTIFIERS_SCHEMES = {
     scheme: definition
     for scheme, definition in rdm_config.RDM_RECORDS_IDENTIFIERS_SCHEMES.items()
@@ -581,7 +588,8 @@ RDM_RECORDS_IDENTIFIERS_SCHEMES = {
 }
 """InvenioRDM's schemes, extended rather than copied, so that the schemes a
 release adds arrive with it: a copy from before v14 had left out CSTR, RRID
-and Wikidata. The Starter adds UUID and GUID, and keeps "other" last."""
+and Wikidata. The Starter adds UUID, GUID and OpenAlex (a work's OpenAlex ID,
+which commonmeta's OpenAlex enrichment adds), and keeps "other" last."""
 RDM_RECORDS_IDENTIFIERS_SCHEMES.update(
     {
         "uuid": {
@@ -593,6 +601,11 @@ RDM_RECORDS_IDENTIFIERS_SCHEMES.update(
             "label": _("GUID"),
             "validator": rdm_config.always_valid,
             "datacite": "GUID",
+        },
+        "openalex": {
+            "label": "OpenAlex",
+            "validator": is_openalex_work,
+            "datacite": "Other",
         },
         "other": rdm_config.RDM_RECORDS_IDENTIFIERS_SCHEMES["other"],
     }
