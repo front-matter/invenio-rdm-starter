@@ -28,7 +28,6 @@ def test_the_three_starter_packs_are_defined():
             "rs:license": {"id": "cc-by-4.0"},
         },
         "mhh": {
-            "rs:ror": "00f2yqf98",
             "rs:language": {"id": "deu"},
         },
     }
@@ -46,7 +45,6 @@ def test_the_packs_fields_are_the_communities_custom_fields():
         "rs:issn",
         "rs:doi",
         "rs:prefix",
-        "rs:ror",
         "rs:language",
         "rs:license",
     }
@@ -93,6 +91,7 @@ def test_a_pack_becomes_a_curated_starterpack_community():
             "title": "Journal of Open Source Software",
             "description": "Papers about research software.\n",
             "website": "https://joss.theoj.org",
+            "organizations": ["https://ror.org/00f2yqf98", "", "03x94j517"],
             "custom_fields": {"rs:issn": "2475-9066", "rs:license": "cc-by-4.0"},
         }
     )
@@ -105,6 +104,7 @@ def test_a_pack_becomes_a_curated_starterpack_community():
             "type": {"id": "starterpack"},
             "description": "Papers about research software.",
             "website": "https://joss.theoj.org",
+            "organizations": [{"id": "00f2yqf98"}, {"id": "03x94j517"}],
         },
         "custom_fields": {"rs:issn": "2475-9066", "rs:license": {"id": "cc-by-4.0"}},
     }

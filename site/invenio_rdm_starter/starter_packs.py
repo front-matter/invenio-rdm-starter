@@ -86,6 +86,11 @@ def community_data(pack: dict[str, Any]) -> dict[str, Any]:
         metadata["description"] = str(pack["description"]).strip()
     if pack.get("website"):
         metadata["website"] = pack["website"]
+    organizations = [
+        {"id": _bare_ror(ror)} for ror in pack.get("organizations") or [] if ror
+    ]
+    if organizations:
+        metadata["organizations"] = organizations
     data: dict[str, Any] = {
         "slug": pack["slug"],
         "access": dict(COMMUNITY_ACCESS),
@@ -95,6 +100,11 @@ def community_data(pack: dict[str, Any]) -> dict[str, Any]:
     if fields:
         data["custom_fields"] = fields
     return data
+
+
+def _bare_ror(value: str) -> str:
+    """A ROR id without its URL: the id of the community's organization."""
+    return str(value).strip().removeprefix("https://ror.org/")
 
 
 #: The rs: fields whose value is a vocabulary entry, given by its id.

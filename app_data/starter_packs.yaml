@@ -5,13 +5,13 @@
 # doesn't have one; a pack's community is found again by its slug.
 #
 # Each pack: slug, title, logo (an image in app_data/starter_packs, at most
-# 1 MB, set while the community has none), description, website, and
-# custom_fields, the
-# community's rs: fields that select its works (invenio_rdm_starter.
-# custom_fields): rs:issn, rs:doi (the DOI of a blog or journal), rs:prefix
-# (a DOI prefix), rs:ror (the ROR id of the authors' organization),
-# rs:language (a languages vocabulary id) and rs:license (a licenses
-# vocabulary id).
+# 1 MB, set while the community has none), description, website,
+# organizations (the ROR ids of the organizations its works come from, the
+# community's organizations, resolved from the commonmeta store), and
+# custom_fields, the community's rs: fields that select its works
+# (invenio_rdm_starter.custom_fields): rs:issn, rs:doi (the DOI of a blog or
+# journal), rs:prefix (a DOI prefix), rs:language (a languages vocabulary id)
+# and rs:license (a licenses vocabulary id).
 - slug: joss
   title: Journal of Open Source Software
   logo: starter_packs/joss.png
@@ -27,7 +27,10 @@
 - slug: mhh
   title: Medizinische Hochschule Hannover
   logo: starter_packs/mhh.png
+  description: >-
+    Publications and their metadata from Hannover Medical School.
   website: https://mhh.de/
+  organizations:
+    - "00f2yqf98"
   custom_fields:
-    rs:ror: "00f2yqf98"
     rs:language: deu

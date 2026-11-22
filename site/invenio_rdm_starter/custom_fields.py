@@ -2,9 +2,10 @@
 
 A Starter Pack (:mod:`invenio_rdm_starter.starter_packs`) says which works it
 holds: by the ISSN of their journal (``rs:issn``), the DOI of their blog or
-journal (``rs:doi``), the prefix of their DOIs (``rs:prefix``), the ROR id of
-the organization their authors are affiliated with (``rs:ror``), their
+journal (``rs:doi``), the prefix of their DOIs (``rs:prefix``), their
 language (``rs:language``), and the license they come with (``rs:license``).
+The organizations its works come from are the community's own organizations
+(``metadata.organizations``), not a field of these.
 The names and meanings are Rogue Scholar's community fields, so that a
 community moves between the two with its fields.
 """
@@ -45,7 +46,6 @@ STARTER_PACK_CUSTOM_FIELDS = [
     TextCF(name="rs:issn"),
     TextCF(name="rs:doi"),
     TextCF(name="rs:prefix"),
-    TextCF(name="rs:ror"),
     CommunityVocabularyCF(
         name="rs:language",
         vocabulary_id="languages",
@@ -95,19 +95,6 @@ STARTER_PACK_CUSTOM_FIELDS_UI = {
                 "icon": "barcode",
                 "description": _("The DOI prefix of the works the pack holds."),
                 "placeholder": "10.21105",
-            },
-        },
-        {
-            "field": "rs:ror",
-            "ui_widget": "Input",
-            "props": {
-                "label": "ROR",
-                "icon": "building",
-                "description": _(
-                    "The ROR id of the organization the authors of the works the "
-                    "pack holds are affiliated with."
-                ),
-                "placeholder": "00f2yqf98",
             },
         },
         {

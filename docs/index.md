@@ -109,6 +109,8 @@ A Starter Pack is the content an InvenioRDM Starter instance can start with, def
 
 A Starter Pack's community is curated: public, its records added by its curators rather than submitted. `INVENIO_STARTER_PACKS_FILE` names another definitions file.
 
+A pack's `organizations`, ROR ids, are its community's organizations: `mhh` names 00f2yqf98. With `PIDBOX_RECORD_RELATIONS` on, as in the Starter, invenio-pidbox resolves them from the commonmeta store rather than the affiliations vocabulary, so any ROR organization will do, and the community's settings search the store's organizations too.
+
 Its custom fields, in the `rs` namespace as on Rogue Scholar, say which works a pack holds. They are set from `starter_packs.yaml` when the job creates the community, and admins edit them in the community's settings (section **Starter Pack**):
 
 | Field | | `joss` | `mhh` |
@@ -116,7 +118,6 @@ Its custom fields, in the `rs` namespace as on Rogue Scholar, say which works a 
 | `rs:issn` | the journal's ISSN | 2475-9066 | |
 | `rs:doi` | the DOI of the blog or journal | | |
 | `rs:prefix` | the DOI prefix | 10.21105 | |
-| `rs:ror` | the ROR id of the authors' organization | | 00f2yqf98 |
 | `rs:language` | the language (`languages` vocabulary) | eng | deu |
 | `rs:license` | the license (`licenses` vocabulary) | cc-by-4.0 | |
 
