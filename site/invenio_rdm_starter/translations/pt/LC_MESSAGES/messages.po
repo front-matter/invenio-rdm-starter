@@ -40,3 +40,6 @@ msgstr "Tópico"
 
 msgid "Organize, curate and collaborate on records for your institution, journal, repository, blog or event."
 msgstr "Organize, faça a curadoria e colabore em registros para a sua instituição, revista, repositório, blog ou evento."
+
+msgid "Works citing this version, as far as the commonmeta store knows them"
+msgstr "Trabalhos que citam esta versão, na medida em que o armazenamento commonmeta os conhece"

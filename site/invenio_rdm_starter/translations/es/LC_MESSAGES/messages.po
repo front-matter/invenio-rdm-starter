@@ -48,3 +48,6 @@ msgstr "Tema"
 
 msgid "Organize, curate and collaborate on records for your institution, journal, repository, blog or event."
 msgstr "Organice, seleccione y colabore en la gestión de registros para su institución, revista, repositorio, blog o evento."
+
+msgid "Works citing this version, as far as the commonmeta store knows them"
+msgstr "Obras que citan esta versión, en la medida en que el almacén commonmeta las conoce"

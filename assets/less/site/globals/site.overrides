@@ -197,3 +197,21 @@ ol.ui.ordered.list.details-list {
     text-align: right;
   }
 }
+
+/* A record's views, downloads and citations side by side in the sidebar's
+   statistics (templates/semantic-ui/invenio_app_rdm/records/details/
+   stats.html): a third of the sidebar is narrower than an uppercase label
+   with its icon ("ANSICHTEN"), and Semantic UI would wrap the third onto a
+   line of its own. */
+.ui.tiny.three.statistics {
+  flex-wrap: nowrap;
+
+  .statistic {
+    min-width: 0;
+    flex: 1 1 0;
+
+    > .label {
+      font-size: 0.85em;
+    }
+  }
+}

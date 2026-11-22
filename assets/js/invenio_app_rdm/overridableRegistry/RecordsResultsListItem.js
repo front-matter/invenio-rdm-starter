@@ -10,7 +10,8 @@
 // inline HTML (italics, sub- and superscripts) instead of as escaped text; see
 // titleHtml.js, creators linking to their person pages; see
 // ProfileItemCreators.js, the journal's title in "Published in" linked to its
-// container page; see publishedIn.js, and the DOI in place of the access status. It renders the search page, the community and collection
+// container page; see publishedIn.js, the citations beside the views and
+// downloads; see citationCount.js, and the DOI in place of the access status. It renders the search page, the community and collection
 // searches, and the front page's recent uploads.
 
 import { i18next } from "@translations/invenio_app_rdm/i18next";
@@ -25,6 +26,7 @@ import { CompactStats } from "@js/invenio_app_rdm/components/CompactStats";
 import { DisplayPartOfCommunities } from "@js/invenio_app_rdm/components/DisplayPartOfCommunities";
 import { titleElements } from "./titleHtml";
 import { PublishedIn } from "./publishedIn";
+import { CitationCount } from "./citationCount";
 
 class RecordsResultsListItem extends Component {
   render() {
@@ -205,6 +207,7 @@ class RecordsResultsListItem extends Component {
                     uniqueViews={uniqueViews}
                     uniqueDownloads={uniqueDownloads}
                   />
+                  <CitationCount result={result} />
                 </small>
               </div>
             </Item.Extra>

@@ -687,6 +687,9 @@ RDM_SORT_OPTIONS = {
         "title": _("Least recently added"),
         "fields": ["created"],
     },
+    # The records cited most, by the citation count invenio-pidbox writes into
+    # the search document: this version's citations the commonmeta store knows.
+    "mostcited": pidbox_fields.CITATIONS_SORT_OPTION,
 }
 """Definitions of available record sort options.
 
@@ -695,7 +698,8 @@ serves the request searches (RDM_SEARCH_USER_REQUESTS sorts by activity), and
 a copy from before v14 without newestactivity made every record landing page
 fail with KeyError, shown as "Page not found". The Starter sorts newest and
 oldest by publication date rather than by when the record was created, and
-adds sorting by creation date as options of its own."""
+adds sorting by creation date as options of its own, and by citations ("Most
+cited")."""
 
 RDM_FACETS = {
     **rdm_config.RDM_FACETS,
@@ -763,7 +767,9 @@ RDM_FACETS = {
             "field": "metadata.references.scheme",
         },
     },
-    "citations": pidbox_fields.CITATIONS_FACET,
+    # The records cited at all ("Cited"), by the mark invenio-pidbox writes
+    # into the search document beside the citation count.
+    "citations": pidbox_fields.CITED_FACET,
     "content": {
         # The records with a PDF among their files, which invenio-pidbox's
         # Attach PDFs job adds, and those with a ZIP, the software archives
@@ -812,6 +818,7 @@ RDM_SEARCH = {
         "created-desc",
         "created-asc",
         "mostviewed",
+        "mostcited",
     ],
     "query_parser_cls": QueryParser.factory(
         mapping={

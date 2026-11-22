@@ -1,0 +1,155 @@
+{#
+  SPDX-FileCopyrightText: 2020-2025 CERN.
+  SPDX-License-Identifier: MIT
+
+  InvenioRDM's record statistics, with the citations beside the views and
+  downloads: how many works cite this version of the record, among those the
+  commonmeta store knows (invenio-pidbox's pidbox:citations, refreshed by the
+  Refresh citations job). Not counted across versions: the "All versions"
+  cell of the citations is empty.
+#}
+{% from "invenio_app_rdm/records/macros/stats_popup.html" import stats_popup %}
+
+<div class="ui tiny three statistics rel-mt-1">
+  {% set all_versions = record_ui["stats"]["all_versions"] %}
+  {% set this_version = record_ui["stats"]["this_version"] %}
+  {%- set citations = ((record_ui.get("custom_fields") or {}).get("pidbox:citations") or []) | length %}
+
+  <div class="ui statistic">
+    <div class="value">{{ all_versions.unique_views|compact_number(max_value=1_000_000) }}</div>
+    <div class="label">
+      <i aria-hidden="true" class="eye icon"></i>
+      {{ _("Views") }}
+    </div>
+  </div>
+
+  <div class="ui statistic">
+    <div class="value">{{ all_versions.unique_downloads|compact_number(max_value=1_000_000) }}</div>
+    <div class="label">
+      <i aria-hidden="true" class="download icon"></i>
+      {{ _("Downloads") }}
+    </div>
+  </div>
+  <div class="ui statistic">
+    <div class="value">{{ citations|compact_number(max_value=1_000_000) }}</div>
+    <div class="label">
+      <i aria-hidden="true" class="quote left icon"></i>
+      {{ _("Citations") }}
+    </div>
+  </div>
+</div>
+
+<div class="ui accordion rel-mt-1 centered">
+  <div class="title trigger" tabindex="0">
+    <i class="caret right icon" aria-hidden="true"></i>
+    <span
+      data-open-text="{{ _('Show more details') }}"
+      data-close-text="{{ _('Show less details') }}"
+    >
+      {{ _('Show more details') }}
+    </span>
+  </div>
+
+  <div class="content">
+    <table id="record-statistics" class="ui definition table fluid">
+      <thead>
+        <tr>
+          <th></th>
+          <th class="right aligned">{{ _("All versions") }}</th>
+          <th class="right aligned">{{ _("This version") }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            {{ _("Views") }}
+            <i
+              tabindex="0"
+              role="button"
+              style="position:relative"
+              class="popup-trigger question circle small icon"
+              aria-expanded="false"
+              aria-label="{{ _('More info') }}"
+              data-variation="mini inverted"
+            >
+            </i>
+            <p role="tooltip" class="popup-content ui flowing popup transition hidden">
+              {{ _('Total views') }}
+            </p>
+          </td>
+          <td data-label="{{_('All versions')}}" class="right aligned">{{ stats_popup(all_versions.unique_views) }}</td>
+          <td data-label="{{_('This version')}}" class="right aligned">{{ stats_popup(this_version.unique_views) }}</td>
+        </tr>
+        <tr>
+          <td>
+            {{ _("Downloads") }}
+            <i
+              tabindex="0"
+              role="button"
+              style="position:relative"
+              class="popup-trigger question circle small icon"
+              aria-expanded="false"
+              aria-label="{{ _('More info') }}"
+              data-variation="mini inverted"
+            >
+            </i>
+            <p role="tooltip" class="popup-content ui flowing popup transition hidden">
+              {{ _('Total downloads') }}
+            </p>
+          </td>
+          <td data-label="{{_('All versions')}}" class="right aligned">{{ stats_popup(all_versions.unique_downloads) }}</td>
+          <td data-label="{{_('This version')}}" class="right aligned">{{ stats_popup(this_version.unique_downloads) }}</td>
+        </tr>
+        <tr>
+          <td>
+            {{ _("Citations") }}
+            <i
+              tabindex="0"
+              role="button"
+              style="position:relative"
+              class="popup-trigger question circle small icon"
+              aria-expanded="false"
+              aria-label="{{ _('More info') }}"
+              data-variation="mini inverted"
+            >
+            </i>
+            <p role="tooltip" class="popup-content ui flowing popup transition hidden">
+              {{ _('Works citing this version, as far as the commonmeta store knows them') }}
+            </p>
+          </td>
+          <td data-label="{{_('All versions')}}" class="right aligned">–</td>
+          <td data-label="{{_('This version')}}" class="right aligned">{{ stats_popup(citations) }}</td>
+        </tr>
+        <tr>
+          <td>
+            {{ _("Data volume") }}
+            <i
+              tabindex="0"
+              role="button"
+              style="position:relative"
+              class="popup-trigger question circle small icon"
+              aria-expanded="false"
+              aria-label="{{ _('More info') }}"
+              data-variation="mini inverted"
+            >
+            </i>
+            <p role="tooltip" class="popup-content ui flowing popup transition hidden">
+              {{ _('Total data volume') }}
+            </p>
+          </td>
+          {%- set binary_sizes = not config.APP_RDM_DISPLAY_DECIMAL_FILE_SIZES %}
+
+          <td data-label="{{_('All versions')}}" class="right aligned">{{ all_versions.data_volume|filesizeformat(binary=binary_sizes) }}</td>
+          <td data-label="{{_('This version')}}" class="right aligned">{{ this_version.data_volume|filesizeformat(binary=binary_sizes) }}</td>
+        </tr>
+      </tbody>
+    </table>
+    <p class="text-align-center rel-mt-1">
+      <small>
+        <a href="{{ invenio_url_for('invenio_app_rdm.help_statistics') }}">{{ _("More info on how stats are collected.") }}...</a>
+      </small>
+    </p>
+  </div>
+
+</div>
+
