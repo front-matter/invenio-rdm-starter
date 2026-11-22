@@ -18,7 +18,7 @@ dependencies = [
     "gunicorn~=23.0.0",
     "commonmeta-py[backend]>=0.318,<1",
     "commonmeta-rs>=0.12.20,<1",
-    "invenio-pidbox>=0.7.10,<1",
+    "invenio-pidbox>=0.7.11,<1",
     "invenio-logging",
     "structlog>=25.0",
     "prometheus-flask-exporter>=0.23.1",         # no [sentry] extra
