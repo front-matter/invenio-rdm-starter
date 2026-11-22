@@ -302,7 +302,7 @@ show_alternate_identifiers, show_related_identifiers, show_funding, show_dates %
         <h3 class="ui header">{{ _('References') }}</h3>
       </div>
       <div class="sixteen wide mobile twelve wide tablet thirteen wide computer column">
-        {{ show_references(metadata.references) }}
+        {{ show_references(metadata.references, community.slug if community else None) }}
       </div>
     </div>
     <div class="ui divider"></div>
@@ -316,7 +316,7 @@ show_alternate_identifiers, show_related_identifiers, show_funding, show_dates %
         <h3 class="ui header">{{ _('Citations') }}</h3>
       </div>
       <div class="sixteen wide mobile twelve wide tablet thirteen wide computer column">
-        {{ show_references(record_ui["ui"]["custom_fields"].get("pidbox:citations")) }}
+        {{ show_references(record_ui["ui"]["custom_fields"].get("pidbox:citations"), community.slug if community else None) }}
       </div>
     </div>
     <div class="ui divider"></div>

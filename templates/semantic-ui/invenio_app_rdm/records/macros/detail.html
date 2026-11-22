@@ -165,7 +165,7 @@
 {%- endif -%}
 {% endmacro %}
 
-{% macro show_references(references) %}
+{% macro show_references(references, community_slug=None) %}
   {#- A reference or citation as HTML, but only its inline formatting, as the
       record title: a formatted citation sets a journal or a species name in
       italics. References come from publishers and citations from citeproc,
@@ -179,13 +179,20 @@
         {% if reference.scheme %}
           {% set id = reference.identifier %}
           {% if 'doi' == reference.scheme %}
-            {#- The text searches this site for the work around the DOI, as
-                Rogue Scholar does: the work itself, boosted to the top of a
-                search by relevance (the default with a query), the works
-                that reference it, and the works it cites. The DOI links out. #}
+            {#- The text searches for the work around the DOI, as Rogue
+                Scholar does: the work itself, boosted to the top of a search
+                by relevance (the default with a query), the works that
+                reference it, and the works it cites; in the record's
+                community if it has one, else the whole site. The DOI links
+                out. #}
             {%- set q = 'doi:' ~ id ~ '^5 references:' ~ id ~ ' citations:' ~ id -%}
+            {%- if community_slug -%}
+              {%- set search_url = url_for('invenio_app_rdm_communities.communities_detail', pid_value=community_slug, q=q) -%}
+            {%- else -%}
+              {%- set search_url = url_for('invenio_search_ui.search', q=q) -%}
+            {%- endif -%}
             <li class="item">
-              <a class="ui creatibutor-link" href="{{ url_for('invenio_search_ui.search', q=q) }}">
+              <a class="ui creatibutor-link" href="{{ search_url }}">
                 {{ reference_string }}
               </a>
               <a class="no-text-decoration" target="_blank" href="{{ id|pid_url('doi') }}">
