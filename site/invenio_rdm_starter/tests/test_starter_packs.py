@@ -1,4 +1,4 @@
-"""Tests for the Starter Packs, communities of a container or an organization."""
+"""Tests for the Starter Packs, communities of a journal, an organization, …"""
 
 from datetime import UTC, datetime
 from importlib.metadata import entry_points
@@ -19,21 +19,16 @@ def test_the_three_starter_packs_are_defined():
 
     assert [pack["slug"] for pack in packs] == ["joss", "mhh"]
     assert all(pack["website"].startswith("https://") for pack in packs)
-    assert [(pack["type"], pack["subtype"]) for pack in packs] == [
-        ("container", "journal"),
-        ("organization", "education"),
-    ]
+    assert [pack["type"] for pack in packs] == ["journal", "organization"]
     fields = {pack["slug"]: starter_packs.custom_fields(pack) for pack in packs}
     assert fields == {
         "joss": {
-            "rs:subtype": "journal",
             "rs:issn": "2475-9066",
             "rs:prefix": "10.21105",
             "rs:language": {"id": "eng"},
             "rs:license": {"id": "cc-by-4.0"},
         },
         "mhh": {
-            "rs:subtype": "education",
             "rs:language": {"id": "deu"},
         },
     }
@@ -48,7 +43,6 @@ def test_the_packs_fields_are_the_communities_custom_fields():
 
     assert config.COMMUNITIES_NAMESPACES == {"rs": None}
     assert defined == {
-        "rs:subtype",
         "rs:issn",
         "rs:doi",
         "rs:prefix",
@@ -74,17 +68,17 @@ def test_a_communitys_vocabulary_field_takes_the_dereferenced_entry():
 
 
 def test_the_packs_types_are_in_the_vocabulary_fixtures():
-    """Container replaces Blog, and Starter Pack is no type of its own."""
+    """Journal, repository and funder join Blog; Starter Pack is no type."""
     types = yaml.safe_load(
         (APP_DATA / "vocabularies" / "community_types.yaml").read_text()
     )
     ids = [t["id"] for t in types]
 
     assert set(starter_packs.PACK_TYPES) <= set(ids)
-    assert "blog" not in ids
-    assert "starterpack" not in ids
-    container = next(t for t in types if t["id"] == "container")
-    assert container["title"]["en"] == "Container"
+    for gone in ("starterpack", "subject", "container"):
+        assert gone not in ids
+    funder = next(t for t in types if t["id"] == "funder")
+    assert funder["title"]["de"] == "Förderer"
     # InvenioRDM's own types keep the translations its fixtures give them.
     organization = next(t for t in types if t["id"] == "organization")
     assert {"es", "cs", "ar"} <= set(organization["title"])
@@ -101,49 +95,14 @@ def test_an_award_is_a_resource_type_to_link_not_to_deposit():
     assert award["tags"] == ["linkable"]
 
 
-def test_a_subtype_is_one_of_its_types():
-    from invenio_rdm_starter import custom_fields
-
-    assert custom_fields.subtype_fits("container", "journal")
-    assert custom_fields.subtype_fits("organization", "funder")
-    assert custom_fields.subtype_fits("organization", None)
-    assert not custom_fields.subtype_fits("container", "funder")
-    assert not custom_fields.subtype_fits("subject", "journal")
-
-
-def test_the_subtype_field_takes_one_of_the_subtypes():
-    from invenio_rdm_starter import config, custom_fields
-
-    subtype = next(
-        f for f in config.COMMUNITIES_CUSTOM_FIELDS if f.name == "rs:subtype"
-    )
-    field = subtype.field
-
-    assert field.deserialize("repository") == "repository"
-    with pytest.raises(Exception, match="Must be one of"):
-        field.deserialize("newspaper")
-    ui = next(
-        f
-        for f in config.COMMUNITIES_CUSTOM_FIELDS_UI[0]["fields"]
-        if f["field"] == "rs:subtype"
-    )
-    assert ui["ui_widget"] == "Dropdown"
-    assert [o["id"] for o in ui["props"]["options"]] == custom_fields.SUBTYPE_IDS
-    assert ui["props"]["multiple"] is False
-
-
 @pytest.mark.parametrize(
     ("pack", "message"),
     [
-        ("- slug: a\n  title: A\n", "type is one of container, organization"),
-        ("- slug: a\n  title: A\n  type: subject\n", "type is one of"),
-        (
-            "- slug: a\n  title: A\n  type: container\n  subtype: funder\n",
-            "funder is not a subtype of container",
-        ),
+        ("- slug: a\n  title: A\n", "type is one of journal, blog, repository"),
+        ("- slug: a\n  title: A\n  type: topic\n", "type is one of"),
     ],
 )
-def test_a_pack_needs_a_type_and_a_subtype_of_it(tmp_path, pack, message):
+def test_a_pack_needs_a_type_of_a_pack(tmp_path, pack, message):
     path = tmp_path / "packs.yaml"
     path.write_text(pack)
 
@@ -164,8 +123,7 @@ def test_a_pack_becomes_a_curated_community_of_its_type():
         {
             "slug": "joss",
             "title": "Journal of Open Source Software",
-            "type": "container",
-            "subtype": "journal",
+            "type": "journal",
             "description": "Papers about research software.\n",
             "website": "https://joss.theoj.org",
             "organizations": ["https://ror.org/00f2yqf98", "", "03x94j517"],
@@ -178,16 +136,12 @@ def test_a_pack_becomes_a_curated_community_of_its_type():
         "access": starter_packs.COMMUNITY_ACCESS,
         "metadata": {
             "title": "Journal of Open Source Software",
-            "type": {"id": "container"},
+            "type": {"id": "journal"},
             "description": "Papers about research software.",
             "website": "https://joss.theoj.org",
             "organizations": [{"id": "00f2yqf98"}, {"id": "03x94j517"}],
         },
-        "custom_fields": {
-            "rs:subtype": "journal",
-            "rs:issn": "2475-9066",
-            "rs:license": {"id": "cc-by-4.0"},
-        },
+        "custom_fields": {"rs:issn": "2475-9066", "rs:license": {"id": "cc-by-4.0"}},
     }
     assert data["access"]["record_submission_policy"] == "closed"
 
@@ -244,13 +198,13 @@ class Service:
 
 
 PACKS = [
-    {"slug": "rogue-scholar", "title": "Rogue Scholar", "type": "container"},
-    {"slug": "joss", "title": "JOSS", "type": "container", "subtype": "journal"},
-    {"slug": "arxiv-cs-dl", "title": "arXiv cs.DL", "type": "container"},
+    {"slug": "rogue-scholar", "title": "Rogue Scholar", "type": "journal"},
+    {"slug": "joss", "title": "JOSS", "type": "journal"},
+    {"slug": "arxiv-cs-dl", "title": "arXiv cs.DL", "type": "journal"},
 ]
 
 TYPES = [
-    {"id": "container", "title": {"en": "Container"}},
+    {"id": "journal", "title": {"en": "Journal"}},
     {"id": "organization", "title": {"en": "Organization"}},
 ]
 
@@ -270,8 +224,7 @@ def test_the_missing_packs_and_types_are_created():
         data={
             "joss": {
                 "slug": "joss",
-                "metadata": {"type": {"id": "container"}},
-                "custom_fields": {"rs:subtype": "journal"},
+                "metadata": {"type": {"id": "journal"}},
             }
         },
     )
@@ -298,13 +251,13 @@ def test_the_missing_packs_and_types_are_created():
     # Created or there already, each pack is featured.
     assert set(communities.featured) == {"id-rogue-scholar", "id-joss"}
     assert vocabularies.created == [
-        {"id": "container", "title": {"en": "Container"}, "type": "communitytypes"},
+        {"id": "journal", "title": {"en": "Journal"}, "type": "communitytypes"},
         {**AWARD, "type": "resourcetypes"},
     ]
 
 
-def test_an_existing_community_takes_its_packs_type_and_subtype():
-    """joss, a community of type starterpack, becomes a container/journal."""
+def test_an_existing_community_takes_its_packs_type():
+    """joss, a community of type starterpack, becomes a journal."""
     before = {
         "slug": "joss",
         "access": {"visibility": "public"},
@@ -321,25 +274,13 @@ def test_an_existing_community_takes_its_packs_type_and_subtype():
     assert counts["updated"] == 1
     ((id_, data),) = communities.updated
     assert id_ == "id-joss"
-    assert data["metadata"]["type"] == {"id": "container"}
+    assert data["metadata"]["type"] == {"id": "journal"}
     # What an admin edited stays.
     assert data["metadata"]["title"] == "JOSS, as an admin named it"
-    assert data["custom_fields"] == {"rs:issn": "2475-9066", "rs:subtype": "journal"}
+    assert data["custom_fields"] == {"rs:issn": "2475-9066"}
 
     # Once it has them, it isn't updated again.
     assert starter_packs.type_changes(PACKS[1], {**before, **data}) == {}
-
-
-def test_a_subtype_the_pack_drops_is_cleared():
-    community = {
-        "slug": "a",
-        "metadata": {"type": {"id": "container"}},
-        "custom_fields": {"rs:subtype": "blog", "rs:issn": "1"},
-    }
-
-    changes = starter_packs.type_changes({"slug": "a", "type": "container"}, community)
-
-    assert changes["custom_fields"] == {"rs:issn": "1"}
 
 
 def test_the_packs_are_found_by_the_slugs_they_are_defined_with():
@@ -398,7 +339,7 @@ def test_the_packs_logos_are_in_app_data_and_small_enough():
 def test_a_pack_gets_its_logo_while_it_has_none(tmp_path):
     (tmp_path / "joss.png").write_bytes(b"PNG")
     communities = Service()
-    pack = {"slug": "joss", "title": "JOSS", "type": "container", "logo": "joss.png"}
+    pack = {"slug": "joss", "title": "JOSS", "type": "journal", "logo": "joss.png"}
 
     counts = starter_packs.create_packs(communities, Service(), [pack], tmp_path)
 

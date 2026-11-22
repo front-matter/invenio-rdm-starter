@@ -38,9 +38,8 @@ class CreateStarterPackCommunitiesJob(_EverythingEachRun):
     title = _("Sync starter packs")
     description = _(
         "Create a community for every Starter Pack in app_data/starter_packs.yaml "
-        "that doesn't have one, give an existing one the pack's type and "
-        "subtype, add community and resource types the vocabularies lack, and "
-        "feature the "
+        "that doesn't have one, give an existing one the pack's type, add "
+        "community and resource types the vocabularies lack, and feature the "
         "packs on the front page."
     )
 

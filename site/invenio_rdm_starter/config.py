@@ -915,7 +915,13 @@ would take otherwise, is too dark for the About text's dark slate. It is
 invenio-pidbox's setting for the metrics' band, which the Starter keeps
 without the metrics (invenio_rdm_starter/header_frontpage.html)."""
 
-PIDBOX_JOBS_COMMUNITY_TYPES = ["container", "organization"]
+PIDBOX_JOBS_COMMUNITY_TYPES = [
+    "journal",
+    "blog",
+    "repository",
+    "organization",
+    "funder",
+]
 """invenio-pidbox's jobs (Administration > Jobs) offer the communities of the
 Starter Packs' types in a Community select: the works imports (Import a work,
 Import works by ROR ID, by ORCID iD, by container) add their works to that
