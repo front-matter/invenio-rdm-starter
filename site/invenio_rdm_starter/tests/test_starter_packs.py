@@ -17,9 +17,14 @@ APP_DATA = Path(__file__).parents[3] / "app_data"
 def test_the_three_starter_packs_are_defined():
     packs = starter_packs.load_packs(APP_DATA / "starter_packs.yaml")
 
-    assert [pack["slug"] for pack in packs] == ["joss", "mhh", "wellcome"]
+    assert [pack["slug"] for pack in packs] == ["joss", "mhh", "wellcome", "irights"]
     assert all(pack["website"].startswith("https://") for pack in packs)
-    assert [pack["type"] for pack in packs] == ["journal", "organization", "funder"]
+    assert [pack["type"] for pack in packs] == [
+        "journal",
+        "organization",
+        "funder",
+        "blog",
+    ]
     fields = {pack["slug"]: starter_packs.custom_fields(pack) for pack in packs}
     assert fields == {
         "joss": {
@@ -35,11 +40,17 @@ def test_the_three_starter_packs_are_defined():
             "rs:language": {"id": "eng"},
             "rs:license": {"id": "cc-by-4.0"},
         },
+        "irights": {
+            "rs:doi": "10.59350/irights",
+            "rs:language": {"id": "deu"},
+            "rs:license": {"id": "cc-by-4.0"},
+        },
     }
     assert [pack.get("organizations") for pack in packs] == [
         None,
         ["00f2yqf98"],
         ["029chgv08"],
+        None,
     ]
 
 
