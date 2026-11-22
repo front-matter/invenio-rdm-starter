@@ -262,3 +262,10 @@ def test_the_pidbox_jobs_offer_the_starter_packs():
     from invenio_rdm_starter import config
 
     assert config.PIDBOX_JOBS_COMMUNITY_TYPE == starter_packs.COMMUNITY_TYPE
+
+
+def test_a_record_needs_a_community_to_be_published():
+    """The deposit form asks for one, and a record keeps its last one."""
+    from invenio_rdm_starter import config
+
+    assert config.RDM_COMMUNITY_REQUIRED_TO_PUBLISH is True

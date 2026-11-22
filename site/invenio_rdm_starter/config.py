@@ -874,6 +874,14 @@ RDM_SEARCH_DRAFTS = {
 RDM_PERMISSION_POLICY = StarterRecordPermissionPolicy
 """InvenioRDM Starter record permission policy."""
 
+RDM_COMMUNITY_REQUIRED_TO_PUBLISH = True
+"""A record belongs to a community: the deposit form asks for one before it
+publishes, and a record's last community can't be removed, except by an
+administrator or the system. The Starter's records come in through
+invenio-pidbox's imports, which publish as the system and so are not held to
+it: they belong to a Starter Pack when the run names one (the jobs'
+Community select, PIDBOX_JOBS_COMMUNITY_TYPE)."""
+
 RDM_RECORDS_SERVICE_COMPONENTS = citations_components()
 """InvenioRDM's record service components, with the one that writes custom
 fields replaced by invenio-pidbox's CitationsComponent. The stock component
