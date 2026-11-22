@@ -1,0 +1,39 @@
+{#
+  SPDX-FileCopyrightText: 2020 CERN.
+  SPDX-FileCopyrightText: 2020 Northwestern University.
+  SPDX-License-Identifier: MIT
+
+  InvenioRDM's record search, with a header above a search for one OpenAlex
+  subject (a domain, field, subfield or topic, as a record's subjects link
+  to): the subject's name, its kind and its OpenAlex ID, in the grey band a
+  community's pages have (invenio_rdm_starter.subjects).
+#}
+{%- set title = _("Search results") %}
+{%- extends config.BASE_TEMPLATE %}
+
+{%- block javascript %}
+    {{ super() }}
+    {{ webpack['invenio-app-rdm-search.js'] }}
+{%- endblock %}
+
+{%- block page_body %}
+{%- set subject = starter_openalex_subject(request.args.get("q")) %}
+{%- if subject %}
+<div class="ui fluid container page-subheader-outer compact ml-0-mobile mr-0-mobile starter-subject-header">
+  <div class="ui container page-subheader">
+    <div class="page-subheader-element">
+      <div class="ui header">
+        <span class="ui small header">{{ subject.name or subject.id }}</span>
+        <div class="sub header">
+          {{ subject.kind }} ·
+          <a href="{{ subject.id }}" target="_blank" rel="noopener noreferrer">{{ subject.id }}</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{%- endif %}
+<div class="ui container">
+  <div data-invenio-search-config='{{ search_app_rdm_config(app_id="InvenioAppRdm.Search") | tojson }}'></div>
+</div>
+{%- endblock page_body %}

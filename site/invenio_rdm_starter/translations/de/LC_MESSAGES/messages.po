@@ -33,3 +33,15 @@ msgstr "Inhalt"
 #: templates/semantic-ui/invenio_app_rdm/frontpage.html
 msgid "Starter Packs"
 msgstr "Starterpakete"
+
+msgid "Domain"
+msgstr "Domäne"
+
+msgid "Field"
+msgstr "Fach"
+
+msgid "Subfield"
+msgstr "Teilgebiet"
+
+msgid "Topic"
+msgstr "Thema"
