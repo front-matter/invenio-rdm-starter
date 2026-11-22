@@ -39,7 +39,7 @@
   custom_fields:
     rs:language: deu
 - slug: wellcome
-  title: Wellcome
+  title: Wellcome Trust
   type: funder
   logo: starter_packs/wellcome.png
   description: >-
@@ -50,7 +50,6 @@
   custom_fields:
     rs:language: eng
     rs:license: cc-by-4.0
-
 # Later: uncomment to create their communities with the next Sync run.
 #
 # - slug: irights
