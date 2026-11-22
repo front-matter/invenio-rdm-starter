@@ -80,17 +80,13 @@ invenio_rdm_starter_pages = "invenio_rdm_starter.pages:finalize_app"
 # Whether there are records, for the front page (invenio_rdm_starter.frontpage).
 invenio_rdm_starter_frontpage = "invenio_rdm_starter.frontpage:finalize_app"
 
-# The subject communities jobs: the Jobs dashboard lists them, Celery runs
-# their tasks.
+# The Starter's jobs: the Jobs dashboard lists them, Celery runs their tasks.
 [project.entry-points."invenio_jobs.jobs"]
-starter_create_subject_communities = "invenio_rdm_starter.jobs:CreateSubjectCommunitiesJob"
-starter_add_records_to_subject_communities = "invenio_rdm_starter.jobs:AddRecordsToSubjectCommunitiesJob"
 starter_delete_all_records = "invenio_rdm_starter.jobs:DeleteAllRecordsJob"
 starter_create_starter_pack_communities = "invenio_rdm_starter.jobs:CreateStarterPackCommunitiesJob"
 starter_move_records_to_starter_pack = "invenio_rdm_starter.jobs:MoveRecordsToStarterPackJob"
 
 [project.entry-points."invenio_celery.tasks"]
-invenio_rdm_starter = "invenio_rdm_starter.subject_communities"
 # Deleting all records (Administration → Jobs → Delete all records).
 invenio_rdm_starter_reset = "invenio_rdm_starter.reset"
 # The Starter Packs' communities (Administration → Jobs).
