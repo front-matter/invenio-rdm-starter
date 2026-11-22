@@ -255,3 +255,10 @@ def test_a_pack_gets_its_logo_while_it_has_none(tmp_path):
 
     assert counts["logos"] == 0
     assert communities.logos == {"id-joss": (b"ADMIN", 5)}
+
+
+def test_the_works_imports_offer_the_starter_packs():
+    """invenio-pidbox's imports add works to communities of the packs' type."""
+    from invenio_rdm_starter import config
+
+    assert config.PIDBOX_IMPORT_COMMUNITY_TYPE == starter_packs.COMMUNITY_TYPE

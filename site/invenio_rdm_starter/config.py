@@ -904,3 +904,10 @@ below it, one band under the menubar: the navbar's grey, which the band
 would take otherwise, is too dark for the About text's dark slate. It is
 invenio-pidbox's setting for the metrics' band, which the Starter keeps
 without the metrics (invenio_rdm_starter/header_frontpage.html)."""
+
+PIDBOX_IMPORT_COMMUNITY_TYPE = "starterpack"
+"""The works imports (Administration > Jobs: Import a work, Import works by
+ROR ID, by ORCID iD, by container) offer the Starter Packs in a Community
+select, and a run with one adds its works to that pack's community
+(invenio-pidbox, the release after 0.7.9). The type is invenio_rdm_starter.starter_packs'
+COMMUNITY_TYPE; with no Starter Pack created yet, there is none to choose."""
