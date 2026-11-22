@@ -88,6 +88,30 @@ form.pidbox-search .ui.icon.button {
   }
 }
 
+/* The menubar's search on a tablet: InvenioRDM folds the whole menu into
+   the burger below @computerBreakpoint (1280px), but there is room for the
+   search beside the logo, so it stays in the menubar, narrower where it has
+   to be, the rest of the menu in the burger. The right margin keeps it clear
+   of the burger. With the burger open, the menu is InvenioRDM's, search
+   included. */
+@media all and (min-width: @tabletBreakpoint) and (max-width: @largestTabletScreen) {
+  #invenio-nav.ui.menu:not(.active) #invenio-menu.ui.menu.mobile-hidden {
+    display: flex;
+    flex: 1 1 auto;
+    min-width: 0;
+    margin-right: 3.5rem;
+
+    > :not(.search-bar) {
+      display: none;
+    }
+
+    > .item.search-bar {
+      flex: 0 1 auto;
+      min-width: 0;
+    }
+  }
+}
+
 /* The About box above the front page's metrics (the page /about): text on
    the band itself, without a box of its own, left-aligned and larger, in
    the dark slate the band's light ground needs (white would be about 1.4:1
