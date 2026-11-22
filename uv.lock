@@ -2134,7 +2134,7 @@ wheels = [
 
 [[package]]
 name = "invenio-pidbox"
-version = "0.7.7"
+version = "0.7.8"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "commonmeta-py", extra = ["backend"] },
@@ -2142,9 +2142,9 @@ dependencies = [
     { name = "invenio-app-rdm" },
     { name = "requests" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/be/53/fefeb2792887f40310dd5415d5b9becdd0af704088820f7f22f06480e5b5/invenio_pidbox-0.7.7.tar.gz", hash = "sha256:76e51f4662a943b4b1a87d0b70a1cece70b780803933ef87d5bca347795b7848", size = 237397, upload-time = "2026-11-21T23:38:17.365Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/10/d7/ba3a8febaf73c0989001452181e2b7e37a94d2d500c7f6e9eecd780eccad/invenio_pidbox-0.7.8.tar.gz", hash = "sha256:cbfb29286f20e8aa04a9977007ff79e8494741cae9b252312647c86339eecd05", size = 237399, upload-time = "2026-11-22T07:51:36.611Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/18/b4/8782705e01769405c9e528246f3ed865f09ef9f70b02d62ccb089ed2e991/invenio_pidbox-0.7.7-py3-none-any.whl", hash = "sha256:d8274ab2b65cf23366d14360c466d8b73644f755e052f08f4f7bea2b614b1ac1", size = 213622, upload-time = "2026-11-21T23:38:13.594Z" },
+    { url = "https://files.pythonhosted.org/packages/df/db/6b077ece1d6ebb517c0332dd9f018d0ebde7468d7b518ea54caf0c36dab0/invenio_pidbox-0.7.8-py3-none-any.whl", hash = "sha256:51610761c82b51120a35d7e5c966d12a639504e3e22c2cf14a4fa8ddb8b16a03", size = 213637, upload-time = "2026-11-22T07:51:34.817Z" },
 ]
 
 [[package]]
@@ -2285,7 +2285,7 @@ requires-dist = [
     { name = "invenio-app-rdm", specifier = ">=14.0.7,<15.0" },
     { name = "invenio-logging" },
     { name = "invenio-oauthclient", git = "https://github.com/max-moser/invenio-oauthclient?branch=mm%2Fauthlib" },
-    { name = "invenio-pidbox", specifier = ">=0.7.7,<1" },
+    { name = "invenio-pidbox", specifier = ">=0.7.8,<1" },
     { name = "invenio-rdm-records", specifier = ">=32.3.3,<33" },
     { name = "invenio-s3", specifier = ">=3.0.2" },
     { name = "invenio-search", extras = ["opensearch2"], specifier = ">=3.1.2,<3.2.0" },
