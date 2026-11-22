@@ -9,7 +9,8 @@
 // invenio-app-rdm v14's RecordsResultsListItem, with the title shown with its
 // inline HTML (italics, sub- and superscripts) instead of as escaped text; see
 // titleHtml.js, creators linking to their person pages; see
-// ProfileItemCreators.js, and the DOI in place of the access status. It renders the search page, the community and collection
+// ProfileItemCreators.js, the journal's title in "Published in" linked to its
+// container page; see publishedIn.js, and the DOI in place of the access status. It renders the search page, the community and collection
 // searches, and the front page's recent uploads.
 
 import { i18next } from "@translations/invenio_app_rdm/i18next";
@@ -23,6 +24,7 @@ import { buildUID } from "react-searchkit";
 import { CompactStats } from "@js/invenio_app_rdm/components/CompactStats";
 import { DisplayPartOfCommunities } from "@js/invenio_app_rdm/components/DisplayPartOfCommunities";
 import { titleElements } from "./titleHtml";
+import { PublishedIn } from "./publishedIn";
 
 class RecordsResultsListItem extends Component {
   render() {
@@ -180,11 +182,10 @@ class RecordsResultsListItem extends Component {
                     {createdDate && publishingInformation && " | "}
 
                     {publishingInformation && (
-                      <>
-                        {i18next.t("Published in: {{- publishInfo }}", {
-                          publishInfo: publishingInformation,
-                        })}
-                      </>
+                      <PublishedIn
+                        result={result}
+                        publishingInformation={publishingInformation}
+                      />
                     )}
                   </p>
 
