@@ -45,3 +45,6 @@ msgstr "Sous-discipline"
 
 msgid "Topic"
 msgstr "Sujet"
+
+msgid "Organize, curate and collaborate on records for your institution, journal, repository, blog or event."
+msgstr "Organisez, gérez et collaborez sur des enregistrements pour votre institution, revue, dépôt, blog ou événement."

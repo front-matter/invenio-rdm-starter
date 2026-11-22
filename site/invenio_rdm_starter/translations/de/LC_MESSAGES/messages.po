@@ -45,3 +45,6 @@ msgstr "Teilgebiet"
 
 msgid "Topic"
 msgstr "Thema"
+
+msgid "Organize, curate and collaborate on records for your institution, journal, repository, blog or event."
+msgstr "Organisieren, kuratieren und arbeiten Sie gemeinsam an Einträgen für Ihre Institution, Ihre Zeitschrift, Ihr Repositorium, Ihren Blog oder Ihre Veranstaltung."

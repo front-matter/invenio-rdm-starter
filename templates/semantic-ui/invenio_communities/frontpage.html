@@ -1,0 +1,95 @@
+{#
+  SPDX-FileCopyrightText: 2016-2020 CERN.
+  SPDX-FileCopyrightText: 2023 Northwestern University.
+  SPDX-License-Identifier: MIT
+
+  invenio-communities' communities page, its subtitle naming the Starter's
+  community types (institution, journal, repository, blog or event) in place
+  of InvenioRDM's (institution, project, topic or event).
+#}
+
+{% extends "invenio_communities/base.html" %}
+
+{%- set title = _("Communities") -%}
+
+{%- block javascript %}
+  {{ super() }}
+  {{ webpack['invenio-communities-frontpage.js'] }}
+{%- endblock %}
+
+{%- block page_body %}
+<div class="ui container fluid page-subheader-outer ml-0-mobile mr-0-mobile">
+  <div class="ui container centered grid page-subheader rel-pt-1">
+    <div class="centered one column row">
+      <h1 class="ui header">
+        {{_('Communities')}}
+      </h1>
+    </div>
+    <div class="one column row">
+      <div class="thirteen wide mobile ten wide tablet eight wide computer center aligned column">
+        <p>
+          {{_('Organize, curate and collaborate on records for your institution, journal, repository, blog or event.')}}
+        </p>
+      </div>
+    </div>
+    {%- block searchbar %}
+    <div class="two column stackable row">
+      <div class="eight wide tablet five wide computer column mt-auto mb-auto">
+        <form action="{{ url_for('invenio_communities.communities_search') }}" class="ui form">
+          <div class="ui fluid action input">
+            <input
+              type="text"
+              name="q"
+              class="form-control"
+              placeholder="{{ _('Search communities') }}"
+              aria-label="{{ _('Search communities') }}"
+            >
+            <button
+              type="submit"
+              class="ui icon search button"
+              aria-label="{{ _('Search') }}"
+            >
+              <i class="search icon" aria-hidden="true"></i>
+            </button>
+          </div>
+        </form>
+      </div>
+      {% if permissions.can_create %}
+        <div class="three wide mobile five wide tablet three wide computer stretched column">
+          <a href="{{ config.COMMUNITIES_ROUTES['new'] }}" class="ui icon left labeled positive button" role="button">
+            <i class="icon plus"></i>
+            {{_('New community')}}
+          </a>
+        </div>
+      {% endif %}
+    </div>
+    {%- endblock searchbar %}
+    <div class="ui divider hidden"></div>
+  </div>
+</div>
+<div class="ui container communities-frontpage rel-mt-3 rel-mb-2">
+  {%- block user_communities %}
+  {% if current_user.is_authenticated %}
+    <div class="flex">
+      <h2 class="ui header mb-0 align-self-center">{{_('My communities')}}</h2>
+      <a class="align-self-center rel-ml-1 " href="{{url_for('invenio_app_rdm_users.communities')}}">
+        {{ _('See all')}}
+      </a>
+    </div>
+    <div class="ui divider hidden"></div>
+    <div id="user-communities" class="rel-mb-2"></div>
+  {% endif %}
+  {%- endblock user_communities %}
+  {%- block new_communities %}
+  <div class="ui divider"></div>
+  <div class="flex">
+    <h2 class="ui header mb-0 align-self-center">{{ _('New communities') }}</h2>
+    <a class="align-self-center rel-ml-1" href="{{url_for('invenio_communities.communities_search')}}">
+        {{ _('See all')}}
+      </a>
+  </div>
+  <div class="ui divider hidden"></div>
+  <div id="new-communities"></div>
+  {%- endblock new_communities %}
+</div>
+{%- endblock page_body %}

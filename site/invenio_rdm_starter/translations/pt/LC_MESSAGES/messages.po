@@ -37,3 +37,6 @@ msgstr "Subcampo"
 
 msgid "Topic"
 msgstr "Tópico"
+
+msgid "Organize, curate and collaborate on records for your institution, journal, repository, blog or event."
+msgstr "Organize, faça a curadoria e colabore em registros para a sua instituição, revista, repositório, blog ou evento."

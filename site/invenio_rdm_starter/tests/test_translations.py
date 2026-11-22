@@ -32,3 +32,39 @@ def test_the_front_page_list_title_is_translated(locale, text):
 
     assert catalog.gettext("Recently published works") == text
 
+
+COMMUNITIES_SUBTITLE = (
+    "Organize, curate and collaborate on records for your institution, journal, "
+    "repository, blog or event."
+)
+
+
+def test_the_communities_page_names_the_starters_community_types():
+    """The Starter's copy of invenio-communities' communities page."""
+    from pathlib import Path
+
+    template = (
+        Path(__file__).parents[3]
+        / "templates/semantic-ui/invenio_communities/frontpage.html"
+    ).read_text()
+
+    assert f"{{{{_('{COMMUNITIES_SUBTITLE}')}}}}" in template
+    assert (
+        "{{_('Organize, curate and collaborate on records for your institution, project"
+        not in template
+    )
+
+
+@pytest.mark.parametrize(
+    ("locale", "start"),
+    [
+        ("de", "Organisieren, kuratieren"),
+        ("es", "Organice, seleccione"),
+        ("fr", "Organisez, gérez"),
+        ("pt", "Organize, faça a curadoria"),
+    ],
+)
+def test_the_communities_subtitle_is_translated(locale, start):
+    catalog = Translations.load(str(TRANSLATIONS), [locale])
+
+    assert catalog.gettext(COMMUNITIES_SUBTITLE).startswith(start)

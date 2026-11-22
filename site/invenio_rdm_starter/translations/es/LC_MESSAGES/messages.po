@@ -45,3 +45,6 @@ msgstr "Subcampo"
 
 msgid "Topic"
 msgstr "Tema"
+
+msgid "Organize, curate and collaborate on records for your institution, journal, repository, blog or event."
+msgstr "Organice, seleccione y colabore en la gestión de registros para su institución, revista, repositorio, blog o evento."
