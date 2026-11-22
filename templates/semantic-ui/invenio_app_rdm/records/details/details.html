@@ -310,7 +310,8 @@ show_alternate_identifiers, show_related_identifiers, show_funding, show_dates %
 
   {# The works citing this one, which invenio-pidbox's "Refresh citations"
      job keeps current from the commonmeta store: a page of them at a time
-     (STARTER_CITATIONS_PAGE_SIZE), the others a click away. #}
+     (STARTER_CITATIONS_PAGE_SIZE), the others a click away, past the newest
+     the record stores read from the store (invenio_rdm_starter.citations). #}
   {% if record_ui["ui"]["custom_fields"].get("pidbox:citations") %}
     <div class="ui grid" id="citations">
       <div class="sixteen wide mobile four wide tablet three wide computer column">
@@ -318,11 +319,13 @@ show_alternate_identifiers, show_related_identifiers, show_funding, show_dates %
       </div>
       <div class="sixteen wide mobile twelve wide tablet thirteen wide computer column">
         {{ show_citations(
-             record_ui["ui"]["custom_fields"].get("pidbox:citations"),
+             starter_citations_page(
+               record_ui.get("custom_fields"),
+               record_ui.get("pids", {}).get("doi", {}).get("identifier"),
+               request.args.get("citations_page"),
+             ),
              record_ui["id"],
              community.slug if community else None,
-             (request.args.get("citations_page") or 1) | int,
-             config.STARTER_CITATIONS_PAGE_SIZE,
            ) }}
       </div>
     </div>

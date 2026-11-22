@@ -51,3 +51,13 @@ msgstr "Organisieren, kuratieren und arbeiten Sie gemeinsam an Einträgen für I
 
 msgid "Works citing this version, as far as the commonmeta store knows them"
 msgstr "Werke, die diese Version zitieren, soweit der commonmeta-Speicher sie kennt"
+
+msgid "Citations pages"
+msgstr "Seiten der Zitationen"
+
+#, python-format
+msgid "%(first)s–%(last)s of %(total)s"
+msgstr "%(first)s–%(last)s von %(total)s"
+
+msgid "These citations could not be read just now."
+msgstr "Diese Zitationen konnten gerade nicht gelesen werden."

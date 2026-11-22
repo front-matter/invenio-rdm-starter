@@ -217,18 +217,24 @@
 {% endmacro %}
 
 
-{% macro show_citations(citations, record_id, community_slug=None, page=1, size=25) %}
-  {#- One page of a record's citations, with a pager: the record page renders
-      the page its citations_page asks for, and the script of details.html
-      swaps in the others from /records/<id>/citations?page=N without a reload
-      (invenio_rdm_starter.citations); without the script, the pager's links
-      load the record page at that page. #}
-  {%- set total = citations | length %}
-  {%- set pages = ((total + size - 1) // size) if total else 1 %}
-  {%- set page = [[page, 1] | max, pages] | min %}
-  {%- set first = (page - 1) * size %}
+{% macro show_citations(citations, record_id, community_slug=None) %}
+  {#- One page of a record's citations, with a pager: citations is
+      invenio_rdm_starter.citations.citations_page, the page's entries and
+      where they are. The record page renders the page its citations_page
+      asks for, and the script of details.html swaps in the others from
+      /records/<id>/citations?page=N without a reload; without the script, the
+      pager's links load the record page at that page. #}
+  {%- set total = citations.total %}
+  {%- set pages = citations.pages %}
+  {%- set page = citations.page %}
+  {%- set first = citations.first - 1 %}
+  {%- set size = citations.size %}
   <div class="starter-citations" data-citations-url="{{ url_for('invenio_rdm_starter.record_citations', pid_value=record_id) }}">
-    {{ show_references(citations[first:first + size], community_slug, start=first + 1) }}
+    {%- if citations.entries %}
+      {{ show_references(citations.entries, community_slug, start=first + 1) }}
+    {%- else %}
+      <p class="text-muted">{{ _('These citations could not be read just now.') }}</p>
+    {%- endif %}
     {%- if pages > 1 %}
       {%- set window = 2 %}
       <div class="ui small pagination menu" role="navigation" aria-label="{{ _('Citations pages') }}">

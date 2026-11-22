@@ -43,3 +43,13 @@ msgstr "Organize, faça a curadoria e colabore em registros para a sua institui�
 
 msgid "Works citing this version, as far as the commonmeta store knows them"
 msgstr "Trabalhos que citam esta versão, na medida em que o armazenamento commonmeta os conhece"
+
+msgid "Citations pages"
+msgstr "Páginas de citações"
+
+#, python-format
+msgid "%(first)s–%(last)s of %(total)s"
+msgstr "%(first)s–%(last)s de %(total)s"
+
+msgid "These citations could not be read just now."
+msgstr "Não foi possível ler estas citações neste momento."

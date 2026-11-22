@@ -4,7 +4,8 @@ from pathlib import Path
 
 import pytest
 from flask import Flask
-from invenio_rdm_starter.citations import page_number
+from invenio_rdm_starter import citations as starter_citations
+from invenio_rdm_starter.citations import citation_count, citations_page, page_number
 from jinja2 import ChoiceLoader, FileSystemLoader
 
 ROOT = Path(__file__).parents[3]
@@ -12,6 +13,8 @@ ROOT = Path(__file__).parents[3]
 
 def _app() -> Flask:
     app = Flask(__name__)
+    app.config["STARTER_CITATIONS_PAGE_SIZE"] = 25
+    app.config["PIDBOX_SQLITE_PATH"] = "/store.sqlite3"
     app.jinja_loader = ChoiceLoader(
         [FileSystemLoader(str(ROOT / "templates/semantic-ui"))]
     )
@@ -35,19 +38,23 @@ def _app() -> Flask:
     return app
 
 
-def _render(count: int, page: int, size: int = 25) -> str:
-    citations = [
+def _citations(count: int) -> list[dict]:
+    return [
         {"identifier": f"10.5555/{n}", "scheme": "doi", "reference": f"Work {n}."}
         for n in range(1, count + 1)
     ]
+
+
+def _render(count: int, page: int, size: int = 25, stored: int | None = None) -> str:
+    fields = {"pidbox:citations": _citations(count if stored is None else stored)}
+    if stored is not None:
+        fields["pidbox:citation_count"] = count
     app = _app()
     with app.test_request_context():
         return app.jinja_env.get_template("invenio_rdm_starter/citations.html").render(
-            citations=citations,
+            citations=citations_page(fields, "10.5555/cited", page, size),
             record_id="t5wk7-bsp06",
             community_slug=None,
-            page=page,
-            size=size,
         )
 
 
@@ -114,7 +121,7 @@ def test_the_record_page_shows_a_page_and_fetches_the_others():
 
     assert 'id="citations"' in template
     assert 'request.args.get("citations_page")' in template
-    assert "config.STARTER_CITATIONS_PAGE_SIZE" in template
+    assert "starter_citations_page(" in template
     assert "data-citations-url" in template and "a[data-citations-page]" in template
 
 
@@ -124,3 +131,55 @@ def test_the_citations_route_and_setting():
     assert config.STARTER_CITATIONS_PAGE_SIZE == 25
     views = (ROOT / "site/invenio_rdm_starter/views.py").read_text()
     assert '"/records/<pid_value>/citations"' in views
+
+
+@pytest.fixture()
+def store_pages(monkeypatch):
+    """The store's pages of citations, past those a record stores."""
+    asked = []
+
+    def _page(path, doi, page, size, current=None):
+        asked.append((path, doi, page, size))
+        first = (page - 1) * size
+        return _citations(20746)[first : first + size], 20746
+
+    monkeypatch.setattr(starter_citations, "citation_page", _page)
+    return asked
+
+
+def test_a_page_of_the_stored_citations_is_not_read_from_the_store(store_pages):
+    html = _render(20746, 2, stored=1000)
+
+    assert "Work 26." in html and "26–50 of 20746" in html
+    assert store_pages == []
+
+
+def test_a_page_past_the_stored_citations_is_read_from_the_store(store_pages):
+    html = _render(20746, 41, stored=1000)
+
+    assert store_pages == [("/store.sqlite3", "10.5555/cited", 41, 25)]
+    assert "Work 1001." in html and "1001–1025 of 20746" in html
+    assert 'data-citations-page="830"' in html  # the last page
+
+
+def test_a_page_the_store_cannot_answer_says_so(monkeypatch):
+    monkeypatch.setattr(starter_citations, "citation_page", lambda *a: None)
+
+    html = _render(20746, 41, stored=1000)
+
+    assert "could not be read just now" in html
+    assert 'data-citations-page="42"' in html
+
+
+@pytest.mark.parametrize(
+    ("fields", "count"),
+    [
+        ({}, 0),
+        (None, 0),
+        ({"pidbox:citations": _citations(3)}, 3),
+        ({"pidbox:citations": _citations(3), "pidbox:citation_count": 20746}, 20746),
+        ({"pidbox:citations": _citations(3), "pidbox:citation_count": 1}, 3),
+    ],
+)
+def test_the_citation_count_counts_those_not_stored(fields, count):
+    assert citation_count(fields) == count
