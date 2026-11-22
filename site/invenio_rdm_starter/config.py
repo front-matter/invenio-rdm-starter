@@ -878,9 +878,10 @@ RDM_COMMUNITY_REQUIRED_TO_PUBLISH = True
 """A record belongs to a community: the deposit form asks for one before it
 publishes, and a record's last community can't be removed, except by an
 administrator or the system. The Starter's records come in through
-invenio-pidbox's imports, which publish as the system and so are not held to
-it: they belong to a Starter Pack when the run names one (the jobs'
-Community select, PIDBOX_JOBS_COMMUNITY_TYPE)."""
+invenio-pidbox's imports, which publish as the system, which InvenioRDM
+exempts; so the imports refuse a run that names no community (invenio-pidbox,
+the release after 0.7.11), and their Community select offers only the Starter
+Packs (PIDBOX_JOBS_COMMUNITY_TYPE): every record imported joins one."""
 
 RDM_RECORDS_SERVICE_COMPONENTS = citations_components()
 """InvenioRDM's record service components, with the one that writes custom
