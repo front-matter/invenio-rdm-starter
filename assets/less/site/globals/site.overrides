@@ -186,14 +186,15 @@ form.pidbox-search .ui.icon.button {
 
 /* The references and citations of a record: numbered "1.", "2.", … in a
    right-aligned column wide enough for two digits, rather than Semantic UI's
-   bare "1". */
+   bare "1". invenio-app-rdm places the number with !important (1.5rem left
+   of the text, too close for two digits), so this does too. */
 ol.ui.ordered.list.details-list {
   margin-left: 2.4rem;
 
   > .item:before {
     content: counter(ordered) ".\00a0\00a0";
-    min-width: 1.6rem;
-    margin-left: -2.4rem;
+    min-width: 1.9rem;
+    margin-left: -2.2rem !important;
     text-align: right;
   }
 }
