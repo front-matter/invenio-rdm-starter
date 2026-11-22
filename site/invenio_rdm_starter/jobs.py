@@ -60,14 +60,20 @@ class AddRecordsToSubjectCommunitiesJob(_EverythingEachRun):
 
 
 class CreateStarterPackCommunitiesJob(_EverythingEachRun):
-    """Create the communities of the Starter Packs."""
+    """Create or update the communities of the Starter Packs.
+
+    The id is the job's first, so that the job registered under it before
+    keeps running.
+    """
 
     id = "starter_create_starter_pack_communities"
-    title = _("Create starter pack communities")
+    title = _("Sync starter packs")
     description = _(
-        "Create a community of type Starter Pack for every Starter Pack in "
-        "app_data/starter_packs.yaml that doesn't have one, and feature them "
-        "all on the front page."
+        "Create a community for every Starter Pack in app_data/starter_packs.yaml "
+        "that doesn't have one, give an existing one the pack's type and "
+        "subtype, add community and resource types the vocabularies lack, and "
+        "feature the "
+        "packs on the front page."
     )
 
     task = create_starter_pack_communities

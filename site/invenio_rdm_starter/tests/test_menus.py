@@ -284,7 +284,7 @@ def test_communities_in_the_menubar_are_the_starter_packs():
         assert link_starter_packs_in_menubar() == "main.communities"
         (item,) = current_menu.submenu("main").children
         assert str(item.text) == "Starter Packs"
-        assert item.url == "/communities-search?q=&f=type:starterpack"
+        assert item.url == "/communities-search?q=&f=type:container&f=type:organization"
 
 
 def test_no_starter_packs_link_without_the_communities_search():

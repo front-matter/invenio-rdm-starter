@@ -1,18 +1,26 @@
-"""Starter Packs, each an InvenioRDM community of type ``starterpack``.
+"""Starter Packs: collections of works, each an InvenioRDM community.
 
-A Starter Pack is the content an InvenioRDM Starter instance can start with:
-Rogue Scholar's German-language posts, and the Journal of Open Source
-Software (the content of demo.front-matter.de). The packs are defined in ``app_data/starter_packs.yaml`` (or
-the file ``STARTER_PACKS_FILE`` names); the community of each pack is where
-it lives in InvenioRDM, found again by its slug. Its ``rs:`` custom fields
-(:mod:`invenio_rdm_starter.custom_fields`) say which works it holds.
+A Starter Pack is the content an InvenioRDM Starter instance can start with,
+a collection of works defined by one PID, such as the Journal of Open Source
+Software (by its ISSN; the content of demo.front-matter.de) or the works of a
+university (by its ROR id). The packs are defined in
+``app_data/starter_packs.yaml`` (or the file ``STARTER_PACKS_FILE`` names);
+the community of each pack is where it lives in InvenioRDM, found again by its
+slug. Its type says what kind of collection it is (:data:`PACK_TYPES`: a
+container, such as a journal, or an organization), its ``rs:subtype`` which
+kind of container or organization, and its other ``rs:`` custom fields
+(:mod:`invenio_rdm_starter.custom_fields`) which works it holds. Nothing else
+marks a community as a pack: the packs are those the definitions name.
 
-:func:`create_starter_pack_communities` creates the community of every pack
-that doesn't have one, as :mod:`invenio_rdm_starter.subject_communities` does
-for the OpenAlex subfields, and features each, for the front page's carousel
-of featured communities: the Starter Packs, all of them. The community type comes with the vocabulary
-fixtures of a new instance; an instance set up before it gets it from the job,
-since the fixtures don't add to a vocabulary that is loaded already.
+:func:`create_starter_pack_communities` (the "Sync starter packs" job) creates
+the community of every pack that doesn't have one, as
+:mod:`invenio_rdm_starter.subject_communities` does for the OpenAlex
+subfields, gives an existing one the pack's type and subtype, and features
+each, for the front page's carousel of featured communities: the Starter
+Packs, all of them. The community types, and the resource types (Award, for a
+funder's pack), come with the vocabulary fixtures of a new instance; an
+instance set up before one of them gets it from the job, since the fixtures
+don't add to a vocabulary that is loaded already.
 """
 
 from __future__ import annotations
@@ -28,17 +36,13 @@ from flask import current_app
 from invenio_access.permissions import system_identity
 from invenio_pidstore.errors import PIDDoesNotExistError
 
-#: The community type of the Starter Packs, in the communitytypes vocabulary.
-COMMUNITY_TYPE = "starterpack"
+from .custom_fields import SUBTYPES, subtype_fits
 
-#: Its title, as app_data/vocabularies/community_types.yaml has it.
-COMMUNITY_TYPE_TITLE = {
-    "en": "Starter Pack",
-    "sv": "Startpaket",
-    "de": "Starterpaket",
-    "fr": "Pack de démarrage",
-    "es": "Paquete de inicio",
-}
+#: The community types a Starter Pack can have, in the communitytypes
+#: vocabulary: a container (a journal, blog or repository) or an organization.
+#: Searches for the packs (the menubar's Starter Packs, invenio-pidbox's jobs)
+#: take the communities of these types.
+PACK_TYPES = tuple(SUBTYPES)
 
 #: Who can see and add to a Starter Pack: anyone sees it, its curators add
 #: works to it.
@@ -65,14 +69,53 @@ def packs_file() -> Path:
     return Path(current_app.instance_path) / "app_data" / "starter_packs.yaml"
 
 
+#: The vocabularies the job adds missing entries to, from the files of
+#: app_data/vocabularies they are loaded from: the community types (a pack's
+#: type) and the resource types (Award, for a funder's pack).
+VOCABULARY_FILES = {
+    "communitytypes": "community_types.yaml",
+    "resourcetypes": "resource_types.yaml",
+}
+
+
+def vocabulary_file(vocabulary_type: str) -> Path:
+    """The file a vocabulary of :data:`VOCABULARY_FILES` is loaded from."""
+    return (
+        Path(current_app.instance_path)
+        / "app_data"
+        / "vocabularies"
+        / VOCABULARY_FILES[vocabulary_type]
+    )
+
+
+def load_vocabulary_entries(vocabulary_type: str) -> list[dict[str, Any]]:
+    """The entries of a vocabulary's file, or none without the file."""
+    path = vocabulary_file(vocabulary_type)
+    if not path.exists():
+        return []
+    return yaml.safe_load(path.read_text(encoding="utf-8")) or []
+
+
 def load_packs(path: Path) -> list[dict[str, Any]]:
-    """The Starter Packs defined in ``path``: each with slug and title."""
+    """The Starter Packs defined in ``path``.
+
+    Each has a slug, a title and a type of :data:`PACK_TYPES`, and at most one
+    subtype of its type's.
+    """
     packs = yaml.safe_load(path.read_text(encoding="utf-8")) or []
     if not isinstance(packs, list):
         raise StarterPackError(f"{path}: a list of Starter Packs is expected")
     for pack in packs:
         if not isinstance(pack, dict) or not pack.get("slug") or not pack.get("title"):
             raise StarterPackError(f"{path}: a Starter Pack needs a slug and a title")
+        if pack.get("type") not in PACK_TYPES:
+            raise StarterPackError(
+                f"{path}: {pack['slug']}'s type is one of {', '.join(PACK_TYPES)}"
+            )
+        if not subtype_fits(pack["type"], pack.get("subtype")):
+            raise StarterPackError(
+                f"{path}: {pack['subtype']} is not a subtype of {pack['type']}"
+            )
     return packs
 
 
@@ -80,7 +123,7 @@ def community_data(pack: dict[str, Any]) -> dict[str, Any]:
     """The data of a Starter Pack's community."""
     metadata: dict[str, Any] = {
         "title": pack["title"],
-        "type": {"id": COMMUNITY_TYPE},
+        "type": {"id": pack["type"]},
     }
     if pack.get("description"):
         metadata["description"] = str(pack["description"]).strip()
@@ -102,6 +145,31 @@ def community_data(pack: dict[str, Any]) -> dict[str, Any]:
     return data
 
 
+def type_changes(pack: dict[str, Any], community: dict[str, Any]) -> dict[str, Any]:
+    """What a pack's existing community needs to take the pack's type, or nothing.
+
+    The type and ``rs:subtype``: a subtype the pack doesn't give is cleared.
+    Returns the community's data with them changed, to update it with, or an
+    empty dict when it has them already. The rest of the community, which
+    admins edit in its settings, is left as it is.
+    """
+    metadata = community.get("metadata") or {}
+    fields = community.get("custom_fields") or {}
+    current = ((metadata.get("type") or {}).get("id"), fields.get("rs:subtype"))
+    wanted = (pack["type"], pack.get("subtype") or None)
+    if current == wanted:
+        return {}
+    fields = {k: v for k, v in fields.items() if k != "rs:subtype"}
+    if wanted[1]:
+        fields["rs:subtype"] = wanted[1]
+    return {
+        "slug": community["slug"],
+        "access": community.get("access") or {},
+        "metadata": {**metadata, "type": {"id": wanted[0]}},
+        "custom_fields": fields,
+    }
+
+
 def _bare_ror(value: str) -> str:
     """A ROR id without its URL: the id of the community's organization."""
     return str(value).strip().removeprefix("https://ror.org/")
@@ -115,9 +183,12 @@ def custom_fields(pack: dict[str, Any]) -> dict[str, Any]:
     """A pack's rs: custom fields, as a community holds them.
 
     The definitions give a vocabulary field by its id (``deu``), which the
-    community holds as ``{"id": "deu"}``; text fields stay as they are.
+    community holds as ``{"id": "deu"}``; text fields stay as they are. The
+    pack's subtype is ``rs:subtype``.
     """
     fields = {}
+    if pack.get("subtype"):
+        fields["rs:subtype"] = str(pack["subtype"])
     for name, value in (pack.get("custom_fields") or {}).items():
         if value in (None, ""):
             continue
@@ -129,22 +200,30 @@ def custom_fields(pack: dict[str, Any]) -> dict[str, Any]:
     return fields
 
 
-def ensure_community_type(vocabularies: Any) -> bool:
-    """Add the ``starterpack`` community type, unless the vocabulary has it.
+def ensure_vocabulary_entries(
+    vocabularies: Any, vocabulary_type: str, entries: list[dict[str, Any]]
+) -> int:
+    """Add the entries of a vocabulary the instance doesn't have yet.
 
-    Returns whether it was added.
+    ``entries`` are those of the vocabulary's file in app_data/vocabularies.
+    An entry the instance has is left as it is. Returns how many were added.
     """
-    try:
-        vocabularies.read(system_identity, ("communitytypes", COMMUNITY_TYPE))
-        return False
-    except PIDDoesNotExistError:
-        pass
-    vocabularies.create(
-        system_identity,
-        {"id": COMMUNITY_TYPE, "title": COMMUNITY_TYPE_TITLE, "type": "communitytypes"},
-    )
-    log.info("community_type_created", id=COMMUNITY_TYPE)
-    return True
+    added = 0
+    for entry in entries:
+        try:
+            vocabularies.read(system_identity, (vocabulary_type, entry["id"]))
+            continue
+        except PIDDoesNotExistError:
+            pass
+        data = {
+            key: entry[key]
+            for key in ("id", "title", "props", "icon", "tags")
+            if key in entry
+        }
+        vocabularies.create(system_identity, {**data, "type": vocabulary_type})
+        added += 1
+        log.info("vocabulary_entry_created", type=vocabulary_type, id=entry["id"])
+    return added
 
 
 def _read(communities: Any, slug: str) -> Any | None:
@@ -195,22 +274,30 @@ def create_packs(
     vocabularies: Any,
     packs: list[dict[str, Any]],
     base: Path | None = None,
+    vocabulary_entries: dict[str, list[dict[str, Any]]] | None = None,
 ) -> dict[str, int]:
-    """Create the community of every pack that has none, and feature them all.
+    """Create or update the community of every pack, and feature them all.
 
-    The front page's carousel shows the featured communities: every Starter
-    Pack, and only those. A pack's ``logo``, a path relative to ``base`` (the
-    folder of the definitions), becomes its community's logo while it has none.
+    A pack without a community gets one; an existing one takes the pack's type
+    and subtype. The front page's carousel shows the featured communities:
+    every Starter Pack, and only those. A pack's ``logo``, a path relative to
+    ``base`` (the folder of the definitions), becomes its community's logo
+    while it has none. ``vocabulary_entries`` (by vocabulary type, the entries
+    of its file) are added where the instance's vocabulary lacks them.
     """
     counts = {
         "packs": len(packs),
         "existing": 0,
         "created": 0,
+        "updated": 0,
         "featured": 0,
         "logos": 0,
         "failed": 0,
     }
-    counts["type_created"] = int(ensure_community_type(vocabularies))
+    counts["vocabulary_entries_created"] = sum(
+        ensure_vocabulary_entries(vocabularies, vocabulary_type, entries)
+        for vocabulary_type, entries in (vocabulary_entries or {}).items()
+    )
     for pack in packs:
         community = _read(communities, pack["slug"])
         try:
@@ -220,6 +307,18 @@ def create_packs(
                 log.info("starter_pack_created", slug=pack["slug"], title=pack["title"])
             else:
                 counts["existing"] += 1
+                changes = type_changes(pack, community.to_dict())
+                if changes:
+                    community = communities.update(
+                        system_identity, community.id, changes
+                    )
+                    counts["updated"] += 1
+                    log.info(
+                        "starter_pack_updated",
+                        slug=pack["slug"],
+                        type=pack["type"],
+                        subtype=pack.get("subtype"),
+                    )
             if feature(communities, community.id):
                 counts["featured"] += 1
                 log.info("starter_pack_featured", slug=pack["slug"])
@@ -238,30 +337,45 @@ def create_packs(
 
 @shared_task(ignore_result=True)
 def create_starter_pack_communities() -> dict[str, int]:
-    """Create the community of every Starter Pack that has none.
+    """Create or update the community of every Starter Pack.
 
-    Returns ``{"packs", "existing", "created", "featured", "logos", "failed",
-    "type_created"}``.
+    Returns ``{"packs", "existing", "created", "updated", "featured", "logos",
+    "failed", "vocabulary_entries_created"}``.
     """
     from invenio_communities.proxies import current_communities
     from invenio_vocabularies.proxies import current_service as vocabularies
 
     path = packs_file()
     counts = create_packs(
-        current_communities.service, vocabularies, load_packs(path), path.parent
+        current_communities.service,
+        vocabularies,
+        load_packs(path),
+        path.parent,
+        vocabulary_entries={
+            vocabulary_type: load_vocabulary_entries(vocabulary_type)
+            for vocabulary_type in VOCABULARY_FILES
+        },
     )
     log.info("starter_pack_communities_created", **counts)
     return counts
 
 
-#: The communities of the Starter Packs, by their type.
-PACKS_QUERY = f"metadata.type.id:{COMMUNITY_TYPE}"
+def pack_ids(
+    communities: Any, packs: list[dict[str, Any]] | None = None
+) -> dict[str, str]:
+    """The Starter Packs' communities, as slug → community id.
 
-
-def pack_ids(communities: Any) -> dict[str, str]:
-    """The Starter Packs' communities, as slug → community id."""
-    result = communities.search(system_identity, params={"q": PACKS_QUERY, "size": 100})
-    return {hit["slug"]: hit["id"] for hit in result.hits}
+    The packs are those the definitions name (``packs``, or the packs file);
+    a pack without a community yet is left out.
+    """
+    if packs is None:
+        packs = load_packs(packs_file())
+    ids = {}
+    for pack in packs:
+        community = _read(communities, pack["slug"])
+        if community is not None:
+            ids[pack["slug"]] = str(community.id)
+    return ids
 
 
 def selection_query(packs: dict[str, str], source: str | None) -> str:

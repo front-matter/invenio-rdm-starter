@@ -8,16 +8,50 @@ The organizations its works come from are the community's own organizations
 (``metadata.organizations``), not a field of these.
 The names and meanings are Rogue Scholar's community fields, so that a
 community moves between the two with its fields.
+
+``rs:subtype`` narrows the community's type down: a container is a journal, a
+blog or a repository, an organization one of ROR's types. Zero or one of
+:data:`SUBTYPES`.
 """
 
 from __future__ import annotations
 
 from invenio_i18n import lazy_gettext as _
-from invenio_records_resources.services.custom_fields import TextCF
+from invenio_records_resources.services.custom_fields import KeywordCF, TextCF
 from invenio_vocabularies.services.custom_fields import VocabularyCF
+from marshmallow import validate
 
 #: The namespace of the Starter's community fields, as on Rogue Scholar.
 RS_NAMESPACE = {"rs": None}
+
+#: The subtypes of each community type, with their labels: a container's kinds,
+#: and ROR's organization types.
+SUBTYPES = {
+    "container": {
+        "journal": _("Journal"),
+        "blog": _("Blog"),
+        "repository": _("Repository"),
+    },
+    "organization": {
+        "education": _("Education"),
+        "funder": _("Funder"),
+        "healthcare": _("Healthcare"),
+        "company": _("Company"),
+        "archive": _("Archive"),
+        "nonprofit": _("Nonprofit"),
+        "government": _("Government"),
+        "facility": _("Facility"),
+        "other": _("Other"),
+    },
+}
+
+#: Every subtype, whatever the type: the values ``rs:subtype`` takes.
+SUBTYPE_IDS = [subtype for subtypes in SUBTYPES.values() for subtype in subtypes]
+
+
+def subtype_fits(community_type: str | None, subtype: str | None) -> bool:
+    """Whether ``subtype`` is one of ``community_type``'s, or there is none."""
+    return not subtype or subtype in SUBTYPES.get(community_type or "", {})
 
 
 class CommunityVocabularyCF(VocabularyCF):
@@ -43,6 +77,10 @@ class CommunityVocabularyCF(VocabularyCF):
 
 
 STARTER_PACK_CUSTOM_FIELDS = [
+    KeywordCF(
+        name="rs:subtype",
+        field_args={"validate": validate.OneOf(SUBTYPE_IDS)},
+    ),
     TextCF(name="rs:issn"),
     TextCF(name="rs:doi"),
     TextCF(name="rs:prefix"),
@@ -65,6 +103,27 @@ STARTER_PACK_CUSTOM_FIELDS = [
 STARTER_PACK_CUSTOM_FIELDS_UI = {
     "section": _("Starter Pack"),
     "fields": [
+        {
+            "field": "rs:subtype",
+            "ui_widget": "Dropdown",
+            "props": {
+                "label": _("Subtype"),
+                "icon": "tag",
+                "description": _(
+                    "What kind of container (journal, blog, repository) or "
+                    "organization (ROR's types) the community is."
+                ),
+                "placeholder": _("Choose a subtype"),
+                "options": [
+                    {"id": subtype, "title_l10n": label}
+                    for subtypes in SUBTYPES.values()
+                    for subtype, label in subtypes.items()
+                ],
+                "clearable": True,
+                "multiple": False,
+                "required": False,
+            },
+        },
         {
             "field": "rs:issn",
             "ui_widget": "Input",

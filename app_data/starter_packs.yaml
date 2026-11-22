@@ -1,10 +1,13 @@
 # Starter Packs: the content an InvenioRDM Starter instance can start with,
-# each a community of type "starterpack" (app_data/vocabularies/
-# community_types.yaml). The "Create starter pack communities" job
-# (invenio_rdm_starter.starter_packs) creates the community of each pack that
-# doesn't have one; a pack's community is found again by its slug.
+# each a collection of works defined by one PID and modelled as a community.
+# The "Sync starter packs" job (invenio_rdm_starter.starter_packs) creates the
+# community of each pack that doesn't have one, and gives an existing one the
+# pack's type and subtype; a pack's community is found again by its slug.
 #
-# Each pack: slug, title, logo (an image in app_data/starter_packs, at most
+# Each pack: slug, title, type (a community type of app_data/vocabularies/
+# community_types.yaml: container or organization), subtype (at most one: a
+# container is a journal, blog or repository, an organization one of ROR's
+# types, e.g. education or funder; the community's rs:subtype), logo (an image in app_data/starter_packs, at most
 # 1 MB, set while the community has none), description, website,
 # organizations (the ROR ids of the organizations its works come from, the
 # community's organizations, resolved from the commonmeta store), and
@@ -14,6 +17,8 @@
 # and rs:license (a licenses vocabulary id).
 - slug: joss
   title: Journal of Open Source Software
+  type: container
+  subtype: journal
   logo: starter_packs/joss.png
   description: >-
     Archive of the Journal of Open Source Software (JOSS):
@@ -26,6 +31,8 @@
     rs:license: cc-by-4.0
 - slug: mhh
   title: Medizinische Hochschule Hannover
+  type: organization
+  subtype: education
   logo: starter_packs/mhh.png
   description: >-
     Publications and their metadata from Hannover Medical School.

@@ -96,16 +96,27 @@ The box above the front page's metrics and the boxes of its sidebar are pages, w
 * `/about` - its **Content** can be a box at the top of the front page, saying what the repository holds ("Metadata and content from the Journal of Open Source Software (JOSS) archived in InvenioRDM Starter. This is a demo site and content and metadata are regularly cleared.", in English, German, French and Spanish), with `STARTER_FRONTPAGE_ABOUT_PAGE` set to `/about`. It is unset: the front page starts with the Starter Packs, and the page is shown at `/about` only.
 * `/about/why` - "Why InvenioRDM Starter?", a box of the front page's sidebar: the page's **Title** is the box's header, its **Content** the box. `STARTER_FRONTPAGE_SIDEBAR_PAGES` lists the pages shown as boxes, in order.
 
-The front page shows no metrics (`INVENIO_PIDBOX_FRONTPAGE_METRICS=False`). The menubar's **Starter Packs**, in place of InvenioRDM's **Communities**, leads to the communities search for the Starter Packs (`/communities-search?q=&f=type:starterpack`).
+The front page shows no metrics (`INVENIO_PIDBOX_FRONTPAGE_METRICS=False`). The menubar's **Starter Packs**, in place of InvenioRDM's **Communities**, leads to the communities search for the Starter Packs' types, containers and organizations (`/communities-search?q=&f=type:container&f=type:organization`), which leaves the subject communities out.
 
 The front page's carousel shows the featured communities, the Starter Packs, under the heading `INVENIO_STARTER_FRONTPAGE_FEATURED_TITLE`, defaults to `Starter Packs` (translated into German, French and Spanish); InvenioRDM's is `Featured communities`.
 
 ### Starter Packs
 
-A Starter Pack is the content an InvenioRDM Starter instance can start with, defined as an InvenioRDM community of type **Starter Pack** (`starterpack` in `app_data/vocabularies/community_types.yaml`). The packs are listed in `app_data/starter_packs.yaml`, each with a slug, title, description, website and logo (an image in `app_data/starter_packs`, at most 1 MB, set while the community has none); the **Create starter pack communities** job (Administration > Jobs) creates the community of each pack that doesn't have one, and adds the Starter Pack community type on an instance set up before it. It also features every pack's community, so that the front page's carousel of featured communities shows the Starter Packs, all of them. The first two:
+A Starter Pack is the content an InvenioRDM Starter instance can start with: a collection of works defined by one PID, such as a journal's ISSN or a university's ROR id, and modelled as an InvenioRDM community. The packs are listed in `app_data/starter_packs.yaml`, each with a slug, title, type, subtype, description, website and logo (an image in `app_data/starter_packs`, at most 1 MB, set while the community has none).
 
-* `joss` - the [Journal of Open Source Software](https://joss.theoj.org), with PDFs and software archives: the content of demo.front-matter.de.
-* `mhh` - the works of authors affiliated with the [Medizinische Hochschule Hannover](https://www.mhh.de) (ROR [00f2yqf98](https://ror.org/00f2yqf98)).
+A pack's community type says what kind of collection it is, and its subtype (the community field `rs:subtype`, at most one) which kind:
+
+| Community type | Subtypes |
+| --- | --- |
+| `container` | `journal`, `blog`, `repository` |
+| `organization` | ROR's types: `education`, `funder`, `healthcare`, `company`, `archive`, `nonprofit`, `government`, `facility`, `other` |
+
+Nothing else marks a community as a pack: searches for the packs (the menubar, invenio-pidbox's jobs) take the communities of these two types, and the jobs below take the packs `starter_packs.yaml` names.
+
+The **Sync starter packs** job (Administration > Jobs) creates the community of each pack that doesn't have one, gives an existing one the pack's type and subtype (leaving what admins edited in its settings), and adds the community and resource types the vocabularies lack on an instance set up before them (`app_data/vocabularies/community_types.yaml`, `resource_types.yaml`). It also features every pack's community, so that the front page's carousel of featured communities shows the Starter Packs, all of them. The first two:
+
+* `joss` (container, journal) - the [Journal of Open Source Software](https://joss.theoj.org), with PDFs and software archives: the content of demo.front-matter.de.
+* `mhh` (organization, education) - the works of authors affiliated with the [Medizinische Hochschule Hannover](https://www.mhh.de) (ROR [00f2yqf98](https://ror.org/00f2yqf98)).
 
 A Starter Pack's community is curated: public, its records added by its curators rather than submitted. `INVENIO_STARTER_PACKS_FILE` names another definitions file.
 
@@ -115,6 +126,7 @@ Its custom fields, in the `rs` namespace as on Rogue Scholar, say which works a 
 
 | Field | | `joss` | `mhh` |
 | --- | --- | --- | --- |
+| `rs:subtype` | the kind of container or organization | journal | education |
 | `rs:issn` | the journal's ISSN | 2475-9066 | |
 | `rs:doi` | the DOI of the blog or journal | | |
 | `rs:prefix` | the DOI prefix | 10.21105 | |
@@ -122,6 +134,8 @@ Its custom fields, in the `rs` namespace as on Rogue Scholar, say which works a 
 | `rs:license` | the license (`licenses` vocabulary) | cc-by-4.0 | |
 
 The setup creates the fields' search mappings (`invenio communities custom-fields init`); an instance set up before them needs that run once.
+
+Grants are records of resource type **Award** (`award` in `app_data/vocabularies/resource_types.yaml`; DataCite `Award`, schema.org `MonetaryGrant`), for a funder's pack to hold its awards beside the works they funded. They come in through the imports, so the type is offered for linking but not in the upload form. On an instance set up before it, the **Sync starter packs** job adds it to the resource types, as it adds the community types.
 
 ### Invenio-Records-Resources
 

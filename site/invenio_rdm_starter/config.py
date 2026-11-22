@@ -881,7 +881,7 @@ administrator or the system. The Starter's records come in through
 invenio-pidbox's imports, which publish as the system, which InvenioRDM
 exempts; so the imports refuse a run that names no community (invenio-pidbox,
 the release after 0.7.11), and their Community select offers only the Starter
-Packs (PIDBOX_JOBS_COMMUNITY_TYPE): every record imported joins one."""
+Packs (PIDBOX_JOBS_COMMUNITY_TYPES): every record imported joins one."""
 
 RDM_RECORDS_SERVICE_COMPONENTS = citations_components()
 """InvenioRDM's record service components, with the one that writes custom
@@ -914,11 +914,10 @@ would take otherwise, is too dark for the About text's dark slate. It is
 invenio-pidbox's setting for the metrics' band, which the Starter keeps
 without the metrics (invenio_rdm_starter/header_frontpage.html)."""
 
-PIDBOX_JOBS_COMMUNITY_TYPE = "starterpack"
-"""invenio-pidbox's jobs (Administration > Jobs) offer the Starter Packs in a
-Community select: the works imports (Import a work, Import works by ROR ID,
-by ORCID iD, by container) add their works to that pack's community, and
-Refresh citations, Attach PDFs and Attach software archives take only its
-records (invenio-pidbox, the release after 0.7.9). The type is
-invenio_rdm_starter.starter_packs' COMMUNITY_TYPE; with no Starter Pack
-created yet, there is none to choose."""
+PIDBOX_JOBS_COMMUNITY_TYPES = ["container", "organization"]
+"""invenio-pidbox's jobs (Administration > Jobs) offer the communities of the
+Starter Packs' types in a Community select: the works imports (Import a work,
+Import works by ROR ID, by ORCID iD, by container) add their works to that
+pack's community, and Refresh citations, Attach PDFs and Attach software
+archives take only its records (invenio-pidbox, the release after 0.7.11).
+The types are invenio_rdm_starter.starter_packs' PACK_TYPES."""

@@ -21,8 +21,10 @@ to the account (``invenio_rdm_starter.oidc``): it leads to the user's person
 page, ``/people/<orcid>``, while invenio-pidbox's person pages are on.
 
 "Communities" (``main.communities``, invenio-communities) becomes "Starter
-Packs": the communities search for the Starter Packs' communities
-(``/communities-search?q=&f=type:starterpack``), the Starter's own.
+Packs": the communities search for the communities of the Starter Packs'
+types, containers and organizations
+(``/communities-search?q=&f=type:container&f=type:organization``), which
+leaves the subject communities out.
 
 The items are removed rather than hidden: the header shows the "+" button
 whenever ``plus`` has items at all, visible or not. And they are removed on
@@ -48,10 +50,11 @@ REMOVED_MENU_ITEMS = (
 )
 
 #: "Starter Packs" in the menubar, in place of "Communities": the
-#: communities search, for the communities of type Starter Pack.
+#: communities search, for the communities of the Starter Packs' types (two
+#: values of one facet, either matching).
 STARTER_PACKS_MENU_ITEM = "main.communities"
 STARTER_PACKS_ENDPOINT = "invenio_communities.communities_search"
-STARTER_PACKS_SEARCH = {"q": "", "f": "type:starterpack"}
+STARTER_PACKS_SEARCH = {"q": "", "f": ["type:container", "type:organization"]}
 
 #: "My dashboard" in the user menu: its path, invenio-app-rdm's endpoint, and
 #: an order between "Profile" (0) and "Change password" (1).
