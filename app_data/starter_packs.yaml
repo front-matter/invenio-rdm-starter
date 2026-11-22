@@ -9,19 +9,9 @@
 # custom_fields, the
 # community's rs: fields that select its works (invenio_rdm_starter.
 # custom_fields): rs:issn, rs:doi (the DOI of a blog or journal), rs:prefix
-# (a DOI prefix), rs:language (a languages vocabulary id) and rs:license (a
-# licenses vocabulary id).
-- slug: irights
-  title: iRights
-  logo: starter_packs/irights.png
-  description: >-
-    Urheberrecht und kreatives Schaffen in der digitalen Welt.
-  website: https://irights.info/
-  custom_fields:
-    rs:doi: "10.59350/irights"
-    rs:language: deu
-    rs:license: cc-by-4.0
-
+# (a DOI prefix), rs:ror (the ROR id of the authors' organization),
+# rs:language (a languages vocabulary id) and rs:license (a licenses
+# vocabulary id).
 - slug: joss
   title: Journal of Open Source Software
   logo: starter_packs/joss.png
@@ -34,3 +24,10 @@
     rs:prefix: "10.21105"
     rs:language: eng
     rs:license: cc-by-4.0
+- slug: mhh
+  title: Medizinische Hochschule Hannover
+  logo: starter_packs/mhh.png
+  website: https://mhh.de/
+  custom_fields:
+    rs:ror: "00f2yqf98"
+    rs:language: deu

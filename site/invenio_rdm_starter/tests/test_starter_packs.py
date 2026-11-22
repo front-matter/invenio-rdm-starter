@@ -17,20 +17,19 @@ APP_DATA = Path(__file__).parents[3] / "app_data"
 def test_the_three_starter_packs_are_defined():
     packs = starter_packs.load_packs(APP_DATA / "starter_packs.yaml")
 
-    assert [pack["slug"] for pack in packs] == ["irights", "joss"]
+    assert [pack["slug"] for pack in packs] == ["joss", "mhh"]
     assert all(pack["website"].startswith("https://") for pack in packs)
     fields = {pack["slug"]: starter_packs.custom_fields(pack) for pack in packs}
     assert fields == {
-        "irights": {
-            "rs:doi": "10.59350/irights",
-            "rs:language": {"id": "deu"},
-            "rs:license": {"id": "cc-by-4.0"},
-        },
         "joss": {
             "rs:issn": "2475-9066",
             "rs:prefix": "10.21105",
             "rs:language": {"id": "eng"},
             "rs:license": {"id": "cc-by-4.0"},
+        },
+        "mhh": {
+            "rs:ror": "00f2yqf98",
+            "rs:language": {"id": "deu"},
         },
     }
 
@@ -47,6 +46,7 @@ def test_the_packs_fields_are_the_communities_custom_fields():
         "rs:issn",
         "rs:doi",
         "rs:prefix",
+        "rs:ror",
         "rs:language",
         "rs:license",
     }

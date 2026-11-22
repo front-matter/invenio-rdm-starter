@@ -104,20 +104,21 @@ The front page's carousel shows the featured communities, the Starter Packs, und
 
 A Starter Pack is the content an InvenioRDM Starter instance can start with, defined as an InvenioRDM community of type **Starter Pack** (`starterpack` in `app_data/vocabularies/community_types.yaml`). The packs are listed in `app_data/starter_packs.yaml`, each with a slug, title, description, website and logo (an image in `app_data/starter_packs`, at most 1 MB, set while the community has none); the **Create starter pack communities** job (Administration > Jobs) creates the community of each pack that doesn't have one, and adds the Starter Pack community type on an instance set up before it. It also features every pack's community, so that the front page's carousel of featured communities shows the Starter Packs, all of them. The first two:
 
-* `irights` - [iRights.info](https://irights.info), the German-language blog on copyright and creative work in the digital world, as archived by [Rogue Scholar](https://rogue-scholar.org).
 * `joss` - the [Journal of Open Source Software](https://joss.theoj.org), with PDFs and software archives: the content of demo.front-matter.de.
+* `mhh` - the works of authors affiliated with the [Medizinische Hochschule Hannover](https://www.mhh.de) (ROR [00f2yqf98](https://ror.org/00f2yqf98)).
 
 A Starter Pack's community is curated: public, its records added by its curators rather than submitted. `INVENIO_STARTER_PACKS_FILE` names another definitions file.
 
 Its custom fields, in the `rs` namespace as on Rogue Scholar, say which works a pack holds. They are set from `starter_packs.yaml` when the job creates the community, and admins edit them in the community's settings (section **Starter Pack**):
 
-| Field | | `irights` | `joss` |
+| Field | | `joss` | `mhh` |
 | --- | --- | --- | --- |
-| `rs:issn` | the journal's ISSN | | 2475-9066 |
-| `rs:doi` | the DOI of the blog or journal | 10.59350/irights | |
-| `rs:prefix` | the DOI prefix | | 10.21105 |
-| `rs:language` | the language (`languages` vocabulary) | deu | eng |
-| `rs:license` | the license (`licenses` vocabulary) | cc-by-4.0 | cc-by-4.0 |
+| `rs:issn` | the journal's ISSN | 2475-9066 | |
+| `rs:doi` | the DOI of the blog or journal | | |
+| `rs:prefix` | the DOI prefix | 10.21105 | |
+| `rs:ror` | the ROR id of the authors' organization | | 00f2yqf98 |
+| `rs:language` | the language (`languages` vocabulary) | eng | deu |
+| `rs:license` | the license (`licenses` vocabulary) | cc-by-4.0 | |
 
 The setup creates the fields' search mappings (`invenio communities custom-fields init`); an instance set up before them needs that run once.
 
