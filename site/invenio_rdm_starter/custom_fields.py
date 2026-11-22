@@ -1,8 +1,8 @@
 """The custom fields of the Starter's communities, in the ``rs`` namespace.
 
 A Starter Pack (:mod:`invenio_rdm_starter.starter_packs`) says which works it
-holds: by the ISSN of their journal (``rs:issn``), the prefix of their DOIs
-(``rs:prefix``), their language (``rs:language``), and the license they come
+holds: by the ISSN of their journal (``rs:issn``), the DOI of their blog or
+journal (``rs:doi``), the prefix of their DOIs (``rs:prefix``), their language (``rs:language``), and the license they come
 with (``rs:license``). The names and meanings are Rogue Scholar's community
 fields, so that a community moves between the two with its fields.
 """
@@ -41,6 +41,7 @@ class CommunityVocabularyCF(VocabularyCF):
 
 STARTER_PACK_CUSTOM_FIELDS = [
     TextCF(name="rs:issn"),
+    TextCF(name="rs:doi"),
     TextCF(name="rs:prefix"),
     CommunityVocabularyCF(
         name="rs:language",
@@ -69,6 +70,18 @@ STARTER_PACK_CUSTOM_FIELDS_UI = {
                 "icon": "book",
                 "description": _("The ISSN of the journal whose works the pack holds."),
                 "placeholder": "2475-9066",
+            },
+        },
+        {
+            "field": "rs:doi",
+            "ui_widget": "Input",
+            "props": {
+                "label": "DOI",
+                "icon": "barcode",
+                "description": _(
+                    "The DOI of the blog or journal whose works the pack holds."
+                ),
+                "placeholder": "10.59350/irights",
             },
         },
         {

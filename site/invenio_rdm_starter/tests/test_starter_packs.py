@@ -17,12 +17,12 @@ APP_DATA = Path(__file__).parents[3] / "app_data"
 def test_the_three_starter_packs_are_defined():
     packs = starter_packs.load_packs(APP_DATA / "starter_packs.yaml")
 
-    assert [pack["slug"] for pack in packs] == ["rogue-scholar", "joss"]
+    assert [pack["slug"] for pack in packs] == ["irights", "joss"]
     assert all(pack["website"].startswith("https://") for pack in packs)
     fields = {pack["slug"]: starter_packs.custom_fields(pack) for pack in packs}
     assert fields == {
-        "rogue-scholar": {
-            "rs:prefix": "10.59350",
+        "irights": {
+            "rs:doi": "10.59350/irights",
             "rs:language": {"id": "deu"},
             "rs:license": {"id": "cc-by-4.0"},
         },
@@ -43,7 +43,13 @@ def test_the_packs_fields_are_the_communities_custom_fields():
     packs = starter_packs.load_packs(APP_DATA / "starter_packs.yaml")
 
     assert config.COMMUNITIES_NAMESPACES == {"rs": None}
-    assert defined == {"rs:issn", "rs:prefix", "rs:language", "rs:license"}
+    assert defined == {
+        "rs:issn",
+        "rs:doi",
+        "rs:prefix",
+        "rs:language",
+        "rs:license",
+    }
     assert {name for pack in packs for name in pack["custom_fields"]} <= defined
     ui = {f["field"] for f in config.COMMUNITIES_CUSTOM_FIELDS_UI[0]["fields"]}
     assert ui == defined

@@ -8,16 +8,17 @@
 # 1 MB, set while the community has none), description, website, and
 # custom_fields, the
 # community's rs: fields that select its works (invenio_rdm_starter.
-# custom_fields): rs:issn, rs:prefix (a DOI prefix), rs:language (a languages
-# vocabulary id) and rs:license (a licenses vocabulary id).
-- slug: rogue-scholar
-  title: Rogue Scholar
-  logo: starter_packs/rogue-scholar.png
+# custom_fields): rs:issn, rs:doi (the DOI of a blog or journal), rs:prefix
+# (a DOI prefix), rs:language (a languages vocabulary id) and rs:license (a
+# licenses vocabulary id).
+- slug: irights
+  title: iRights
+  logo: starter_packs/irights.png
   description: >-
-    German-language posts from the science blogs archived by Rogue Scholar.
-  website: https://rogue-scholar.org
+    Urheberrecht und kreatives Schaffen in der digitalen Welt.
+  website: https://irights.info/
   custom_fields:
-    rs:prefix: "10.59350"
+    rs:doi: "10.59350/irights"
     rs:language: deu
     rs:license: cc-by-4.0
 
@@ -27,7 +28,7 @@
   description: >-
     Archive of the Journal of Open Source Software (JOSS):
     papers describing Open Source research software, with their PDFs and software archives.
-  website: https://joss.theoj.org
+  website: https://joss.theoj.org/
   custom_fields:
     rs:issn: 2475-9066
     rs:prefix: "10.21105"
