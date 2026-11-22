@@ -11,6 +11,7 @@ from prometheus_flask_exporter.multiprocess import (
     GunicornInternalPrometheusMetrics,
 )
 
+from .citations import record_citations
 from .exceptions import ConfigNotLoadedError
 from .filters import format_edtf_date
 
@@ -110,5 +111,10 @@ def create_blueprint(app):
         template_folder="./templates",
     )
     blueprint.add_app_template_filter(format_edtf_date, "format_edtf")
+    blueprint.add_url_rule(
+        "/records/<pid_value>/citations",
+        endpoint="record_citations",
+        view_func=record_citations,
+    )
 
     return blueprint

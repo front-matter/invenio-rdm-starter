@@ -8,7 +8,7 @@
 #}
 
 
-{%- from "invenio_app_rdm/records/macros/detail.html" import show_section_custom_fields, show_references, show_add_titles,
+{%- from "invenio_app_rdm/records/macros/detail.html" import show_section_custom_fields, show_references, show_citations, show_add_titles,
 show_alternate_identifiers, show_related_identifiers, show_funding, show_dates %}
 
 {% set hasContent = namespace(value=false) %}
@@ -309,17 +309,56 @@ show_alternate_identifiers, show_related_identifiers, show_funding, show_dates %
   {% endif %}
 
   {# The works citing this one, which invenio-pidbox's "Refresh citations"
-     job keeps current from the commonmeta store. #}
+     job keeps current from the commonmeta store: a page of them at a time
+     (STARTER_CITATIONS_PAGE_SIZE), the others a click away. #}
   {% if record_ui["ui"]["custom_fields"].get("pidbox:citations") %}
-    <div class="ui grid">
+    <div class="ui grid" id="citations">
       <div class="sixteen wide mobile four wide tablet three wide computer column">
         <h3 class="ui header">{{ _('Citations') }}</h3>
       </div>
       <div class="sixteen wide mobile twelve wide tablet thirteen wide computer column">
-        {{ show_references(record_ui["ui"]["custom_fields"].get("pidbox:citations"), community.slug if community else None) }}
+        {{ show_citations(
+             record_ui["ui"]["custom_fields"].get("pidbox:citations"),
+             record_ui["id"],
+             community.slug if community else None,
+             (request.args.get("citations_page") or 1) | int,
+             config.STARTER_CITATIONS_PAGE_SIZE,
+           ) }}
       </div>
     </div>
     <div class="ui divider"></div>
+    <script>
+      // A page of citations swapped in place: the pager's links fetch it from
+      // /records/<id>/citations and fall back to loading the page on failure.
+      (function () {
+        var section = document.getElementById("citations");
+        if (!section || !window.fetch) return;
+        section.addEventListener("click", function (event) {
+          var link = event.target.closest("a[data-citations-page]");
+          var box = section.querySelector("[data-citations-url]");
+          if (!link || !box) return;
+          event.preventDefault();
+          var page = link.getAttribute("data-citations-page");
+          box.style.opacity = "0.5";
+          fetch(box.getAttribute("data-citations-url") + "?page=" + encodeURIComponent(page), {
+            headers: { Accept: "text/html" },
+            credentials: "same-origin",
+          })
+            .then(function (response) {
+              if (!response.ok) throw new Error(response.status);
+              return response.text();
+            })
+            .then(function (html) {
+              box.outerHTML = html;
+              history.replaceState(null, "", "?citations_page=" + page + "#citations");
+              section.scrollIntoView({ block: "start" });
+            })
+            .catch(function () {
+              window.location.href = link.href;
+            });
+        });
+      })();
+    </script>
   {% endif %}
 {% endif %}
 

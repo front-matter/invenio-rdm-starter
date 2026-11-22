@@ -422,6 +422,10 @@ are the Starter Packs (invenio_rdm_starter.starter_packs); translated where
 the Starter's catalogs have it. None, as now: InvenioRDM's, "Featured
 communities"."""
 
+STARTER_CITATIONS_PAGE_SIZE = 25
+"""How many of a record's citations its page shows at a time, the others a
+page away (invenio_rdm_starter.citations)."""
+
 STARTER_PACKS_FILE = None
 """The file the Starter Packs are defined in, each a community that the "Sync
 starter packs" job creates

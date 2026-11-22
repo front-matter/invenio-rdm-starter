@@ -165,14 +165,16 @@
 {%- endif -%}
 {% endmacro %}
 
-{% macro show_references(references, community_slug=None) %}
+{% macro show_references(references, community_slug=None, start=1) %}
   {#- A reference or citation as HTML, but only its inline formatting, as the
       record title: a formatted citation sets a journal or a species name in
       italics. References come from publishers and citations from citeproc,
       neither sanitized, so anything else is stripped to its text, and no tag
       keeps an attribute. #}
   {%- set reference_tags = ["b", "strong", "i", "em", "u", "sub", "sup"] %}
-  <ol class="ui ordered list details-list">
+  {#- start: the number of the first entry, for a page of a longer list: the
+      list's counter starts one before it. #}
+  <ol class="ui ordered list details-list{{ ' wide-numbers' if start + (references | length) > 100 }}"{% if start > 1 %} style="counter-reset: ordered {{ start - 1 }}"{% endif %}>
     {% for reference in references %}
       {% set reference_string = reference.reference|default('')|sanitize_html(tags=reference_tags, attributes={"*": []})|safe %}
       {% if reference.identifier %}
@@ -212,6 +214,44 @@
       {% endif %}
     {% endfor %}
   </ol>
+{% endmacro %}
+
+
+{% macro show_citations(citations, record_id, community_slug=None, page=1, size=25) %}
+  {#- One page of a record's citations, with a pager: the record page renders
+      the page its citations_page asks for, and the script of details.html
+      swaps in the others from /records/<id>/citations?page=N without a reload
+      (invenio_rdm_starter.citations); without the script, the pager's links
+      load the record page at that page. #}
+  {%- set total = citations | length %}
+  {%- set pages = ((total + size - 1) // size) if total else 1 %}
+  {%- set page = [[page, 1] | max, pages] | min %}
+  {%- set first = (page - 1) * size %}
+  <div class="starter-citations" data-citations-url="{{ url_for('invenio_rdm_starter.record_citations', pid_value=record_id) }}">
+    {{ show_references(citations[first:first + size], community_slug, start=first + 1) }}
+    {%- if pages > 1 %}
+      {%- set window = 2 %}
+      <div class="ui small pagination menu" role="navigation" aria-label="{{ _('Citations pages') }}">
+        {%- macro page_link(number, label=None, disabled=False, active=False) %}
+          {%- if disabled %}
+            <span class="disabled item">{{ label or number }}</span>
+          {%- else %}
+            <a class="{{ 'active ' if active }}item" href="?citations_page={{ number }}#citations" data-citations-page="{{ number }}"{% if active %} aria-current="page"{% endif %}>{{ label or number }}</a>
+          {%- endif %}
+        {%- endmacro %}
+        {{ page_link(page - 1, "‹", disabled=page == 1) }}
+        {%- for number in range(1, pages + 1) %}
+          {%- if number == 1 or number == pages or (number >= page - window and number <= page + window) %}
+            {{ page_link(number, active=number == page) }}
+          {%- elif number == page - window - 1 or number == page + window + 1 %}
+            <span class="disabled item">…</span>
+          {%- endif %}
+        {%- endfor %}
+        {{ page_link(page + 1, "›", disabled=page == pages) }}
+      </div>
+      <p class="text-muted rel-mt-1"><small>{{ _('%(first)s–%(last)s of %(total)s', first=first + 1, last=[first + size, total] | min, total=total) }}</small></p>
+    {%- endif %}
+  </div>
 {% endmacro %}
 
 

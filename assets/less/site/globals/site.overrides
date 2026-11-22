@@ -199,6 +199,17 @@ ol.ui.ordered.list.details-list {
   }
 }
 
+/* … and three digits from the 100th on, as on the later pages of a record's
+   citations (show_citations). */
+ol.ui.ordered.list.details-list.wide-numbers {
+  margin-left: 3rem;
+
+  > .item:before {
+    min-width: 2.5rem;
+    margin-left: -2.8rem !important;
+  }
+}
+
 /* A record's views, downloads and citations side by side in the sidebar's
    statistics (templates/semantic-ui/invenio_app_rdm/records/details/
    stats.html): a third of the sidebar is narrower than an uppercase label
