@@ -20,12 +20,6 @@ which a login through ORCID, or a provider that sends an orcid claim, links
 to the account (``invenio_rdm_starter.oidc``): it leads to the user's person
 page, ``/people/<orcid>``, while invenio-pidbox's person pages are on.
 
-"Communities" (``main.communities``, invenio-communities) becomes "Starter
-Packs": the communities search for the communities of the Starter Packs'
-types, containers and organizations
-(``/communities-search?q=&f=type:container&f=type:organization``), which
-leaves the subject communities out.
-
 The items are removed rather than hidden: the header shows the "+" button
 whenever ``plus`` has items at all, visible or not. And they are removed on
 the first request rather than in the finalize hook itself: invenio-base runs
@@ -48,13 +42,6 @@ REMOVED_MENU_ITEMS = (
     "plus.community",
     "actions.deposit",
 )
-
-#: "Starter Packs" in the menubar, in place of "Communities": the
-#: communities search, for the communities of the Starter Packs' types (two
-#: values of one facet, either matching).
-STARTER_PACKS_MENU_ITEM = "main.communities"
-STARTER_PACKS_ENDPOINT = "invenio_communities.communities_search"
-STARTER_PACKS_SEARCH = {"q": "", "f": ["type:container", "type:organization"]}
 
 #: "My dashboard" in the user menu: its path, invenio-app-rdm's endpoint, and
 #: an order between "Profile" (0) and "Change password" (1).
@@ -134,27 +121,6 @@ def add_dashboard_to_user_menu() -> str | None:
     return DASHBOARD_MENU_ITEM
 
 
-def _starter_packs_text() -> str:
-    # The Starter's catalogs translate "Starter Packs".
-    return gettext("Starter Packs")
-
-
-def link_starter_packs_in_menubar() -> str | None:
-    """Make "Communities" in the menubar "Starter Packs", and return its path.
-
-    Left as it is, returning ``None``, when the communities search isn't
-    routed in this app.
-    """
-    if STARTER_PACKS_ENDPOINT not in current_app.view_functions:
-        return None
-    current_menu.submenu(STARTER_PACKS_MENU_ITEM).register(
-        endpoint=STARTER_PACKS_ENDPOINT,
-        text=LazyString(_starter_packs_text),
-        order=1,
-        endpoint_arguments_constructor=lambda: dict(STARTER_PACKS_SEARCH),
-    )
-    return STARTER_PACKS_MENU_ITEM
-
 
 def remove_menu_items(paths: tuple[str, ...] = REMOVED_MENU_ITEMS) -> list[str]:
     """Remove menu items by their path, and return the paths it removed.
@@ -197,4 +163,3 @@ def finalize_app(app: Flask) -> None:
         log.info("menu_items_removed", paths=remove_menu_items())
         log.info("menu_item_added", path=add_dashboard_to_user_menu())
         log.info("menu_item_added", path=add_person_page_to_user_menu())
-        log.info("menu_item_changed", path=link_starter_packs_in_menubar())

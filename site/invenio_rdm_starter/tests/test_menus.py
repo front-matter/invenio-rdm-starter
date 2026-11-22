@@ -12,7 +12,6 @@ from invenio_rdm_starter.menus import (
     add_dashboard_to_user_menu,
     add_person_page_to_user_menu,
     finalize_app,
-    link_starter_packs_in_menubar,
     remove_menu_items,
     user_orcid,
 )
@@ -261,36 +260,3 @@ def test_the_orcid_of_a_user_without_identities():
         login_user(User())
         assert user_orcid() is None
 
-
-def test_communities_in_the_menubar_are_the_starter_packs():
-    app = Flask(__name__)
-    Babel(app)
-    Menu(app)
-
-    @app.route("/communities", endpoint="invenio_communities.communities_frontpage")
-    def frontpage():
-        return "ok"
-
-    @app.route("/communities-search", endpoint="invenio_communities.communities_search")
-    def search():
-        return "ok"
-
-    with app.app_context():
-        current_menu.submenu("main.communities").register(
-            "invenio_communities.communities_frontpage", "Communities", order=1
-        )
-
-    with app.test_request_context("/"):
-        assert link_starter_packs_in_menubar() == "main.communities"
-        (item,) = current_menu.submenu("main").children
-        assert str(item.text) == "Starter Packs"
-        assert item.url == "/communities-search?q=&f=type:container&f=type:organization"
-
-
-def test_no_starter_packs_link_without_the_communities_search():
-    app = Flask(__name__)
-    Menu(app)
-
-    with app.app_context():
-        assert link_starter_packs_in_menubar() is None
-        assert _menu(app, "main") == []

@@ -96,9 +96,9 @@ The box above the front page's metrics and the boxes of its sidebar are pages, w
 * `/about` - its **Content** can be a box at the top of the front page, saying what the repository holds ("Metadata and content from the Journal of Open Source Software (JOSS) archived in InvenioRDM Starter. This is a demo site and content and metadata are regularly cleared.", in English, German, French and Spanish), with `STARTER_FRONTPAGE_ABOUT_PAGE` set to `/about`. It is unset: the front page starts with the Starter Packs, and the page is shown at `/about` only.
 * `/about/why` - "Why InvenioRDM Starter?", a box of the front page's sidebar: the page's **Title** is the box's header, its **Content** the box. `STARTER_FRONTPAGE_SIDEBAR_PAGES` lists the pages shown as boxes, in order.
 
-The front page shows no metrics (`INVENIO_PIDBOX_FRONTPAGE_METRICS=False`). The menubar's **Starter Packs**, in place of InvenioRDM's **Communities**, leads to the communities search for the Starter Packs' types, containers and organizations (`/communities-search?q=&f=type:container&f=type:organization`), which leaves the subject communities out.
+The front page shows no metrics (`INVENIO_PIDBOX_FRONTPAGE_METRICS=False`). The menubar keeps InvenioRDM's **Communities**: every community of the Starter could become a Starter Pack.
 
-The front page's carousel shows the featured communities, the Starter Packs, under the heading `INVENIO_STARTER_FRONTPAGE_FEATURED_TITLE`, defaults to `Starter Packs` (translated into German, French and Spanish); InvenioRDM's is `Featured communities`.
+The front page's carousel shows the featured communities, the Starter Packs, under InvenioRDM's heading, `Featured communities`; `INVENIO_STARTER_FRONTPAGE_FEATURED_TITLE` sets another (translated where the Starter's catalogs have it).
 
 ### Starter Packs
 

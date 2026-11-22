@@ -416,14 +416,15 @@ page's title as the header, its content as the box (invenio_rdm_starter.
 pages). Admins edit them under Site management > Pages. A page that doesn't
 exist is left out. The Starter's pages are app_data/pages.yaml."""
 
-STARTER_FRONTPAGE_FEATURED_TITLE = "Starter Packs"
+STARTER_FRONTPAGE_FEATURED_TITLE = None
 """The heading of the front page's carousel of featured communities, which
 are the Starter Packs (invenio_rdm_starter.starter_packs); translated where
-the Starter's catalogs have it. InvenioRDM's is "Featured communities"."""
+the Starter's catalogs have it. None, as now: InvenioRDM's, "Featured
+communities"."""
 
 STARTER_PACKS_FILE = None
-"""The file the Starter Packs are defined in, each a community of type Starter
-Pack that the "Create starter pack communities" job creates
+"""The file the Starter Packs are defined in, each a community that the "Sync
+starter packs" job creates
 (invenio_rdm_starter.starter_packs); app_data/starter_packs.yaml of the
 instance unless set."""
 
