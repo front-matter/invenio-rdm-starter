@@ -112,6 +112,22 @@ form.pidbox-search .ui.icon.button {
   }
 }
 
+/* The menubar from a tablet up: 1rem between the logo and the search, as
+   InvenioRDM means it (its padding-right on the logo is undone by the logo's
+   p-0 class, padding: 0 !important, so a margin it is), and the search 4rem
+   narrower than invenio-pidbox's 38rem. With the burger open, pidbox's
+   #invenio-nav.ui.menu.active rule still gives the search the drawer's
+   width. */
+@media all and (min-width: @tabletBreakpoint) {
+  #invenio-nav.ui.menu > .item.logo {
+    margin-right: 1rem;
+  }
+
+  #invenio-nav form.pidbox-search {
+    width: 34rem;
+  }
+}
+
 /* The About box above the front page's metrics (the page /about): text on
    the band itself, without a box of its own, left-aligned and larger, in
    the dark slate the band's light ground needs (white would be about 1.4:1
