@@ -108,10 +108,13 @@ A pack's community type says what kind of collection it is: `journal`, `blog`, `
 
 Nothing else marks a community as a pack: invenio-pidbox's jobs offer the communities of these types (`PIDBOX_JOBS_COMMUNITY_TYPES`), and the jobs below take the packs `starter_packs.yaml` names.
 
-The **Sync starter packs** job (Administration > Jobs) creates the community of each pack that doesn't have one, gives an existing one the pack's type (leaving what admins edited in its settings), and adds the community and resource types the vocabularies lack on an instance set up before them (`app_data/vocabularies/community_types.yaml`, `resource_types.yaml`). It also features every pack's community, so that the front page's carousel of featured communities shows the Starter Packs, all of them. The first two:
+The **Sync starter packs** job (Administration > Jobs) creates the community of each pack that doesn't have one, gives an existing one the pack's type (leaving what admins edited in its settings), and adds the community and resource types the vocabularies lack on an instance set up before them (`app_data/vocabularies/community_types.yaml`, `resource_types.yaml`). It also features every pack's community, so that the front page's carousel of featured communities shows the Starter Packs, all of them. The packs:
 
 * `joss` (journal) - the [Journal of Open Source Software](https://joss.theoj.org), with PDFs and software archives: the content of demo.front-matter.de.
 * `mhh` (organization) - the works of authors affiliated with the [Medizinische Hochschule Hannover](https://www.mhh.de) (ROR [00f2yqf98](https://ror.org/00f2yqf98)).
+* `wellcome` (funder) - the grants awarded by [Wellcome](https://wellcome.org) (ROR [029chgv08](https://ror.org/029chgv08)) and the publications they funded.
+
+Two more are defined but commented out in `starter_packs.yaml`, for later: `irights` (blog, [iRights.info](https://irights.info) on Rogue Scholar) and `leeds` (repository, [Research Data Leeds](https://archive.researchdata.leeds.ac.uk), DataCite client `bl.leeds`).
 
 A Starter Pack's community is curated: public, its records added by its curators rather than submitted. `INVENIO_STARTER_PACKS_FILE` names another definitions file.
 

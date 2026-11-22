@@ -38,3 +38,42 @@
     - "00f2yqf98"
   custom_fields:
     rs:language: deu
+- slug: wellcome
+  title: Wellcome
+  type: funder
+  logo: starter_packs/wellcome.png
+  description: >-
+    Grants awarded by Wellcome and the publications they funded.
+  website: https://wellcome.org/
+  organizations:
+    - "029chgv08"
+  custom_fields:
+    rs:language: eng
+    rs:license: cc-by-4.0
+
+# Later: uncomment to create their communities with the next Sync run.
+#
+# - slug: irights
+#   title: iRights.info
+#   type: blog
+#   logo: starter_packs/irights.png  # in git history (742bc00), to restore
+#   description: >-
+#     Urheberrecht und kreatives Schaffen in der digitalen Welt.
+#   website: https://irights.info/
+#   custom_fields:
+#     rs:doi: "10.59350/irights"
+#     rs:language: deu
+#     rs:license: cc-by-4.0
+#
+# - slug: leeds
+#   title: Research Data Leeds
+#   type: repository
+#   logo: starter_packs/leeds.png  # to add
+#   description: >-
+#     Research data of the University of Leeds (DataCite client bl.leeds).
+#   website: https://archive.researchdata.leeds.ac.uk/
+#   organizations:
+#     - "024mrxd33"
+#   custom_fields:
+#     rs:language: eng
+#     rs:license: cc-by-4.0
