@@ -50,16 +50,16 @@
   custom_fields:
     rs:language: eng
     rs:license: cc-by-4.0
-- slug: irights
-  title: iRights.info
+- slug: rzepa
+  title: Henry Rzepa's Blog
   type: blog
-  logo: starter_packs/irights.png
+  logo: starter_packs/rzepa.png
   description: >-
-    Urheberrecht und kreatives Schaffen in der digitalen Welt.
-  website: https://irights.info/
+    Chemistry with a twist.
+  website: https://www.ch.ic.ac.uk/rzepa/blog/
   custom_fields:
-    rs:doi: "10.59350/irights"
-    rs:language: deu
+    rs:doi: "10.59350/rzepa"
+    rs:language: eng
     rs:license: cc-by-4.0
 
 # Later: uncomment to create their communities with the next Sync run.

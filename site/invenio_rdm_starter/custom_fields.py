@@ -84,7 +84,7 @@ STARTER_PACK_CUSTOM_FIELDS_UI = {
                 "description": _(
                     "The DOI of the blog or journal whose works the pack holds."
                 ),
-                "placeholder": "10.59350/irights",
+                "placeholder": "10.59350/rzepa",
             },
         },
         {

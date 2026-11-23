@@ -17,7 +17,7 @@ APP_DATA = Path(__file__).parents[3] / "app_data"
 def test_the_three_starter_packs_are_defined():
     packs = starter_packs.load_packs(APP_DATA / "starter_packs.yaml")
 
-    assert [pack["slug"] for pack in packs] == ["joss", "mhh", "wellcome", "irights"]
+    assert [pack["slug"] for pack in packs] == ["joss", "mhh", "wellcome", "rzepa"]
     assert all(pack["website"].startswith("https://") for pack in packs)
     assert [pack["type"] for pack in packs] == [
         "journal",
@@ -40,9 +40,9 @@ def test_the_three_starter_packs_are_defined():
             "rs:language": {"id": "eng"},
             "rs:license": {"id": "cc-by-4.0"},
         },
-        "irights": {
-            "rs:doi": "10.59350/irights",
-            "rs:language": {"id": "deu"},
+        "rzepa": {
+            "rs:doi": "10.59350/rzepa",
+            "rs:language": {"id": "eng"},
             "rs:license": {"id": "cc-by-4.0"},
         },
     }

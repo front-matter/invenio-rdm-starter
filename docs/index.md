@@ -113,7 +113,7 @@ The **Sync starter packs** job (Administration > Jobs) creates the community of 
 * `joss` (journal) - the [Journal of Open Source Software](https://joss.theoj.org), with PDFs and software archives: the content of demo.front-matter.de.
 * `mhh` (organization) - the works of authors affiliated with the [Medizinische Hochschule Hannover](https://www.mhh.de) (ROR [00f2yqf98](https://ror.org/00f2yqf98)).
 * `wellcome` (funder) - the grants awarded by [Wellcome](https://wellcome.org) (ROR [029chgv08](https://ror.org/029chgv08)) and the publications they funded.
-* `irights` (blog) - [iRights.info](https://irights.info), the German-language blog on copyright and creative work in the digital world, as archived by [Rogue Scholar](https://rogue-scholar.org) (DOI 10.59350/irights).
+* `rzepa` (blog) - [Henry Rzepa's Blog](https://www.ch.ic.ac.uk/rzepa/blog/), chemistry with a twist, as archived by [Rogue Scholar](https://rogue-scholar.org/communities/rzepa) (DOI 10.59350/rzepa).
 
 One more is defined but commented out in `starter_packs.yaml`, for later: `leeds` (repository, [Research Data Leeds](https://archive.researchdata.leeds.ac.uk), DataCite client `bl.leeds`).
 
