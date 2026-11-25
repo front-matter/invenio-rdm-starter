@@ -38,21 +38,51 @@ def _app() -> Flask:
     return app
 
 
-def _citations(count: int) -> list[dict]:
+def _citations(count: int, formatted: bool = True) -> list[dict]:
     return [
-        {"identifier": f"10.5555/{n}", "scheme": "doi", "reference": f"Work {n}."}
+        {
+            "identifier": f"10.5555/{n}",
+            "scheme": "doi",
+            "reference": f"Work {n}." if formatted else None,
+            "publication_year": 2024,
+        }
         for n in range(1, count + 1)
     ]
 
 
-def _render(count: int, page: int, size: int = 25, stored: int | None = None) -> str:
-    fields = {"pidbox:citations": _citations(count if stored is None else stored)}
-    if stored is not None:
-        fields["pidbox:citation_count"] = count
+class FakeGraph:
+    """invenio-pidbox's citations kept in Postgres, for one cited DOI."""
+
+    def __init__(self, count: int, formatted: bool = True):
+        self.entries = _citations(count, formatted)
+        self.read: list[tuple] = []
+
+    def count_citations(self, doi):
+        return len(self.entries) if doi == "10.5555/cited" else 0
+
+    def read_citations(self, doi, page=1, size=25):
+        self.read.append((doi, page, size))
+        first = (page - 1) * size
+        return self.entries[first : first + size], len(self.entries)
+
+
+@pytest.fixture()
+def kept(monkeypatch):
+    """Keep ``count`` citations for the cited DOI; returns the fake."""
+
+    def _keep(count: int, formatted: bool = True) -> FakeGraph:
+        fake = FakeGraph(count, formatted)
+        monkeypatch.setattr(starter_citations, "graph", fake)
+        return fake
+
+    return _keep
+
+
+def _render(page: int, size: int = 25, doi: str = "10.5555/cited") -> str:
     app = _app()
     with app.test_request_context():
         return app.jinja_env.get_template("invenio_rdm_starter/citations.html").render(
-            citations=citations_page(fields, "10.5555/cited", page, size),
+            citations=citations_page(doi, page, size),
             record_id="t5wk7-bsp06",
             community_slug=None,
         )
@@ -66,16 +96,18 @@ def test_the_page_a_request_asks_for(value, expected):
     assert page_number(value) == expected
 
 
-def test_a_short_list_has_no_pager():
-    html = _render(3, 1)
+def test_a_short_list_has_no_pager(kept):
+    kept(3)
+    html = _render(1)
 
     assert html.count('<li class="item">') == 3
     assert "pagination" not in html
     assert 'data-citations-url="/records/t5wk7-bsp06/citations"' in html
 
 
-def test_a_page_of_a_long_list_is_numbered_from_its_first_citation():
-    html = _render(462, 3)
+def test_a_page_of_a_long_list_is_numbered_from_its_first_citation(kept):
+    fake = kept(462)
+    html = _render(3)
 
     assert html.count('<li class="item">') == 25
     assert "Work 51." in html and "Work 75." in html
@@ -83,10 +115,13 @@ def test_a_page_of_a_long_list_is_numbered_from_its_first_citation():
     assert 'style="counter-reset: ordered 50"' in html
     assert "wide-numbers" not in html
     assert "51–75 of 462" in html
+    # Only the page is read.
+    assert fake.read == [("10.5555/cited", 3, 25)]
 
 
-def test_the_pager_links_the_first_last_and_nearby_pages():
-    html = _render(462, 10)
+def test_the_pager_links_the_first_last_and_nearby_pages(kept):
+    kept(462)
+    html = _render(10)
 
     assert 'class="active item"' in html
     assert 'data-citations-page="10" aria-current="page"' in html
@@ -101,13 +136,15 @@ def test_the_pager_links_the_first_last_and_nearby_pages():
 
 
 @pytest.mark.parametrize(("page", "shown"), [(0, "1–25"), (99, "451–462")])
-def test_a_page_out_of_range_shows_the_nearest(page, shown):
-    assert f"{shown} of 462" in _render(462, page)
+def test_a_page_out_of_range_shows_the_nearest(kept, page, shown):
+    kept(462)
+    assert f"{shown} of 462" in _render(page)
 
 
-def test_the_first_page_disables_previous_and_the_last_next():
-    first = _render(60, 1)
-    last = _render(60, 3)
+def test_the_first_page_disables_previous_and_the_last_next(kept):
+    kept(60)
+    first = _render(1)
+    last = _render(3)
 
     assert '<span class="disabled item">‹</span>' in first
     assert '<span class="disabled item">›</span>' in last
@@ -133,53 +170,38 @@ def test_the_citations_route_and_setting():
     assert '"/records/<pid_value>/citations"' in views
 
 
-@pytest.fixture()
-def store_pages(monkeypatch):
-    """The store's pages of citations, past those a record stores."""
-    asked = []
+def test_a_citation_not_formatted_yet_is_shown_by_its_doi(kept):
+    kept(1, formatted=False)
 
-    def _page(path, doi, page, size, current=None):
-        asked.append((path, doi, page, size))
-        first = (page - 1) * size
-        return _citations(20746)[first : first + size], 20746
+    html = _render(1)
 
-    monkeypatch.setattr(starter_citations, "citation_page", _page)
-    return asked
+    assert 'href="https://doi.org/10.5555/1"' in html
+    assert "creatibutor-link" not in html
 
 
-def test_a_page_of_the_stored_citations_is_not_read_from_the_store(store_pages):
-    html = _render(20746, 2, stored=1000)
+def test_a_page_of_a_doi_cited_tens_of_thousands_of_times(kept):
+    fake = kept(20746)
 
-    assert "Work 26." in html and "26–50 of 20746" in html
-    assert store_pages == []
+    html = _render(41)
 
-
-def test_a_page_past_the_stored_citations_is_read_from_the_store(store_pages):
-    html = _render(20746, 41, stored=1000)
-
-    assert store_pages == [("/store.sqlite3", "10.5555/cited", 41, 25)]
+    assert fake.read == [("10.5555/cited", 41, 25)]
     assert "Work 1001." in html and "1001–1025 of 20746" in html
     assert 'data-citations-page="830"' in html  # the last page
 
 
-def test_a_page_the_store_cannot_answer_says_so(monkeypatch):
-    monkeypatch.setattr(starter_citations, "citation_page", lambda *a: None)
+def test_a_record_without_citations_has_none(kept):
+    kept(5)
 
-    html = _render(20746, 41, stored=1000)
+    page = None
+    app = _app()
+    with app.app_context():
+        page = citations_page("10.5555/other", 1, 25)
 
-    assert "could not be read just now" in html
-    assert 'data-citations-page="42"' in html
+    assert page["total"] == 0 and page["entries"] == []
 
 
-@pytest.mark.parametrize(
-    ("fields", "count"),
-    [
-        ({}, 0),
-        (None, 0),
-        ({"pidbox:citations": _citations(3)}, 3),
-        ({"pidbox:citations": _citations(3), "pidbox:citation_count": 20746}, 20746),
-        ({"pidbox:citations": _citations(3), "pidbox:citation_count": 1}, 3),
-    ],
-)
-def test_the_citation_count_counts_those_not_stored(fields, count):
-    assert citation_count(fields) == count
+@pytest.mark.parametrize(("doi", "count"), [(None, 0), ("", 0), ("10.5555/cited", 3)])
+def test_the_citation_count_is_that_of_the_kept_citations(kept, doi, count):
+    kept(3)
+
+    assert citation_count(doi) == count

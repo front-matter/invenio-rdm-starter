@@ -642,11 +642,13 @@ RDM_CUSTOM_FIELDS = [
     *journal.JOURNAL_CUSTOM_FIELDS,
     *pidbox_fields.CITATIONS_CUSTOM_FIELDS,
 ]
-"""Custom fields of records: the journal fields, and `pidbox:citations`, the
-works citing a record. invenio-pidbox fills it in from the commonmeta store
-with the "Refresh citations" job (Administration → Jobs); nobody edits it, so
-the deposit form doesn't show it. The landing page lists the citations, and
-the person and organization pages count the cited works."""
+"""Custom fields of records: the journal fields, and the citations'
+`pidbox:citations`, `pidbox:citation_count` and `pidbox:cited`. The works citing
+a record are kept by invenio-pidbox in Postgres, not in the record, current
+with the commonmeta store by its "Refresh citations" job (Administration →
+Jobs); these fields are in its search document only, for "Most cited", the
+"Cited" filter and the person and organization pages' counts. The landing page
+lists the citations a page at a time."""
 
 COMMUNITIES_NAMESPACES = custom_fields.RS_NAMESPACE
 """The namespace of the communities' custom fields: rs, as Rogue Scholar's."""
@@ -897,10 +899,9 @@ Packs (PIDBOX_JOBS_COMMUNITY_TYPES): every record imported joins one."""
 
 RDM_RECORDS_SERVICE_COMPONENTS = citations_components()
 """InvenioRDM's record service components, with the one that writes custom
-fields replaced by invenio-pidbox's CitationsComponent. The stock component
-replaces all custom fields with what an update sends, and the deposit form
-never sends `pidbox:citations`, so every edit of a record would delete its
-citations until the next "Refresh citations" run."""
+fields replaced by invenio-pidbox's CitationsComponent, which keeps the
+`pidbox:citations` commonmeta-rs writes into a pushed record out of it: a
+record's citations are kept in Postgres."""
 
 
 # Invenio-Pidbox

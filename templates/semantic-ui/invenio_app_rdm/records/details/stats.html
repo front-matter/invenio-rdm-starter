@@ -4,7 +4,7 @@
 
   InvenioRDM's record statistics, with the citations beside the views and
   downloads: how many works cite this version of the record, among those the
-  commonmeta store knows (invenio-pidbox's pidbox:citations, refreshed by the
+  commonmeta store knows (kept by invenio-pidbox, current with the store by its
   Refresh citations job). Not counted across versions: the "All versions"
   cell of the citations is empty.
 #}
@@ -13,9 +13,9 @@
 <div class="ui tiny three statistics rel-mt-1">
   {% set all_versions = record_ui["stats"]["all_versions"] %}
   {% set this_version = record_ui["stats"]["this_version"] %}
-  {#- All of them, for a record storing only the newest (invenio_rdm_starter.
+  {#- The works citing it, kept by invenio-pidbox (invenio_rdm_starter.
       citations). #}
-  {%- set citations = starter_citation_count(record_ui.get("custom_fields")) %}
+  {%- set citations = starter_citation_count(record_ui.get("pids", {}).get("doi", {}).get("identifier")) %}
 
   <div class="ui statistic">
     <div class="value">{{ all_versions.unique_views|compact_number(max_value=1_000_000) }}</div>

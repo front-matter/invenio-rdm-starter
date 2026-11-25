@@ -38,7 +38,7 @@ def test_the_record_page_shows_this_versions_citations():
     ).read_text()
 
     assert "three statistics" in template
-    assert 'starter_citation_count(record_ui.get("custom_fields"))' in template
+    assert 'starter_citation_count(record_ui.get("pids", {}).get("doi", {})' in template
     assert template.count('{{ _("Citations") }}') == 2
     assert "{{ stats_popup(citations) }}" in template
 

@@ -18,7 +18,7 @@ show_alternate_identifiers, show_related_identifiers, show_funding, show_dates %
                     metadata.funding or
                     record_ui["ui"]["dates"] or
                     metadata.references or
-                    record_ui["ui"]["custom_fields"].get("pidbox:citations")
+                    starter_citation_count(record_ui.get("pids", {}).get("doi", {}).get("identifier"))
 %}
 
 {# Check if custom field has values if no other content #}
@@ -308,22 +308,22 @@ show_alternate_identifiers, show_related_identifiers, show_funding, show_dates %
     <div class="ui divider"></div>
   {% endif %}
 
-  {# The works citing this one, which invenio-pidbox's "Refresh citations"
-     job keeps current from the commonmeta store: a page of them at a time
-     (STARTER_CITATIONS_PAGE_SIZE), the others a click away, past the newest
-     the record stores read from the store (invenio_rdm_starter.citations). #}
-  {% if record_ui["ui"]["custom_fields"].get("pidbox:citations") %}
+  {# The works citing this one, which invenio-pidbox keeps in Postgres and its
+     "Refresh citations" job current with the commonmeta store: a page of them
+     at a time (STARTER_CITATIONS_PAGE_SIZE), the others a click away
+     (invenio_rdm_starter.citations). #}
+  {%- set starter_citations = starter_citations_page(
+        record_ui.get("pids", {}).get("doi", {}).get("identifier"),
+        request.args.get("citations_page"),
+      ) %}
+  {% if starter_citations.total %}
     <div class="ui grid" id="citations">
       <div class="sixteen wide mobile four wide tablet three wide computer column">
         <h3 class="ui header">{{ _('Citations') }}</h3>
       </div>
       <div class="sixteen wide mobile twelve wide tablet thirteen wide computer column">
         {{ show_citations(
-             starter_citations_page(
-               record_ui.get("custom_fields"),
-               record_ui.get("pids", {}).get("doi", {}).get("identifier"),
-               request.args.get("citations_page"),
-             ),
+             starter_citations,
              record_ui["id"],
              community.slug if community else None,
            ) }}

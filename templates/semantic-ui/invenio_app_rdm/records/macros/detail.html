@@ -194,9 +194,12 @@
               {%- set search_url = url_for('invenio_search_ui.search', q=q) -%}
             {%- endif -%}
             <li class="item">
+              {#- A citation not formatted yet is shown by its DOI alone. #}
+              {%- if reference.reference %}
               <a class="ui creatibutor-link" href="{{ search_url }}">
                 {{ reference_string }}
               </a>
+              {%- endif %}
               <a class="no-text-decoration" target="_blank" href="{{ id|pid_url('doi') }}">
                 {{ id|pid_url('doi') }}
               </a>
