@@ -30,6 +30,10 @@ def _app() -> Flask:
         "/records/<pid_value>/citations",
         endpoint="invenio_rdm_starter.record_citations",
     )
+    app.add_url_rule(
+        "/records/<pid_value>/references",
+        endpoint="invenio_rdm_starter.record_references",
+    )
     app.add_url_rule("/search", endpoint="invenio_search_ui.search")
     app.add_url_rule(
         "/communities/<pid_value>/records",
@@ -57,11 +61,23 @@ class FakeGraph:
         self.entries = _citations(count, formatted)
         self.read: list[tuple] = []
 
+    def read_references(self, references, style=None, locale=None):
+        self.locale = locale
+        return [
+            (
+                dict(entry, reference=f"Rendered {entry['identifier']}.")
+                if entry.get("identifier") == "10.5555/read"
+                else dict(entry)
+            )
+            for entry in references
+        ]
+
     def count_citations(self, doi):
         return len(self.entries) if doi == "10.5555/cited" else 0
 
-    def read_citations(self, doi, page=1, size=25):
+    def read_citations(self, doi, page=1, size=25, style=None, locale=None):
         self.read.append((doi, page, size))
+        self.locale = locale
         first = (page - 1) * size
         return self.entries[first : first + size], len(self.entries)
 
@@ -159,7 +175,9 @@ def test_the_record_page_shows_a_page_and_fetches_the_others():
     assert 'id="citations"' in template
     assert 'request.args.get("citations_page")' in template
     assert "starter_citations_page(" in template
-    assert "data-citations-url" in template and "a[data-citations-page]" in template
+    # The script swaps a page of either list in, by its data attributes.
+    assert '"[data-" + kind + "-url]"' in template
+    assert '"a[data-" + kind + "-page]"' in template
 
 
 def test_the_citations_route_and_setting():
@@ -205,3 +223,62 @@ def test_the_citation_count_is_that_of_the_kept_citations(kept, doi, count):
     kept(3)
 
     assert citation_count(doi) == count
+
+
+def _references(count: int) -> list[dict]:
+    return [
+        {"reference": f"Deposited {n}.", "scheme": "doi", "identifier": f"10.5555/{n}"}
+        for n in range(1, count + 1)
+    ]
+
+
+def _render_references(references, page: int, size: int = 25) -> str:
+    from invenio_rdm_starter.citations import references_page
+
+    app = _app()
+    with app.test_request_context():
+        return app.jinja_env.get_template("invenio_rdm_starter/references.html").render(
+            references=references_page(references, page, size),
+            record_id="t5wk7-bsp06",
+            community_slug=None,
+        )
+
+
+def test_a_page_of_references_in_their_order(kept):
+    kept(0)
+
+    html = _render_references(_references(60), 2)
+
+    assert "Deposited 26." in html and "Deposited 50." in html
+    assert "Deposited 25." not in html and "Deposited 51." not in html
+    assert "26–50 of 60" in html
+    assert 'data-references-url="/records/t5wk7-bsp06/references"' in html
+    assert 'href="?references_page=3#references"' in html
+    assert 'data-references-page="3"' in html
+
+
+def test_a_reference_whose_work_is_read_is_rendered(kept):
+    kept(0)
+    references = [
+        {"reference": "Deposited.", "scheme": "doi", "identifier": "10.5555/read"},
+        {"reference": "A book."},
+    ]
+
+    html = _render_references(references, 1)
+
+    assert "Rendered 10.5555/read." in html and "Deposited." not in html
+    assert "A book." in html
+    assert "pagination" not in html
+
+
+def test_the_record_page_pages_its_references():
+    template = (
+        ROOT / "templates/semantic-ui/invenio_app_rdm/records/details/details.html"
+    ).read_text()
+
+    assert 'id="references"' in template
+    assert (
+        'starter_references_page(metadata.references, request.args.get("references_page"))'
+        in template
+    )
+    assert '["references", "citations"].forEach' in template

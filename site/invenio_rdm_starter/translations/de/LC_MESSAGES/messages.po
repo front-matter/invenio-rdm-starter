@@ -55,6 +55,9 @@ msgstr "Werke, die diese Version zitieren, soweit der commonmeta-Speicher sie ke
 msgid "Citations pages"
 msgstr "Seiten der Zitationen"
 
+msgid "References pages"
+msgstr "Seiten der Referenzen"
+
 #, python-format
 msgid "%(first)s–%(last)s of %(total)s"
 msgstr "%(first)s–%(last)s von %(total)s"

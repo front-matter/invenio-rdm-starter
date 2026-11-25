@@ -1,0 +1,4 @@
+{#- One page of a record's references, which the record page's pager swaps in
+    (invenio_rdm_starter.citations). #}
+{%- from "invenio_app_rdm/records/macros/detail.html" import show_reference_page -%}
+{{ show_reference_page(references, record_id, community_slug) }}

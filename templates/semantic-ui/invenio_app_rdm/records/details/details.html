@@ -8,7 +8,7 @@
 #}
 
 
-{%- from "invenio_app_rdm/records/macros/detail.html" import show_section_custom_fields, show_references, show_citations, show_add_titles,
+{%- from "invenio_app_rdm/records/macros/detail.html" import show_section_custom_fields, show_references, show_citations, show_reference_page, show_add_titles,
 show_alternate_identifiers, show_related_identifiers, show_funding, show_dates %}
 
 {% set hasContent = namespace(value=false) %}
@@ -296,13 +296,21 @@ show_alternate_identifiers, show_related_identifiers, show_funding, show_dates %
     {%- endfor %}
   {% endif %}
 
+  {# The record's references, in their order, a page at a time
+     (STARTER_CITATIONS_PAGE_SIZE): each DOI one rendered from its work's CSL
+     where invenio-pidbox has read it, any other as deposited
+     (invenio_rdm_starter.citations). #}
   {% if metadata.references %}
-    <div class="ui grid">
+    <div class="ui grid" id="references">
       <div class="sixteen wide mobile four wide tablet three wide computer column">
         <h3 class="ui header">{{ _('References') }}</h3>
       </div>
       <div class="sixteen wide mobile twelve wide tablet thirteen wide computer column">
-        {{ show_references(metadata.references, community.slug if community else None) }}
+        {{ show_reference_page(
+             starter_references_page(metadata.references, request.args.get("references_page")),
+             record_ui["id"],
+             community.slug if community else None,
+           ) }}
       </div>
     </div>
     <div class="ui divider"></div>
@@ -330,35 +338,41 @@ show_alternate_identifiers, show_related_identifiers, show_funding, show_dates %
       </div>
     </div>
     <div class="ui divider"></div>
+  {% endif %}
+  {% if metadata.references or starter_citations.total %}
     <script>
-      // A page of citations swapped in place: the pager's links fetch it from
-      // /records/<id>/citations and fall back to loading the page on failure.
+      // A page of citations or references swapped in place: the pager's links
+      // fetch it from /records/<id>/<kind> and fall back to loading the page
+      // on failure.
       (function () {
-        var section = document.getElementById("citations");
-        if (!section || !window.fetch) return;
-        section.addEventListener("click", function (event) {
-          var link = event.target.closest("a[data-citations-page]");
-          var box = section.querySelector("[data-citations-url]");
-          if (!link || !box) return;
-          event.preventDefault();
-          var page = link.getAttribute("data-citations-page");
-          box.style.opacity = "0.5";
-          fetch(box.getAttribute("data-citations-url") + "?page=" + encodeURIComponent(page), {
-            headers: { Accept: "text/html" },
-            credentials: "same-origin",
-          })
-            .then(function (response) {
-              if (!response.ok) throw new Error(response.status);
-              return response.text();
+        if (!window.fetch) return;
+        ["references", "citations"].forEach(function (kind) {
+          var section = document.getElementById(kind);
+          if (!section) return;
+          section.addEventListener("click", function (event) {
+            var link = event.target.closest("a[data-" + kind + "-page]");
+            var box = section.querySelector("[data-" + kind + "-url]");
+            if (!link || !box) return;
+            event.preventDefault();
+            var page = link.getAttribute("data-" + kind + "-page");
+            box.style.opacity = "0.5";
+            fetch(box.getAttribute("data-" + kind + "-url") + "?page=" + encodeURIComponent(page), {
+              headers: { Accept: "text/html" },
+              credentials: "same-origin",
             })
-            .then(function (html) {
-              box.outerHTML = html;
-              history.replaceState(null, "", "?citations_page=" + page + "#citations");
-              section.scrollIntoView({ block: "start" });
-            })
-            .catch(function () {
-              window.location.href = link.href;
-            });
+              .then(function (response) {
+                if (!response.ok) throw new Error(response.status);
+                return response.text();
+              })
+              .then(function (html) {
+                box.outerHTML = html;
+                history.replaceState(null, "", "?" + kind + "_page=" + page + "#" + kind);
+                section.scrollIntoView({ block: "start" });
+              })
+              .catch(function () {
+                window.location.href = link.href;
+              });
+          });
         });
       })();
     </script>

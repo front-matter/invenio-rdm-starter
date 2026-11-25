@@ -47,6 +47,9 @@ msgstr "Trabalhos que citam esta versão, na medida em que o armazenamento commo
 msgid "Citations pages"
 msgstr "Páginas de citações"
 
+msgid "References pages"
+msgstr "Páginas de referências"
+
 #, python-format
 msgid "%(first)s–%(last)s of %(total)s"
 msgstr "%(first)s–%(last)s de %(total)s"

@@ -55,6 +55,9 @@ msgstr "Travaux citant cette version, pour autant que le stockage commonmeta les
 msgid "Citations pages"
 msgstr "Pages des citations"
 
+msgid "References pages"
+msgstr "Pages des références"
+
 #, python-format
 msgid "%(first)s–%(last)s of %(total)s"
 msgstr "%(first)s–%(last)s sur %(total)s"

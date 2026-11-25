@@ -220,32 +220,33 @@
 {% endmacro %}
 
 
-{% macro show_citations(citations, record_id, community_slug=None) %}
-  {#- One page of a record's citations, with a pager: citations is
-      invenio_rdm_starter.citations.citations_page, the page's entries and
-      where they are. The record page renders the page its citations_page
-      asks for, and the script of details.html swaps in the others from
-      /records/<id>/citations?page=N without a reload; without the script, the
-      pager's links load the record page at that page. #}
-  {%- set total = citations.total %}
-  {%- set pages = citations.pages %}
-  {%- set page = citations.page %}
-  {%- set first = citations.first - 1 %}
-  {%- set size = citations.size %}
-  <div class="starter-citations" data-citations-url="{{ url_for('invenio_rdm_starter.record_citations', pid_value=record_id) }}">
-    {%- if citations.entries %}
-      {{ show_references(citations.entries, community_slug, start=first + 1) }}
-    {%- else %}
-      <p class="text-muted">{{ _('These citations could not be read just now.') }}</p>
+{% macro show_paged(kind, listing, url, community_slug=None, empty=None, label=None) %}
+  {#- One page of a list of a record's citations or references, with a pager:
+      listing is invenio_rdm_starter.citations.citations_page or
+      references_page, the page's entries and where they are. The record page
+      renders the page its <kind>_page asks for, and the script of
+      details.html swaps in the others from url?page=N without a reload;
+      without the script, the pager's links load the record page at that
+      page. #}
+  {%- set total = listing.total %}
+  {%- set pages = listing.pages %}
+  {%- set page = listing.page %}
+  {%- set first = listing.first - 1 %}
+  {%- set size = listing.size %}
+  <div class="starter-{{ kind }}" data-{{ kind }}-url="{{ url }}">
+    {%- if listing.entries %}
+      {{ show_references(listing.entries, community_slug, start=first + 1) }}
+    {%- elif empty %}
+      <p class="text-muted">{{ empty }}</p>
     {%- endif %}
     {%- if pages > 1 %}
       {%- set window = 2 %}
-      <div class="ui small pagination menu" role="navigation" aria-label="{{ _('Citations pages') }}">
-        {%- macro page_link(number, label=None, disabled=False, active=False) %}
+      <div class="ui small pagination menu" role="navigation" aria-label="{{ label }}">
+        {%- macro page_link(number, text=None, disabled=False, active=False) %}
           {%- if disabled %}
-            <span class="disabled item">{{ label or number }}</span>
+            <span class="disabled item">{{ text or number }}</span>
           {%- else %}
-            <a class="{{ 'active ' if active }}item" href="?citations_page={{ number }}#citations" data-citations-page="{{ number }}"{% if active %} aria-current="page"{% endif %}>{{ label or number }}</a>
+            <a class="{{ 'active ' if active }}item" href="?{{ kind }}_page={{ number }}#{{ kind }}" data-{{ kind }}-page="{{ number }}"{% if active %} aria-current="page"{% endif %}>{{ text or number }}</a>
           {%- endif %}
         {%- endmacro %}
         {{ page_link(page - 1, "‹", disabled=page == 1) }}
@@ -261,6 +262,29 @@
       <p class="text-muted rel-mt-1"><small>{{ _('%(first)s–%(last)s of %(total)s', first=first + 1, last=[first + size, total] | min, total=total) }}</small></p>
     {%- endif %}
   </div>
+{% endmacro %}
+
+
+{% macro show_citations(citations, record_id, community_slug=None) %}
+  {{ show_paged(
+       "citations",
+       citations,
+       url_for('invenio_rdm_starter.record_citations', pid_value=record_id),
+       community_slug,
+       empty=_('These citations could not be read just now.'),
+       label=_('Citations pages'),
+     ) }}
+{% endmacro %}
+
+
+{% macro show_reference_page(references, record_id, community_slug=None) %}
+  {{ show_paged(
+       "references",
+       references,
+       url_for('invenio_rdm_starter.record_references', pid_value=record_id),
+       community_slug,
+       label=_('References pages'),
+     ) }}
 {% endmacro %}
 
 

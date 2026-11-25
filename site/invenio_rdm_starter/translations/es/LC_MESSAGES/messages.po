@@ -55,6 +55,9 @@ msgstr "Obras que citan esta versión, en la medida en que el almacén commonmet
 msgid "Citations pages"
 msgstr "Páginas de citas"
 
+msgid "References pages"
+msgstr "Páginas de referencias"
+
 #, python-format
 msgid "%(first)s–%(last)s of %(total)s"
 msgstr "%(first)s–%(last)s de %(total)s"
