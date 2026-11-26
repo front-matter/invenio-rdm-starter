@@ -1,0 +1,22 @@
+{#-
+  Copyright (C) 2026 Front Matter.
+
+  InvenioRDM Starter is free software; you can redistribute it and/or modify
+  it under the terms of the MIT License; see LICENSE file for more details.
+
+  The ISSN of a Starter Pack's journal (rs:issn), in the community header
+  beside its website and type, as Rogue Scholar shows it: invenio-pidbox's
+  header includes this. Linked to the journal's page of invenio-pidbox, its
+  works, while those pages are on (PIDBOX_CONTAINER_PROFILES).
+#}
+{%- set issn = (community_ui.get("custom_fields") or {}).get("rs:issn") %}
+{%- if issn %}
+  <div class="inline-computer mt-5 rel-mr-1">
+    <i class="barcode icon" aria-hidden="true"></i>
+    {%- if config.get("PIDBOX_CONTAINER_PROFILES", True) %}
+      <a href="/containers/{{ issn | urlencode }}">ISSN {{ issn }}</a>
+    {%- else %}
+      ISSN {{ issn }}
+    {%- endif %}
+  </div>
+{%- endif %}
