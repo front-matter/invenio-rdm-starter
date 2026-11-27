@@ -64,3 +64,9 @@ msgstr "%(first)s–%(last)s sur %(total)s"
 
 msgid "These citations could not be read just now."
 msgstr "Ces citations n’ont pas pu être lues pour le moment."
+
+msgid "Awards"
+msgstr "Subventions"
+
+msgid "View awards"
+msgstr "Voir les subventions"

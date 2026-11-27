@@ -36,6 +36,7 @@ from invenio_records_resources.services.records.facets.facets import (
 # section.
 from invenio_oauthclient.views.views import auto_redirect_login
 from invenio_rdm_starter import custom_fields
+from invenio_rdm_starter.community_views import CommunityRecordSearchOptions
 from invenio_rdm_starter.permissions import (
     StarterCommunityPermissionPolicy,
     StarterRecordPermissionPolicy,
@@ -856,6 +857,11 @@ and the query parser with the Starter's field shortcuts."""
 
 COMMUNITIES_RECORDS_SEARCH = deepcopy(RDM_SEARCH)
 """Communities record search config is the same as the main record search."""
+
+RDM_COMMUNITY_RECORD_SEARCH_OPTIONS_CLS = CommunityRecordSearchOptions
+"""A community's record search takes the parameter of the awards switch of a
+funder's community: ``awards=exclude`` its works, ``awards=only`` its awards
+(invenio_rdm_starter.community_views)."""
 
 RDM_SEARCH_DRAFTS = {
     "facets": [

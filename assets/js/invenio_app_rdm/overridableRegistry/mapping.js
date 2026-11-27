@@ -13,10 +13,14 @@
  * own name. A community's and a collection's record searches don't look it up
  * by name: each passes InvenioRDM's item as its result component, so they are
  * given the Starter's directly, with their app names, under their result keys.
+ *
+ * A community's record search has the Starter's facets: InvenioRDM's, and on a
+ * funder's community the awards switch above them (AwardsToggle).
  */
 
 import { parametrize } from "react-overridable";
 import RecordsResultsListItem from "./RecordsResultsListItem";
+import { CommunityRecordsFacets } from "./AwardsToggle";
 
 const COMMUNITY_RECORDS = "InvenioCommunities.DetailsSearch";
 const COLLECTION_RECORDS = "InvenioAppRDM.CollectionsSearch";
@@ -29,6 +33,7 @@ export const overriddenComponents = {
       appName: COMMUNITY_RECORDS,
     }
   ),
+  [`${COMMUNITY_RECORDS}.SearchApp.facets`]: CommunityRecordsFacets,
   [`${COLLECTION_RECORDS}.ResultsList.item`]: parametrize(
     RecordsResultsListItem,
     {
