@@ -936,7 +936,8 @@ PIDBOX_JOBS_COMMUNITY_TYPES = [
 ]
 """invenio-pidbox's jobs (Administration > Jobs) offer the communities of the
 Starter Packs' types in a Community select: the works imports (Import a work,
-Import works by ROR ID, by ORCID iD, by container) add their works to that
-pack's community, and Refresh citations, Attach PDFs and Attach software
-archives take only its records (invenio-pidbox, the release after 0.7.11).
+Import works by ROR ID, by funder, by ORCID iD, by container) add their
+works to that pack's community, and Refresh citations, Attach PDFs and Attach
+software archives take only its records (invenio-pidbox, the release after
+0.7.11).
 The types are invenio_rdm_starter.starter_packs' PACK_TYPES."""
