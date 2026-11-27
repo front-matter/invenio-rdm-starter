@@ -943,6 +943,7 @@
     fr: Subvention
     es: Subvención
   tags:
+    - depositable
     - linkable
 - id: physicalobject
   icon: cube

@@ -20,7 +20,9 @@ each, for the front page's carousel of featured communities: the Starter
 Packs, all of them. The community types, and the resource types (Award, for a
 funder's pack), come with the vocabulary fixtures of a new instance; an
 instance set up before one of them gets it from the job, since the fixtures
-don't add to a vocabulary that is loaded already.
+don't add to a vocabulary that is loaded already. An entry it has already
+gets the tags of the file it lacks: Award needs ``depositable``, which
+InvenioRDM checks a record's resource type for, to be one at all.
 """
 
 from __future__ import annotations
@@ -182,30 +184,55 @@ def custom_fields(pack: dict[str, Any]) -> dict[str, Any]:
     return fields
 
 
+#: The fields of a vocabulary entry the job writes.
+VOCABULARY_ENTRY_FIELDS = ("id", "title", "description", "props", "icon", "tags")
+
+
 def ensure_vocabulary_entries(
     vocabularies: Any, vocabulary_type: str, entries: list[dict[str, Any]]
-) -> int:
+) -> tuple[int, int]:
     """Add the entries of a vocabulary the instance doesn't have yet.
 
     ``entries`` are those of the vocabulary's file in app_data/vocabularies.
-    An entry the instance has is left as it is. Returns how many were added.
+    An entry the instance has keeps what it has, and gets the tags of the file
+    it lacks: a tag decides what an entry is for, as ``depositable`` decides
+    whether a record can have a resource type. Returns how many entries were
+    added, and how many given tags.
     """
-    added = 0
+    added = updated = 0
     for entry in entries:
         try:
-            vocabularies.read(system_identity, (vocabulary_type, entry["id"]))
-            continue
+            existing = vocabularies.read(
+                system_identity, (vocabulary_type, entry["id"])
+            ).to_dict()
         except PIDDoesNotExistError:
-            pass
+            existing = None
+        if existing is None:
+            data = {key: entry[key] for key in VOCABULARY_ENTRY_FIELDS if key in entry}
+            vocabularies.create(system_identity, {**data, "type": vocabulary_type})
+            added += 1
+            log.info("vocabulary_entry_created", type=vocabulary_type, id=entry["id"])
+            continue
+        tags = list(existing.get("tags") or [])
+        missing = [tag for tag in entry.get("tags") or [] if tag not in tags]
+        if not missing:
+            continue
         data = {
-            key: entry[key]
-            for key in ("id", "title", "props", "icon", "tags")
-            if key in entry
+            key: existing[key] for key in VOCABULARY_ENTRY_FIELDS if key in existing
         }
-        vocabularies.create(system_identity, {**data, "type": vocabulary_type})
-        added += 1
-        log.info("vocabulary_entry_created", type=vocabulary_type, id=entry["id"])
-    return added
+        vocabularies.update(
+            system_identity,
+            (vocabulary_type, entry["id"]),
+            {**data, "tags": tags + missing, "type": vocabulary_type},
+        )
+        updated += 1
+        log.info(
+            "vocabulary_entry_tagged",
+            type=vocabulary_type,
+            id=entry["id"],
+            tags=missing,
+        )
+    return added, updated
 
 
 def _read(communities: Any, slug: str) -> Any | None:
@@ -265,7 +292,8 @@ def create_packs(
     every Starter Pack, and only those. A pack's ``logo``, a path relative to
     ``base`` (the folder of the definitions), becomes its community's logo
     while it has none. ``vocabulary_entries`` (by vocabulary type, the entries
-    of its file) are added where the instance's vocabulary lacks them.
+    of its file) are added where the instance's vocabulary lacks them, and
+    given the tags of the file where it has them without.
     """
     counts = {
         "packs": len(packs),
@@ -276,10 +304,14 @@ def create_packs(
         "logos": 0,
         "failed": 0,
     }
-    counts["vocabulary_entries_created"] = sum(
-        ensure_vocabulary_entries(vocabularies, vocabulary_type, entries)
-        for vocabulary_type, entries in (vocabulary_entries or {}).items()
-    )
+    counts["vocabulary_entries_created"] = 0
+    counts["vocabulary_entries_updated"] = 0
+    for vocabulary_type, entries in (vocabulary_entries or {}).items():
+        added, updated = ensure_vocabulary_entries(
+            vocabularies, vocabulary_type, entries
+        )
+        counts["vocabulary_entries_created"] += added
+        counts["vocabulary_entries_updated"] += updated
     for pack in packs:
         community = _read(communities, pack["slug"])
         try:
@@ -319,7 +351,7 @@ def create_starter_pack_communities() -> dict[str, int]:
     """Create or update the community of every Starter Pack.
 
     Returns ``{"packs", "existing", "created", "updated", "featured", "logos",
-    "failed", "vocabulary_entries_created"}``.
+    "failed", "vocabulary_entries_created", "vocabulary_entries_updated"}``.
     """
     from invenio_communities.proxies import current_communities
     from invenio_vocabularies.proxies import current_service as vocabularies

@@ -104,7 +104,8 @@ def test_the_packs_types_are_in_the_vocabulary_fixtures():
     assert {"es", "cs", "ar"} <= set(organization["title"])
 
 
-def test_an_award_is_a_resource_type_to_link_not_to_deposit():
+def test_an_award_is_a_resource_type_a_record_can_have():
+    """InvenioRDM checks a record's resource type for the tag depositable."""
     types = yaml.safe_load(
         (APP_DATA / "vocabularies" / "resource_types.yaml").read_text()
     )
@@ -112,7 +113,7 @@ def test_an_award_is_a_resource_type_to_link_not_to_deposit():
 
     assert award["props"]["datacite_general"] == "Award"
     assert award["props"]["schema.org"] == "https://schema.org/MonetaryGrant"
-    assert award["tags"] == ["linkable"]
+    assert award["tags"] == ["depositable", "linkable"]
 
 
 @pytest.mark.parametrize(
@@ -233,7 +234,7 @@ AWARD = {
     "icon": "award",
     "props": {"datacite_general": "Award"},
     "title": {"en": "Award"},
-    "tags": ["linkable"],
+    "tags": ["depositable", "linkable"],
 }
 
 
@@ -266,6 +267,7 @@ def test_the_missing_packs_and_types_are_created():
         "logos": 0,
         "failed": 1,
         "vocabulary_entries_created": 2,
+        "vocabulary_entries_updated": 0,
     }
     assert [c["slug"] for c in communities.created] == ["rogue-scholar"]
     # Created or there already, each pack is featured.
@@ -274,6 +276,59 @@ def test_the_missing_packs_and_types_are_created():
         {"id": "journal", "title": {"en": "Journal"}, "type": "communitytypes"},
         {**AWARD, "type": "resourcetypes"},
     ]
+
+
+def test_an_existing_entry_gets_the_tags_it_lacks():
+    """An award added with linkable alone becomes depositable too."""
+    before = {
+        "id": "award",
+        "type": "resourcetypes",
+        "icon": "award",
+        "props": {"datacite_general": "Award"},
+        "title": {"en": "Award", "de": "Förderung, as an admin named it"},
+        "tags": ["linkable"],
+        "links": {"self": "https://localhost/api/vocabularies/resourcetypes/award"},
+        "revision_id": 2,
+    }
+    vocabularies = Service(
+        existing={("resourcetypes", "award")},
+        data={("resourcetypes", "award"): before},
+    )
+
+    counts = starter_packs.create_packs(
+        Service(), vocabularies, [], vocabulary_entries={"resourcetypes": [AWARD]}
+    )
+
+    assert counts["vocabulary_entries_created"] == 0
+    assert counts["vocabulary_entries_updated"] == 1
+    assert vocabularies.created == []
+    ((id_, data),) = vocabularies.updated
+    assert id_ == ("resourcetypes", "award")
+    assert data == {
+        "id": "award",
+        "type": "resourcetypes",
+        "icon": "award",
+        "props": {"datacite_general": "Award"},
+        # What an admin edited stays.
+        "title": {"en": "Award", "de": "Förderung, as an admin named it"},
+        "tags": ["linkable", "depositable"],
+    }
+
+
+def test_an_entry_with_the_tags_already_is_left_alone():
+    vocabularies = Service(
+        existing={("resourcetypes", "award")},
+        data={
+            ("resourcetypes", "award"): {**AWARD, "tags": ["linkable", "depositable"]}
+        },
+    )
+
+    counts = starter_packs.create_packs(
+        Service(), vocabularies, [], vocabulary_entries={"resourcetypes": [AWARD]}
+    )
+
+    assert counts["vocabulary_entries_updated"] == 0
+    assert vocabularies.updated == []
 
 
 def test_an_existing_community_takes_its_packs_type():
