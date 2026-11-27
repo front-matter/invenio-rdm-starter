@@ -176,7 +176,7 @@
       list's counter starts one before it. #}
   <ol class="ui ordered list details-list{{ ' wide-numbers' if start + (references | length) > 100 }}"{% if start > 1 %} style="counter-reset: ordered {{ start - 1 }}"{% endif %}>
     {% for reference in references %}
-      {% set reference_string = reference.reference|default('')|sanitize_html(tags=reference_tags, attributes={"*": []})|safe %}
+      {% set reference_string = reference.reference|default('', true)|sanitize_html(tags=reference_tags, attributes={"*": []})|safe %}
       {% if reference.identifier %}
         {% if reference.scheme %}
           {% set id = reference.identifier %}

@@ -11,6 +11,13 @@ from jinja2 import ChoiceLoader, FileSystemLoader
 ROOT = Path(__file__).parents[3]
 
 
+def _sanitize_html(value: str, **kwargs) -> str:
+    """invenio-formatter's filter, which, as bleach, takes text only."""
+    if not isinstance(value, str):
+        raise TypeError(f"argument cannot be of {type(value).__name__!r} type")
+    return value
+
+
 def _app() -> Flask:
     app = Flask(__name__)
     app.config["STARTER_CITATIONS_PAGE_SIZE"] = 25
@@ -19,7 +26,7 @@ def _app() -> Flask:
         [FileSystemLoader(str(ROOT / "templates/semantic-ui"))]
     )
     app.jinja_env.globals["_"] = lambda text, **kwargs: text % kwargs
-    app.jinja_env.filters["sanitize_html"] = lambda value, **kwargs: value
+    app.jinja_env.filters["sanitize_html"] = _sanitize_html
     # The macros' other filters, which these macros don't use.
     for name in ("custom_fields_search", "format_edtf", "get_scheme_label"):
         app.jinja_env.filters[name] = lambda value, *args, **kwargs: value
