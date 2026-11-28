@@ -8,6 +8,7 @@ from invenio_rdm_starter import community_views
 from invenio_rdm_starter.community_views import (
     AwardsParam,
     CommunityRecordSearchOptions,
+    RecordSearchOptions,
 )
 from invenio_records_resources.services.base.config import SearchConfig
 from invenio_records_resources.services.records.params import FacetsParam
@@ -66,17 +67,22 @@ def test_a_community_s_record_search_takes_the_parameter():
 
 
 @pytest.mark.parametrize(
+    "options_cls", [CommunityRecordSearchOptions, RecordSearchOptions]
+)
+@pytest.mark.parametrize(
     ("value", "expected"),
     [
         ("only", {"bool": {"filter": [AWARD]}}),
         ("exclude", {"bool": {"filter": [{"bool": {"must_not": [AWARD]}}]}}),
     ],
 )
-def test_the_parameter_survives_the_facets_parameter(value, expected):
-    """The interpreters run in their order; the facets one takes the facets."""
-    options = CommunityRecordSearchOptions.customize(
-        SearchConfig({"facets": []}, facets={})
-    )
+def test_the_parameter_survives_the_facets_parameter(options_cls, value, expected):
+    """The interpreters run in their order; the facets one takes the facets.
+
+    A community's records search, and the records search an organization's
+    page lists its works with.
+    """
+    options = options_cls.customize(SearchConfig({"facets": []}, facets={}))
     params = {"facets": {"awards": [value]}}
     search = dsl.Search()
     for interpreter_cls in options.params_interpreters_cls:
@@ -213,7 +219,7 @@ def test_a_records_page_with_the_switch_marks_it_and_starts_as_its_type_says(
     html = _render(community)
 
     assert (
-        '<div hidden data-starter-awards-toggle data-title="Awards" '
+        '<div hidden data-awards-toggle data-title="Awards" '
         f'data-label="View awards" data-default="{expected}"></div>'
     ) in html
     assert f"[&#34;awards&#34;, &#34;{expected}&#34;]" in html or (
@@ -224,6 +230,6 @@ def test_a_records_page_with_the_switch_marks_it_and_starts_as_its_type_says(
 def test_another_records_page_is_invenio_s():
     html = _render(JOSS)
 
-    assert "data-starter-awards-toggle" not in html
+    assert "data-awards-toggle" not in html
     assert "awards" not in html
     assert "InvenioCommunities.DetailsSearch" in html

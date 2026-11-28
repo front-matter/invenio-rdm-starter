@@ -31,7 +31,7 @@ export const EXCLUDE = [AWARDS, "exclude"];
 
 /** The marker of a records page with the awards switch, or null. */
 export function awardsToggleMarker(doc = document) {
-  return doc.querySelector("[data-starter-awards-toggle]");
+  return doc.querySelector("[data-awards-toggle]");
 }
 
 /** The awards filter among the search's filters: "only", "exclude" or null. */
@@ -110,10 +110,12 @@ AwardsToggleComponent.defaultProps = {
 export const AwardsToggle = withState(AwardsToggleComponent);
 
 /**
- * A community records search's facets: InvenioRDM's, with its versions switch,
- * and the awards switch above them on a funder's or organization's page.
+ * A records search's facets: InvenioRDM's, with its versions switch, and the
+ * awards switch above them where the page is marked for it: a funder's or
+ * organization's community, and an organization's page with awards
+ * (invenio-pidbox's PIDBOX_AWARDS_SWITCH).
  */
-export const CommunityRecordsFacets = (props) => {
+export const RecordsFacets = (props) => {
   const marker = awardsToggleMarker();
   return (
     <>

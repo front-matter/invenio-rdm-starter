@@ -21,7 +21,7 @@
 {%- block page_body %}
 {{ super() }}
 {%- if starter_awards_toggle(community_ui) %}
-<div hidden data-starter-awards-toggle data-title="{{ _('Awards') }}" data-label="{{ _('View awards') }}" data-default="{{ starter_awards_filter(community_ui) }}"></div>
+<div hidden data-awards-toggle data-title="{{ _('Awards') }}" data-label="{{ _('View awards') }}" data-default="{{ starter_awards_filter(community_ui) }}"></div>
 {%- endif %}
 <div data-invenio-search-config='{{
   starter_community_search_config(

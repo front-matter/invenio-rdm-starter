@@ -139,6 +139,8 @@ A funder's pack is filled by invenio-pidbox's **Import works by funder** job (Ad
 
 A funder's community holds both, its grants and the works they funded, and its search has a switch in the sidebar for them, above InvenioRDM's **Versions**: **Awards**, off for the works, on for the awards. It narrows the query as the versions switch does, so the facets count what the list shows; on the API, `awards=exclude` and `awards=only` do the same for any community's records (`/api/communities/<slug>/records`). An organization's community has the switch too. A funder's community opens with its awards, an organization's with its works; communities of other types have no switch. A funder's community has no **Author identifiers** facet: its awards name the funder as their creator. Its metrics count the awards (invenio-pidbox's `PIDBOX_COMMUNITY_METRICS_TYPES`).
 
+An organization's page (`/organizations/<ror>`) with awards has the same switch above the facets of its works, in place of the **All**, **Funded** and **Affiliated** buttons: it opens with the works, or with the awards when the organization has nothing else, and its metrics count what the list opens with (invenio-pidbox's `PIDBOX_AWARDS_SWITCH`, which the Starter turns on; `awards=exclude|only` works on `/api/records` too).
+
 ### Invenio-Records-Resources
 
 * `INVENIO_SITE_UI_URL` - The site UI URL used by InvenioRDM, defaults to `https://localhost`.

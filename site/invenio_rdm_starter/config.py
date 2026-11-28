@@ -36,7 +36,10 @@ from invenio_records_resources.services.records.facets.facets import (
 # section.
 from invenio_oauthclient.views.views import auto_redirect_login
 from invenio_rdm_starter import custom_fields
-from invenio_rdm_starter.community_views import CommunityRecordSearchOptions
+from invenio_rdm_starter.community_views import (
+    CommunityRecordSearchOptions,
+    RecordSearchOptions,
+)
 from invenio_rdm_starter.permissions import (
     StarterCommunityPermissionPolicy,
     StarterRecordPermissionPolicy,
@@ -858,6 +861,11 @@ and the query parser with the Starter's field shortcuts."""
 COMMUNITIES_RECORDS_SEARCH = deepcopy(RDM_SEARCH)
 """Communities record search config is the same as the main record search."""
 
+RDM_SEARCH_OPTIONS_CLS = RecordSearchOptions
+"""The records search takes the parameter of an organization page's awards
+switch (PIDBOX_AWARDS_SWITCH): ``awards=exclude`` its works, ``awards=only``
+its awards (invenio_rdm_starter.community_views)."""
+
 RDM_COMMUNITY_RECORD_SEARCH_OPTIONS_CLS = CommunityRecordSearchOptions
 """A community's record search takes the parameter of the awards switch of a
 funder's community: ``awards=exclude`` its works, ``awards=only`` its awards
@@ -920,6 +928,12 @@ import: a record commit accepts any organization the store's ROR holds, as
 an affiliation or a funder, and any grant the store holds (Crossref grants,
 DataCite Awards) as an award (invenio-pidbox 0.6.1+). The vocabularies still
 count where they have entries, so the accepted set is the union of the two."""
+
+PIDBOX_AWARDS_SWITCH = True
+"""An organization's page with awards switches its works list between its
+works and its awards, with the switch above the facets that a funder's
+community has (invenio-pidbox 0.9.9+). The records search takes the switch's
+parameter (RDM_SEARCH_OPTIONS_CLS)."""
 
 PIDBOX_FRONTPAGE_METRICS = False
 """No metrics on the front page: its header band holds the About page's text,

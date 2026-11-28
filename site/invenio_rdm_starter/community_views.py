@@ -25,7 +25,10 @@ from copy import deepcopy
 from typing import Any, ClassVar
 
 from flask import Flask
-from invenio_rdm_records.services.config import RDMCommunityRecordSearchOptions
+from invenio_rdm_records.services.config import (
+    RDMCommunityRecordSearchOptions,
+    RDMSearchOptions,
+)
 from invenio_records_resources.services.records.params.base import ParamInterpreter
 
 #: The community types whose records search has the awards switch.
@@ -68,6 +71,20 @@ class AwardsParam(ParamInterpreter):
         if EXCLUDE in values:
             return search.exclude("term", **{RESOURCE_TYPE_FIELD: AWARD_TYPE})
         return search
+
+
+class RecordSearchOptions(RDMSearchOptions):
+    """InvenioRDM's records search, with the ``awards`` parameter.
+
+    For an organization's page, whose list of works (invenio-pidbox's) is the
+    records search: its awards switch (PIDBOX_AWARDS_SWITCH). As the
+    community's, read before the facets parameter takes the facets.
+    """
+
+    params_interpreters_cls: ClassVar[list[type]] = [
+        AwardsParam,
+        *RDMSearchOptions.params_interpreters_cls,
+    ]
 
 
 class CommunityRecordSearchOptions(RDMCommunityRecordSearchOptions):

@@ -14,16 +14,18 @@
  * by name: each passes InvenioRDM's item as its result component, so they are
  * given the Starter's directly, with their app names, under their result keys.
  *
- * A community's record search has the Starter's facets: InvenioRDM's, and on a
- * funder's community the awards switch above them (AwardsToggle).
+ * A community's record search and the main search app, which an organization's
+ * page embeds, have the Starter's facets: InvenioRDM's, and the awards switch
+ * above them where the page is marked for it (AwardsToggle).
  */
 
 import { parametrize } from "react-overridable";
 import RecordsResultsListItem from "./RecordsResultsListItem";
-import { CommunityRecordsFacets } from "./AwardsToggle";
+import { RecordsFacets } from "./AwardsToggle";
 
 const COMMUNITY_RECORDS = "InvenioCommunities.DetailsSearch";
 const COLLECTION_RECORDS = "InvenioAppRDM.CollectionsSearch";
+const RECORDS = "InvenioAppRdm.Search";
 
 export const overriddenComponents = {
   RecordsResultsListItem: RecordsResultsListItem,
@@ -33,7 +35,8 @@ export const overriddenComponents = {
       appName: COMMUNITY_RECORDS,
     }
   ),
-  [`${COMMUNITY_RECORDS}.SearchApp.facets`]: CommunityRecordsFacets,
+  [`${COMMUNITY_RECORDS}.SearchApp.facets`]: RecordsFacets,
+  [`${RECORDS}.SearchApp.facets`]: RecordsFacets,
   [`${COLLECTION_RECORDS}.ResultsList.item`]: parametrize(
     RecordsResultsListItem,
     {
