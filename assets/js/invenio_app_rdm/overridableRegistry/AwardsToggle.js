@@ -40,11 +40,17 @@ export function awardsFilter(filters) {
   return found ? found[1] : null;
 }
 
-/** The filters to toggle to switch to the other view, from `current`. */
-export function switchFilters(current) {
-  if (current === "only") return [ONLY, EXCLUDE];
-  if (current === "exclude") return [EXCLUDE, ONLY];
-  return [ONLY];
+/**
+ * The search's state with `filter` as its awards filter, and the rest as it is.
+ *
+ * react-searchkit's updateQueryState doesn't merge a state into the current
+ * one: it starts from its initial state (no query, no filters) and toggles the
+ * filters it is given into it. So it is given the whole state, with the
+ * filters as they should be.
+ */
+export function withAwardsFilter(queryState, filter) {
+  const others = (queryState.filters || []).filter((f) => f[0] !== AWARDS);
+  return { ...queryState, filters: [...others, filter], page: 1 };
 }
 
 const AwardsToggleComponent = ({
@@ -59,9 +65,11 @@ const AwardsToggleComponent = ({
   // Without a filter, as after clearing them, what the community opens with.
   useEffect(() => {
     if (current === null) {
-      updateQueryState({ filters: [initial === "only" ? ONLY : EXCLUDE] });
+      updateQueryState(
+        withAwardsFilter(currentQueryState, initial === "only" ? ONLY : EXCLUDE)
+      );
     }
-  }, [current, initial, updateQueryState]);
+  }, [current, currentQueryState, initial, updateQueryState]);
 
   const checked = current === "only";
   return (
@@ -75,7 +83,11 @@ const AwardsToggleComponent = ({
           label={<label aria-hidden="true">{label}</label>}
           name="awards-toggle"
           aria-label={label}
-          onClick={() => updateQueryState({ filters: switchFilters(current) })}
+          onClick={() =>
+            updateQueryState(
+              withAwardsFilter(currentQueryState, checked ? EXCLUDE : ONLY)
+            )
+          }
           checked={checked}
         />
       </Card.Content>
