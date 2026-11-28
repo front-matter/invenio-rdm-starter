@@ -66,11 +66,15 @@ class AwardsParam(ParamInterpreter):
 
 
 class CommunityRecordSearchOptions(RDMCommunityRecordSearchOptions):
-    """InvenioRDM's community record search, with the ``awards`` parameter."""
+    """InvenioRDM's community record search, with the ``awards`` parameter.
+
+    The parameter is read first: the facets parameter takes the facets out of
+    the params, and puts back only those it has.
+    """
 
     params_interpreters_cls: ClassVar[list[type]] = [
-        *RDMCommunityRecordSearchOptions.params_interpreters_cls,
         AwardsParam,
+        *RDMCommunityRecordSearchOptions.params_interpreters_cls,
     ]
 
 

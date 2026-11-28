@@ -10,6 +10,7 @@ from invenio_rdm_starter.community_views import (
     CommunityRecordSearchOptions,
 )
 from invenio_records_resources.services.base.config import SearchConfig
+from invenio_records_resources.services.records.params import FacetsParam
 from invenio_search.engine import dsl
 from jinja2 import ChoiceLoader, DictLoader, FileSystemLoader
 
@@ -62,6 +63,30 @@ def test_a_community_s_record_search_takes_the_parameter():
     assert len(options.params_interpreters_cls) == len(
         set(options.params_interpreters_cls)
     )
+
+
+@pytest.mark.parametrize(
+    ("value", "expected"),
+    [
+        ("only", {"bool": {"filter": [AWARD]}}),
+        ("exclude", {"bool": {"filter": [{"bool": {"must_not": [AWARD]}}]}}),
+    ],
+)
+def test_the_parameter_survives_the_facets_parameter(value, expected):
+    """The interpreters run in their order; the facets one takes the facets."""
+    options = CommunityRecordSearchOptions.customize(
+        SearchConfig({"facets": []}, facets={})
+    )
+    params = {"facets": {"awards": [value]}}
+    search = dsl.Search()
+    for interpreter_cls in options.params_interpreters_cls:
+        if interpreter_cls in (AwardsParam, FacetsParam):
+            search = interpreter_cls(options).apply(None, search, params)
+
+    assert search.to_dict().get("query") == expected
+    assert options.params_interpreters_cls.index(
+        AwardsParam
+    ) < options.params_interpreters_cls.index(FacetsParam)
 
 
 @pytest.mark.parametrize(
