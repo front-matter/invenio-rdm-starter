@@ -139,6 +139,29 @@ def test_an_organization_community_s_search_starts_with_its_works():
     assert started["initialQueryState"]["filters"] == [["awards", "exclude"]]
 
 
+AGGS = [
+    {"aggName": "language", "field": "metadata.languages.id"},
+    {"aggName": "author_identifiers", "field": "metadata.creators..."},
+]
+
+
+@pytest.mark.parametrize(
+    ("community", "facets"),
+    [
+        (WELLCOME, ["language"]),
+        (MHH, ["language", "author_identifiers"]),
+        (JOSS, ["language", "author_identifiers"]),
+    ],
+)
+def test_a_funder_community_s_search_has_no_author_identifiers_facet(community, facets):
+    config = {"appId": "x", "aggs": AGGS, "initialQueryState": {"filters": []}}
+
+    started = community_views.community_search_config(config, community)
+
+    assert [agg["aggName"] for agg in started["aggs"]] == facets
+    assert len(config["aggs"]) == 2
+
+
 def test_another_community_s_search_starts_as_invenio_s():
     config = {"appId": "x", "initialQueryState": {"filters": []}}
 

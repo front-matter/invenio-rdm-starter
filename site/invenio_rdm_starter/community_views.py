@@ -35,6 +35,11 @@ TYPES_WITH_AWARDS_TOGGLE = ("funder", "organization")
 #: open with the works.
 TYPES_OPENING_WITH_AWARDS = ("funder",)
 
+#: The facets a community type's records search leaves out: a funder's
+#: awards name the funder as their creator, so author identifiers there count
+#: the funder's ROR rather than the works' authors.
+HIDDEN_FACETS = {"funder": ("author_identifiers",)}
+
 #: The search parameter of the switch, and its values.
 AWARDS_PARAM = "awards"
 ONLY = "only"
@@ -106,11 +111,19 @@ def community_search_config(
     """A community records search's config, starting with its awards or works.
 
     The switch sets the filter as the search loads, but the first request would
-    still be for every record; starting with it saves that request.
+    still be for every record; starting with it saves that request. The facets
+    the community's type leaves out (``HIDDEN_FACETS``) are left out.
     """
-    if not awards_toggle(community):
+    hidden = HIDDEN_FACETS.get(community_type(community)) or ()
+    if not awards_toggle(community) and not hidden:
         return config
     config = deepcopy(config)
+    if hidden:
+        config["aggs"] = [
+            agg for agg in config.get("aggs") or [] if agg.get("aggName") not in hidden
+        ]
+    if not awards_toggle(community):
+        return config
     state = config.setdefault("initialQueryState", {})
     filters = [f for f in state.get("filters") or [] if f[0] != AWARDS_PARAM]
     state["filters"] = [*filters, [AWARDS_PARAM, awards_filter(community)]]
