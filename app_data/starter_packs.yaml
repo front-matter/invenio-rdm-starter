@@ -43,7 +43,7 @@
   type: funder
   logo: starter_packs/wellcome.png
   description: >-
-    Grants awarded by Wellcome and the publications they funded.
+    Awards funded by Wellcome Trust and their publications.
   website: https://wellcome.org/
   organizations:
     - "029chgv08"
@@ -61,7 +61,6 @@
     rs:doi: "10.59350/rzepa"
     rs:language: eng
     rs:license: cc-by-4.0
-
 # Later: uncomment to create their communities with the next Sync run.
 #
 # - slug: leeds
