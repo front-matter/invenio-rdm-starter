@@ -6,7 +6,8 @@
 // under the terms of the MIT License; see LICENSE file for more details.
 
 // invenio-app-rdm v14's SearchItemCreators (utils.js), with a creator's name
-// linking to their person page instead of to a search by name.
+// linking to their person page, or an organization's to its organization page,
+// instead of to a search by name.
 
 import { i18next } from "@translations/invenio_app_rdm/i18next";
 import _get from "lodash/get";
@@ -66,22 +67,36 @@ export function ProfileItemCreators({ creators, className, othersLink }) {
     return icons;
   }
 
+  // The page of a creator: a person's by their ORCID iD, an organization's by
+  // its ROR ID. invenio-pidbox redirects to a search for their records when it
+  // has no profile for them.
+  function profilePath(creator) {
+    const ids = _get(creator, "person_or_org.identifiers", []);
+    const find = (scheme) => ids.find((id) => id.scheme === scheme)?.identifier;
+    const orcid = find("orcid");
+    if (orcid) {
+      return `/people/${encodeURIComponent(orcid)}`;
+    }
+    const ror = find("ror");
+    if (ror && _get(creator, "person_or_org.type") === "organizational") {
+      return `/organizations/${encodeURIComponent(ror)}`;
+    }
+    return null;
+  }
+
   function getLink(creator) {
     let creatorName = _get(creator, "person_or_org.name", i18next.t("No name"));
-    // A creator with an ORCID iD links to their person page; invenio-pidbox
-    // redirects to a search for their records when it has no profile for them.
-    const orcid = _get(creator, "person_or_org.identifiers", []).find(
-      (id) => id.scheme === "orcid"
-    )?.identifier;
+    const profile = profilePath(creator);
     let link = (
       <a
         className="creatibutor-link"
         href={
-          orcid
-            ? `/people/${encodeURIComponent(orcid)}`
-            : `/search?q=metadata.creators.person_or_org.name:"${creatorName}"`
+          profile ||
+          `/search?q=metadata.creators.person_or_org.name:"${creatorName}"`
         }
-        title={`${creatorName}: ${orcid ? i18next.t("Profile") : i18next.t("Search")}`}
+        title={`${creatorName}: ${
+          profile ? i18next.t("Profile") : i18next.t("Search")
+        }`}
       >
         <span className="creatibutor-name">{creatorName}</span>
       </a>
