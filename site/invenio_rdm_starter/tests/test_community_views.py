@@ -291,3 +291,17 @@ def test_the_configured_author_facets_count_the_awards_contributors():
         facet = config.RDM_FACETS[name]["facet"]
         assert isinstance(facet, AwardsTermsFacet)
         assert facet.awards_field == field
+
+
+@pytest.mark.parametrize(
+    ("name", "title"),
+    [
+        ("affiliations", "Contributor affiliations"),
+        ("author_identifiers", "Contributor identifiers"),
+    ],
+)
+def test_the_author_facets_are_titled_for_the_awards_contributors(name, title):
+    """The search app swaps the title in while the awards switch is on."""
+    from invenio_rdm_starter import config
+
+    assert config.RDM_FACETS[name]["ui"]["awardsTitle"] == title

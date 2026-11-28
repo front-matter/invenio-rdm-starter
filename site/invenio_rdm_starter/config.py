@@ -725,6 +725,8 @@ RDM_FACETS = {
         ),
         "ui": {
             "field": "metadata.creators.affiliations",
+            # The title while the awards switch is on (AwardsToggle.js).
+            "awardsTitle": _("Contributor affiliations"),
         },
     },
     "funders": {
@@ -746,6 +748,7 @@ RDM_FACETS = {
         ),
         "ui": {
             "field": "metadata.creators.person_or_org.identifiers.scheme",
+            "awardsTitle": _("Contributor identifiers"),
         },
     },
     "rights": {

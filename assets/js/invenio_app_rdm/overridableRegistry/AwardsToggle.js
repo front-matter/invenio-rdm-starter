@@ -110,13 +110,34 @@ AwardsToggleComponent.defaultProps = {
 export const AwardsToggle = withState(AwardsToggleComponent);
 
 /**
+ * The facets' config with the awards switch's `filter`: while it is on, a
+ * facet with an `awardsTitle` (RDM_FACETS' "ui") takes it, as the author
+ * facets count the awards' contributors then (AwardsTermsFacet).
+ */
+export function awardsAggs(aggs, filter) {
+  if (filter !== "only") {
+    return aggs;
+  }
+  return (aggs || []).map((agg) =>
+    agg.awardsTitle ? { ...agg, title: agg.awardsTitle } : agg
+  );
+}
+
+/**
  * A records search's facets: InvenioRDM's, with its versions switch, and the
  * awards switch above them where the page is marked for it: a funder's or
  * organization's community, and an organization's page with awards
  * (invenio-pidbox's PIDBOX_AWARDS_SWITCH).
  */
-export const RecordsFacets = (props) => {
+const RecordsFacetsComponent = ({
+  currentQueryState,
+  currentResultsState,
+  updateQueryState,
+  aggs,
+  ...props
+}) => {
   const marker = awardsToggleMarker();
+  const filter = awardsFilter(currentQueryState?.filters);
   return (
     <>
       {marker && (
@@ -126,7 +147,26 @@ export const RecordsFacets = (props) => {
           initial={marker.dataset.default}
         />
       )}
-      <ContribSearchAppFacets {...props} toggle />
+      <ContribSearchAppFacets
+        {...props}
+        aggs={awardsAggs(aggs, filter)}
+        toggle
+      />
     </>
   );
 };
+
+RecordsFacetsComponent.propTypes = {
+  currentQueryState: PropTypes.object,
+  currentResultsState: PropTypes.object,
+  updateQueryState: PropTypes.func,
+  aggs: PropTypes.array.isRequired,
+};
+
+RecordsFacetsComponent.defaultProps = {
+  currentQueryState: {},
+  currentResultsState: {},
+  updateQueryState: () => {},
+};
+
+export const RecordsFacets = withState(RecordsFacetsComponent);
