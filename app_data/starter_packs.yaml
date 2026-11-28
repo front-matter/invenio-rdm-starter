@@ -13,8 +13,7 @@
 # custom_fields, the community's rs: fields that select its works
 # (invenio_rdm_starter.custom_fields): rs:issn, rs:doi (the DOI of a blog or
 # journal), rs:prefix (a DOI prefix), rs:language (a languages vocabulary id)
-# and rs:license (a licenses vocabulary id); a funder's also rs:records_view,
-# works or awards, what its records page opens with (works when not set).
+# and rs:license (a licenses vocabulary id).
 - slug: joss
   title: Journal of Open Source Software
   type: journal

@@ -1,8 +1,8 @@
-"""A funder's community, switched between the works it funded and its awards.
+"""A funder's or organization's community, switched between works and awards.
 
 A funder's Starter Pack (``wellcome``) holds the grants the funder made, records
-of resource type Award, and the works they funded. Its records search has a
-switch in the sidebar, as InvenioRDM has for versions: off, the works; on, the
+of resource type Award, and the works they funded; an organization's may hold
+awards too. Their records search has a switch in the sidebar, as InvenioRDM has for versions: off, the works; on, the
 awards. The switch is the search parameter ``awards`` (:class:`AwardsParam`):
 ``exclude`` leaves the awards out, ``only`` keeps them alone. It narrows the
 query rather than filtering the hits after it, as the versions switch does, so
@@ -12,9 +12,9 @@ The parameter is the community record search's, through the search options
 class ``RDM_COMMUNITY_RECORD_SEARCH_OPTIONS_CLS`` names
 (:class:`CommunityRecordSearchOptions`). The switch itself is the Starter's
 (``assets/js/.../AwardsToggle.js``), shown where the records template marks the
-page as a funder community's (``starter_awards_toggle``), which also starts the
-search with the works or the awards, as the community's setting
-``rs:records_view`` says (``starter_community_search_config``). Loaded through
+page as a funder's or organization's community's (``starter_awards_toggle``), which also starts the
+search with the awards on a funder's community and with the works on an
+organization's (``starter_community_search_config``). Loaded through
 the ``invenio_base.finalize_app`` entry point
 ``invenio_rdm_starter_community_views``.
 """
@@ -28,14 +28,12 @@ from flask import Flask
 from invenio_rdm_records.services.config import RDMCommunityRecordSearchOptions
 from invenio_records_resources.services.records.params.base import ParamInterpreter
 
-from invenio_rdm_starter.custom_fields import (
-    DEFAULT_RECORDS_VIEW,
-    RECORDS_VIEW_FIELD,
-    RECORDS_VIEWS,
-)
-
 #: The community types whose records search has the awards switch.
-TYPES_WITH_AWARDS_TOGGLE = ("funder",)
+TYPES_WITH_AWARDS_TOGGLE = ("funder", "organization")
+
+#: The community types whose records page opens with the awards; the others
+#: open with the works.
+TYPES_OPENING_WITH_AWARDS = ("funder",)
 
 #: The search parameter of the switch, and its values.
 AWARDS_PARAM = "awards"
@@ -81,28 +79,27 @@ def awards_toggle(community: dict[str, Any]) -> bool:
 
     ``community`` is the community as its page has it (``community_ui``).
     """
-    community_type = ((community.get("metadata") or {}).get("type") or {}).get("id")
-    return community_type in TYPES_WITH_AWARDS_TOGGLE
+    return community_type(community) in TYPES_WITH_AWARDS_TOGGLE
 
 
-def records_view(community: dict[str, Any]) -> str:
-    """What a funder community's records page opens with: works or awards.
-
-    The community's setting ``rs:records_view``; works when it has none.
-    """
-    view = (community.get("custom_fields") or {}).get(RECORDS_VIEW_FIELD)
-    return view if view in RECORDS_VIEWS else DEFAULT_RECORDS_VIEW
+def community_type(community: dict[str, Any]) -> str | None:
+    """A community's type (``funder``, ``organization``, ...), or None."""
+    return ((community.get("metadata") or {}).get("type") or {}).get("id")
 
 
 def awards_filter(community: dict[str, Any]) -> str:
-    """The awards filter a funder community's records search starts with."""
-    return ONLY if records_view(community) == "awards" else EXCLUDE
+    """The awards filter a community's records search starts with.
+
+    ``only``, the awards, on a funder's community; ``exclude``, the works, on
+    any other.
+    """
+    return ONLY if community_type(community) in TYPES_OPENING_WITH_AWARDS else EXCLUDE
 
 
 def community_search_config(
     config: dict[str, Any], community: dict[str, Any]
 ) -> dict[str, Any]:
-    """A community records search's config, on a funder's starting as it says.
+    """A community records search's config, starting with its awards or works.
 
     The switch sets the filter as the search loads, but the first request would
     still be for every record; starting with it saves that request.

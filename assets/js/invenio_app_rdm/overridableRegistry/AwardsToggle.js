@@ -5,18 +5,18 @@
 // under the terms of the MIT License; see LICENSE file for more details.
 
 /**
- * A funder community's records, switched between the works it funded and its
- * awards (the grants it made), in the search sidebar as InvenioRDM switches
+ * A funder's or organization's community's records, switched between the
+ * works and the awards (grants), in the search sidebar as InvenioRDM switches
  * between the latest and all versions.
  *
  * The switch is a filter of its own, `awards`: `exclude` while it is off, the
  * works, and `only` while it is on, the awards. The Starter's search params
  * interpreter (invenio_rdm_starter.community_views.AwardsParam) applies it to
  * the query, so the facets count what the list shows. The page says the
- * community is a funder's by a marker the Starter's records template renders,
+ * community has the switch by a marker the Starter's records template renders,
  * with the switch's title and label in the page's language, and the filter the
- * community's setting (rs:records_view) opens the page with; elsewhere there
- * is no switch, and no filter.
+ * community's type opens the page with: the awards on a funder's, the works on
+ * an organization's; elsewhere there is no switch, and no filter.
  */
 
 import React, { useEffect } from "react";
@@ -29,7 +29,7 @@ export const AWARDS = "awards";
 export const ONLY = [AWARDS, "only"];
 export const EXCLUDE = [AWARDS, "exclude"];
 
-/** The marker of a funder community's records page, or null. */
+/** The marker of a records page with the awards switch, or null. */
 export function awardsToggleMarker(doc = document) {
   return doc.querySelector("[data-starter-awards-toggle]");
 }
@@ -99,7 +99,7 @@ export const AwardsToggle = withState(AwardsToggleComponent);
 
 /**
  * A community records search's facets: InvenioRDM's, with its versions switch,
- * and the awards switch above them on a funder community's page.
+ * and the awards switch above them on a funder's or organization's page.
  */
 export const CommunityRecordsFacets = (props) => {
   const marker = awardsToggleMarker();

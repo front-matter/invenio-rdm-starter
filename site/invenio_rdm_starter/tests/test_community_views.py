@@ -12,7 +12,6 @@ from invenio_rdm_starter.community_views import (
 from invenio_records_resources.services.base.config import SearchConfig
 from invenio_search.engine import dsl
 from jinja2 import ChoiceLoader, DictLoader, FileSystemLoader
-from marshmallow import ValidationError
 
 ROOT = Path(__file__).parents[3]
 
@@ -21,7 +20,7 @@ WELLCOME = {
     "slug": "wellcome",
     "metadata": {"title": "Wellcome Trust", "type": {"id": "funder"}},
 }
-WELLCOME_AWARDS = {**WELLCOME, "custom_fields": {"rs:records_view": "awards"}}
+MHH = {"id": "c3", "slug": "mhh", "metadata": {"type": {"id": "organization"}}}
 JOSS = {"id": "c2", "slug": "joss", "metadata": {"type": {"id": "journal"}}}
 
 AWARD = {"term": {"metadata.resource_type.id": "award"}}
@@ -67,13 +66,19 @@ def test_a_community_s_record_search_takes_the_parameter():
 
 @pytest.mark.parametrize(
     ("community", "toggle"),
-    [(WELLCOME, True), (JOSS, False), ({"metadata": {}}, False), ({}, False)],
+    [
+        (WELLCOME, True),
+        (MHH, True),
+        (JOSS, False),
+        ({"metadata": {}}, False),
+        ({}, False),
+    ],
 )
 def test_a_funder_community_has_the_switch(community, toggle):
     assert community_views.awards_toggle(community) is toggle
 
 
-def test_a_funder_community_s_search_starts_with_its_works():
+def test_a_funder_community_s_search_starts_with_its_awards():
     config = {
         "appId": "x",
         "initialQueryState": {"filters": [["language", "eng"], ["awards", "only"]]},
@@ -83,41 +88,30 @@ def test_a_funder_community_s_search_starts_with_its_works():
 
     assert started["initialQueryState"]["filters"] == [
         ["language", "eng"],
-        ["awards", "exclude"],
+        ["awards", "only"],
     ]
     # The config it was given is left as it was.
-    assert config["initialQueryState"]["filters"][-1] == ["awards", "only"]
+    assert config["initialQueryState"]["filters"] == [
+        ["language", "eng"],
+        ["awards", "only"],
+    ]
+    assert started is not config
 
 
 @pytest.mark.parametrize(
-    ("custom_fields", "expected"),
-    [
-        ({"rs:records_view": "awards"}, "only"),
-        ({"rs:records_view": "works"}, "exclude"),
-        ({"rs:records_view": "anything"}, "exclude"),
-        ({}, "exclude"),
-        (None, "exclude"),
-    ],
+    ("community", "expected"),
+    [(WELLCOME, "only"), (MHH, "exclude"), (JOSS, "exclude"), ({}, "exclude")],
 )
-def test_a_funder_community_s_setting_says_what_its_search_starts_with(
-    custom_fields, expected
-):
-    community = {**WELLCOME, "custom_fields": custom_fields}
-    config = {"appId": "x", "initialQueryState": {"filters": []}}
-
-    started = community_views.community_search_config(config, community)
-
-    assert started["initialQueryState"]["filters"] == [["awards", expected]]
+def test_a_funder_s_records_open_with_awards_the_others_with_works(community, expected):
     assert community_views.awards_filter(community) == expected
 
 
-def test_the_setting_takes_works_or_awards():
-    from invenio_rdm_starter.custom_fields import STARTER_PACK_CUSTOM_FIELDS
+def test_an_organization_community_s_search_starts_with_its_works():
+    config = {"appId": "x", "initialQueryState": {"filters": [["awards", "only"]]}}
 
-    (field,) = [f for f in STARTER_PACK_CUSTOM_FIELDS if f.name == "rs:records_view"]
-    assert field.field.deserialize("awards") == "awards"
-    with pytest.raises(ValidationError):
-        field.field.deserialize("grants")
+    started = community_views.community_search_config(config, MHH)
+
+    assert started["initialQueryState"]["filters"] == [["awards", "exclude"]]
 
 
 def test_another_community_s_search_starts_as_invenio_s():
@@ -162,24 +156,20 @@ def _render(community: dict) -> str:
         )
 
 
-def test_a_funder_s_records_page_marks_the_switch_and_starts_with_works():
-    html = _render(WELLCOME)
+@pytest.mark.parametrize(
+    ("community", "expected"), [(WELLCOME, "only"), (MHH, "exclude")]
+)
+def test_a_records_page_with_the_switch_marks_it_and_starts_as_its_type_says(
+    community, expected
+):
+    html = _render(community)
 
     assert (
         '<div hidden data-starter-awards-toggle data-title="Awards" '
-        'data-label="View awards" data-default="exclude"></div>'
+        f'data-label="View awards" data-default="{expected}"></div>'
     ) in html
-    assert "[&#34;awards&#34;, &#34;exclude&#34;]" in html or (
-        '["awards", "exclude"]' in html
-    )
-
-
-def test_a_funder_s_records_page_opening_with_awards_says_so():
-    html = _render(WELLCOME_AWARDS)
-
-    assert 'data-default="only"' in html
-    assert "[&#34;awards&#34;, &#34;only&#34;]" in html or (
-        '["awards", "only"]' in html
+    assert f"[&#34;awards&#34;, &#34;{expected}&#34;]" in html or (
+        f'["awards", "{expected}"]' in html
     )
 
 
