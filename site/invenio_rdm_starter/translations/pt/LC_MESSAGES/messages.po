@@ -62,3 +62,12 @@ msgstr "Financiamentos"
 
 msgid "View awards"
 msgstr "Ver financiamentos"
+
+msgid "Records page opens with"
+msgstr "A página de registos abre com"
+
+msgid "For a funder's community: whether its records page opens with the works the funder funded or with its awards. Works when not set."
+msgstr "Para a comunidade de um financiador: se a sua página de registos abre com as obras que financiou ou com os seus financiamentos. Obras se não definido."
+
+msgid "Works"
+msgstr "Obras"

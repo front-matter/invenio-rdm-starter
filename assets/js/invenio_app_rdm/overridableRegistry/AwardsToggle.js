@@ -14,8 +14,9 @@
  * interpreter (invenio_rdm_starter.community_views.AwardsParam) applies it to
  * the query, so the facets count what the list shows. The page says the
  * community is a funder's by a marker the Starter's records template renders,
- * with the switch's title and label in the page's language; elsewhere there is
- * no switch, and no filter.
+ * with the switch's title and label in the page's language, and the filter the
+ * community's setting (rs:records_view) opens the page with; elsewhere there
+ * is no switch, and no filter.
  */
 
 import React, { useEffect } from "react";
@@ -51,15 +52,16 @@ const AwardsToggleComponent = ({
   updateQueryState,
   title,
   label,
+  initial,
 }) => {
   const current = awardsFilter(currentQueryState.filters);
 
-  // Without a filter, as after clearing them, the works.
+  // Without a filter, as after clearing them, what the community opens with.
   useEffect(() => {
     if (current === null) {
-      updateQueryState({ filters: [EXCLUDE] });
+      updateQueryState({ filters: [initial === "only" ? ONLY : EXCLUDE] });
     }
-  }, [current, updateQueryState]);
+  }, [current, initial, updateQueryState]);
 
   const checked = current === "only";
   return (
@@ -86,6 +88,11 @@ AwardsToggleComponent.propTypes = {
   updateQueryState: PropTypes.func.isRequired,
   title: PropTypes.string.isRequired,
   label: PropTypes.string.isRequired,
+  initial: PropTypes.oneOf(["only", "exclude"]),
+};
+
+AwardsToggleComponent.defaultProps = {
+  initial: "exclude",
 };
 
 export const AwardsToggle = withState(AwardsToggleComponent);
@@ -102,6 +109,7 @@ export const CommunityRecordsFacets = (props) => {
         <AwardsToggle
           title={marker.dataset.title}
           label={marker.dataset.label}
+          initial={marker.dataset.default}
         />
       )}
       <ContribSearchAppFacets {...props} toggle />

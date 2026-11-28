@@ -70,3 +70,12 @@ msgstr "Förderungen"
 
 msgid "View awards"
 msgstr "Förderungen anzeigen"
+
+msgid "Records page opens with"
+msgstr "Datensatzseite öffnet mit"
+
+msgid "For a funder's community: whether its records page opens with the works the funder funded or with its awards. Works when not set."
+msgstr "Für die Community eines Förderers: ob ihre Datensatzseite mit den geförderten Werken oder mit ihren Förderungen öffnet. Werke, wenn nicht gesetzt."
+
+msgid "Works"
+msgstr "Werke"

@@ -4,6 +4,8 @@ A Starter Pack (:mod:`invenio_rdm_starter.starter_packs`) says which works it
 holds: by the ISSN of their journal (``rs:issn``), the DOI of their blog or
 journal (``rs:doi``), the prefix of their DOIs (``rs:prefix``), their
 language (``rs:language``), and the license they come with (``rs:license``).
+A funder's community also says whether its records page opens with the works
+the funder funded or with its awards (``rs:records_view``).
 The organizations its works come from are the community's own organizations
 (``metadata.organizations``), not a field of these.
 The names and meanings are Rogue Scholar's community fields, so that a
@@ -15,9 +17,16 @@ from __future__ import annotations
 from invenio_i18n import lazy_gettext as _
 from invenio_records_resources.services.custom_fields import TextCF
 from invenio_vocabularies.services.custom_fields import VocabularyCF
+from marshmallow import validate
 
 #: The namespace of the Starter's community fields, as on Rogue Scholar.
 RS_NAMESPACE = {"rs": None}
+
+#: What a funder's community records page opens with: the works it funded, or
+#: its awards. Works when the community doesn't say.
+RECORDS_VIEW_FIELD = "rs:records_view"
+RECORDS_VIEWS = ("works", "awards")
+DEFAULT_RECORDS_VIEW = "works"
 
 
 class CommunityVocabularyCF(VocabularyCF):
@@ -58,8 +67,13 @@ STARTER_PACK_CUSTOM_FIELDS = [
         dump_options=False,
         multiple=False,
     ),
+    TextCF(
+        name=RECORDS_VIEW_FIELD,
+        field_args={"validate": validate.OneOf(RECORDS_VIEWS)},
+    ),
 ]
-"""The fields of a Starter Pack: what selects its works."""
+"""The fields of a Starter Pack: what selects its works, and what a funder's
+community records page opens with."""
 
 
 STARTER_PACK_CUSTOM_FIELDS_UI = {
@@ -125,6 +139,27 @@ STARTER_PACK_CUSTOM_FIELDS_UI = {
                 "autocompleteFrom": "/api/vocabularies/licenses",
                 "autocompleteFromAcceptHeader": "application/vnd.inveniordm.v1+json",
                 "required": False,
+                "multiple": False,
+                "clearable": True,
+            },
+        },
+        {
+            "field": RECORDS_VIEW_FIELD,
+            "ui_widget": "Dropdown",
+            "props": {
+                "label": _("Records page opens with"),
+                "icon": "toggle on",
+                "description": _(
+                    "For a funder's community: whether its records page opens "
+                    "with the works the funder funded or with its awards. "
+                    "Works when not set."
+                ),
+                "placeholder": _("Works"),
+                "options": [
+                    {"id": "works", "title_l10n": _("Works")},
+                    {"id": "awards", "title_l10n": _("Awards")},
+                ],
+                "search": False,
                 "multiple": False,
                 "clearable": True,
             },

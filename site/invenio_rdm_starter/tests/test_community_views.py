@@ -12,6 +12,7 @@ from invenio_rdm_starter.community_views import (
 from invenio_records_resources.services.base.config import SearchConfig
 from invenio_search.engine import dsl
 from jinja2 import ChoiceLoader, DictLoader, FileSystemLoader
+from marshmallow import ValidationError
 
 ROOT = Path(__file__).parents[3]
 
@@ -20,6 +21,7 @@ WELLCOME = {
     "slug": "wellcome",
     "metadata": {"title": "Wellcome Trust", "type": {"id": "funder"}},
 }
+WELLCOME_AWARDS = {**WELLCOME, "custom_fields": {"rs:records_view": "awards"}}
 JOSS = {"id": "c2", "slug": "joss", "metadata": {"type": {"id": "journal"}}}
 
 AWARD = {"term": {"metadata.resource_type.id": "award"}}
@@ -87,6 +89,37 @@ def test_a_funder_community_s_search_starts_with_its_works():
     assert config["initialQueryState"]["filters"][-1] == ["awards", "only"]
 
 
+@pytest.mark.parametrize(
+    ("custom_fields", "expected"),
+    [
+        ({"rs:records_view": "awards"}, "only"),
+        ({"rs:records_view": "works"}, "exclude"),
+        ({"rs:records_view": "anything"}, "exclude"),
+        ({}, "exclude"),
+        (None, "exclude"),
+    ],
+)
+def test_a_funder_community_s_setting_says_what_its_search_starts_with(
+    custom_fields, expected
+):
+    community = {**WELLCOME, "custom_fields": custom_fields}
+    config = {"appId": "x", "initialQueryState": {"filters": []}}
+
+    started = community_views.community_search_config(config, community)
+
+    assert started["initialQueryState"]["filters"] == [["awards", expected]]
+    assert community_views.awards_filter(community) == expected
+
+
+def test_the_setting_takes_works_or_awards():
+    from invenio_rdm_starter.custom_fields import STARTER_PACK_CUSTOM_FIELDS
+
+    (field,) = [f for f in STARTER_PACK_CUSTOM_FIELDS if f.name == "rs:records_view"]
+    assert field.field.deserialize("awards") == "awards"
+    with pytest.raises(ValidationError):
+        field.field.deserialize("grants")
+
+
 def test_another_community_s_search_starts_as_invenio_s():
     config = {"appId": "x", "initialQueryState": {"filters": []}}
 
@@ -112,6 +145,7 @@ def _render(community: dict) -> str:
         _=lambda s: s,
         webpack={"invenio-app-rdm-community-records-search.js": ""},
         starter_awards_toggle=community_views.awards_toggle,
+        starter_awards_filter=community_views.awards_filter,
         starter_community_search_config=community_views.community_search_config,
         search_app_communities_records_config=lambda **kwargs: {
             "appId": kwargs["app_id"],
@@ -133,10 +167,19 @@ def test_a_funder_s_records_page_marks_the_switch_and_starts_with_works():
 
     assert (
         '<div hidden data-starter-awards-toggle data-title="Awards" '
-        'data-label="View awards"></div>'
+        'data-label="View awards" data-default="exclude"></div>'
     ) in html
     assert "[&#34;awards&#34;, &#34;exclude&#34;]" in html or (
         '["awards", "exclude"]' in html
+    )
+
+
+def test_a_funder_s_records_page_opening_with_awards_says_so():
+    html = _render(WELLCOME_AWARDS)
+
+    assert 'data-default="only"' in html
+    assert "[&#34;awards&#34;, &#34;only&#34;]" in html or (
+        '["awards", "only"]' in html
     )
 
 

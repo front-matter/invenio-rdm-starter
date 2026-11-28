@@ -68,6 +68,7 @@ def test_the_packs_fields_are_the_communities_custom_fields():
         "rs:prefix",
         "rs:language",
         "rs:license",
+        "rs:records_view",
     }
     assert {name for pack in packs for name in pack["custom_fields"]} <= defined
     ui = {f["field"] for f in config.COMMUNITIES_CUSTOM_FIELDS_UI[0]["fields"]}

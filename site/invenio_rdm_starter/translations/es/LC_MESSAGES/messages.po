@@ -70,3 +70,12 @@ msgstr "Subvenciones"
 
 msgid "View awards"
 msgstr "Ver subvenciones"
+
+msgid "Records page opens with"
+msgstr "La página de registros abre con"
+
+msgid "For a funder's community: whether its records page opens with the works the funder funded or with its awards. Works when not set."
+msgstr "Para la comunidad de un financiador: si su página de registros abre con las obras que financió o con sus subvenciones. Obras si no se indica."
+
+msgid "Works"
+msgstr "Obras"

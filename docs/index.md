@@ -139,6 +139,8 @@ A funder's pack is filled by invenio-pidbox's **Import works by funder** job (Ad
 
 A funder's community holds both, its grants and the works they funded, and its search has a switch in the sidebar for them, above InvenioRDM's **Versions**: **Awards**, off for the works, on for the awards. It narrows the query as the versions switch does, so the facets count what the list shows; on the API, `awards=exclude` and `awards=only` do the same for any community's records (`/api/communities/<slug>/records`). Communities of other types have no switch.
 
+The page opens with the works unless the community's settings say otherwise: under **Starter Pack**, **Records page opens with** is **Works** or **Awards** (the field `rs:records_view`). An instance set up before the field needs its search mapping created once: `invenio communities custom-fields init -f rs:records_view`.
+
 ### Invenio-Records-Resources
 
 * `INVENIO_SITE_UI_URL` - The site UI URL used by InvenioRDM, defaults to `https://localhost`.

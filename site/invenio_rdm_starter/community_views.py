@@ -13,7 +13,8 @@ class ``RDM_COMMUNITY_RECORD_SEARCH_OPTIONS_CLS`` names
 (:class:`CommunityRecordSearchOptions`). The switch itself is the Starter's
 (``assets/js/.../AwardsToggle.js``), shown where the records template marks the
 page as a funder community's (``starter_awards_toggle``), which also starts the
-search with the works (``starter_community_search_config``). Loaded through
+search with the works or the awards, as the community's setting
+``rs:records_view`` says (``starter_community_search_config``). Loaded through
 the ``invenio_base.finalize_app`` entry point
 ``invenio_rdm_starter_community_views``.
 """
@@ -26,6 +27,12 @@ from typing import Any, ClassVar
 from flask import Flask
 from invenio_rdm_records.services.config import RDMCommunityRecordSearchOptions
 from invenio_records_resources.services.records.params.base import ParamInterpreter
+
+from invenio_rdm_starter.custom_fields import (
+    DEFAULT_RECORDS_VIEW,
+    RECORDS_VIEW_FIELD,
+    RECORDS_VIEWS,
+)
 
 #: The community types whose records search has the awards switch.
 TYPES_WITH_AWARDS_TOGGLE = ("funder",)
@@ -78,10 +85,24 @@ def awards_toggle(community: dict[str, Any]) -> bool:
     return community_type in TYPES_WITH_AWARDS_TOGGLE
 
 
+def records_view(community: dict[str, Any]) -> str:
+    """What a funder community's records page opens with: works or awards.
+
+    The community's setting ``rs:records_view``; works when it has none.
+    """
+    view = (community.get("custom_fields") or {}).get(RECORDS_VIEW_FIELD)
+    return view if view in RECORDS_VIEWS else DEFAULT_RECORDS_VIEW
+
+
+def awards_filter(community: dict[str, Any]) -> str:
+    """The awards filter a funder community's records search starts with."""
+    return ONLY if records_view(community) == "awards" else EXCLUDE
+
+
 def community_search_config(
     config: dict[str, Any], community: dict[str, Any]
 ) -> dict[str, Any]:
-    """A community records search's config, starting with the works on a funder's.
+    """A community records search's config, on a funder's starting as it says.
 
     The switch sets the filter as the search loads, but the first request would
     still be for every record; starting with it saves that request.
@@ -91,12 +112,13 @@ def community_search_config(
     config = deepcopy(config)
     state = config.setdefault("initialQueryState", {})
     filters = [f for f in state.get("filters") or [] if f[0] != AWARDS_PARAM]
-    state["filters"] = [*filters, [AWARDS_PARAM, EXCLUDE]]
+    state["filters"] = [*filters, [AWARDS_PARAM, awards_filter(community)]]
     return config
 
 
 def finalize_app(app: Flask) -> None:
-    """Make ``starter_awards_toggle`` and ``starter_community_search_config``
-    template globals."""
+    """Make ``starter_awards_toggle``, ``starter_awards_filter`` and
+    ``starter_community_search_config`` template globals."""
     app.add_template_global(awards_toggle, "starter_awards_toggle")
+    app.add_template_global(awards_filter, "starter_awards_filter")
     app.add_template_global(community_search_config, "starter_community_search_config")
