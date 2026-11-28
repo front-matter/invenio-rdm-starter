@@ -6,7 +6,9 @@ import pytest
 from flask import Flask
 from invenio_rdm_starter import community_views
 from invenio_rdm_starter.community_views import (
+    AwardsFacetsParam,
     AwardsParam,
+    AwardsTermsFacet,
     CommunityRecordSearchOptions,
     RecordSearchOptions,
 )
@@ -86,13 +88,13 @@ def test_the_parameter_survives_the_facets_parameter(options_cls, value, expecte
     params = {"facets": {"awards": [value]}}
     search = dsl.Search()
     for interpreter_cls in options.params_interpreters_cls:
-        if interpreter_cls in (AwardsParam, FacetsParam):
+        if interpreter_cls in (AwardsParam, AwardsFacetsParam):
             search = interpreter_cls(options).apply(None, search, params)
 
     assert search.to_dict().get("query") == expected
     assert options.params_interpreters_cls.index(
         AwardsParam
-    ) < options.params_interpreters_cls.index(FacetsParam)
+    ) < options.params_interpreters_cls.index(AwardsFacetsParam)
 
 
 @pytest.mark.parametrize(
@@ -143,29 +145,6 @@ def test_an_organization_community_s_search_starts_with_its_works():
     started = community_views.community_search_config(config, MHH)
 
     assert started["initialQueryState"]["filters"] == [["awards", "exclude"]]
-
-
-AGGS = [
-    {"aggName": "language", "field": "metadata.languages.id"},
-    {"aggName": "author_identifiers", "field": "metadata.creators..."},
-]
-
-
-@pytest.mark.parametrize(
-    ("community", "facets"),
-    [
-        (WELLCOME, ["language"]),
-        (MHH, ["language", "author_identifiers"]),
-        (JOSS, ["language", "author_identifiers"]),
-    ],
-)
-def test_a_funder_community_s_search_has_no_author_identifiers_facet(community, facets):
-    config = {"appId": "x", "aggs": AGGS, "initialQueryState": {"filters": []}}
-
-    started = community_views.community_search_config(config, community)
-
-    assert [agg["aggName"] for agg in started["aggs"]] == facets
-    assert len(config["aggs"]) == 2
 
 
 def test_another_community_s_search_starts_as_invenio_s():
@@ -233,3 +212,82 @@ def test_another_records_page_is_invenio_s():
     assert "data-awards-toggle" not in html
     assert "awards" not in html
     assert "InvenioCommunities.DetailsSearch" in html
+
+
+FACETS = {
+    "affiliations": AwardsTermsFacet(
+        field="metadata.creators.affiliations.id",
+        awards_field="metadata.contributors.affiliations.id",
+        label="Author affiliations",
+    ),
+    "language": dsl.TermsFacet(field="metadata.languages.id"),
+}
+
+
+def _facets_search(awards: list[str] | None, selected: list[str] | None = None):
+    options = RecordSearchOptions.customize(
+        SearchConfig(
+            {"facets": list(FACETS)},
+            facets={name: {"facet": facet} for name, facet in FACETS.items()},
+        )
+    )
+    facets = {"awards": awards} if awards else {}
+    if selected:
+        facets["affiliations"] = selected
+    return (
+        AwardsFacetsParam(options)
+        .apply(None, dsl.Search(), {"facets": facets})
+        .to_dict()
+    )
+
+
+@pytest.mark.parametrize(
+    ("awards", "field"),
+    [
+        (["only"], "metadata.contributors.affiliations.id"),
+        (["exclude"], "metadata.creators.affiliations.id"),
+        (None, "metadata.creators.affiliations.id"),
+    ],
+)
+def test_the_awards_count_their_contributors_affiliations(awards, field):
+    search = _facets_search(awards, ["02jx3x895"])
+
+    assert search["aggs"]["affiliations"]["terms"]["field"] == field
+    assert search["post_filter"] == {"terms": {field: ["02jx3x895"]}}
+    # A facet without a field for the awards is as it is.
+    assert search["aggs"]["language"]["terms"]["field"] == "metadata.languages.id"
+
+
+def test_a_facet_for_the_awards_leaves_the_configured_one_as_it_is():
+    facet = FACETS["affiliations"]
+
+    awards = facet.for_awards()
+
+    assert awards._params["field"] == "metadata.contributors.affiliations.id"
+    assert facet._params["field"] == "metadata.creators.affiliations.id"
+
+
+@pytest.mark.parametrize(
+    "options_cls", [CommunityRecordSearchOptions, RecordSearchOptions]
+)
+def test_the_searches_with_the_switch_take_the_facets_for_awards(options_cls):
+    interpreters = options_cls.params_interpreters_cls
+
+    assert AwardsFacetsParam in interpreters
+    assert FacetsParam not in interpreters
+    assert interpreters.index(AwardsParam) < interpreters.index(AwardsFacetsParam)
+
+
+def test_the_configured_author_facets_count_the_awards_contributors():
+    from invenio_rdm_starter import config
+
+    for name, field in (
+        ("affiliations", "metadata.contributors.affiliations.id"),
+        (
+            "author_identifiers",
+            "metadata.contributors.person_or_org.identifiers.scheme",
+        ),
+    ):
+        facet = config.RDM_FACETS[name]["facet"]
+        assert isinstance(facet, AwardsTermsFacet)
+        assert facet.awards_field == field

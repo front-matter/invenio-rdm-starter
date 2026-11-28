@@ -37,6 +37,7 @@ from invenio_records_resources.services.records.facets.facets import (
 from invenio_oauthclient.views.views import auto_redirect_login
 from invenio_rdm_starter import custom_fields
 from invenio_rdm_starter.community_views import (
+    AwardsTermsFacet,
     CommunityRecordSearchOptions,
     RecordSearchOptions,
 )
@@ -713,9 +714,12 @@ cited")."""
 
 RDM_FACETS = {
     **rdm_config.RDM_FACETS,
+    # With the awards switch on, the two author facets count the awards'
+    # contributors, their investigators, rather than their creator, the funder.
     "affiliations": {
-        "facet": TermsFacet(
+        "facet": AwardsTermsFacet(
             field="metadata.creators.affiliations.id",
+            awards_field="metadata.contributors.affiliations.id",
             label=_("Author affiliations"),
             value_labels=StoreAffiliationsLabels("affiliations"),
         ),
@@ -734,8 +738,9 @@ RDM_FACETS = {
         },
     },
     "author_identifiers": {
-        "facet": TermsFacet(
+        "facet": AwardsTermsFacet(
             field="metadata.creators.person_or_org.identifiers.scheme",
+            awards_field="metadata.contributors.person_or_org.identifiers.scheme",
             label=_("Author identifiers"),
             value_labels={"orcid": _("ORCID")},
         ),

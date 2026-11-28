@@ -8,6 +8,11 @@ awards. The switch is the search parameter ``awards`` (:class:`AwardsParam`):
 query rather than filtering the hits after it, as the versions switch does, so
 the facets count what the list shows.
 
+The awards name their funder as creator and their investigators, with their
+affiliations, as contributors. With the awards on, the facets for author
+affiliations and author identifiers (:class:`AwardsTermsFacet`) count the
+contributors instead, through the facets parameter (:class:`AwardsFacetsParam`).
+
 The parameter is the community record search's, through the search options
 class ``RDM_COMMUNITY_RECORD_SEARCH_OPTIONS_CLS`` names
 (:class:`CommunityRecordSearchOptions`). The switch itself is the Starter's
@@ -21,7 +26,7 @@ the ``invenio_base.finalize_app`` entry point
 
 from __future__ import annotations
 
-from copy import deepcopy
+from copy import copy, deepcopy
 from typing import Any, ClassVar
 
 from flask import Flask
@@ -29,6 +34,8 @@ from invenio_rdm_records.services.config import (
     RDMCommunityRecordSearchOptions,
     RDMSearchOptions,
 )
+from invenio_records_resources.services.records.facets import TermsFacet
+from invenio_records_resources.services.records.params import FacetsParam
 from invenio_records_resources.services.records.params.base import ParamInterpreter
 
 #: The community types whose records search has the awards switch.
@@ -38,11 +45,6 @@ TYPES_WITH_AWARDS_TOGGLE = ("funder", "organization")
 #: open with the works.
 TYPES_OPENING_WITH_AWARDS = ("funder",)
 
-#: The facets a community type's records search leaves out: a funder's
-#: awards name the funder as their creator, so author identifiers there count
-#: the funder's ROR rather than the works' authors.
-HIDDEN_FACETS = {"funder": ("author_identifiers",)}
-
 #: The search parameter of the switch, and its values.
 AWARDS_PARAM = "awards"
 ONLY = "only"
@@ -51,6 +53,12 @@ EXCLUDE = "exclude"
 #: Where a record's resource type is, and the type of a funder's grants.
 RESOURCE_TYPE_FIELD = "metadata.resource_type.id"
 AWARD_TYPE = "award"
+
+
+def _awards_values(params: dict[str, Any]) -> list[str]:
+    """The values of the ``awards`` parameter among the facets in ``params``."""
+    values = (params.get("facets") or {}).get(AWARDS_PARAM) or []
+    return [values] if isinstance(values, str) else list(values)
 
 
 class AwardsParam(ParamInterpreter):
@@ -63,14 +71,66 @@ class AwardsParam(ParamInterpreter):
 
     def apply(self, identity: Any, search: Any, params: dict[str, Any]) -> Any:
         """Narrow the query to the awards or to the other records."""
-        values = (params.get("facets") or {}).get(AWARDS_PARAM) or []
-        if isinstance(values, str):
-            values = [values]
+        values = _awards_values(params)
         if ONLY in values:
             return search.filter("term", **{RESOURCE_TYPE_FIELD: AWARD_TYPE})
         if EXCLUDE in values:
             return search.exclude("term", **{RESOURCE_TYPE_FIELD: AWARD_TYPE})
         return search
+
+
+class AwardsTermsFacet(TermsFacet):
+    """A terms facet that counts another field in the awards alone.
+
+    ``awards_field`` is the field it counts and filters on while the search
+    has ``awards=only``, e.g. the contributors' affiliations where ``field``
+    is the creators'.
+    """
+
+    def __init__(self, awards_field: str, **kwargs: Any) -> None:
+        """Take the field for the awards, and the facet's own arguments."""
+        self.awards_field = awards_field
+        super().__init__(**kwargs)
+
+    def for_awards(self) -> AwardsTermsFacet:
+        """The same facet, on the field for the awards."""
+        facet = copy(self)
+        facet._params = {**self._params, "field": self.awards_field}
+        return facet
+
+
+class AwardsFacetsParam(FacetsParam):
+    """InvenioRDM's facets parameter, with the awards' fields for the awards.
+
+    With ``awards=only`` its :class:`AwardsTermsFacet` facets count and filter
+    on their ``awards_field``; otherwise all facets are as configured.
+    """
+
+    awards_only = False
+
+    @property
+    def facets(self) -> dict[str, Any]:
+        """The facets, those for the awards on their fields while they are on."""
+        facets = super().facets
+        if not self.awards_only:
+            return facets
+        return {
+            name: facet.for_awards() if isinstance(facet, AwardsTermsFacet) else facet
+            for name, facet in facets.items()
+        }
+
+    def apply(self, identity: Any, search: Any, params: dict[str, Any]) -> Any:
+        """Evaluate the facets, on the awards' fields with ``awards=only``."""
+        self.awards_only = ONLY in _awards_values(params)
+        return super().apply(identity, search, params)
+
+
+def _with_awards(interpreters: list[type]) -> list[type]:
+    """The interpreters, the awards parameter first and the facets for awards."""
+    return [
+        AwardsParam,
+        *(AwardsFacetsParam if cls is FacetsParam else cls for cls in interpreters),
+    ]
 
 
 class RecordSearchOptions(RDMSearchOptions):
@@ -81,10 +141,9 @@ class RecordSearchOptions(RDMSearchOptions):
     community's, read before the facets parameter takes the facets.
     """
 
-    params_interpreters_cls: ClassVar[list[type]] = [
-        AwardsParam,
-        *RDMSearchOptions.params_interpreters_cls,
-    ]
+    params_interpreters_cls: ClassVar[list[type]] = _with_awards(
+        RDMSearchOptions.params_interpreters_cls
+    )
 
 
 class CommunityRecordSearchOptions(RDMCommunityRecordSearchOptions):
@@ -94,10 +153,9 @@ class CommunityRecordSearchOptions(RDMCommunityRecordSearchOptions):
     the params, and puts back only those it has.
     """
 
-    params_interpreters_cls: ClassVar[list[type]] = [
-        AwardsParam,
-        *RDMCommunityRecordSearchOptions.params_interpreters_cls,
-    ]
+    params_interpreters_cls: ClassVar[list[type]] = _with_awards(
+        RDMCommunityRecordSearchOptions.params_interpreters_cls
+    )
 
 
 def awards_toggle(community: dict[str, Any]) -> bool:
@@ -128,19 +186,11 @@ def community_search_config(
     """A community records search's config, starting with its awards or works.
 
     The switch sets the filter as the search loads, but the first request would
-    still be for every record; starting with it saves that request. The facets
-    the community's type leaves out (``HIDDEN_FACETS``) are left out.
+    still be for every record; starting with it saves that request.
     """
-    hidden = HIDDEN_FACETS.get(community_type(community)) or ()
-    if not awards_toggle(community) and not hidden:
-        return config
-    config = deepcopy(config)
-    if hidden:
-        config["aggs"] = [
-            agg for agg in config.get("aggs") or [] if agg.get("aggName") not in hidden
-        ]
     if not awards_toggle(community):
         return config
+    config = deepcopy(config)
     state = config.setdefault("initialQueryState", {})
     filters = [f for f in state.get("filters") or [] if f[0] != AWARDS_PARAM]
     state["filters"] = [*filters, [AWARDS_PARAM, awards_filter(community)]]
