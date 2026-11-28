@@ -938,9 +938,9 @@ DataCite Awards) as an award (invenio-pidbox 0.6.1+). The vocabularies still
 count where they have entries, so the accepted set is the union of the two."""
 
 PIDBOX_AWARDS_SWITCH = True
-"""An organization's page with awards switches its works list between its
-works and its awards, with the switch above the facets that a funder's
-community has (invenio-pidbox 0.9.9+). The records search takes the switch's
+"""An organization's or a person's page with awards switches its works list
+between its works and its awards, with the switch above the facets that a
+funder's community has (invenio-pidbox 0.9.9+, a person's page 0.9.12+). The records search takes the switch's
 parameter (RDM_SEARCH_OPTIONS_CLS)."""
 
 PIDBOX_FRONTPAGE_METRICS = False
